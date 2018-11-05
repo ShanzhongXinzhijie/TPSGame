@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TpsCamera.h" />
+    <ClInclude Include="CStage.h" />
+    <ClInclude Include="CPlayerCamera.h" />
+    <ClInclude Include="CPlayer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="TpsCamera.cpp" />
+    <ClCompile Include="CStage.cpp" />
+    <ClCompile Include="CPlayerCamera.cpp" />
+    <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <MeshContentTask Include="Asset\modelData\teapot.FBX" />
+    <MeshContentTask Include="Asset\modelData\testback.FBX" />
+    <MeshContentTask Include="Asset\modelData\testback2.FBX" />
+    <MeshContentTask Include="Asset\modelData\skydome.FBX" />
+    <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
+  </ItemGroup>
+</Project>
