@@ -4,39 +4,16 @@ class TpsCamera
 {
 public:
 
-	void Init(const CVector3& tar, const CVector3& off, const CVector3& up) {
-		AddGO(&m_camera);
-
-		SetTarget(tar);
-		SetOffset(off);
-		SetUp(up);
-		m_rot = CVector2::Zero();
-		UpdateVector();
-		Update();
-	}
+	void Init(const CVector3& tar, const CVector3& off, const CVector3& up);
 
 	//カメラ回転
-	void RotationCamera(const CVector2& rot) {
-		m_rot += rot;
-		if (m_rot.x < -CMath::PI2) { m_rot.x -= -CMath::PI2; }
-		if (m_rot.x >  CMath::PI2) { m_rot.x -=  CMath::PI2; }
-		if (m_rot.y < -CMath::PI2) { m_rot.y -= -CMath::PI2; }
-		if (m_rot.y >  CMath::PI2) { m_rot.y -=  CMath::PI2; }
-
-		UpdateVector();
-	}	
+	void RotationCamera(const CVector2& rot);
 	//カメラ位置設定
 	void SetTarget(const CVector3& vec) {
 		m_target = vec;
 	}
 
-	void Update() {
-		//カメラ更新
-		m_camera.SetPos(m_target + m_ar_offsetPos);
-		m_camera.SetTarget(m_target);
-		m_camera.SetUp(m_ar_up);
-		m_camera.UpdateMatrix();
-	}
+	void Update();
 
 	GameObj::PerspectiveCamera& GetCamera() {
 		return m_camera;
@@ -55,18 +32,7 @@ public:
 private:
 
 	//回転後の座標算出
-	void UpdateVector() {
-		m_ar_offsetPos = m_offsetPos, m_ar_up = m_up;
-
-		CQuaternion cq;
-		cq.SetRotation(CVector3::AxisX(), m_rot.y);
-		cq.Multiply(m_ar_offsetPos);
-		cq.Multiply(m_ar_up);
-
-		cq.SetRotation(CVector3::AxisY(), m_rot.x);
-		cq.Multiply(m_ar_offsetPos);
-		cq.Multiply(m_ar_up);
-	}
+	void UpdateVector();
 	
 	void SetOffset(const CVector3& vec) {
 		m_offsetPos = vec;

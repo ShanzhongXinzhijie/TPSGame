@@ -3,23 +3,49 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TpsCamera.h" />
-    <ClInclude Include="CStage.h" />
     <ClInclude Include="CPlayerCamera.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="ConfirmPlayers.h" />
+    <ClInclude Include="ActionSender.h" />
+    <ClInclude Include="MainPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TpsCamera.cpp" />
-    <ClCompile Include="CStage.cpp" />
     <ClCompile Include="CPlayerCamera.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="ConfirmPlayers.cpp" />
+    <ClCompile Include="ActionSender.cpp" />
+    <ClCompile Include="MainPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <MeshContentTask Include="Asset\modelData\teapot.FBX" />
-    <MeshContentTask Include="Asset\modelData\testback.FBX" />
-    <MeshContentTask Include="Asset\modelData\testback2.FBX" />
-    <MeshContentTask Include="Asset\modelData\skydome.FBX" />
-    <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
+    <MeshContentTask Include="Asset\modelData\unityChan.fbx">
+      <Filter>Assets\modelData</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Asset\modelData\Ground.FBX">
+      <Filter>Assets\modelData</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Asset\modelData\Title.FBX" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{8911c66b-5378-4f12-8f9b-312d8b16d2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData">
+      <UniqueIdentifier>{d466c73d-6c42-4f29-ab60-fd42a414814f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\Sprite\Black.png" />
+    <ImageContentTask Include="Asset\Sprite\Title.png" />
   </ItemGroup>
 </Project>
