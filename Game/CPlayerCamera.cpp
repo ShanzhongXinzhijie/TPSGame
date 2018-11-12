@@ -22,14 +22,14 @@ void CPlayerCamera::Update() {
 	//ƒJƒƒ‰‚Ì¶‰EˆÚ“®‚ğ0.2•b‚Ås‚¤
 	if (isRight) {
 		if (side < rightSide) {
-			side += (1.0f / GetStandardFrameRate()) * (rightSide * 10);
+			side += GetDeltaTimeSec() * (rightSide * 10);
 			if (side > rightSide) {
 				side = rightSide;
 			}
 		}
 	} else {
 		if (side > -rightSide) {
-			side -= (1.0f / GetStandardFrameRate()) * (rightSide * 10);
+			side -= GetDeltaTimeSec() * (rightSide * 10);
 			if (side < -rightSide) {
 				side = -rightSide;
 			}

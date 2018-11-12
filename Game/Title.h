@@ -8,10 +8,10 @@ public:
 	
 	bool Start() override;
 	void Update() override;
+	void PostRender() override;
 
 private:
-	CSkinModelRender m_render;
 	OrthoCamera camera;
-	CDirectionLight m_dirlight;
+	CFont m_font;
 };
 

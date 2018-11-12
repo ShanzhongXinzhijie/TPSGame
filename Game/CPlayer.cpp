@@ -34,13 +34,18 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 
 void CPlayer::GravityAndJump() {
 	if (!charaCon.IsOnGround()) {
-		velocity.y -= gravity * (1.0f / GetStandardFrameRate());
+		velocity.y -= gravity * GetDeltaTimeSec();
 	} else {
 		if (velocity.y < 0) {
 			velocity.y = 0;
 		}
 		if (action.isJump()) {
 			velocity.y = jumpPower;
+			CVector2 movement = action.getMovement();
+			//xˆÚ“®
+			velocity.x += movement.x * moveSpeed *3;
+			//zˆÚ“®
+			velocity.z += movement.y * moveSpeed *3;
 		}
 	}
 }
@@ -49,6 +54,7 @@ void CPlayer::Move() {
 	CVector2 movement = action.getMovement();
 
 	CVector3 moveVec;
+
 	//xˆÚ“®
 	moveVec.x += movement.x * moveSpeed;
 
@@ -60,6 +66,29 @@ void CPlayer::Move() {
 		moveVec *= dashMul;
 		dash = true;
 	}
+	//‹ó’†‚É‚¢‚éê‡ˆÚ“®‘¬“xŒ¸­
+	if (!charaCon.IsOnGround()) {
+		moveVec *= 0;
+	} else {
+		//’n–Ê‚É‚¢‚é‚Æ‚«‚Í–€ŽC‚ÅŠµ«‚ªŒ¸‚Á‚Ä‚¢‚­
+		char sign = 1;
+		if (velocity.x < 0) {
+			sign = -1;
+		}
+		velocity.x -= 400 * sign;
+		if (velocity.x * sign <= 0) {
+			velocity.x = 0;
+		}
+
+		if (velocity.z < 0) {
+			sign = -1;
+		}
+		velocity.z -= 400 * sign;
+		if (velocity.z * sign <= 0) {
+			velocity.z = 0;
+		}
+	}
+
 	moveVec += velocity;
 
 	m_pos = charaCon.Execute(moveVec);
