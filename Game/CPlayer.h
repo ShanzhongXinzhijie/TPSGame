@@ -33,8 +33,9 @@ private:
 	CVector3 m_pos = { 150.0f, 0.0f, 150.0f };
 	CQuaternion m_rot;
 
-	const float moveSpeed = 300.0f;               //移動速度
+	const float moveSpeed = 80.0f;               //移動速度
 	const float dashMul = 2.0f;                   //ダッシュ倍率
+	const float friction = 10.0f;               //摩擦
 	const float gravity = 980.0f;                   //重力加速度
 	const float jumpPower = 600.0f;                //ジャンプ力
 	CVector3 velocity = { 0.0f, 0.0f, 0.0f };	 //速度

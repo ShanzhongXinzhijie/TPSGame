@@ -2,7 +2,7 @@
 #include "CPlayer.h"
 #include "CPlayerCamera.h"
 
-CPlayer::CPlayer(){
+CPlayer::CPlayer() {
 }
 
 bool CPlayer::Start() {
@@ -41,11 +41,6 @@ void CPlayer::GravityAndJump() {
 		}
 		if (action.isJump()) {
 			velocity.y = jumpPower;
-			CVector2 movement = action.getMovement();
-			//x移動
-			velocity.x += movement.x * moveSpeed *3;
-			//z移動
-			velocity.z += movement.y * moveSpeed *3;
 		}
 	}
 }
@@ -53,48 +48,54 @@ void CPlayer::GravityAndJump() {
 void CPlayer::Move() {
 	CVector2 movement = action.getMovement();
 
-	CVector3 moveVec;
-
-	//x移動
-	moveVec.x += movement.x * moveSpeed;
-
-	//z移動
-	moveVec.z += movement.y * moveSpeed;
-
+	//ダッシュ判定
+	float speed = moveSpeed;
 	bool dash = false;
 	if (action.isDash()) {
-		moveVec *= dashMul;
+		speed = moveSpeed * dashMul;
 		dash = true;
 	}
-	//空中にいる場合移動速度減少
-	if (!charaCon.IsOnGround()) {
-		moveVec *= 0;
-	} else {
-		//地面にいるときは摩擦で慣性が減っていく
+
+	//空中にいる場合空気抵抗減少、操作は効きにくくなる。(摩擦は空気抵抗として計算する)
+	float airResist = friction;
+	if (!charaCon.IsOnGround() || action.isJump()) {
+		speed = moveSpeed * 0.2f;
+		airResist *= 0.1f;
+	}
+
+	//x移動
+	velocity.x += movement.x * speed;
+
+	//z移動
+	velocity.z += movement.y * speed;
+
+	//空気抵抗。
+	{
 		char sign = 1;
 		if (velocity.x < 0) {
 			sign = -1;
 		}
-		velocity.x -= 400 * sign;
-		if (velocity.x * sign <= 0) {
+		velocity.x -= airResist * velocity.x * GetDeltaTimeSec();
+		if (velocity.x * sign < 0) {
 			velocity.x = 0;
 		}
 
+		sign = 1;
 		if (velocity.z < 0) {
 			sign = -1;
 		}
-		velocity.z -= 400 * sign;
-		if (velocity.z * sign <= 0) {
+		velocity.z -= airResist * velocity.z * GetDeltaTimeSec();
+		if (velocity.z * sign < 0) {
 			velocity.z = 0;
 		}
 	}
 
-	moveVec += velocity;
+	//位置更新
+	m_pos = charaCon.Execute(velocity);
 
-	m_pos = charaCon.Execute(moveVec);
-
-	if (moveVec.x != 0 && moveVec.z != 0) {
-		m_rot = CQuaternion::GetRotation(CVector3::AxisY(), atan2f(moveVec.x, moveVec.z));
+	//アニメーションと回転
+	if (movement.x != 0 && movement.y != 0) {
+		m_rot = CQuaternion::GetRotation(CVector3::AxisY(), atan2f(movement.x, movement.y));
 
 		if (dash) {
 			m_model.GetAnimCon().Play(anim_run, animInterpolateSec);
@@ -105,6 +106,7 @@ void CPlayer::Move() {
 		m_model.GetAnimCon().Play(anim_idle, animInterpolateSec);
 	}
 
+	//モデル更新
 	m_model.SetPRS(m_pos, m_rot, { 1.0f,1.0f ,1.0f });
 
 }
