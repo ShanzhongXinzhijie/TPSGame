@@ -2,7 +2,7 @@
 #include "MainPlayer.h"
 #include "ActionSender.h"
 
-MainPlayer::MainPlayer(int p) :padNum(p), m_camera(p){
+MainPlayer::MainPlayer(int p) :padNum(p), m_camera(p,CPlayer::getPosition(), 100.0f){
 }
 
 
@@ -24,7 +24,9 @@ void MainPlayer::Update() {
 
 	ActionSender action({ moveVec.x,moveVec.z },
 						Pad(padNum).GetButton(enButtonA),
-						Pad(padNum).GetButton(enButtonLB1));
+						Pad(padNum).GetButton(enButtonLB1),
+						m_camera.getLook(),
+						Pad(padNum).GetButton(enButtonRB1));
 
 	CPlayer::sendAction(action);
 
@@ -35,5 +37,12 @@ void MainPlayer::Update() {
 	} else if (Pad(padNum).GetButton(enButtonRT)) {
 		m_camera.setRigth();
 	}
-	m_camera.SetPos(CPlayer::getPosition());
+
+	if (Pad(padNum).GetButton(enButtonDown)) {
+		m_camera.BackTurn();
+	}
+
+
+
+	m_camera.SetTarget(CPlayer::getPosition());
 }

@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TpsCamera.h" />
-    <ClInclude Include="CPlayerCamera.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Title.h" />
@@ -12,11 +11,12 @@
     <ClInclude Include="ConfirmPlayers.h" />
     <ClInclude Include="ActionSender.h" />
     <ClInclude Include="MainPlayer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="BatBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TpsCamera.cpp" />
-    <ClCompile Include="CPlayerCamera.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Ground.cpp" />
@@ -26,6 +26,7 @@
     <ClCompile Include="ConfirmPlayers.cpp" />
     <ClCompile Include="ActionSender.cpp" />
     <ClCompile Include="MainPlayer.cpp" />
+    <ClCompile Include="BatBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -35,6 +36,7 @@
       <Filter>Assets\modelData</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Asset\modelData\Title.FBX" />
+    <MeshContentTask Include="Asset\modelData\Bat.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -47,5 +49,8 @@
   <ItemGroup>
     <ImageContentTask Include="Asset\Sprite\Black.png" />
     <ImageContentTask Include="Asset\Sprite\Title.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
 </Project>

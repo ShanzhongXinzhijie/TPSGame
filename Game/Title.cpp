@@ -13,7 +13,8 @@ bool Title::Start() {
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({0, 0, 0});
 	camera.UpdateMatrix();
-	SetMainCamera(&camera);
+	GetCameraList().push_back(&camera);
+	GetCameraList().push_back(&camera);
 	return true;
 }
 

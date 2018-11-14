@@ -1,6 +1,6 @@
 #pragma once
 #include "CPlayer.h"
-#include "CPlayerCamera.h"
+#include "TpsCamera.h"
 
 class MainPlayer :public CPlayer {
 public:
@@ -10,6 +10,6 @@ public:
 
 private:
 	const int padNum;
-	CPlayerCamera m_camera;
+	TpsCamera m_camera;
 };
 

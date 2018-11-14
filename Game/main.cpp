@@ -6,7 +6,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	//ÉQÅ[ÉÄÇÃèâä˙âªÅB
 	InitEngineParameter initparam;
-	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);	
+	initparam.isSplitScreen = enSide_TwoSplit;
+	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
 	//CPlayer plyer(0);
 	//PlayersManager playerMng;

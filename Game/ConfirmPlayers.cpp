@@ -19,7 +19,8 @@ ConfirmPlayers::~ConfirmPlayers() {
 bool ConfirmPlayers::Start() {
 	camera.SetPos({ 0, 50, 200 });
 	camera.SetTarget({ 0, 50, 0 });
-	SetMainCamera(&camera);
+	GetCameraList().push_back(&camera);
+	GetCameraList().push_back(&camera);
 	camera.UpdateMatrix();
 
 	m_dirlight.SetColor({ 1,1,1 });

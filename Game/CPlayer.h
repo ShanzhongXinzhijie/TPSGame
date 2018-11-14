@@ -19,6 +19,8 @@ public:
 private:
 	void GravityAndJump();
 	void Move();
+	void Turn();
+	void Shot();
 
 	GameObj::CSkinModelRender m_model;
 	enum {
@@ -32,6 +34,10 @@ private:
 
 	CVector3 m_pos = { 150.0f, 0.0f, 150.0f };
 	CQuaternion m_rot;
+	float radian = 0.0f; //‰ñ“]—Ê
+
+	const float coolTime = 0.1f;
+	float shotCoolTime = coolTime;
 
 	const float moveSpeed = 80.0f;               //ˆÚ“®‘¬“x
 	const float dashMul = 2.0f;                   //ƒ_ƒbƒVƒ…”{—¦
