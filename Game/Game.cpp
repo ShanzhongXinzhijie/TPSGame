@@ -6,7 +6,6 @@ Game::Game(std::unordered_set<int> playersIni) : mainPlayer(0){
 	for (int num : playersIni) {
 		playersMap[num] = new MainPlayer(num);
 	}
-
 }
 
 

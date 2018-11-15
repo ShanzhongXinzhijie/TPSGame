@@ -3,6 +3,7 @@
 #include "BatBullet.h"
 
 CPlayer::CPlayer() {
+
 }
 
 bool CPlayer::Start() {

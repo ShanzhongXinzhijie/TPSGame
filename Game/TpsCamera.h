@@ -62,7 +62,7 @@ private:
 	CVector2 m_rot = {0.0f, 0.0f};
 	GameObj::PerspectiveCamera m_camera;
 
-	const float rightSide = 90.0f; //右よりの場合の横移動
+	const float rightSide = 50.0f; //右よりの場合の横移動
 	const float up = 100.0f;    //カメラ位置　上下
 	const float distance = 100.0f; //カメラの距離
 	float side = rightSide; //カメラの左右

@@ -17,9 +17,10 @@ private:
 	PerspectiveCamera camera;
 	CDirectionLight m_dirlight;
 	CSkinModelRender myModel;
-	CSkinModelRender* pModels[3];
+	CSkinModelRender* pModels[3] = {};
 	int modelCount = 0;
 	std::unordered_set<int> players;
+	bool startButton[3] = {};
 	
 };
 

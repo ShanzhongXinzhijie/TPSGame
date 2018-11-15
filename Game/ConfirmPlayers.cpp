@@ -5,6 +5,7 @@
 #include "Game.h"
 
 ConfirmPlayers::ConfirmPlayers() {
+	players.clear();
 }
 
 
@@ -19,6 +20,8 @@ ConfirmPlayers::~ConfirmPlayers() {
 bool ConfirmPlayers::Start() {
 	camera.SetPos({ 0, 50, 200 });
 	camera.SetTarget({ 0, 50, 0 });
+	SetMainCamera(&camera);
+	GetCameraList().clear();
 	GetCameraList().push_back(&camera);
 	GetCameraList().push_back(&camera);
 	camera.UpdateMatrix();
@@ -28,7 +31,6 @@ bool ConfirmPlayers::Start() {
 
 	myModel.Init(L"Resource/modelData/unityChan.cmo");
 	myModel.SetPos({200, 0, 0});
-	modelCount++;
 
 	return true;
 }
@@ -36,22 +38,28 @@ bool ConfirmPlayers::Start() {
 void ConfirmPlayers::Update() {
 	for (int num = 1; num < 4; num++) {
 		if (Pad(num).GetButton(enButtonStart)) {
-			if (players.count(num) == 0) {
-				players.insert(num);
-				pModels[modelCount] = new CSkinModelRender;
-				pModels[modelCount]->Init(L"Resource/modelData/unityChan.cmo");
-				pModels[modelCount]->SetPos({ (float)(100 - modelCount*100), 0, 0 });
-				modelCount++;
-			} else {
-				players.erase(num);
-			 	delete pModels[modelCount];
-				pModels[modelCount] = nullptr;
-				modelCount--;
+			if (startButton[num - 1] == false) {
+				if (players.count(num) == 0) {
+					players.insert(num);
+					pModels[modelCount] = new CSkinModelRender;
+					pModels[modelCount]->Init(L"Resource/modelData/unityChan.cmo");
+					pModels[modelCount]->SetPos({ (float)(modelCount * 100), 0, 0 });
+					modelCount++;
+				} else {
+					players.erase(num);
+					modelCount--;
+					delete pModels[modelCount];
+					pModels[modelCount] = nullptr;
+				}
 			}
+			startButton[num - 1] = true;
+		} else {
+			startButton[num - 1] = false;
 		}
 	}
 
-	if (Pad(0).GetButton(enButtonStart)) {
+	if (Pad(0).GetButton(enButtonStart)&&!players.empty()) {
+		GetCameraList().clear();
 		new Game(players);
 		delete this;
 	} else if(Pad(0).GetButton(enButtonSelect)) {
