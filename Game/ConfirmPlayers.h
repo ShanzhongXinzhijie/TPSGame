@@ -15,6 +15,7 @@ public:
 
 private:
 	PerspectiveCamera camera;
+	PerspectiveCamera camera2;
 	CDirectionLight m_dirlight;
 	CSkinModelRender myModel;
 	CSkinModelRender* pModels[3] = {};

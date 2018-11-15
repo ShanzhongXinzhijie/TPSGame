@@ -9,10 +9,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	initparam.isSplitScreen = enSide_TwoSplit;
 	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
-	//CPlayer plyer(0);
-	//PlayersManager playerMng;
-	//Ground ground;
 	new Title;
+
 	//ゲームループ。
 	GetEngine().RunGameLoop();
 }

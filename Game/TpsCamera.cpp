@@ -8,7 +8,7 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar, float distance): padNum(pad){
 	m_rot = CVector2::Zero();
 	UpdateVector();
 	Update();
-	m_camera.SetFar(8000.0f);
+	m_camera.SetFar(3000.0f);
 	//ƒƒCƒ“ƒJƒƒ‰‚Éİ’è
 	GetCameraList().push_back(&m_camera);
 }

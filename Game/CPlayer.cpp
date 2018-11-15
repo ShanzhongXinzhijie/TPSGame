@@ -2,7 +2,7 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 
-CPlayer::CPlayer() {
+CPlayer::CPlayer(const CVector3& position) : m_pos(position){
 
 }
 

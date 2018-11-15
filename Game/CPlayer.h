@@ -7,7 +7,7 @@ class CPlayerCamera;
 
 class CPlayer : public IGameObject {
 public:
-	CPlayer();
+	CPlayer(const CVector3& positon);
 
 	bool Start() override;
 	virtual void Update() override;
@@ -32,7 +32,7 @@ private:
 	AnimationClip m_animationClips[anim_num];
 	const float animInterpolateSec = 0.2f;        //アニメーション補間時間
 
-	CVector3 m_pos = { 200.0f, 0.0f, 200.0f };
+	CVector3 m_pos;
 	CQuaternion m_rot;
 	float radian = 0.0f; //回転量
 
