@@ -73,12 +73,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/bulletPhysics/src;$(ProjectDir)/../../DemolisherWeapon/;$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/lib/$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/bulletPhysics/src;$(ProjectDir)/../../DemolisherWeapon/;$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/lib/$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,10 +161,13 @@
   <ItemGroup>
     <ClCompile Include="ActionSender.cpp" />
     <ClCompile Include="BatBullet.cpp" />
+    <ClCompile Include="CircleWalk.cpp" />
+    <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="ICitizenMover.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ConfirmPlayers.cpp" />
     <ClCompile Include="MainPlayer.cpp" />
@@ -170,21 +179,25 @@
     <ClCompile Include="TpsCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActionSender.h" />
-    <ClInclude Include="BatBullet.h" />
-    <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="Fade.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Ground.h" />
-    <ClInclude Include="ConfirmPlayers.h" />
-    <ClInclude Include="MainPlayer.h" />
+    <ClInclude Include="Include\ActionSender.h" />
+    <ClInclude Include="Include\BatBullet.h" />
+    <ClInclude Include="Include\CircleWalk.h" />
+    <ClInclude Include="Include\Citizen.h" />
+    <ClInclude Include="Include\CPlayer.h" />
+    <ClInclude Include="Include\Fade.h" />
+    <ClInclude Include="Include\Game.h" />
+    <ClInclude Include="Include\Ground.h" />
+    <ClInclude Include="Include\ConfirmPlayers.h" />
+    <ClInclude Include="Include\ICitizenMover.h" />
+    <ClInclude Include="Include\MainPlayer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="TpsCamera.h" />
+    <ClInclude Include="Include\Title.h" />
+    <ClInclude Include="Include\TpsCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
+    <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\Title.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />

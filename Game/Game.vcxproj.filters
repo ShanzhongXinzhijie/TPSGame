@@ -2,17 +2,20 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TpsCamera.h" />
-    <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="Ground.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="Fade.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="ConfirmPlayers.h" />
-    <ClInclude Include="ActionSender.h" />
-    <ClInclude Include="MainPlayer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="BatBullet.h" />
+    <ClInclude Include="Include\ActionSender.h" />
+    <ClInclude Include="Include\BatBullet.h" />
+    <ClInclude Include="Include\Citizen.h" />
+    <ClInclude Include="Include\ConfirmPlayers.h" />
+    <ClInclude Include="Include\CPlayer.h" />
+    <ClInclude Include="Include\Fade.h" />
+    <ClInclude Include="Include\Game.h" />
+    <ClInclude Include="Include\Ground.h" />
+    <ClInclude Include="Include\MainPlayer.h" />
+    <ClInclude Include="Include\Title.h" />
+    <ClInclude Include="Include\TpsCamera.h" />
+    <ClInclude Include="Include\ICitizenMover.h" />
+    <ClInclude Include="Include\CircleWalk.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -27,6 +30,9 @@
     <ClCompile Include="ActionSender.cpp" />
     <ClCompile Include="MainPlayer.cpp" />
     <ClCompile Include="BatBullet.cpp" />
+    <ClCompile Include="Citizen.cpp" />
+    <ClCompile Include="ICitizenMover.cpp" />
+    <ClCompile Include="CircleWalk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -37,6 +43,7 @@
     </MeshContentTask>
     <MeshContentTask Include="Asset\modelData\Title.FBX" />
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
+    <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

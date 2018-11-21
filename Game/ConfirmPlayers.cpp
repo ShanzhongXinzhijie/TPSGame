@@ -57,7 +57,7 @@ void ConfirmPlayers::Update() {
 		}
 	}
 
-	if (Pad(0).GetButton(enButtonStart)&&!players.empty()) {
+	if (Pad(0).GetButton(enButtonStart)) {
 		GetCameraList().clear();
 		new Game(players);
 		delete this;
