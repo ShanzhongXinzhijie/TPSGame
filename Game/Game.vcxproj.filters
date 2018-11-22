@@ -16,6 +16,7 @@
     <ClInclude Include="Include\TpsCamera.h" />
     <ClInclude Include="Include\ICitizenMover.h" />
     <ClInclude Include="Include\CircleWalk.h" />
+    <ClInclude Include="sikakukuidou.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="ICitizenMover.cpp" />
     <ClCompile Include="CircleWalk.cpp" />
+    <ClCompile Include="sikakukuidou.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
