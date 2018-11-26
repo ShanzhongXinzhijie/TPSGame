@@ -2,8 +2,11 @@
 #include "Game.h"
 #include "Ground.h"
 #include "CircleWalk.h"
+#include "sikakukuidou.h"
+#include "ziguzagu.h"
+#include "ittarikitari.h"
 
-Game::Game(std::unordered_set<int> playersIni) : citizen(new CircleWalk()){
+Game::Game(std::unordered_set<int> playersIni) : citizen(new ittarikitari()){
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
 		if (objData.EqualObjectName(L"unityChan")) {
 			mainPlayer = new MainPlayer(0, objData.position);
