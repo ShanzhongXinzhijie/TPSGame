@@ -3,7 +3,6 @@
 #include "BatBullet.h"
 
 CPlayer::CPlayer(const CVector3& position) : m_pos(position){
-
 }
 
 bool CPlayer::Start() {

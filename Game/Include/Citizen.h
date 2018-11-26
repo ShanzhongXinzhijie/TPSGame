@@ -18,7 +18,7 @@ private:
 		anim_num,
 	};
 	AnimationClip m_animationClips[anim_num];
-	const float animInterpolateSec = 0.2f;        //アニメーション補間時間
+	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
 
 	CCharacterController charaCon;
 	ICitizenMover* mover;
