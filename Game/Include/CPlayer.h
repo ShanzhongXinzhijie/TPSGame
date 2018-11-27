@@ -35,7 +35,11 @@ private:
 	AnimationClip m_animationClips[anim_num];
 	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
 
-	unsigned short m_hp = 10;
+	static constexpr unsigned short constHp = 10;
+	unsigned short m_hp = constHp;
+	static constexpr float constDeathCool = 10;
+	float deathCool = 0;
+
 
 	const int playerNum;  //識別番号
 
@@ -44,8 +48,8 @@ private:
 	float radian = 0.0f; //回転量
 
 	//銃のクールタイム
-	static constexpr float coolTime = 0.1f;
-	float shotCoolTime = coolTime;
+	static constexpr float constShotCool = 0.1f;
+	float shotCool = constShotCool;
 
 	//物理系
 	static constexpr float moveSpeed = 80.0f;              //移動速度

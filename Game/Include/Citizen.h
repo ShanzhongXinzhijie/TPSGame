@@ -1,11 +1,12 @@
 #pragma once
 #include "DemolisherWeapon/physics/character/CCharacterController.h"
+#include "CPlayer.h"
 
-class ICitizenMover;
+class ICitizenBrain;
 
 class Citizen : public IGameObject{
 public:
-	Citizen(ICitizenMover* moveType);
+	Citizen(std::vector<CPlayer*>& players, ICitizenBrain* moveType);
 	~Citizen();
 
 	void Update() override;
@@ -21,6 +22,8 @@ private:
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
 
 	CCharacterController charaCon;
-	ICitizenMover* mover;
+	ICitizenBrain* mover;
+
+	std::vector<CPlayer*>& players;
 };
 

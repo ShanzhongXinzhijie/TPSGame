@@ -44,7 +44,14 @@ void MainPlayer::Update() {
 		m_camera.BackTurn();
 	}
 
-
+	if (Pad(padNum).GetButton(enButtonB)) {
+		if (!pushB) {
+			m_camera.ChangeSlow();
+			pushB = true;
+		}
+	} else {
+		pushB = false;
+	}
 
 	m_camera.SetTarget(CPlayer::getPosition());
 }

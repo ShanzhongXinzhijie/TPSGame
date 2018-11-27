@@ -25,6 +25,10 @@ public:
 		isRight = true;
 	}
 
+	void ChangeSlow() {
+		slow = !slow;
+	}
+
 	CVector3 GetFront() const {
 		return m_ar_offsetPos.GetNorm() * -1.0f;
 	}
@@ -73,5 +77,7 @@ private:
 	float backTurnRad = 0.0f; //U‚èŒü‚«c‚è‚ÌŠp“x
 
 	const int padNum;
+
+	bool slow = false;
 };
 

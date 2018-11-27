@@ -15,6 +15,6 @@ private:
 	float lifeTime = 5;
 	const int shotPlayerNum;
 
-	std::unique_ptr<SuicideObj::CCollisionObj> m_collision;
+	SuicideObj::CCollisionObj m_collision;
 };
 

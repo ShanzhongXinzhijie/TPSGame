@@ -2,7 +2,7 @@
 #include "Citizen.h"
 #include "ICitizenMover.h"
 
-Citizen::Citizen(ICitizenMover* moveType) {
+Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
 	m_model.Init(L"Resource/modelData/Citizen.cmo", m_animationClips, anim_num);

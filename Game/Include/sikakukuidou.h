@@ -1,6 +1,6 @@
 #pragma once
 #include "ICitizenMover.h"
-class sikakukuidou :	public ICitizenMover{
+class sikakukuidou :	public ICitizenBrain{
 public:
 	sikakukuidou();
 	~sikakukuidou();

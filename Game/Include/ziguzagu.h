@@ -1,6 +1,6 @@
 #pragma once
 #include "ICitizenMover.h"
-class ziguzagu :	public ICitizenMover{
+class ziguzagu :	public ICitizenBrain{
 public:
 	ziguzagu();
 	~ziguzagu();

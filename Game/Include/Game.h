@@ -16,8 +16,9 @@ private:
 	Ground* ground = nullptr;
 	Level level;
 	std::unordered_map<int, CPlayer*> playersMap;
+	std::vector<CPlayer*> players;
 
 	GameObj::PerspectiveCamera karicamera;
-	Citizen citizen;
+	std::unique_ptr<Citizen> citizen;
 };
 

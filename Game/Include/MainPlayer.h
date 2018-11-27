@@ -10,6 +10,7 @@ public:
 
 private:
 	const int padNum;
+	bool pushB = false;
 	TpsCamera m_camera;
 };
 

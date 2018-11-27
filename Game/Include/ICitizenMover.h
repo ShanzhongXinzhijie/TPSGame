@@ -1,9 +1,9 @@
 #pragma once
 
-class ICitizenMover {
+class ICitizenBrain {
 public:
-	ICitizenMover();
-	~ICitizenMover();
+	ICitizenBrain();
+	~ICitizenBrain();
 
 	virtual void Update(bool isOnGround) = 0;
 

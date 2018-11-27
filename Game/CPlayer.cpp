@@ -15,7 +15,7 @@ bool CPlayer::Start() {
 
 	m_model.Init(L"Resource/modelData/unityChan.cmo", m_animationClips, anim_num, enFbxUpAxisY);
 
-	charaCon.Init(30.0f, 80.0f, m_pos);
+	charaCon.Init(30.0f, 90.0f, m_pos);
 
 	m_collision.CreateCapsule(m_pos, CQuaternion::Identity(), 30.0f, 80.0f);
 	m_collision.SetName(L"CPlayer");
@@ -25,12 +25,20 @@ bool CPlayer::Start() {
 };
 
 void CPlayer::Update() {
-	GravityAndJump();
-	Move();
-	Turn();
-	Shot();
-	//アップデート終了時、アクションを初期化する。
-	action = ActionSender();
+	if (m_hp != 0) {
+		GravityAndJump();
+		Move();
+		Turn();
+		Shot();
+		//アップデート終了時、アクションを初期化する。
+		action = ActionSender();
+	} else {
+		deathCool -= GetDeltaTimeSec();
+		if (deathCool <= 0.0f) {
+			m_hp = constHp;
+			m_model.SetIsDraw(true);
+		}
+	}
 }
 
 CVector3 CPlayer::getPosition() {
@@ -42,11 +50,12 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 }
 
 bool CPlayer::BatHit(int num, CVector3 dir) {
-	if (num == playerNum) {
+	if (num != playerNum && m_hp != 0) {
 		velocity += dir;
 		m_hp--;
 		if (m_hp == 0) {
-			delete this;
+			deathCool = constDeathCool;
+			m_model.SetIsDraw(false);
 		}
 		return true;
 	}
@@ -176,13 +185,13 @@ void CPlayer::Turn() 	{
 }
 void CPlayer::Shot() {
 	bool shot = false;
-	if (shotCoolTime <= 0) {
+	if (shotCool <= 0) {
 		if (action.isShot()) {
 			shot = true;
-			shotCoolTime = coolTime;
+			shotCool = constShotCool;
 		}
 	} else {
-		shotCoolTime -= GetDeltaTimeSec();
+		shotCool -= GetDeltaTimeSec();
 	}
 
 	if (shot) {

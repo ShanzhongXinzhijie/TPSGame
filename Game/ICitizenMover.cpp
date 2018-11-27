@@ -2,9 +2,9 @@
 #include "ICitizenMover.h"
 
 
-ICitizenMover::ICitizenMover() {
+ICitizenBrain::ICitizenBrain() {
 }
 
 
-ICitizenMover::~ICitizenMover() {
+ICitizenBrain::~ICitizenBrain() {
 }

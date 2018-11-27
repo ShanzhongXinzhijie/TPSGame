@@ -27,15 +27,14 @@ bool BatBullet::Start() {
 	m_model.SetScale({ 0.5f, 0.5f, 0.5f });
 
 	//ƒRƒŠƒWƒ‡ƒ“‰Šú‰»
-	m_collision = std::make_unique<SuicideObj::CCollisionObj>();
-	m_collision->CreateSphere(m_pos, CQuaternion::Identity(), 15.0f);
-	m_collision->SetName(L"BatBullet");
-	m_collision->SetClass(this);
+	m_collision.CreateSphere(m_pos, CQuaternion::Identity(), 20.0f);
+	m_collision.SetName(L"BatBullet");
+	m_collision.SetClass(this);
 
-	m_collision->SetCallback([&](SuicideObj::CCollisionObj::SCallbackParam& callback){
+	m_collision.SetCallback([&](SuicideObj::CCollisionObj::SCallbackParam& callback){
 		if (callback.EqualName(L"CPlayer")) {
 			if (callback.GetClass<CPlayer>()->BatHit(shotPlayerNum, getHitVec())) {
-				delete this;
+				DeleteGO(this, false);
 			}
 		}
 	});
@@ -46,7 +45,7 @@ bool BatBullet::Start() {
 void BatBullet::Update() {
 	m_pos += m_dir;
 	m_model.SetPos(m_pos);
-	m_collision->SetPosition(m_pos);
+	m_collision.SetPosition(m_pos);
 	lifeTime -= GetDeltaTimeSec();
 	if (lifeTime < 0) {
 		delete this;
