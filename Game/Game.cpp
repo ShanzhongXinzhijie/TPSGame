@@ -22,6 +22,7 @@ Game::Game(std::unordered_set<int> playersIni) : citizen(new ittarikitari()){
 	karicamera.SetTarget({0, 0, 0});
 	karicamera.SetFar(3000);
 	GetCameraList().push_back(&karicamera);
+	GetCameraList().push_back(&karicamera);
 }
 
 

@@ -2,7 +2,10 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 
-CPlayer::CPlayer(const CVector3& position) : m_pos(position){
+CPlayer::CPlayer(int pNum,const CVector3& position) : m_pos(position), playerNum(pNum) {
+}
+
+CPlayer::~CPlayer() {
 }
 
 bool CPlayer::Start() {
@@ -13,6 +16,10 @@ bool CPlayer::Start() {
 	m_model.Init(L"Resource/modelData/unityChan.cmo", m_animationClips, anim_num, enFbxUpAxisY);
 
 	charaCon.Init(30.0f, 80.0f, m_pos);
+
+	m_collision.CreateCapsule(m_pos, CQuaternion::Identity(), 30.0f, 80.0f);
+	m_collision.SetName(L"CPlayer");
+	m_collision.SetClass(this);
 
 	return true;
 };
@@ -32,6 +39,18 @@ CVector3 CPlayer::getPosition() {
 
 void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
+}
+
+bool CPlayer::BatHit(int num, CVector3 dir) {
+	if (num == playerNum) {
+		velocity += dir;
+		m_hp--;
+		if (m_hp == 0) {
+			delete this;
+		}
+		return true;
+	}
+	return false;
 }
 
 void CPlayer::GravityAndJump() {
@@ -113,7 +132,8 @@ void CPlayer::Move() {
 
 	//モデル更新
 	m_model.SetPos(m_pos);
-
+	//コリジョン更新
+	m_collision.SetPosition(m_pos);
 }
 
 void CPlayer::Turn() 	{
@@ -169,6 +189,6 @@ void CPlayer::Shot() {
 		CVector3 look = action.getLookVec();
 		CVector3 pos = m_pos;
 		pos.y += 70;
-		new BatBullet(pos, look * 30);
+		new BatBullet(playerNum, pos, look * 30);
 	}
 }

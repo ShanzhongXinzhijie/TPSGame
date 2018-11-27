@@ -3,6 +3,7 @@
 class TpsCamera : public IGameObject {
 public:
 	TpsCamera(int pad, const CVector3& tar, float distance);
+	~TpsCamera();
 
 	void Update() override;
 

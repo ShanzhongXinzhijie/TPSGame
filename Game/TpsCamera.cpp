@@ -13,6 +13,16 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar, float distance): padNum(pad){
 	GetCameraList().push_back(&m_camera);
 }
 
+TpsCamera::~TpsCamera() {
+	auto& list = GetCameraList();
+	for (auto itr = list.begin(), end = list.end(); itr != end; itr++) {
+		if ((*itr) == &m_camera) {
+			list.erase(itr);
+			break;
+		}
+	}
+}
+
 void TpsCamera::RotationCamera(const CVector2& rot) {
 	m_rot += rot;
 	if (m_rot.x < -CMath::PI2) { m_rot.x += CMath::PI2; }
