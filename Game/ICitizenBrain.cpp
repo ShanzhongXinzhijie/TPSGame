@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "ICitizenMover.h"
+#include "ICitizenBrain.h"
 
 
 ICitizenBrain::ICitizenBrain() {
@@ -7,4 +7,8 @@ ICitizenBrain::ICitizenBrain() {
 
 
 ICitizenBrain::~ICitizenBrain() {
+}
+
+bool ICitizenBrain::isAtk() {
+	return false;
 }

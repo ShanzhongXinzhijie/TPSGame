@@ -19,6 +19,8 @@ public:
 
 	bool BatHit(int num, CVector3 dir);
 
+	const int playerNum;  //¯•Ê”Ô†
+
 private:
 	void GravityAndJump();
 	void Move();
@@ -41,7 +43,7 @@ private:
 	float deathCool = 0;
 
 
-	const int playerNum;  //¯•Ê”Ô†
+	
 
 	CVector3 m_pos;
 	CQuaternion m_rot;

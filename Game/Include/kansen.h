@@ -1,19 +1,27 @@
 #pragma once
 #include "ICitizenBrain.h"
-class sikakukuidou :	public ICitizenBrain{
+#include "CPlayer.h"
+
+class kansen : public ICitizenBrain
+{
 public:
-	sikakukuidou();
-	~sikakukuidou();
+	kansen(std::vector<CPlayer*>& players);
+	~kansen();
 
 	void Update(bool isOnGround)override;
-	
+
+	bool isAtk()override;
+
 	CVector3 getMove()override;
 	CQuaternion getTurn()override;
 
 private:
 	CVector3 walkVec = { 0, 0, 100 };
 	CQuaternion rot;
-	float sec = 4.0f;
 	float jumpPower = 0;
+
+	bool Atk;
+
+	std::vector<CPlayer*>& players;
 };
 
