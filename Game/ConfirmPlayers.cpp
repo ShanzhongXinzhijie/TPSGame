@@ -5,16 +5,10 @@
 #include "Game.h"
 
 ConfirmPlayers::ConfirmPlayers() {
-	players.clear();
 }
 
 
 ConfirmPlayers::~ConfirmPlayers() {
-	for (CSkinModelRender* model : pModels) {
-		if (model != nullptr) {
-			delete model;
-		}
-	}
 }
 
 bool ConfirmPlayers::Start() {
@@ -28,33 +22,27 @@ bool ConfirmPlayers::Start() {
 	m_dirlight.SetColor({ 1,1,1 });
 	m_dirlight.SetDirection({ 0,0,1 });
 
-	myModel.Init(L"Resource/modelData/unityChan.cmo");
-	myModel.SetPos({200, 0, 0});
+	m_sprite.Init(L"Resource/spriteData/Title.dds");
 
 	return true;
 }
 
 void ConfirmPlayers::Update() {
 	for (int num = 1; num < 4; num++) {
+
 		if (Pad(num).GetButton(enButtonStart)) {
 			if (startButton[num - 1] == false) {
 				if (players.count(num) == 0) {
-					players.insert(num);
-					pModels[modelCount] = new CSkinModelRender;
-					pModels[modelCount]->Init(L"Resource/modelData/unityChan.cmo");
-					pModels[modelCount]->SetPos({ (float)(modelCount * 100), 0, 0 });
-					modelCount++;
+					players[num] = CVector4();
 				} else {
 					players.erase(num);
-					modelCount--;
-					delete pModels[modelCount];
-					pModels[modelCount] = nullptr;
 				}
 			}
 			startButton[num - 1] = true;
 		} else {
 			startButton[num - 1] = false;
 		}
+
 	}
 
 	if (Pad(0).GetButton(enButtonStart)) {
@@ -65,4 +53,8 @@ void ConfirmPlayers::Update() {
 		new Title;
 		delete this;
 	}
+}
+
+void ConfirmPlayers::PostRender() {
+	m_sprite.Draw({ 0.5f, 0.5f }, CVector2::One(), { 0.5f, 0.5f });
 }

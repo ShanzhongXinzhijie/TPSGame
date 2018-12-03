@@ -7,7 +7,7 @@ class CPlayerCamera;
 
 class CPlayer : public IGameObject {
 public:
-	CPlayer(int playerNum ,const CVector3& positon);
+	CPlayer(int playerNum, CVector4 color, const CVector3& positon);
 	virtual ~CPlayer();
 
 	bool Start() override;
@@ -18,6 +18,8 @@ public:
 	void sendAction(const ActionSender& action);
 
 	bool BatHit(int num, CVector3 dir);
+
+	const CVector4 color;
 
 private:
 	void GravityAndJump();
@@ -30,6 +32,7 @@ private:
 		anim_run,
 		anim_walk,
 		anim_idle,
+		anim_shot,
 		anim_num,
 	};
 	AnimationClip m_animationClips[anim_num];

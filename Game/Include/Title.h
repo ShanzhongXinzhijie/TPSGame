@@ -13,5 +13,6 @@ public:
 private:
 	OrthoCamera camera;
 	CFont m_font;
+	CSprite m_sprite;
 };
 

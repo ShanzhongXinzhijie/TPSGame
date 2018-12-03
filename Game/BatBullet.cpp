@@ -31,6 +31,7 @@ bool BatBullet::Start() {
 	m_collision.SetName(L"BatBullet");
 	m_collision.SetClass(this);
 
+	//’e‚ªƒqƒbƒg‚µ‚½‚Ìˆ—
 	m_collision.SetCallback([&](SuicideObj::CCollisionObj::SCallbackParam& callback){
 		if (callback.EqualName(L"CPlayer")) {
 			if (callback.GetClass<CPlayer>()->BatHit(shotPlayerNum, getHitVec())) {

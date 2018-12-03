@@ -4,7 +4,7 @@
 
 class MainPlayer :public CPlayer {
 public:
-	MainPlayer(int pad, const CVector3& position);
+	MainPlayer(int pad, CVector4 color, const CVector3& position);
 	~MainPlayer();
 	void Update() override;
 

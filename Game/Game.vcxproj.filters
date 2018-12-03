@@ -47,9 +47,9 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX">
       <Filter>Assets\modelData</Filter>
     </MeshContentTask>
-    <MeshContentTask Include="Asset\modelData\Title.FBX" />
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
+    <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -60,10 +60,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ImageContentTask Include="Asset\Sprite\Black.png" />
-    <ImageContentTask Include="Asset\Sprite\Title.png" />
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Game.rc" />
+    <ImageContentTask Include="Asset\spriteData\Black.png" />
+    <ImageContentTask Include="Asset\spriteData\Title.png" />
+    <ImageContentTask Include="Asset\spriteData\waku.png" />
   </ItemGroup>
 </Project>

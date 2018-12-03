@@ -113,7 +113,7 @@
       <ContentOutput>$(ProjectDir)\Resource\modelData\%(Filename).cmo</ContentOutput>
     </MeshContentTask>
     <ImageContentTask>
-      <ContentOutput>$(ProjectDir)\Resource\sprite\%(Filename).dds</ContentOutput>
+      <ContentOutput>$(ProjectDir)\Resource\spriteData\%(Filename).dds</ContentOutput>
       <GeneratePremultipliedAlpha>true</GeneratePremultipliedAlpha>
     </ImageContentTask>
   </ItemDefinitionGroup>
@@ -153,7 +153,7 @@
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxguid.lib;DemolisherWeapon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ImageContentTask>
-      <ContentOutput>$(ProjectDir)\Resource\sprite\%(Filename).dds</ContentOutput>
+      <ContentOutput>$(ProjectDir)\Resource\spriteData\%(Filename).dds</ContentOutput>
       <GeneratePremultipliedAlpha>true</GeneratePremultipliedAlpha>
     </ImageContentTask>
     <MeshContentTask>
@@ -207,15 +207,18 @@
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
-    <MeshContentTask Include="Asset\modelData\Title.FBX" />
+    <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
   </ItemGroup>
   <ItemGroup>
-    <ImageContentTask Include="Asset\Sprite\Black.png" />
-    <ImageContentTask Include="Asset\Sprite\Title.png" />
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Game.rc" />
+    <ImageContentTask Include="Asset\spriteData\Black.png" />
+    <ImageContentTask Include="Asset\spriteData\Title.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\waku.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

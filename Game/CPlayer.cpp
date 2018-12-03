@@ -2,18 +2,24 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 
-CPlayer::CPlayer(int pNum,const CVector3& position) : m_pos(position), playerNum(pNum) {
+CPlayer::CPlayer(int pNum, CVector4 col, const CVector3& position)
+	: m_pos(position), playerNum(pNum), color(col){
 }
 
 CPlayer::~CPlayer() {
 }
 
 bool CPlayer::Start() {
-	m_animationClips[anim_run].Load(L"Resource/animData/run.tka", true);
-	m_animationClips[anim_walk].Load(L"Resource/animData/walk.tka", true);
-	m_animationClips[anim_idle].Load(L"Resource/animData/idle.tka", true);
+	m_animationClips[anim_run].Load(L"Resource/animData/PlayerRun.tka", true);
+	m_animationClips[anim_walk].Load(L"Resource/animData/PlayerWalk.tka", true);
+	m_animationClips[anim_idle].Load(L"Resource/animData/PlayerIdle.tka", true);
+	m_animationClips[anim_shot].Load(L"Resource/animData/PlayerShot.tka", true);
 
-	m_model.Init(L"Resource/modelData/unityChan.cmo", m_animationClips, anim_num, enFbxUpAxisY);
+	m_model.Init(L"Resource/modelData/PlayerVanp.cmo", m_animationClips, anim_num);
+
+	m_model.GetSkinModel().FindMaterial([&](ModelEffect* mat) {
+		mat->SetAlbedoScale(color);
+	});
 
 	charaCon.Init(30.0f, 90.0f, m_pos);
 
@@ -185,6 +191,9 @@ void CPlayer::Turn() 	{
 }
 void CPlayer::Shot() {
 	bool shot = false;
+	if (action.isShot()) {
+		m_model.GetAnimCon().Play(anim_shot, animInterpolateSec);
+	}
 	if (shotCool <= 0) {
 		if (action.isShot()) {
 			shot = true;

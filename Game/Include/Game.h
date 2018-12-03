@@ -8,7 +8,7 @@
 
 class Game : public IGameObject{
 public:
-	Game(std::unordered_set<int> playersIni);
+	Game(std::unordered_map<int, CVector4>& playersIni);
 	~Game();
 private:
 	MainPlayer* mainPlayer = nullptr;

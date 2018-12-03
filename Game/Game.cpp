@@ -6,21 +6,25 @@
 #include "ziguzagu.h"
 #include "ittarikitari.h"
 
-Game::Game(std::unordered_set<int> playersIni){
+Game::Game(std::unordered_map<int, CVector4>& playersIni){
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
 		if (objData.EqualObjectName(L"unityChan")) {
+
 			players.push_back(
-				mainPlayer = new MainPlayer(0, objData.position)
+				mainPlayer = new MainPlayer(0, {1,0,0,1}, objData.position)
 			);
 			playersMap[0] = mainPlayer;
-			for (int num : playersIni) {
+			for (auto p : playersIni) {
 				players.push_back(
-					playersMap[num] = new MainPlayer(num, objData.position)
+					playersMap[p.first] = new MainPlayer(p.first, { 1,0,0,1 }, objData.position)
 				);
 				
 			}
+
 		} else if (objData.EqualObjectName(L"Ground")) {
+
 			ground = new Ground(objData.position);
+
 		}
 		return true;
 	});

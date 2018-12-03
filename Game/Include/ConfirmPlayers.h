@@ -1,7 +1,5 @@
 #pragma once
-#include <unordered_set>
-
-class CPlayer;
+#include <unordered_map>
 
 using namespace GameObj;
 
@@ -13,15 +11,15 @@ public:
 	bool Start() override;
 	void Update() override;
 
+	void PostRender() override;
+
 private:
 	PerspectiveCamera camera;
-	PerspectiveCamera camera2;
 	CDirectionLight m_dirlight;
-	CSkinModelRender myModel;
-	CSkinModelRender* pModels[3] = {};
-	int modelCount = 0;
-	std::unordered_set<int> players;
+	std::unordered_map<int, CVector4> players;
 	bool startButton[3] = {};
 	
+	CSprite m_sprite;
+
 };
 
