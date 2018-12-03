@@ -14,11 +14,12 @@
     <ClInclude Include="Include\MainPlayer.h" />
     <ClInclude Include="Include\Title.h" />
     <ClInclude Include="Include\TpsCamera.h" />
-    <ClInclude Include="Include\ICitizenMover.h" />
     <ClInclude Include="Include\CircleWalk.h" />
     <ClInclude Include="Include\ziguzagu.h" />
     <ClInclude Include="Include\sikakukuidou.h" />
     <ClInclude Include="Include\ittarikitari.h" />
+    <ClInclude Include="Include\ICitizenBrain.h" />
+    <ClInclude Include="Include\kansen.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -34,11 +35,12 @@
     <ClCompile Include="MainPlayer.cpp" />
     <ClCompile Include="BatBullet.cpp" />
     <ClCompile Include="Citizen.cpp" />
-    <ClCompile Include="ICitizenMover.cpp" />
     <ClCompile Include="CircleWalk.cpp" />
     <ClCompile Include="sikakukuidou.cpp" />
     <ClCompile Include="ziguzagu.cpp" />
     <ClCompile Include="ittarikitari.cpp" />
+    <ClCompile Include="ICitizenBrain.cpp" />
+    <ClCompile Include="kansen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

@@ -169,8 +169,9 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="ICitizenMover.cpp" />
+    <ClCompile Include="ICitizenBrain.cpp" />
     <ClCompile Include="ittarikitari.cpp" />
+    <ClCompile Include="kansen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ConfirmPlayers.cpp" />
     <ClCompile Include="MainPlayer.cpp" />
@@ -193,8 +194,9 @@
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\Ground.h" />
     <ClInclude Include="Include\ConfirmPlayers.h" />
-    <ClInclude Include="Include\ICitizenMover.h" />
+    <ClInclude Include="Include\ICitizenBrain.h" />
     <ClInclude Include="Include\ittarikitari.h" />
+    <ClInclude Include="Include\kansen.h" />
     <ClInclude Include="Include\MainPlayer.h" />
     <ClInclude Include="Include\ziguzagu.h" />
     <ClInclude Include="resource.h" />

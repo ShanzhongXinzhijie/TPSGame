@@ -9,5 +9,7 @@ public:
 
 	virtual CVector3 getMove() = 0;
 	virtual CQuaternion getTurn() = 0;
+
+	virtual bool isAtk();
 };
 

@@ -21,6 +21,8 @@ public:
 
 	const CVector4 color;
 
+	const int playerNum;  //¯•Ê”Ô†
+
 private:
 	void GravityAndJump();
 	void Move();
@@ -44,7 +46,7 @@ private:
 	float deathCool = 0;
 
 
-	const int playerNum;  //¯•Ê”Ô†
+	
 
 	CVector3 m_pos;
 	CQuaternion m_rot;

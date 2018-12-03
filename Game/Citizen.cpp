@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Citizen.h"
-#include "ICitizenMover.h"
+#include "ICitizenBrain.h"
 
 Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);

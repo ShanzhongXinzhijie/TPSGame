@@ -1,5 +1,5 @@
 #pragma once
-#include "ICitizenMover.h"
+#include "ICitizenBrain.h"
 class CircleWalk : public ICitizenBrain {
 public:
 	CircleWalk();

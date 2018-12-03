@@ -25,5 +25,9 @@ private:
 	ICitizenBrain* mover;
 
 	std::vector<CPlayer*>& players;
+
+	int CitizenNum; 
+
+	bool isKenzoku = false;
 };
 
