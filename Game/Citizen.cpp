@@ -15,6 +15,7 @@ Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps
 void Citizen::Update() {
 	mover->Update(charaCon.IsOnGround());
 
+	charaCon.GetPosition();
 	//ˆÚ“®
 	CVector3 moveVec = mover->getMove();
 	if (moveVec.x != 0 || moveVec.z != 0) {

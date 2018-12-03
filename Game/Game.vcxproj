@@ -169,6 +169,7 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="GuiList.cpp" />
     <ClCompile Include="ICitizenBrain.cpp" />
     <ClCompile Include="ittarikitari.cpp" />
     <ClCompile Include="kansen.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\Ground.h" />
     <ClInclude Include="Include\ConfirmPlayers.h" />
+    <ClInclude Include="Include\GuiList.h" />
     <ClInclude Include="Include\ICitizenBrain.h" />
     <ClInclude Include="Include\ittarikitari.h" />
     <ClInclude Include="Include\kansen.h" />

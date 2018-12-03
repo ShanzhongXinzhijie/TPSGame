@@ -4,7 +4,7 @@
 #include "Title.h"
 #include "Game.h"
 
-ConfirmPlayers::ConfirmPlayers() {
+ConfirmPlayers::ConfirmPlayers(): list(L"Resource/spriteData/waku.dds") {
 }
 
 
@@ -23,6 +23,8 @@ bool ConfirmPlayers::Start() {
 	m_dirlight.SetDirection({ 0,0,1 });
 
 	m_sprite.Init(L"Resource/spriteData/Title.dds");
+
+	list.values.push_back(L"player1");
 
 	return true;
 }
@@ -57,4 +59,5 @@ void ConfirmPlayers::Update() {
 
 void ConfirmPlayers::PostRender() {
 	m_sprite.Draw({ 0.5f, 0.5f }, CVector2::One(), { 0.5f, 0.5f });
+	list.Draw();
 }

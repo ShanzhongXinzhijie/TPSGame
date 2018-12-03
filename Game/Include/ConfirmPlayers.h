@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include "GuiList.h"
 
 using namespace GameObj;
 
@@ -19,6 +20,7 @@ private:
 	std::unordered_map<int, CVector4> players;
 	bool startButton[3] = {};
 	
+	GuiList list;
 	CSprite m_sprite;
 
 };
