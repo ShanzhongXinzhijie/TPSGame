@@ -11,12 +11,16 @@ Game::Game(std::unordered_map<int, CVector4>& playersIni){
 		if (objData.EqualObjectName(L"unityChan")) {
 
 			players.push_back(
-				mainPlayer = new MainPlayer(0, {1,0,0,1}, objData.position)
+				mainPlayer = new MainPlayer(0,{1,0,0,1}, objData.position)
 			);
 			playersMap[0] = mainPlayer;
+			players.push_back(
+				mainPlayer = new MainPlayer(7, { 1,0,0,1 }, objData.position)
+			);
+			playersMap[7] = mainPlayer;
 			for (auto p : playersIni) {
 				players.push_back(
-					playersMap[p.first] = new MainPlayer(p.first, { 1,0,0,1 }, objData.position)
+					playersMap[p.first] = new MainPlayer(p.first ,p.second, objData.position)
 				);
 				
 			}

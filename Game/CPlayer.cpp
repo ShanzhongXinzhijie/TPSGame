@@ -2,8 +2,8 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 
-CPlayer::CPlayer(int pNum, CVector4 col, const CVector3& position)
-	: m_pos(position), playerNum(pNum), color(col){
+CPlayer::CPlayer(CVector4 col, const CVector3& position)
+	: m_pos(position), color(col){
 }
 
 CPlayer::~CPlayer() {
@@ -55,8 +55,8 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
 
-bool CPlayer::BatHit(int num, CVector3 dir) {
-	if (num != playerNum && m_hp != 0) {
+bool CPlayer::BatHit(CPlayer* player, CVector3 dir) {
+	if (this != player && m_hp != 0) {
 		velocity += dir;
 		m_hp--;
 		if (m_hp == 0) {
@@ -207,6 +207,6 @@ void CPlayer::Shot() {
 		CVector3 look = action.getLookVec();
 		CVector3 pos = m_pos;
 		pos.y += 70;
-		new BatBullet(playerNum, pos, look * 30);
+		new BatBullet(this, pos, look * 30);
 	}
 }

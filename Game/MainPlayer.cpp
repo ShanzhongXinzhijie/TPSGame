@@ -3,7 +3,7 @@
 #include "ActionSender.h"
 
 MainPlayer::MainPlayer(int p, CVector4 color, const CVector3& position)
-	:padNum(p), m_camera(p, position, 100.0f), CPlayer(p, color, position){
+	:padNum(p), m_camera(p, position, 100.0f), CPlayer(color, position){
 
 }
 

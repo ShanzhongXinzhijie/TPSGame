@@ -7,7 +7,7 @@ class CPlayerCamera;
 
 class CPlayer : public IGameObject {
 public:
-	CPlayer(int playerNum, CVector4 color, const CVector3& positon);
+	CPlayer(CVector4 color, const CVector3& positon);
 	virtual ~CPlayer();
 
 	bool Start() override;
@@ -17,11 +17,9 @@ public:
 
 	void sendAction(const ActionSender& action);
 
-	bool BatHit(int num, CVector3 dir);
+	bool BatHit(CPlayer* player, CVector3 dir);
 
 	const CVector4 color;
-
-	const int playerNum;  //éØï î‘çÜ
 
 private:
 	void GravityAndJump();
@@ -44,9 +42,6 @@ private:
 	unsigned short m_hp = constHp;
 	static constexpr float constDeathCool = 10;
 	float deathCool = 0;
-
-
-	
 
 	CVector3 m_pos;
 	CQuaternion m_rot;

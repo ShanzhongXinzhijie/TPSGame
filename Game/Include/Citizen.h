@@ -26,7 +26,7 @@ private:
 
 	std::vector<CPlayer*>& players;
 
-	int CitizenNum; 
+	CPlayer* ownerPlayer; 
 
 	bool isKenzoku = false;
 };

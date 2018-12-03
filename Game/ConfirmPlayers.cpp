@@ -33,7 +33,7 @@ void ConfirmPlayers::Update() {
 		if (Pad(num).GetButton(enButtonStart)) {
 			if (startButton[num - 1] == false) {
 				if (players.count(num) == 0) {
-					players[num] = CVector4();
+					players[num] = {1,0,0,1};
 				} else {
 					players.erase(num);
 				}

@@ -2,8 +2,8 @@
 #include "BatBullet.h"
 #include "CPlayer.h";
 
-BatBullet::BatBullet(int pNum ,CVector3 position, CVector3 direction)
-	: m_pos(position), m_dir(direction), shotPlayerNum(pNum){
+BatBullet::BatBullet(CPlayer* player,CVector3 position, CVector3 direction)
+	: m_pos(position), m_dir(direction), shotPlayer(player){
 }
 
 
@@ -34,7 +34,7 @@ bool BatBullet::Start() {
 	//íeÇ™ÉqÉbÉgÇµÇΩéûÇÃèàóù
 	m_collision.SetCallback([&](SuicideObj::CCollisionObj::SCallbackParam& callback){
 		if (callback.EqualName(L"CPlayer")) {
-			if (callback.GetClass<CPlayer>()->BatHit(shotPlayerNum, getHitVec())) {
+			if (callback.GetClass<CPlayer>()->BatHit(shotPlayer, getHitVec())) {
 				DeleteGO(this, false);
 			}
 		}
