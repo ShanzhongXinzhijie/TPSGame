@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Citizen.h"
 #include "ICitizenBrain.h"
+#include "kansen.h"
 
 Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
@@ -26,6 +27,12 @@ void Citizen::Update() {
 
 	//‰ñ“]
 	m_model.SetRot(mover->getTurn());
+}
+
+void Citizen::Kansenzyoutai()
+{
+	delete mover;
+	mover = new kansen(players,charaCon.GetPosition());
 }
 
 Citizen::~Citizen() {

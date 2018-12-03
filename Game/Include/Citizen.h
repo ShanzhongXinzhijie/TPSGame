@@ -11,6 +11,8 @@ public:
 
 	void Update() override;
 
+	void Kansenzyoutai();
+
 private:
 	GameObj::CSkinModelRender m_model;
 	enum {
