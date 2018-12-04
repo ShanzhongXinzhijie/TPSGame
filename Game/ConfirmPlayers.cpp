@@ -51,7 +51,7 @@ void ConfirmPlayers::Update() {
 		GetCameraList().clear();
 		new Game(players);
 		delete this;
-	} else if(Pad(0).GetButton(enButtonSelect)) {
+	} else if(Pad(0).GetButton(enButtonBack)) {
 		new Title;
 		delete this;
 	}

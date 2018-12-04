@@ -19,6 +19,10 @@ public:
 
 	bool BatHit(CPlayer* player, CVector3 dir);
 
+	const btCollisionObject* getCollisionObj() {
+		return &m_collision.GetCollisionObject();
+	}
+
 	const CVector4 color;
 
 private:

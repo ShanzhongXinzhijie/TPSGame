@@ -17,3 +17,6 @@ bool Ground::Start() {
 	m_dirlight[1].SetColor({ 0.3f, 0.3f ,0.3f });
 	return true;
 }
+
+void Ground::Update() {
+}
