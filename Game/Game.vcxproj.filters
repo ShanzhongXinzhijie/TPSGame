@@ -21,6 +21,7 @@
     <ClInclude Include="Include\ICitizenBrain.h" />
     <ClInclude Include="Include\kansen.h" />
     <ClInclude Include="Include\GuiList.h" />
+    <ClInclude Include="Network\Network.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="ICitizenBrain.cpp" />
     <ClCompile Include="kansen.cpp" />
     <ClCompile Include="GuiList.cpp" />
+    <ClCompile Include="Network\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
