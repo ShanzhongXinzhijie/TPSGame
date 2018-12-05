@@ -52,7 +52,7 @@ void BatBullet::Update() {
 	m_collision.SetPosition(m_pos);
 	lifeTime -= GetDeltaTimeSec();
 	if (lifeTime < 0) {
-		delete this;
+		delete this; return;
 	}
 	btTransform start, end;
 	start.setIdentity();
