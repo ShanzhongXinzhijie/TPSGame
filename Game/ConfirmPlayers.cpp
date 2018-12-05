@@ -4,6 +4,8 @@
 #include "Title.h"
 #include "Game.h"
 
+#include "Network/Network.h"
+
 ConfirmPlayers::ConfirmPlayers(): list(L"Resource/spriteData/waku.dds") {
 }
 
@@ -30,9 +32,15 @@ bool ConfirmPlayers::Start() {
 }
 
 void ConfirmPlayers::Update() {
+
+	//ネット接続
+	if (Pad(0).GetButton(enButtonX)) {
+		//FindGO<NetWorkManager>()->ConnectJoin(L"バンパイア中村");
+	}
+
 	for (int num = 1; num < 4; num++) {
 
-		if (Pad(num).GetButton(enButtonStart)) {
+		if (Pad(num).GetButton(enButtonStart) || num == 1 && Pad(0).GetButton(enButtonX)) {
 			if (startButton[num - 1] == false) {
 				if (players.count(num) == 0) {
 					players[num] = {1,0,0,1};
