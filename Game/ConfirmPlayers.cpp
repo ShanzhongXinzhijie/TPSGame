@@ -35,7 +35,7 @@ void ConfirmPlayers::Update() {
 
 	//ネット接続
 	if (Pad(0).GetButton(enButtonX)) {
-		//FindGO<NetWorkManager>()->ConnectJoin(L"バンパイア中村");
+		FindGO<NetWorkManager>()->ConnectJoin(L"バンパイア中村");
 	}
 
 	for (int num = 1; num < 4; num++) {

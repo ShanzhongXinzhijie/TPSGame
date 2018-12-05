@@ -7,8 +7,9 @@
 MainPlayer::MainPlayer(int p, CVector4 color, const CVector3& position)
 	:padNum(p), m_camera(p, position, 100.0f), CPlayer(color, position){
 	if (p == 0) {
-		NewGO<NetActionSenderCaster>();
+		m_actionSenderCaster = NewGO<NetActionSenderCaster>();
 	}
+	m_p_networkManager = FindGO<NetWorkManager>();
 }
 
 
@@ -36,10 +37,10 @@ void MainPlayer::Update() {
 
 	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
 		if (padNum == 0) {
-			FindGO <NetActionSenderCaster>()->SetActionSender(action);
+			m_actionSenderCaster->SetActionSender(action);
 		}
 		else {
-			action = FindGO<NetWorkManager>()->GetReceiveActionSender(padNum - 1);
+			action = m_p_networkManager->GetReceiveActionSender(padNum - 1);
 		}
 	}
 

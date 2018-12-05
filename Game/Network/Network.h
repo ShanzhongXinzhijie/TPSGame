@@ -90,7 +90,7 @@ public:
 	}
 	void Update()override {
 		if (GetPhoton()->GetState() == PhotonNetworkLogic::CONNECTED) {
-			GetPhoton()->JoinRoom(L"‚ ‚ ‚ ‚ ", 4);
+			GetPhoton()->JoinRoom(L"‚ ‚ ‚ ‚ ", 2);
 		}
 	}
 
