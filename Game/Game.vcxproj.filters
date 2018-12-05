@@ -54,6 +54,7 @@
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

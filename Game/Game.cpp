@@ -14,10 +14,10 @@ Game::Game(std::unordered_map<int, CVector4>& playersIni){
 				mainPlayer = new MainPlayer(0,{1,0,0,1}, objData.position)
 			);
 			playersMap[0] = mainPlayer;
-			/*players.push_back(
-				mainPlayer = new MainPlayer(, { 1,0,0,1 }, objData.position)
+			players.push_back(
+				mainPlayer = new MainPlayer(3, { 1,0,0,1 }, objData.position)
 			);
-			playersMap[7] = mainPlayer;*/
+			playersMap[3] = mainPlayer;
 			for (auto p : playersIni) {
 				players.push_back(
 					playersMap[p.first] = new MainPlayer(p.first ,p.second, objData.position)

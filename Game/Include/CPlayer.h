@@ -66,5 +66,5 @@ private:
 	CCharacterController charaCon;
 	ActionSender action;     //プレイヤーの操作が入っている
 
-	SuicideObj::CCollisionObj m_collision;
+	SuicideObj::CCollisionObj m_collision; //コリジョン
 };

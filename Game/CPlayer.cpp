@@ -206,7 +206,7 @@ void CPlayer::Shot() {
 	if (shot) {
 		CVector3 look = action.getLookVec();
 		CVector3 pos = m_pos;
-		pos.y += 70;
+		pos.y += 60;
 		new BatBullet(this, pos, look * 30);
 	}
 }

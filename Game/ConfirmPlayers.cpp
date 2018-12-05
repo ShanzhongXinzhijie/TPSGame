@@ -25,6 +25,11 @@ bool ConfirmPlayers::Start() {
 	m_sprite.Init(L"Resource/spriteData/Title.dds");
 
 	list.values.push_back(L"player1");
+	list.values.push_back(L"player2");
+	list.values.push_back(L"player3");
+	list.values.push_back(L"player4");
+	list.values.push_back(L"player5");
+	list.values.push_back(L"player6");
 
 	return true;
 }
