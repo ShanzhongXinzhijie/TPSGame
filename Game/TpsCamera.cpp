@@ -10,7 +10,11 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar, float distance): padNum(pad){
 	Update();
 	m_camera.SetFar(3000.0f);
 	//ƒƒCƒ“ƒJƒƒ‰‚Éİ’è
+#ifdef SpritScreen
 	GetCameraList().push_back(&m_camera);
+#else
+	SetMainCamera(&m_camera);
+#endif
 }
 
 TpsCamera::~TpsCamera() {

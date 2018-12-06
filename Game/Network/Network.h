@@ -4,6 +4,7 @@
 
 enum NetworkEventCode {
 	enActionSender,
+	enJoinLeaveEvent,
 };
 
 class NetActionSenderCaster : public IQSGameObject
@@ -33,6 +34,31 @@ public:
 
 private:
 	ActionSender m_actionSender;
+};
+
+class NetJoinLeaveCaster : public IQSGameObject {
+public:
+
+	void PostUpdate()override {
+		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED || !m_needSend) { return; }
+
+		ExitGames::Common::Hashtable _event;
+		_event.put(static_cast<nByte>(1), m_isJoin);
+
+		GetPhoton()->Send(enJoinLeaveEvent, _event, true);
+
+		m_needSend = false;
+	}
+
+	//ëóêM
+	void Send(bool isJoin) {
+		m_isJoin = isJoin;
+		m_needSend = true;
+	}
+
+private:
+	bool m_needSend;
+	bool m_isJoin;
 };
 
 class NetWorkManager : public IGameObject{
@@ -68,6 +94,18 @@ public:
 						},
 						((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)5)))->getDataCopy()
 					);
+
+					m_actionFunc(m_actionSenderReceiver[playerNr], playerNr);
+				}
+			}
+				break;
+
+			case enJoinLeaveEvent:
+			{
+				ExitGames::Common::Hashtable eventContent = ExitGames::Common::ValueObject<ExitGames::Common::Hashtable>(eventContentObj).getDataCopy();
+				bool isJoin = ((ExitGames::Common::ValueObject<bool>*)(eventContent.getValue((nByte)1)))->getDataCopy();
+				if (m_joinLeaveFunc != nullptr) {
+					m_joinLeaveFunc(isJoin, playerNr);
 				}
 			}
 				break;
@@ -94,7 +132,22 @@ public:
 		}
 	}
 
+	void setJoinLeaveFunc(const std::function<void(bool,int)>& joinFunc) {
+		m_joinLeaveFunc = joinFunc;
+	}
+
+	void delFunc() {
+		m_joinLeaveFunc = nullptr;
+		m_actionFunc = nullptr;
+	}
+
+	void setActionFunc(const std::function<void(const ActionSender&, int)>& acFunc) {
+		m_actionFunc = acFunc;
+	}
+
 private:
 	ActionSender m_actionSenderReceiver[3];
+	std::function<void(bool,int)> m_joinLeaveFunc = nullptr;
+	std::function<void(ActionSender, int)> m_actionFunc = nullptr;
 };
 

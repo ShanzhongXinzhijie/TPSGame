@@ -13,7 +13,7 @@ public:
 
 	float side = 0.0f;
 
-	std::vector<const wchar_t*> values;
+	std::vector<std::wstring> values;
 private:
 	CSprite back;
 	CFont font;

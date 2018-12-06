@@ -10,6 +10,7 @@ class Game : public IGameObject{
 public:
 	Game(std::unordered_map<int, CVector4>& playersIni);
 	~Game();
+
 private:
 	MainPlayer* mainPlayer = nullptr;
 
@@ -18,7 +19,12 @@ private:
 	std::unordered_map<int, CPlayer*> playersMap;
 	std::vector<CPlayer*> players;
 
+#ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;
+#else
+	NetWorkManager* m_p_networkManager = nullptr;
+#endif
+
 	std::unique_ptr<Citizen> citizen;
 };
 

@@ -16,8 +16,8 @@ void GuiList::Draw() {
 	valuePos.x -= pivot.x * 800.0f / 1280.0f - 40.0f/1280.0f;
 	valuePos.y -= pivot.y * 600.0f / 720.0f - 40.0f/720.0f;
 	unsigned int high = 0;
-	for (const wchar_t* v : values) {
-		font.Draw(v, valuePos, color, scale);
+	for (std::wstring v : values) {
+		font.Draw(v.c_str(), valuePos, color, scale);
 		valuePos.y += 40.0f / 720.0f;
 	}
 }
