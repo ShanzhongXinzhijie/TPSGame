@@ -43,7 +43,14 @@ public:
 		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED || !m_needSend) { return; }
 
 		ExitGames::Common::Hashtable _event;
-		_event.put(static_cast<nByte>(1), m_isJoin);
+		nByte send = 0;
+		if (m_isJoin) {
+			send++;
+			if (m_first) {
+				send++;
+			}
+		}
+		_event.put(static_cast<nByte>(1),send);
 
 		GetPhoton()->Send(enJoinLeaveEvent, _event, true);
 
@@ -51,14 +58,16 @@ public:
 	}
 
 	//ëóêM
-	void Send(bool isJoin) {
+	void Send(bool isJoin, bool first) {
 		m_isJoin = isJoin;
+		m_first = first;
 		m_needSend = true;
 	}
 
 private:
 	bool m_needSend;
 	bool m_isJoin;
+	bool m_first;
 };
 
 class NetWorkManager : public IGameObject{
@@ -103,9 +112,9 @@ public:
 			case enJoinLeaveEvent:
 			{
 				ExitGames::Common::Hashtable eventContent = ExitGames::Common::ValueObject<ExitGames::Common::Hashtable>(eventContentObj).getDataCopy();
-				bool isJoin = ((ExitGames::Common::ValueObject<bool>*)(eventContent.getValue((nByte)1)))->getDataCopy();
+				nByte isJoin = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)1)))->getDataCopy();
 				if (m_joinLeaveFunc != nullptr) {
-					m_joinLeaveFunc(isJoin, playerNr);
+					m_joinLeaveFunc(isJoin > 0, isJoin == 2, playerNr);
 				}
 			}
 				break;
@@ -132,7 +141,7 @@ public:
 		}
 	}
 
-	void setJoinLeaveFunc(const std::function<void(bool,int)>& joinFunc) {
+	void setJoinLeaveFunc(const std::function<void(bool, bool,int)>& joinFunc) {
 		m_joinLeaveFunc = joinFunc;
 	}
 
@@ -147,7 +156,7 @@ public:
 
 private:
 	ActionSender m_actionSenderReceiver[3];
-	std::function<void(bool,int)> m_joinLeaveFunc = nullptr;
+	std::function<void(bool, bool,int)> m_joinLeaveFunc = nullptr;
 	std::function<void(ActionSender, int)> m_actionFunc = nullptr;
 };
 

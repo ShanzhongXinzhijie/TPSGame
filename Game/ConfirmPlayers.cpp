@@ -34,10 +34,12 @@ bool ConfirmPlayers::Start() {
 #ifndef SpritScreen
 	m_netWork = FindGO<NetWorkManager>();
 	m_netWork->ConnectJoin(L"バンパイア中村");
-	m_netWork->setJoinLeaveFunc([&](bool isJoin, int pCord) {
+	m_netWork->setJoinLeaveFunc([&](bool isJoin, bool isfirst,int pCord) {
 		if (isJoin) {
 			joinPlayer(pCord);
-			m_caster.Send(true);
+			if (isfirst) {
+				m_caster.Send(true, false);
+			}
 		} else {
 			leavePlayer(pCord);
 		}
@@ -45,7 +47,7 @@ bool ConfirmPlayers::Start() {
 	std::wstring name(L"player");
 	name += std::to_wstring(GetPhoton()->GetLocalPlayerNumber());
 	list.values.push_back(name);
-	m_caster.Send(true);
+	m_caster.Send(true,true);
 #endif
 	return true;
 }
@@ -71,7 +73,7 @@ void ConfirmPlayers::Update() {
 		new Game(players);
 		delete this;
 	} else if (Pad(0).GetDown(enButtonBack)) {
-		m_caster.Send(false);
+		m_caster.Send(false,false);
 		new Title;
 		delete this;
 	}
