@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "GuiList.h"
+#include "Network/Network.h"
 
 using namespace GameObj;
 
@@ -15,13 +16,15 @@ public:
 	void PostRender() override;
 
 private:
+
 	PerspectiveCamera camera;
 	CDirectionLight m_dirlight;
 	std::unordered_map<int, CVector4> players;
-	bool startButton[3] = {};
+	NetWorkManager* m_netWork = nullptr;
+
+	NetJoinLeaveCaster m_caster;
 	
 	GuiList list;
 	CSprite m_sprite;
-
 };
 

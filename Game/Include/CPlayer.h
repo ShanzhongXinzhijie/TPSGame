@@ -7,7 +7,7 @@ class CPlayerCamera;
 
 class CPlayer : public IGameObject {
 public:
-	CPlayer(CVector4 color, const CVector3& positon);
+	CPlayer(int playerNum, CVector4 color, const CVector3& positon);
 	virtual ~CPlayer();
 
 	bool Start() override;
@@ -24,6 +24,8 @@ public:
 	}
 
 	const CVector4 color;
+
+	const int playerNum;
 
 private:
 	void GravityAndJump();
@@ -66,5 +68,5 @@ private:
 	CCharacterController charaCon;
 	ActionSender action;     //プレイヤーの操作が入っている
 
-	SuicideObj::CCollisionObj m_collision;
+	SuicideObj::CCollisionObj m_collision; //コリジョン
 };

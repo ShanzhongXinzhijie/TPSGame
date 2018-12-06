@@ -217,6 +217,7 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
+    <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

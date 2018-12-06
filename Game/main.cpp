@@ -8,7 +8,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	//ƒQ[ƒ€‚Ì‰Šú‰»B
 	InitEngineParameter initparam;
+
+#ifdef SpritScreen
 	initparam.isSplitScreen = enSide_TwoSplit;
+#else
+	initparam.isSplitScreen = enNoSplit;
+#endif
+
 	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
 	NetWorkManager networkManager;

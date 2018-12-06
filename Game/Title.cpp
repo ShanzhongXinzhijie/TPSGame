@@ -13,9 +13,13 @@ bool Title::Start() {
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({0, 0, 0});
 	camera.UpdateMatrix();
+#ifdef SpritScreen
 	GetCameraList().clear();
 	GetCameraList().push_back(&camera);
 	GetCameraList().push_back(&camera);
+#else
+	SetMainCamera(&camera);
+#endif
 	
 	m_sprite.Init(L"Resource/spriteData/Title.dds");
 	return true;

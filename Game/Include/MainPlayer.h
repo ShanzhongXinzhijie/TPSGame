@@ -11,7 +11,7 @@ public:
 	void Update() override;
 
 private:
-	const int padNum;
+	const int playerNum;
 	bool pushB = false;
 	TpsCamera m_camera;
 

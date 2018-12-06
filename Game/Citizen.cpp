@@ -10,6 +10,11 @@ Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps
 	m_model.SetPos({ 300,100,300 });
 
 	charaCon.Init(15.0f, 80.0f, { 300,100,300 });
+
+	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 80.0f);
+	m_collision.SetName(L"Citizen");
+	m_collision.SetClass(this);
+
 	mover = moveType;
 }
 
@@ -25,9 +30,20 @@ void Citizen::Update() {
 		m_model.GetAnimCon().Play(anim_idle);
 	}
 	m_model.SetPos(charaCon.Execute(moveVec));
+	m_collision.SetPosition(charaCon.GetPosition());
 
 	//‰ñ“]
 	m_model.SetRot(mover->getTurn());
+}
+
+bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
+	if (!isKenzoku) {
+		m_animationClips[anim_walk].Load(L"Resource/animData/VanpWalk.tka", true);
+		m_animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
+		m_model.Init(L"Resource/modelData/Vanp.cmo", m_animationClips, anim_num);
+		isKenzoku = true;
+	}
+	return true;
 }
 
 void Citizen::Kansenzyoutai()

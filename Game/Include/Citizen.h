@@ -11,6 +11,8 @@ public:
 
 	void Update() override;
 
+	bool BatHit(CPlayer* player, CVector3 dir);
+
 	void Kansenzyoutai();
 
 private:
@@ -31,5 +33,7 @@ private:
 	CPlayer* ownerPlayer; 
 
 	bool isKenzoku = false;
+
+	SuicideObj::CCollisionObj m_collision;
 };
 

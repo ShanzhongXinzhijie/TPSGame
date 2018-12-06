@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BatBullet.h"
 #include "CPlayer.h"
+#include "Citizen.h"
 
 using SuicideObj::CCollisionObj;
 
@@ -37,6 +38,11 @@ bool BatBullet::Start() {
 	m_collision.SetCallback([&](CCollisionObj::SCallbackParam& callback){
 		if (callback.EqualName(L"CPlayer")) {
 			if (callback.GetClass<CPlayer>()->BatHit(shotPlayer, getHitVec())) {
+				DeleteGO(this, false);
+			}
+
+		} else if (callback.EqualName(L"Citizen")) {
+			if (callback.GetClass<Citizen>()->BatHit(shotPlayer, getHitVec())) {
 				DeleteGO(this, false);
 			}
 		}
