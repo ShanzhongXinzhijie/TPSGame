@@ -16,13 +16,13 @@ public:
 	void Kansenzyoutai();
 
 private:
-	GameObj::CSkinModelRender m_model;
+	GameObj::CSkinModelRender* m_model;
 	enum {
 		anim_walk,
 		anim_idle,
 		anim_num,
 	};
-	AnimationClip m_animationClips[anim_num];
+	AnimationClip* m_animationClips;
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
 
 	CCharacterController charaCon;
