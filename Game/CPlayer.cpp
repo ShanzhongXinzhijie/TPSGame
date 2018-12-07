@@ -2,8 +2,8 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 
-CPlayer::CPlayer(CVector4 col, const CVector3& position)
-	: m_pos(position), color(col){
+CPlayer::CPlayer(int pNum,CVector4 col, const CVector3& position)
+	: playerNum(pNum),m_pos(position), color(col){
 }
 
 CPlayer::~CPlayer() {
@@ -37,7 +37,7 @@ void CPlayer::Update() {
 		Turn();
 		Shot();
 		//アップデート終了時、アクションを初期化する。
-		action = ActionSender();
+		//action = ActionSender();
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
@@ -206,7 +206,7 @@ void CPlayer::Shot() {
 	if (shot) {
 		CVector3 look = action.getLookVec();
 		CVector3 pos = m_pos;
-		pos.y += 70;
+		pos.y += 60;
 		new BatBullet(this, pos, look * 30);
 	}
 }

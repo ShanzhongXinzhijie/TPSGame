@@ -4,7 +4,8 @@ using namespace GameObj;
 class Ground : public IGameObject{
 public:
 	Ground(CVector3 pos);
-
+	
+	void Update()override;
 	bool Start()override;
 private:
 	GameObj::CSkinModelRender m_model;

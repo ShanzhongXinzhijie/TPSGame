@@ -7,7 +7,7 @@ class CPlayerCamera;
 
 class CPlayer : public IGameObject {
 public:
-	CPlayer(CVector4 color, const CVector3& positon);
+	CPlayer(int playerNum, CVector4 color, const CVector3& positon);
 	virtual ~CPlayer();
 
 	bool Start() override;
@@ -19,7 +19,22 @@ public:
 
 	bool BatHit(CPlayer* player, CVector3 dir);
 
+	const btCollisionObject* getCollisionObj() {
+		return &m_collision.GetCollisionObject();
+	}
+
 	const CVector4 color;
+
+	const int playerNum;
+
+
+	//通信送信で使用
+	const ActionSender& GetActionSender()const {
+		return action;
+	}
+	bool GetIsDead()const {
+		return m_hp == 0 ? true : false;
+	}
 
 private:
 	void GravityAndJump();
@@ -62,5 +77,5 @@ private:
 	CCharacterController charaCon;
 	ActionSender action;     //プレイヤーの操作が入っている
 
-	SuicideObj::CCollisionObj m_collision;
+	SuicideObj::CCollisionObj m_collision; //コリジョン
 };

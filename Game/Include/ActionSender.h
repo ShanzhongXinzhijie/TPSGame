@@ -24,7 +24,7 @@ public:
 		return shot;
 	}
 
-	CVector3 getLookVec() {
+	CVector3 getLookVec() const {
 		return lookVec;
 	}
 

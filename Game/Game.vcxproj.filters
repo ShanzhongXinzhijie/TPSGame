@@ -20,6 +20,12 @@
     <ClInclude Include="Include\ittarikitari.h" />
     <ClInclude Include="Include\ICitizenBrain.h" />
     <ClInclude Include="Include\kansen.h" />
+    <ClInclude Include="Include\GuiList.h" />
+    <ClInclude Include="Network\Network.h" />
+    <ClInclude Include="Network\NetPlayerReceiver.h" />
+    <ClInclude Include="Network\NetPlayerManager.h" />
+    <ClInclude Include="Network\NetPlayerCaster.h" />
+    <ClInclude Include="Network\NetworkConst.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -41,6 +47,11 @@
     <ClCompile Include="ittarikitari.cpp" />
     <ClCompile Include="ICitizenBrain.cpp" />
     <ClCompile Include="kansen.cpp" />
+    <ClCompile Include="GuiList.cpp" />
+    <ClCompile Include="Network\Network.cpp" />
+    <ClCompile Include="Network\NetPlayerReceiver.cpp" />
+    <ClCompile Include="Network\NetPlayerManager.cpp" />
+    <ClCompile Include="Network\NetPlayerCaster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -52,6 +63,7 @@
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

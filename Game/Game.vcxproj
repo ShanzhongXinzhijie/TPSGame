@@ -171,12 +171,17 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="GuiList.cpp" />
     <ClCompile Include="ICitizenBrain.cpp" />
     <ClCompile Include="ittarikitari.cpp" />
     <ClCompile Include="kansen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ConfirmPlayers.cpp" />
     <ClCompile Include="MainPlayer.cpp" />
+    <ClCompile Include="Network\NetPlayerCaster.cpp" />
+    <ClCompile Include="Network\NetPlayerManager.cpp" />
+    <ClCompile Include="Network\NetPlayerReceiver.cpp" />
+    <ClCompile Include="Network\Network.cpp" />
     <ClCompile Include="sikakukuidou.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -196,11 +201,17 @@
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\Ground.h" />
     <ClInclude Include="Include\ConfirmPlayers.h" />
+    <ClInclude Include="Include\GuiList.h" />
     <ClInclude Include="Include\ICitizenBrain.h" />
     <ClInclude Include="Include\ittarikitari.h" />
     <ClInclude Include="Include\kansen.h" />
     <ClInclude Include="Include\MainPlayer.h" />
     <ClInclude Include="Include\ziguzagu.h" />
+    <ClInclude Include="Network\NetPlayerCaster.h" />
+    <ClInclude Include="Network\NetPlayerManager.h" />
+    <ClInclude Include="Network\NetPlayerReceiver.h" />
+    <ClInclude Include="Network\Network.h" />
+    <ClInclude Include="Network\NetworkConst.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Include\sikakukuidou.h" />
     <ClInclude Include="stdafx.h" />
@@ -213,6 +224,7 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
+    <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
