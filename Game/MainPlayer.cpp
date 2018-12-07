@@ -2,14 +2,8 @@
 #include "MainPlayer.h"
 #include "ActionSender.h"
 
-#include "Network/Network.h"
-
 MainPlayer::MainPlayer(int p, CVector4 color, const CVector3& position)
 	:playerNum(p), m_camera(0, position, 100.0f), CPlayer(p,color, position){
-	if (p == 0) {
-		m_actionSenderCaster = NewGO<NetActionSenderCaster>();
-	}
-	m_p_networkManager = FindGO<NetWorkManager>();
 }
 
 
@@ -34,15 +28,6 @@ void MainPlayer::Update() {
 						Pad(0).GetButton(enButtonLB1),
 						m_camera.getLook(),
 						Pad(0).GetButton(enButtonRB1));
-
-	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
-		if (playerNum == 0) {
-			m_actionSenderCaster->SetActionSender(action);
-		}
-		else {
-			action = m_p_networkManager->GetReceiveActionSender(playerNum - 1);
-		}
-	}
 
 	CPlayer::sendAction(action);
 

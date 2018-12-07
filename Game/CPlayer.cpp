@@ -37,7 +37,7 @@ void CPlayer::Update() {
 		Turn();
 		Shot();
 		//アップデート終了時、アクションを初期化する。
-		action = ActionSender();
+		//action = ActionSender();
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {

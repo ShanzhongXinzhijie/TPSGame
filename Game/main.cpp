@@ -18,6 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
 	NetWorkManager networkManager;
+	networkManager.SetName(L"NetWorkManager");
 
 	new Title;
 

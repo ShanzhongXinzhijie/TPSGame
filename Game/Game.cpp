@@ -35,7 +35,12 @@ Game::Game(/*std::unordered_map<int, CVector4>& playersIni*/){
 		return true;
 	});
 
+#ifdef SpritScreen
 	createPlayer(true, 1);
+#else
+	//プレイヤーマネージャーの初期化(プレイヤーの作成)
+	m_netPlayerManager.Init(this);
+#endif
 
 	citizen = std::make_unique<Citizen>(players, new ittarikitari());
 
@@ -57,6 +62,11 @@ Game::~Game() {
 }
 
 void Game::createPlayer(bool isMe, int playerNum) {
+	//重複を許さない
+	if (playersMap.count(playerNum) > 0) {
+		return;
+	}
+
 	if (isMe) {
 		playersMap[playerNum] = new MainPlayer(playerNum, { 1,1,1,1 }, playerPos);
 	} else {

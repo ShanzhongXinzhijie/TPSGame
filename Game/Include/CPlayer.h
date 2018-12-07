@@ -27,6 +27,15 @@ public:
 
 	const int playerNum;
 
+
+	//通信送信で使用
+	const ActionSender& GetActionSender()const {
+		return action;
+	}
+	bool GetIsDead()const {
+		return m_hp == 0 ? true : false;
+	}
+
 private:
 	void GravityAndJump();
 	void Move();

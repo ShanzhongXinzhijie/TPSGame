@@ -20,9 +20,10 @@ private:
 	PerspectiveCamera camera;
 	CDirectionLight m_dirlight;
 	std::unordered_map<int, CVector4> players;
+	
 	NetWorkManager* m_netWork = nullptr;
 
-	NetJoinLeaveCaster m_caster;
+	//NetJoinLeaveCaster m_caster;
 	
 	GuiList list;
 	CSprite m_sprite;

@@ -2,8 +2,6 @@
 #include "CPlayer.h"
 #include "TpsCamera.h"
 
-#include "Network/Network.h"
-
 class MainPlayer :public CPlayer {
 public:
 	MainPlayer(int pad, CVector4 color, const CVector3& position);
@@ -14,9 +12,5 @@ private:
 	const int playerNum;
 	bool pushB = false;
 	TpsCamera m_camera;
-
-	//í êMóp
-	NetActionSenderCaster* m_actionSenderCaster = nullptr;
-	NetWorkManager* m_p_networkManager = nullptr;
 };
 

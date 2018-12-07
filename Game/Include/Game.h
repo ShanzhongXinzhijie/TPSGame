@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include "Citizen.h"
 
+#include "../Network/NetPlayerManager.h"
+
 class Game : public IGameObject{
 public:
 	Game(/*std::unordered_map<int, CVector4>& playersIni*/);
@@ -13,6 +15,7 @@ public:
 
 	void createPlayer(bool isMe,int playerNum);
 	void removePlayer(int playerNum);
+	CPlayer* getPlayer(int playerNum) { return playersMap[playerNum]; };
 
 private:
 	MainPlayer* mainPlayer = nullptr;
@@ -25,7 +28,7 @@ private:
 #ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;
 #else
-	NetWorkManager* m_p_networkManager = nullptr;
+	NetPlayerManager m_netPlayerManager;
 #endif
 
 	CVector3 playerPos;
