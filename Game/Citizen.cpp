@@ -11,6 +11,7 @@ Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps
 
 	charaCon.Init(15.0f, 80.0f, { 300,100,300 });
 	mover = moveType;
+	Kansenzyoutai();
 }
 
 void Citizen::Update() {
