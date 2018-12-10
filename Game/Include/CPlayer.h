@@ -50,6 +50,7 @@ private:
 	void Move();
 	void Turn();
 	void Shot();
+	void Reload();
 
 	GameObj::CSkinModelRender m_model;
 	enum {
@@ -57,6 +58,7 @@ private:
 		anim_walk,
 		anim_idle,
 		anim_shot,
+		anim_reload,
 		anim_num,
 	};
 	AnimationClip m_animationClips[anim_num];
@@ -71,9 +73,12 @@ private:
 	CQuaternion m_rot;
 	float radian = 0.0f; //‰ñ“]—Ê
 
-	//e‚ÌƒN[ƒ‹ƒ^ƒCƒ€
+	//eŒn
 	static constexpr float constShotCool = 0.1f;
 	float shotCool = constShotCool;
+	static constexpr unsigned int constBulletCount = 50;
+	unsigned int bulletCount = constBulletCount;
+	bool onReload = false;
 
 	//•¨—Œn
 	static constexpr float moveSpeed = 80.0f;              //ˆÚ“®‘¬“x

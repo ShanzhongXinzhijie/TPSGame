@@ -14,8 +14,17 @@ bool CPlayer::Start() {
 	m_animationClips[anim_walk].Load(L"Resource/animData/PlayerWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/PlayerIdle.tka", true);
 	m_animationClips[anim_shot].Load(L"Resource/animData/PlayerShot.tka", true);
+	m_animationClips[anim_reload].Load(L"Resource/animData/PlayerReload.tka", false);
 
 	m_model.Init(L"Resource/modelData/PlayerVanp.cmo", m_animationClips, anim_num);
+
+	m_model.GetAnimCon().GetAnimation(0).AddAnimationEventListener(
+		[&](const wchar_t* clipName, const wchar_t* eventName) {
+		if (std::wcscmp(eventName, L"Reload") == 0) {
+			onReload = false;
+			bulletCount = constBulletCount;
+		}
+	});
 
 	m_model.GetSkinModel().FindMaterial([&](ModelEffect* mat) {
 		mat->SetAlbedoScale(color);
@@ -32,12 +41,13 @@ bool CPlayer::Start() {
 
 void CPlayer::Update() {
 	if (m_hp != 0) {
-		GravityAndJump();
-		Move();
-		Turn();
-		Shot();
-		//アップデート終了時、アクションを初期化する。
-		//action = ActionSender();
+		if (!onReload) {
+			GravityAndJump();
+			Move();
+			Turn();
+			Shot();
+			Reload();
+		}
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
@@ -213,10 +223,18 @@ void CPlayer::Shot() {
 		shotCool -= GetDeltaTimeSec();
 	}
 
-	if (shot) {
+	if (shot && bulletCount > 0) {
 		CVector3 look = action.getLookVec();
 		CVector3 pos = m_pos;
 		pos.y += 60;
 		new BatBullet(this, pos, look * 30);
+		bulletCount--;
+	}
+}
+
+void CPlayer::Reload() {
+	if (action.isReload() && bulletCount < constBulletCount) {
+		m_model.GetAnimCon().Play(anim_reload, 0.5f);
+		onReload = true;
 	}
 }

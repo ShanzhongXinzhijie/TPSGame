@@ -5,7 +5,8 @@ public:
 				 bool jump = false,
 				 bool dash = false,
 				 CVector3 lookVector = {0,0,0},
-				 bool shot = false);
+				 bool shot = false,
+				 bool reload = false);
 	~ActionSender();
 
 	CVector2 getMovement() const{
@@ -24,6 +25,10 @@ public:
 		return shot;
 	}
 
+	bool isReload() const {
+		return reload;
+	}
+
 	CVector3 getLookVec() const {
 		return lookVec;
 	}
@@ -34,5 +39,6 @@ private:
 	bool dash;
 	CVector3 lookVec;
 	bool shot;
+	bool reload;
 };
 

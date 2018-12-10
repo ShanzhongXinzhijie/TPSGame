@@ -39,6 +39,7 @@ void NetPlayerCaster::PostUpdate() {
 			_event.put((nByte)(enActionSender + 5), (nByte)(std::round(AS.getLookVec().x*100.0f) + 100));
 			_event.put((nByte)(enActionSender + 6), (nByte)(std::round(AS.getLookVec().y*100.0f) + 100));
 			_event.put((nByte)(enActionSender + 7), (nByte)(std::round(AS.getLookVec().z*100.0f) + 100));
+			_event.put((nByte)(enActionSender + 8), (nByte)AS.isReload());
 		}
 		//4F‚Éˆê‰ñÀ•W‚ğ‘—M
 		if (m_cnt % 4 == 0) {

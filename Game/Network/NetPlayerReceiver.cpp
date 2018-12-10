@@ -59,7 +59,8 @@ void NetPlayerReceiver::RunEvent(int playerNr){
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 6))))->getDataCopy() / 100.0f - 1.0f,
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 7))))->getDataCopy() / 100.0f - 1.0f
 				},
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy()
+				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy(),
+				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 8))))->getDataCopy()
 			);
 		}
 

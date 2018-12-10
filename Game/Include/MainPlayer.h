@@ -10,7 +10,6 @@ public:
 
 private:
 	const int playerNum;
-	bool pushB = false;
 	TpsCamera m_camera;
 };
 
