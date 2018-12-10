@@ -79,8 +79,8 @@ void NetPlayerReceiver::RunEvent(int playerNr){
 	case enKillPlayer:
 	{
 		//ŽE‚³‚ê‚½
-		m_status[playerNr].m_isDead = true;
-		m_status[playerNr].m_isUpdateDead = true;
+		m_status[GetPhoton()->GetLocalPlayerNumber()].m_isDead = true;
+		m_status[GetPhoton()->GetLocalPlayerNumber()].m_isUpdateDead = true;
 	}
 	break;
 
