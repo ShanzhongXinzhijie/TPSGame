@@ -10,9 +10,11 @@ public:
 
 	void PostUpdate() override;
 
+	void SetIsDead(bool isdead) { m_isDead = isdead; }
+
 private:
 	CPlayer* m_pCPlayer = nullptr;
-	unsigned long int m_cnt = 0;
+	int m_cnt = INT_MIN;
 
 	bool m_isDead = false;
 };

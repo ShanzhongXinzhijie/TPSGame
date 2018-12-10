@@ -11,7 +11,9 @@ NetPlayerManager::NetPlayerManager()
 NetPlayerManager::~NetPlayerManager()
 {
 	for (const std::pair<int, NetPlayerCaster*>& ppp : m_playerCastersMap) {
+		m_netReceiver->RemovePlayer(ppp.first);
 		delete ppp.second;
+		m_game->removePlayer(ppp.first);
 	}
 }
 
@@ -64,6 +66,6 @@ void NetPlayerManager::CreatePlayer(int playerNr) {
 		//ƒvƒŒƒCƒ„[ì¬
 		m_game->createPlayer(isMe, playerNr);
 		m_playerCastersMap[playerNr] = new NetPlayerCaster(m_game->getPlayer(playerNr));
-		m_netReceiver->SetPlayer(m_game->getPlayer(playerNr));
+		m_netReceiver->SetPlayer(m_game->getPlayer(playerNr), m_playerCastersMap[playerNr]);
 	}
 }
