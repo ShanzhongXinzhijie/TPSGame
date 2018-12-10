@@ -38,6 +38,7 @@ public:
 	//通信受信で使用
 	void SetPosition(const CVector3& pos) {
 		m_pos = pos;
+		charaCon.SetPosition(m_pos);
 	}
 
 	//死亡処理
