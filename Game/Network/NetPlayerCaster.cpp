@@ -35,6 +35,7 @@ void NetPlayerCaster::PostUpdate() {
 			_event.put((nByte)6, (int)std::round(AS.getLookVec().x*100.0f));
 			_event.put((nByte)7, (int)std::round(AS.getLookVec().y*100.0f));
 			_event.put((nByte)8, (int)std::round(AS.getLookVec().z*100.0f));
+			_event.put((nByte)9, (nByte)AS.isReload());
 
 			GetPhoton()->Send(enActionSender, _event);
 		}

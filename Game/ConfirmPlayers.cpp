@@ -109,7 +109,6 @@ void ConfirmPlayers::Update() {
 			delete this;
 		}
 	} else if (Pad(0).GetDown(enButtonBack)) {
-		//m_caster.Send(false,false);
 		new Title;
 		delete this;
 	}

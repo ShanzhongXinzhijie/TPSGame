@@ -27,7 +27,8 @@ void MainPlayer::Update() {
 						Pad(0).GetButton(enButtonA),
 						Pad(0).GetButton(enButtonLB1),
 						m_camera.getLook(),
-						Pad(0).GetButton(enButtonRB1));
+						Pad(0).GetButton(enButtonRB1),
+						Pad(0).GetDown(enButtonX));
 
 	CPlayer::sendAction(action);
 
@@ -43,13 +44,8 @@ void MainPlayer::Update() {
 		m_camera.BackTurn();
 	}
 
-	if (Pad(0).GetButton(enButtonB)) {
-		if (!pushB) {
-			m_camera.ChangeSlow();
-			pushB = true;
-		}
-	} else {
-		pushB = false;
+	if (Pad(0).GetDown(enButtonB)) {
+		m_camera.ChangeSlow();
 	}
 
 	m_camera.SetTarget(CPlayer::getPosition());

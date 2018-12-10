@@ -17,7 +17,7 @@ void NetPlayerReceiver::EventAction(int playerNr, nByte eventCode, const ExitGam
 	{
 		ExitGames::Common::Hashtable eventContent = ExitGames::Common::ValueObject<ExitGames::Common::Hashtable>(eventContentObj).getDataCopy();
 
-		if (eventContent.getValue((nByte)8)) {
+		if (eventContent.getValue((nByte)9)) {
 			m_status[playerNr].m_actionSender = ActionSender(
 				{
 					(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy() / 100.0f,
@@ -30,7 +30,8 @@ void NetPlayerReceiver::EventAction(int playerNr, nByte eventCode, const ExitGam
 					(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)7)))->getDataCopy() / 100.0f,
 					(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)8)))->getDataCopy() / 100.0f
 				},
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)5)))->getDataCopy()
+				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)5)))->getDataCopy(),
+				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)9)))->getDataCopy()
 			);
 		}
 	}
