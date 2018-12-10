@@ -16,6 +16,7 @@ Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps
 	m_collision.SetClass(this);
 
 	mover = moveType;
+	Kansenzyoutai();
 }
 
 Citizen::~Citizen() {
