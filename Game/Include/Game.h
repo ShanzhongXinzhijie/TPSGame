@@ -23,7 +23,6 @@ private:
 	Ground* ground = nullptr;
 	Level level;
 	std::unordered_map<int, CPlayer*> playersMap;
-	std::vector<CPlayer*> players;
 
 #ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;

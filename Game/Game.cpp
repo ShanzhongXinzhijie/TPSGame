@@ -27,7 +27,7 @@ Game::Game(){
 	m_netPlayerManager.Init(this);
 #endif
 
-	citizen = std::make_unique<Citizen>(players, new ittarikitari());
+	citizen = std::make_unique<Citizen>(playersMap, new ittarikitari());
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });

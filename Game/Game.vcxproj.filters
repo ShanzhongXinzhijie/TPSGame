@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Include\ActionSender.h" />
     <ClInclude Include="Include\BatBullet.h" />
@@ -26,20 +25,17 @@
     <ClInclude Include="Network\NetPlayerManager.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
     <ClInclude Include="Network\NetworkConst.h" />
+    <ClInclude Include="Include\stdafx.h" />
+    <ClInclude Include="Include\HPbar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TpsCamera.cpp" />
-    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ConfirmPlayers.cpp" />
-    <ClCompile Include="ActionSender.cpp" />
-    <ClCompile Include="MainPlayer.cpp" />
-    <ClCompile Include="BatBullet.cpp" />
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="CircleWalk.cpp" />
     <ClCompile Include="sikakukuidou.cpp" />
@@ -52,6 +48,12 @@
     <ClCompile Include="Network\NetPlayerReceiver.cpp" />
     <ClCompile Include="Network\NetPlayerManager.cpp" />
     <ClCompile Include="Network\NetPlayerCaster.cpp" />
+    <ClCompile Include="Player\ActionSender.cpp" />
+    <ClCompile Include="Player\BatBullet.cpp" />
+    <ClCompile Include="Player\CPlayer.cpp" />
+    <ClCompile Include="Player\TpsCamera.cpp" />
+    <ClCompile Include="Player\MainPlayer.cpp" />
+    <ClCompile Include="Player\HPbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
