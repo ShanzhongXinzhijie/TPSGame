@@ -20,11 +20,12 @@ public:
 	~NetPlayerReceiver();
 
 	void PreUpdate()override;
+	void PostLoopUpdate()override;
 
 	//イベント受信
 	void EventAction(int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj);	
 	//イベント実行
-	void RunEvent(int playerNr);
+	void RunEvent(int playerNr, bool frameSkip = false);
 	//プレイヤーに情報渡す
 	void UpdatePlayer(int playerNr);
 

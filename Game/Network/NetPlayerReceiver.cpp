@@ -21,15 +21,26 @@ void NetPlayerReceiver::EventAction(int playerNr, nByte eventCode, const ExitGam
 	}
 }
 	
-void NetPlayerReceiver::RunEvent(int playerNr){
+void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
+
+	bool isFrameSkipOn = false;
 
 	while(!m_eventContentQueue[playerNr].empty()){
 	
 	//いっことりだし
 	int frmcnt = std::get<1>(m_eventContentQueue[playerNr].front());
 
+	//フレームスキップ
+	if (frameSkip) {
+		const int FRAMESKIP_LAG = 6; // フレーム以上のラグはスキップ
+		if (isFrameSkipOn || m_status[playerNr].m_cnt + FRAMESKIP_LAG <= frmcnt) {
+			m_status[playerNr].m_cnt = frmcnt;
+			isFrameSkipOn = true;
+		}
+	}
+	
 	//まだ実行しない
-	if (!m_status[playerNr].m_isNoReceive && frmcnt > m_status[playerNr].m_cnt) { return; }
+	if (!m_status[playerNr].m_isNoReceive && frmcnt > m_status[playerNr].m_cnt) { return; }	
 
 	//初回イベント
 	if (m_status[playerNr].m_isNoReceive) {
@@ -112,16 +123,31 @@ void NetPlayerReceiver::PreUpdate() {
 	}
 }
 
+void NetPlayerReceiver::PostLoopUpdate() {
+	for (int i = 0; i < NET_MAX_PLAYER + 1; i++) {
+		//イベント実行
+		RunEvent(i,true);
+
+		//プレイヤーに情報渡す
+		UpdatePlayer(i);
+	}
+}
+
 //プレイヤーに情報渡す
 void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 	if (m_pCPlayer[playerNr]) {
-		//アクション
-		m_pCPlayer[playerNr]->sendAction(m_status[playerNr].m_actionSender);
-		//座標
-		if (m_status[playerNr].m_isUpdatePos) {
-			m_pCPlayer[playerNr]->SetPosition(m_status[playerNr].m_pos);
-			m_status[playerNr].m_isUpdatePos = false;
+		
+		if (playerNr != GetPhoton()->GetLocalPlayerNumber()) {//自分は除く
+			//アクション
+			m_pCPlayer[playerNr]->sendAction(m_status[playerNr].m_actionSender);
+
+			//座標
+			if (m_status[playerNr].m_isUpdatePos) {
+				m_pCPlayer[playerNr]->SetPosition(m_status[playerNr].m_pos);
+				m_status[playerNr].m_isUpdatePos = false;
+			}
 		}
+
 		//生き死に
 		if (m_status[playerNr].m_isUpdateDead) {
 			if (m_status[playerNr].m_isDead) {
@@ -136,5 +162,6 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 			}
 			m_status[playerNr].m_isUpdateDead = false;
 		}
+
 	}
 }

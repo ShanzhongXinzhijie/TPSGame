@@ -69,3 +69,15 @@ void NetPlayerManager::CreatePlayer(int playerNr) {
 		m_netReceiver->SetPlayer(m_game->getPlayer(playerNr), m_playerCastersMap[playerNr]);
 	}
 }
+
+void NetPlayerManager::PostRender() {
+	//Ú‘±ó‘Ô‚Ì•\¦
+	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
+		wchar_t str[256];
+		swprintf_s(str, L"Ú‘±\nPing: %dms", GetPhoton()->GetPing_ms());
+		m_font.Draw(str, { 0.0f,0.2f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+	else {
+		m_font.Draw(L"Ø’f", { 0.0f,0.2f }, { 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+}
