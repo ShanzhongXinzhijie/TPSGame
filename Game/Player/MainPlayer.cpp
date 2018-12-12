@@ -50,3 +50,7 @@ void MainPlayer::Update() {
 
 	m_camera.SetTarget(CPlayer::getPosition());
 }
+
+void MainPlayer::PostRender() {
+	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
+}

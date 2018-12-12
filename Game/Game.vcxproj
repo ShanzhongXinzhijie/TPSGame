@@ -238,6 +238,10 @@
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\waku.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\HP_in.png" />
+    <ImageContentTask Include="Asset\spriteData\HP_out.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />

@@ -65,8 +65,10 @@ private:
 	AnimationClip m_animationClips[anim_num];
 	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
 
+protected:
 	static constexpr unsigned short constHp = 10;
-	unsigned short m_hp = constHp;
+	unsigned short m_hp = 6;
+private:
 	static constexpr float constDeathCool = 10;
 	float deathCool = 0;
 

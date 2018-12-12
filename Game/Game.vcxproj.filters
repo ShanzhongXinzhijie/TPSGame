@@ -83,4 +83,8 @@
     <ImageContentTask Include="Asset\spriteData\Title.png" />
     <ImageContentTask Include="Asset\spriteData\waku.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\HP_in.png" />
+    <Image Include="Asset\spriteData\HP_out.png" />
+  </ItemGroup>
 </Project>

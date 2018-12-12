@@ -1,6 +1,7 @@
 #pragma once
 #include "CPlayer.h"
 #include "TpsCamera.h"
+#include "HPbar.h"
 
 class MainPlayer :public CPlayer {
 public:
@@ -8,8 +9,11 @@ public:
 	~MainPlayer();
 	void Update() override;
 
+	void PostRender() override;
+
 private:
 	const int playerNum;
+	HPbar hpbar;
 	TpsCamera m_camera;
 };
 
