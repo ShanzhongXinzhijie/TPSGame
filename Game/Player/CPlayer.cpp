@@ -51,8 +51,7 @@ void CPlayer::Update() {
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
-			m_hp = constHp;
-			m_model.SetIsDraw(true);
+			Revive();
 		}
 	}
 }
@@ -70,12 +69,23 @@ bool CPlayer::BatHit(CPlayer* player, CVector3 dir) {
 		velocity += dir;
 		m_hp--;
 		if (m_hp == 0) {
-			deathCool = constDeathCool;
-			m_model.SetIsDraw(false);
+			Death();
 		}
 		return true;
 	}
 	return false;
+}
+
+//Ž€–Sˆ—
+void CPlayer::Death() {
+	m_hp = 0;
+	deathCool = constDeathCool;
+	m_model.SetIsDraw(false);
+}
+//‘h¶ˆ—
+void CPlayer::Revive() {
+	m_hp = constHp;
+	m_model.SetIsDraw(true);
 }
 
 void CPlayer::GravityAndJump() {

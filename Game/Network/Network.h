@@ -8,7 +8,7 @@ class NetWorkManager : public IGameObject{
 public:
 	NetWorkManager() {
 		//ƒtƒHƒgƒ“‰Šú‰»
-		GetEngine().InitPhoton(L"3d457b93-aeb7-4fb7-b958-808dd8b623a4", L"Alpha",
+		GetEngine().InitPhoton(L"3d457b93-aeb7-4fb7-b958-808dd8b623a4", L"Alpha2b",
 			[&](int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj) {
 				for (auto& EventAction : m_eventActionList) {
 					EventAction(playerNr, eventCode, eventContentObj);
