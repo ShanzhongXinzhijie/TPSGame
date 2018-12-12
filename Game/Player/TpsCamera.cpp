@@ -64,6 +64,12 @@ void TpsCamera::Update() {
 	moveLR();
 	//ƒJƒƒ‰‰ñ“]
 	CVector2 stickMove = Pad(padNum).GetStick(enLR::R);
+
+	//“ñŽŸŠÖ”“I‚È“ü—Í‚É‚·‚é
+	float len = stickMove.Length(); len = pow(len, 2.0f); //len = pow(25.0f, len)/25.0f; //len -= 1.0f;
+	stickMove.Normalize();
+	stickMove *= len;
+
 	stickMove = stickMove * 0.05f;
 	if (backTurnRad > 0.0f) {
 		float rad = CMath::PI * GetDeltaTimeSec() / backTurnSpeed;
