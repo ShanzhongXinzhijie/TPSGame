@@ -6,7 +6,7 @@ class ICitizenBrain;
 
 class Citizen : public IGameObject{
 public:
-	Citizen(std::vector<CPlayer*>& players, ICitizenBrain* moveType);
+	Citizen(std::unordered_map<int, CPlayer*>& players, ICitizenBrain* moveType);
 	~Citizen();
 
 	void Update() override;
@@ -28,7 +28,7 @@ private:
 	CCharacterController charaCon;
 	ICitizenBrain* mover;
 
-	std::vector<CPlayer*>& players;
+	std::unordered_map<int, CPlayer*>& playersMap;
 
 	CPlayer* ownerPlayer; 
 

@@ -2,7 +2,8 @@
 #include "kansen.h"
 
 
-kansen::kansen(std::vector<CPlayer*>& ps,const CVector3& Citizenpos) : players(ps),citizen_pos(Citizenpos)
+kansen::kansen(std::unordered_map<int, CPlayer*>& pm,const CVector3& Citizenpos)
+	: playersMap(pm),citizen_pos(Citizenpos)
 {
 }
 
@@ -27,7 +28,9 @@ bool kansen::isAtk()
 CVector3 kansen::getMove()
 {
 	CVector3 walk;
-	for (CPlayer* player : players) {
+	for (const std::pair<int, CPlayer*> playerPair : playersMap) {
+		CPlayer* player = playerPair.second;
+
 		CVector3 kyori;
 		kyori = player->getPosition() - citizen_pos;
 		float kaiten = atan2f(kyori.x, kyori.z);

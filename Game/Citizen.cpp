@@ -3,7 +3,7 @@
 #include "ICitizenBrain.h"
 #include "kansen.h"
 
-Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps){
+Citizen::Citizen(std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
 	m_model.Init(L"Resource/modelData/Citizen.cmo", m_animationClips, anim_num);
@@ -16,7 +16,6 @@ Citizen::Citizen(std::vector<CPlayer*>& ps, ICitizenBrain* moveType): players(ps
 	m_collision.SetClass(this);
 
 	mover = moveType;
-	Kansenzyoutai();
 }
 
 Citizen::~Citizen() {
@@ -63,7 +62,7 @@ void Citizen::Kansenzyoutai()
 	m_model.SetPos(charaCon.GetPosition());
 
 	delete mover;
-	mover = new kansen(players,charaCon.GetPosition());
+	mover = new kansen(playersMap,charaCon.GetPosition());
 
 	isKenzoku = true;
 }

@@ -30,13 +30,13 @@ TpsCamera::~TpsCamera() {
 void TpsCamera::RotationCamera(const CVector2& rot) {
 	float speed = 1;
 	if (slow) {
-		speed = 0.3;
+		speed = 0.3f;
 	}
 	m_rot += rot * speed;
 	if (m_rot.x < -CMath::PI2) { m_rot.x += CMath::PI2; }
 	if (m_rot.x > CMath::PI2) { m_rot.x -= CMath::PI2; }
-	if (m_rot.y < -CMath::PI / 2.1) { m_rot.y = -CMath::PI / 2.1; }
-	if (m_rot.y > CMath::PI/2.1) { m_rot.y = CMath::PI/2.1; }
+	if (m_rot.y < -CMath::PI / 2.1f) { m_rot.y = -CMath::PI / 2.1f; }
+	if (m_rot.y > CMath::PI/2.1f) { m_rot.y = CMath::PI/2.1f; }
 
 	UpdateVector();
 }
