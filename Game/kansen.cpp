@@ -2,8 +2,8 @@
 #include "kansen.h"
 
 
-kansen::kansen(std::unordered_map<int, CPlayer*>& pm,const CVector3& Citizenpos)
-	: playersMap(pm),citizen_pos(Citizenpos)
+kansen::kansen(std::unordered_map<int, CPlayer*>& pm,const CVector3& Citizenpos,Team*& teamm)
+	: playersMap(pm),citizen_pos(Citizenpos),team(teamm)
 {
 }
 

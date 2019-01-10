@@ -27,6 +27,10 @@ public:
 		return zombieCount;
 	}
 
+	void hasPlayer(CPlayer*) {
+
+	}
+
 private:
 	unsigned int zombieCount = 0;
 	CVector4 color;

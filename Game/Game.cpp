@@ -39,11 +39,11 @@ Game::Game() : redTeam({ 1,0.5f,0.5f,1 }), blueTeam({ 0.5f,0.5f,1,1 }) {
 	m_netPlayerManager.Init(this);
 #endif
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 100; i++) {
 
 		Citizen* citizen = new Citizen(playersMap, new ittarikitari());
 		citizenArray.push_back(citizen);
-		if (i > 5) {
+		if (i > 50) {
 			citizen->setPos(citizenSpawn1.getPos());
 		} else {
 			citizen->setPos(citizenSpawn2.getPos());
