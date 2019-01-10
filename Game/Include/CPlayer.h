@@ -2,12 +2,13 @@
 
 #include "DemolisherWeapon/physics/character/CCharacterController.h"
 #include "ActionSender.h"
+#include "Team.h"
 
 class CPlayerCamera;
 
 class CPlayer : public IGameObject {
 public:
-	CPlayer(int playerNum, CVector4 color, const CVector3& positon);
+	CPlayer(int playerNum, Team* team, const CVector3& positon);
 	virtual ~CPlayer();
 
 	bool Start() override;
@@ -23,7 +24,7 @@ public:
 		return &m_collision.GetCollisionObject();
 	}
 
-	const CVector4 color;
+	Team* team;
 
 	const int playerNum;
 
@@ -67,7 +68,7 @@ private:
 
 protected:
 	static constexpr unsigned short constHp = 10;
-	unsigned short m_hp = 6;
+	unsigned short m_hp = 10;
 private:
 	static constexpr float constDeathCool = 10;
 	float deathCool = 0;

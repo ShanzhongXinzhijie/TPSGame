@@ -5,7 +5,7 @@
 
 class MainPlayer :public CPlayer {
 public:
-	MainPlayer(int pad, CVector4 color, const CVector3& position);
+	MainPlayer(int pad, Team* team, const CVector3& position);
 	~MainPlayer();
 	void Update() override;
 
@@ -14,6 +14,7 @@ public:
 private:
 	const int playerNum;
 	HPbar hpbar;
+	CFont font;
 	TpsCamera m_camera;
 };
 

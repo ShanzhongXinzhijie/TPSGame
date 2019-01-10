@@ -1,5 +1,5 @@
 #pragma once
-#include <unordered_map>
+#include <unordered_set>
 #include "GuiList.h"
 #include "Network/Network.h"
 
@@ -19,7 +19,7 @@ private:
 
 	PerspectiveCamera camera;
 	CDirectionLight m_dirlight;
-	std::unordered_map<int, CVector4> players;
+	std::unordered_set<int> players;
 	
 	NetWorkManager* m_netWork = nullptr;
 

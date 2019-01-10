@@ -11,6 +11,10 @@ public:
 
 	void Update() override;
 
+	void setPos(const CVector3& pos) {
+		charaCon.SetPosition(pos);
+	}
+
 	bool BatHit(CPlayer* player, CVector3 dir);
 
 	void Kansenzyoutai();
@@ -30,7 +34,7 @@ private:
 
 	std::unordered_map<int, CPlayer*>& playersMap;
 
-	CPlayer* ownerPlayer; 
+	Team* ownerTeam = nullptr; 
 
 	bool isKenzoku = false;
 

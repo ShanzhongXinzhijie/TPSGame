@@ -41,8 +41,20 @@ void Citizen::Update() {
 }
 
 bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
-	if (!isKenzoku) {
-		Kansenzyoutai();
+	if (ownerTeam != player->team) {
+		if (!isKenzoku) {
+			Kansenzyoutai();
+		}
+
+		if (ownerTeam != nullptr) {
+			ownerTeam->removeZombie();
+		}
+		ownerTeam = player->team;
+		ownerTeam->addZombie();
+
+		m_model.GetSkinModel().FindMaterial([&](ModelEffect* mat) {
+			mat->SetAlbedoScale(ownerTeam->getColor());
+		});
 	}
 	return true;
 }
