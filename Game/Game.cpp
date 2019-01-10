@@ -60,9 +60,11 @@ Game::Game() : redTeam({ 1,0.5f,0.5f,1 }), blueTeam({ 0.5f,0.5f,1,1 }) {
 }
 
 Game::~Game() {
+#ifdef SpritScreen
 	for (const std::pair<int, CPlayer*>& ppp : playersMap) {
 		delete ppp.second;
 	}
+#endif
 	for (Citizen* cp : citizenArray) {
 		delete cp;
 	}

@@ -12,7 +12,7 @@ public:
 	void PostRender() override;
 
 private:
-	const int playerNum;
+	const int playerNum = 0;
 	HPbar hpbar;
 	CFont font;
 	TpsCamera m_camera;
