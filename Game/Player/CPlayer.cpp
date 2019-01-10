@@ -65,16 +65,22 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
 
-bool CPlayer::BatHit(CPlayer* player, CVector3 dir) {
-	if (this != player && m_hp != 0) {
+bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
+	if (this != player) {
+		Hit(dir);
+		return true;
+	}
+	return false;
+}
+
+void CPlayer::Hit(const CVector3 & dir) {
+	if (m_hp != 0) {
 		velocity += dir;
 		m_hp--;
 		if (m_hp == 0) {
 			Death();
 		}
-		return true;
 	}
-	return false;
 }
 
 //éÄñSèàóù

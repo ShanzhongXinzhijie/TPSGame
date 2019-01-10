@@ -18,7 +18,9 @@ public:
 
 	void sendAction(const ActionSender& action);
 
-	bool BatHit(CPlayer* player, CVector3 dir);
+	bool BatHit(CPlayer* player,const CVector3& dir);
+
+	void Hit(const CVector3& dir);
 
 	const btCollisionObject* getCollisionObj() {
 		return &m_collision.GetCollisionObject();

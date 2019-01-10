@@ -29,6 +29,8 @@ private:
 	AnimationClip m_animationClips[anim_num];
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
 
+	float atkTime = 0;
+
 	CCharacterController charaCon;
 	ICitizenBrain* mover;
 

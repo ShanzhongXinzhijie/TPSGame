@@ -74,8 +74,8 @@ Game::~Game() {
 void Game::Update() {
 	timer -= GetDeltaTimeSec();
 	if (timer < 0) {
-		delete this;
 		new Result(redTeam.getZombieCount(), blueTeam.getZombieCount());
+		delete this;
 
 	}
 }

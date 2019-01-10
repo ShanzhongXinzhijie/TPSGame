@@ -25,7 +25,37 @@ Citizen::~Citizen() {
 void Citizen::Update() {
 	mover->Update(charaCon.IsOnGround());
 
-	charaCon.GetPosition();
+	if (atkTime > 0) {
+		atkTime -= GetDeltaTimeSec();
+		return;
+	}
+	//UŒ‚
+	if (mover->isAtk()) {
+		atkTime = 0.5;
+		using namespace SuicideObj;
+		CVector3 pos = charaCon.GetPosition();
+		pos.y += 50;
+		CVector3 vec = CVector3::Front()*60;
+		mover->getTurn().Multiply(vec);
+		pos += vec;
+
+		CCollisionObj* atkCol = new CCollisionObj();
+		atkCol->CreateSphere(pos, CQuaternion::Identity(), 20.0f);
+		atkCol->SetName(L"ZombieAtk");
+		atkCol->SetTimer(2);
+		atkCol->SetCallback([&, vec, atkCol](CCollisionObj::SCallbackParam& callback) {
+			if (callback.EqualName(L"CPlayer")) {
+				CPlayer* p = callback.GetClass<CPlayer>();
+				if (ownerTeam->hasPlayer(p)) {
+					CVector3 v = vec * 10;
+					v.y += 200;
+					p->Hit(v);
+					atkCol->Delete();
+				}
+			}
+		});
+		return;
+	}
 	//ˆÚ“®
 	CVector3 moveVec = mover->getMove();
 	if (moveVec.x != 0 || moveVec.z != 0) {
