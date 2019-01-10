@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_set>
 
 class CPlayer;
 
@@ -8,7 +9,7 @@ public:
 	~Team();
 
 	void addPlayer(CPlayer* player) {
-		players.push_back(player);
+		players.insert(player);
 	}
 
 	CVector4 getColor() const{
@@ -27,9 +28,13 @@ public:
 		return zombieCount;
 	}
 
+	bool hasPlayer(CPlayer* player) {
+		return players.count(player) > 0;
+	}
+
 private:
 	unsigned int zombieCount = 0;
 	CVector4 color;
-	std::vector<CPlayer*> players;
+	std::unordered_set<CPlayer*> players;
 };
 

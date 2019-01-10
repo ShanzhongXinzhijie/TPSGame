@@ -3,7 +3,11 @@
 #include "ActionSender.h"
 
 MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
-	:playerNum(p), m_camera(playerNum, position, 100.0f), CPlayer(p,team, position){
+	:
+#ifdef SpritScreen
+	playerNum(p),
+#endif
+	m_camera(playerNum, position, 100.0f), CPlayer(p,team, position){
 }
 
 
