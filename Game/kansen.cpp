@@ -30,15 +30,16 @@ CVector3 kansen::getMove()
 	CVector3 walk;
 	for (const std::pair<int, CPlayer*> playerPair : playersMap) {
 		CPlayer* player = playerPair.second;
+		if (!team->hasPlayer(player)) {
+			CVector3 kyori;
+			kyori = player->getPosition() - citizen_pos;
+			float kaiten = atan2f(kyori.x, kyori.z);
 
-		CVector3 kyori;
-		kyori = player->getPosition() - citizen_pos;
-		float kaiten = atan2f(kyori.x, kyori.z);
-		
-		if (kyori.Length() < 300.0f) {
-			walk += kyori;
-			rot.SetRotation(CVector3::AxisY(), kaiten);
-			break;
+			if (kyori.Length() < 300.0f) {
+				walk += kyori;
+				rot.SetRotation(CVector3::AxisY(), kaiten);
+				break;
+			}
 		}
 	}
 	
