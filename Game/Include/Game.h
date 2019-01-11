@@ -42,7 +42,6 @@ private:
 
 	Team redTeam;
 	Team blueTeam;
-	bool nextIsRed = false;
 
 	std::vector<Citizen*> citizenArray;
 

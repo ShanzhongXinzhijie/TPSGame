@@ -25,43 +25,24 @@ Citizen::~Citizen() {
 void Citizen::Update() {
 	mover->Update(charaCon.IsOnGround());
 
-	if (atkTime > 0) {
-		atkTime -= GetDeltaTimeSec();
-		return;
-	}
+	AnimationController& animCon = m_model.GetAnimCon();
 	//UŒ‚
-	if (mover->isAtk()) {
-		atkTime = 0.5;
-		using namespace SuicideObj;
-		CVector3 pos = charaCon.GetPosition();
-		pos.y += 50;
-		CVector3 vec = CVector3::Front()*60;
-		mover->getTurn().Multiply(vec);
-		pos += vec;
-
-		CCollisionObj* atkCol = new CCollisionObj();
-		atkCol->CreateSphere(pos, CQuaternion::Identity(), 20.0f);
-		atkCol->SetName(L"ZombieAtk");
-		atkCol->SetTimer(2);
-		atkCol->SetCallback([&, vec, atkCol](CCollisionObj::SCallbackParam& callback) {
-			if (callback.EqualName(L"CPlayer")) {
-				CPlayer* p = callback.GetClass<CPlayer>();
-				if (ownerTeam->hasPlayer(p)) {
-					CVector3 v = vec * 10;
-					v.y += 200;
-					p->Hit(v);
-					atkCol->Delete();
-				}
-			}
-		});
-		return;
+	if (isKenzoku) {
+		if (attacking) {
+			return;
+		}
+		if (mover->isAtk()) {
+			animCon.Play(anim_attack, animInterpolateSec);
+			attacking = true;
+			return;
+		}
 	}
 	//ˆÚ“®
 	CVector3 moveVec = mover->getMove();
 	if (moveVec.x != 0 || moveVec.z != 0) {
-		m_model.GetAnimCon().Play(anim_walk);
+		animCon.Play(anim_walk, animInterpolateSec);
 	} else {
-		m_model.GetAnimCon().Play(anim_idle);
+		animCon.Play(anim_idle, animInterpolateSec);
 	}
 	m_model.SetPos(charaCon.Execute(moveVec));
 	m_collision.SetPosition(charaCon.GetPosition());
@@ -97,14 +78,48 @@ void Citizen::Kansenzyoutai()
 	}
 	m_animationClips[anim_walk].Load(L"Resource/animData/VanpWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
+	m_animationClips[anim_attack].Load(L"Resource/animData/VanpAttack.tka", false);
 
 	m_model.~CSkinModelRender();
 	new(&m_model) GameObj::CSkinModelRender();
 	m_model.Init(L"Resource/modelData/Vanp.cmo", m_animationClips, anim_num);
 	m_model.SetPos(charaCon.GetPosition());
+	m_model.GetAnimCon().AddAnimationEventListener([&](const wchar_t* clipName, const wchar_t* evName) {
+		if (std::wcscmp(evName, L"attack") == 0) {
+			Attack();
+		} else if (std::wcscmp(evName, L"attackEnd") == 0) {
+			m_model.GetAnimCon().Play(anim_idle, animInterpolateSec);
+			attacking = false;
+		}
+	});
 
 	delete mover;
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);
 
 	isKenzoku = true;
+}
+
+void Citizen::Attack() {
+	using namespace SuicideObj;
+	CVector3 pos = charaCon.GetPosition();
+	pos.y += 50;
+	CVector3 vec = CVector3::Front() * 40;
+	mover->getTurn().Multiply(vec);
+	pos += vec;
+	CCollisionObj* atkCol = new CCollisionObj();
+	atkCol->CreateSphere(pos, CQuaternion::Identity(), 40.0f);
+	atkCol->SetName(L"ZombieAtk");
+	atkCol->SetTimer(2);
+	atkCol->SetCallback([&, vec, atkCol](CCollisionObj::SCallbackParam& callback) {
+		if (callback.EqualName(L"CPlayer")) {
+			CPlayer* p = callback.GetClass<CPlayer>();
+
+			if (!ownerTeam->hasPlayer(p)) {
+				CVector3 v = vec * 20;
+				v.y += 200;
+				p->Hit(v);
+				atkCol->Delete();
+			}
+		}
+	});
 }

@@ -39,7 +39,7 @@ Game::Game() : redTeam({ 1,0.5f,0.5f,1 }), blueTeam({ 0.5f,0.5f,1,1 }) {
 	m_netPlayerManager.Init(this);
 #endif
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 1; i++) {
 
 		Citizen* citizen = new Citizen(playersMap, new ittarikitari());
 		citizenArray.push_back(citizen);
@@ -96,14 +96,13 @@ void Game::createPlayer(bool isMe, int playerNum) {
 
 	Team* t;
 	SqSpawner* sSpawn;
-	if (nextIsRed) {
+	if (playerNum%2 == 0) {
 		t = &redTeam;
 		sSpawn = &playerSpawn1;
 	} else {
 		t = &blueTeam;
 		sSpawn = &playerSpawn2;
 	}
-	nextIsRed = !nextIsRed;
 
 	if (isMe) {
 		playersMap[playerNum] = new MainPlayer(playerNum, t, sSpawn->getPos());
