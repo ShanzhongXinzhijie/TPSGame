@@ -104,7 +104,7 @@ void Citizen::Kansenzyoutai()
 	m_model.SetPos(charaCon.GetPosition());
 
 	delete mover;
-	mover = new kansen(playersMap,charaCon.GetPosition());
+	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);
 
 	isKenzoku = true;
 }
