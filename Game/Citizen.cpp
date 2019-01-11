@@ -82,7 +82,7 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 		ownerTeam = player->team;
 		ownerTeam->addZombie();
 
-		m_model.GetSkinModel().FindMaterial([&](ModelEffect* mat) {
+		m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 			mat->SetAlbedoScale(ownerTeam->getColor());
 		});
 	}

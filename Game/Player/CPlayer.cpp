@@ -27,7 +27,7 @@ bool CPlayer::Start() {
 		}
 	});
 
-	m_model.GetSkinModel().FindMaterial([&](ModelEffect* mat) {
+	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 		mat->SetAlbedoScale(team->getColor());
 	});
 
