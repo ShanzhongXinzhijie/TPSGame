@@ -7,26 +7,20 @@
 #include "ittarikitari.h"
 #include "Result.h"
 
-Game::Game() : redTeam({ 1,0.5f,0.5f,1 }), blueTeam({ 0.5f,0.5f,1,1 }) {
+Game::Game() : redTeam({ 1,0.5f,0.5f,1 }), blueTeam({ 0.5f,0.5f,1,1 }),
+playerSpawn1(780.0f), playerSpawn2(780.0f) {
+	SqSpawner citizenSpawn1(4600.0f);
+	SqSpawner citizenSpawn2(4600.0f);
 
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
-		if (objData.EqualObjectName(L"player1max")) {
-			playerSpawn1.setMaxPos(objData.position);
-		} else if (objData.EqualObjectName(L"player1min")) {
-			playerSpawn1.setMinPos(objData.position);
-		}else if (objData.EqualObjectName(L"player2max")) {
-			playerSpawn2.setMaxPos(objData.position);
-		} else if (objData.EqualObjectName(L"player2min")) {
-			playerSpawn2.setMinPos(objData.position);
-
-		} else if (objData.EqualObjectName(L"zombie1max")) {
-			citizenSpawn1.setMaxPos(objData.position);
-		} else if (objData.EqualObjectName(L"zombie1min")) {
-			citizenSpawn1.setMinPos(objData.position);
-		} else if (objData.EqualObjectName(L"zombie2max")) {
-			citizenSpawn2.setMaxPos(objData.position);
-		} else if (objData.EqualObjectName(L"zombie2min")) {
-			citizenSpawn2.setMinPos(objData.position);
+		if (objData.EqualObjectName(L"player1")) {
+			playerSpawn1.setPos(objData.position);
+		} else if (objData.EqualObjectName(L"player2")) {
+			playerSpawn2.setPos(objData.position);
+		} else if (objData.EqualObjectName(L"zombie1")) {
+			citizenSpawn1.setPos(objData.position);
+		} else if (objData.EqualObjectName(L"zombie2")) {
+			citizenSpawn2.setPos(objData.position);
 		}
 		return true;
 	});
@@ -39,11 +33,11 @@ Game::Game() : redTeam({ 1,0.5f,0.5f,1 }), blueTeam({ 0.5f,0.5f,1,1 }) {
 	m_netPlayerManager.Init(this);
 #endif
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 24; i++) {
 
 		Citizen* citizen = new Citizen(playersMap, new ittarikitari());
 		citizenArray.push_back(citizen);
-		if (i > 50) {
+		if (i > 12) {
 			citizen->setPos(citizenSpawn1.getPos());
 		} else {
 			citizen->setPos(citizenSpawn2.getPos());

@@ -1,22 +1,22 @@
 #pragma once
 class SqSpawner {
 public:
-	SqSpawner();
+	SqSpawner(float side = 1000);
 	~SqSpawner();
 
-	void setMaxPos(const CVector3& pos) {
-		maxPos = pos;
+	void setPos(const CVector3& pos) {
+		m_pos = pos;
 	}
 
-	void setMinPos(const CVector3& pos) {
-		minPos = pos;
+	void setSide(float side) {
+		m_side = side;
 	}
 
 	CVector3 getPos();
 
 private:
-	CVector3 maxPos;
-	CVector3 minPos;
+	CVector3 m_pos;
+	float m_side;
 
 
 	std::mt19937 random;

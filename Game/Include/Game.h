@@ -37,8 +37,6 @@ private:
 
 	SqSpawner playerSpawn1;
 	SqSpawner playerSpawn2;
-	SqSpawner citizenSpawn1;
-	SqSpawner citizenSpawn2;
 
 	Team redTeam;
 	Team blueTeam;
