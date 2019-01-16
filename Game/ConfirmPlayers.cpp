@@ -118,6 +118,11 @@ void ConfirmPlayers::PostRender() {
 	m_sprite.Draw({ 0.5f, 0.5f }, CVector2::One(), { 0.5f, 0.5f });
 
 	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
+		//Ping表示
+		wchar_t str[64];
+		swprintf_s(str, L"Ping: %dms", GetPhoton()->GetPing_ms());
+		list.values.emplace_back(str);
+
 		//ルーム内のプレイヤーを表示
 		const ExitGames::Common::JVector<ExitGames::LoadBalancing::Player*>& players = GetPhoton()->GetPlayers();
 		for (unsigned int i = 0; i < players.getSize(); i++){
