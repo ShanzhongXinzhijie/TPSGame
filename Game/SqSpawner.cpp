@@ -2,7 +2,7 @@
 #include "Include\SqSpawner.h"
 
 
-SqSpawner::SqSpawner(float s) : m_side(s), random(){
+SqSpawner::SqSpawner(float s, const CVector3& pos) : m_side(s), m_pos(pos), random(){
 }
 
 

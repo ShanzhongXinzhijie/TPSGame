@@ -7,6 +7,8 @@
 #include "Citizen.h"
 #include "SqSpawner.h"
 #include "Team.h"
+#include "PlayerGene.h"
+#include "CitizenGene.h"
 
 #include "../Network/NetPlayerManager.h"
 
@@ -20,12 +22,16 @@ public:
 
 	void createPlayer(bool isMe,int playerNum);
 	void removePlayer(int playerNum);
-	CPlayer* getPlayer(int playerNum) { return playersMap[playerNum]; };
+	CPlayer* getPlayer(int playerNum) { 
+		return playerGene.getPlayer(playerNum); 
+	}
+	const std::unordered_map<int, CPlayer*>& getPlayers() const {
+		return playerGene.getPlayers();
+	}
 
 private:
 	Ground* ground = nullptr;
 	Level level;
-	std::unordered_map<int, CPlayer*> playersMap;
 
 	float timer = 30.0f;
 
@@ -35,13 +41,8 @@ private:
 	NetPlayerManager m_netPlayerManager;
 #endif
 
-	SqSpawner playerSpawn1;
-	SqSpawner playerSpawn2;
-
-	Team redTeam;
-	Team blueTeam;
-
-	std::vector<Citizen*> citizenArray;
+	PlayerGene playerGene;
+	CitizenGene citizenGene;
 
 	CFont font;
 };

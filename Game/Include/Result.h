@@ -1,7 +1,9 @@
 #pragma once
+#include "PlayerGene.h"
+
 class Result : public IGameObject{
 public:
-	Result(unsigned int red, unsigned int blue);
+	Result(const PlayerGene& playerGene);
 	~Result();
 
 	bool Start() override;
@@ -9,8 +11,8 @@ public:
 	void PostRender() override;
 
 private:
-	unsigned int red;
-	unsigned int blue;
+	std::vector<const wchar_t*> names;
+	std::vector<unsigned int> counts;
 
 	GameObj::OrthoCamera camera;
 	CFont m_font;
