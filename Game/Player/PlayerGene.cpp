@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "Include\PlayerGene.h"
-#include "Include\SqSpawner.h"
-#include "Include\Citizen.h"
-#include "Include\MainPlayer.h"
-#include "Include\Team.h"
+#include "PlayerGene.h"
+#include "SqSpawner.h"
+#include "Citizen.h"
+#include "MainPlayer.h"
+#include "Team.h"
 
 
 PlayerGene::PlayerGene() {

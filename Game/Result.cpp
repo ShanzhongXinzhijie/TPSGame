@@ -8,12 +8,6 @@ Result::Result(const PlayerGene & playerGene) {
 		names.push_back(t->getName());
 		counts.push_back(t->getZombieCount());
 	}
-}
-
-Result::~Result() {
-}
-
-bool Result::Start() {
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({ 0, 0, 0 });
 	camera.UpdateMatrix();
@@ -24,7 +18,12 @@ bool Result::Start() {
 #else
 	SetMainCamera(&camera);
 #endif
+}
 
+Result::~Result() {
+}
+
+bool Result::Start() {
 	m_sprite.Init(L"Resource/spriteData/Title.dds");
 	return true;
 }
