@@ -87,7 +87,7 @@ void ConfirmPlayers::Update() {
 
 		if (Pad(num).GetDown(enButtonStart)) {
 			if (players.count(num) == 0) {
-				players[num] = { 1,0,0,1 };
+				players.insert(num);
 			} else {
 				players.erase(num);
 			}

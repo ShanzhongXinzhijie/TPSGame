@@ -2,8 +2,9 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 
-CPlayer::CPlayer(int pNum,CVector4 col, const CVector3& position)
-	: playerNum(pNum),m_pos(position), color(col){
+CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
+	: playerNum(pNum),m_pos(position), team(tem){
+	team->addPlayer(this);
 }
 
 CPlayer::~CPlayer() {
@@ -26,8 +27,8 @@ bool CPlayer::Start() {
 		}
 	});
 
-	m_model.GetSkinModel().FindMaterial([&](ModelEffect* mat) {
-		mat->SetAlbedoScale(color);
+	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
+		mat->SetAlbedoScale(team->getColor());
 	});
 
 	charaCon.Init(30.0f, 90.0f, m_pos);
@@ -64,16 +65,22 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
 
-bool CPlayer::BatHit(CPlayer* player, CVector3 dir) {
-	if (this != player && m_hp != 0) {
+bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
+	if (this != player) {
+		Hit(dir);
+		return true;
+	}
+	return false;
+}
+
+void CPlayer::Hit(const CVector3 & dir) {
+	if (m_hp != 0) {
 		velocity += dir;
 		m_hp--;
 		if (m_hp == 0) {
 			Death();
 		}
-		return true;
 	}
-	return false;
 }
 
 //éÄñSèàóù

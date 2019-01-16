@@ -4,12 +4,16 @@ public:
 	HPbar();
 	~HPbar();
 
+	void Draw(int hp, int maxHP);
+
+	void setPosition(const CVector2& pos) {
+		m_pos = pos;
+	};
+
 private:
-	static constexpr unsigned int c_hp = 50;
-	unsigned int m_hp;
 	CSprite m_inSpr;
 	CSprite m_outSpr;
 
-	CVector2 m_pos;
+	CVector2 m_pos = {1270.0f,10.0f};
 };
 

@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "Citizen.h"
+#include "SqSpawner.h"
+#include "Team.h"
 
 #include "../Network/NetPlayerManager.h"
 
@@ -13,16 +15,19 @@ public:
 	Game(/*std::unordered_map<int, CVector4>& playersIni*/);
 	~Game();
 
+	void Update() override;
+	void PostRender() override;
+
 	void createPlayer(bool isMe,int playerNum);
 	void removePlayer(int playerNum);
 	CPlayer* getPlayer(int playerNum) { return playersMap[playerNum]; };
 
 private:
-	MainPlayer* mainPlayer = nullptr;
-
 	Ground* ground = nullptr;
 	Level level;
 	std::unordered_map<int, CPlayer*> playersMap;
+
+	float timer = 30.0f;
 
 #ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;
@@ -30,7 +35,14 @@ private:
 	NetPlayerManager m_netPlayerManager;
 #endif
 
-	CVector3 playerPos;
-	std::unique_ptr<Citizen> citizen;
+	SqSpawner playerSpawn1;
+	SqSpawner playerSpawn2;
+
+	Team redTeam;
+	Team blueTeam;
+
+	std::vector<Citizen*> citizenArray;
+
+	CFont font;
 };
 

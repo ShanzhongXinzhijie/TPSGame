@@ -27,6 +27,9 @@
     <ClInclude Include="Network\NetworkConst.h" />
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\HPbar.h" />
+    <ClInclude Include="Include\SqSpawner.h" />
+    <ClInclude Include="Include\Team.h" />
+    <ClInclude Include="Include\Result.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -54,18 +57,19 @@
     <ClCompile Include="Player\TpsCamera.cpp" />
     <ClCompile Include="Player\MainPlayer.cpp" />
     <ClCompile Include="Player\HPbar.cpp" />
+    <ClCompile Include="SqSpawner.cpp" />
+    <ClCompile Include="Player\Team.cpp" />
+    <ClCompile Include="Result.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
-      <Filter>Assets\modelData</Filter>
-    </MeshContentTask>
-    <MeshContentTask Include="Asset\modelData\Ground.FBX">
       <Filter>Assets\modelData</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\Ground.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -82,5 +86,7 @@
     <ImageContentTask Include="Asset\spriteData\Black.png" />
     <ImageContentTask Include="Asset\spriteData\Title.png" />
     <ImageContentTask Include="Asset\spriteData\waku.png" />
+    <ImageContentTask Include="Asset\spriteData\HP_in.png" />
+    <ImageContentTask Include="Asset\spriteData\HP_out.png" />
   </ItemGroup>
 </Project>

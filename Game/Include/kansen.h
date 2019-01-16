@@ -5,7 +5,7 @@
 class kansen : public ICitizenBrain
 {
 public:
-	kansen(std::unordered_map<int, CPlayer*>& playersMap,const CVector3& citizen);
+	kansen(std::unordered_map<int, CPlayer*>& playersMap,const CVector3& citizen,Team*& team);
 	~kansen();
 
 	void Update(bool isOnGround)override;
@@ -26,6 +26,6 @@ private:
 
 	const CVector3& citizen_pos;
 
-	CVector3 kyori;
+	Team*& team;
 };
 

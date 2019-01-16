@@ -2,8 +2,12 @@
 #include "MainPlayer.h"
 #include "ActionSender.h"
 
-MainPlayer::MainPlayer(int p, CVector4 color, const CVector3& position)
-	:playerNum(p), m_camera(0, position, 100.0f), CPlayer(p,color, position){
+MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
+	:
+#ifdef SpritScreen
+	playerNum(p),
+#endif
+	m_camera(playerNum, position, 100.0f), CPlayer(p,team, position){
 }
 
 
@@ -11,7 +15,7 @@ MainPlayer::~MainPlayer() {
 }
 
 void MainPlayer::Update() {
-	CVector2 stickInput = Pad(0).GetStick(enLR::L);
+	CVector2 stickInput = Pad(playerNum).GetStick(enLR::L);
 
 	CVector3 moveVec;
 	//ƒJƒƒ‰‰¡•ûŒü‚ÌˆÚ“®—Ê
@@ -24,29 +28,37 @@ void MainPlayer::Update() {
 	moveVec += front * stickInput.y;
 
 	ActionSender action({ moveVec.x,moveVec.z },
-						Pad(0).GetButton(enButtonA),
-						Pad(0).GetButton(enButtonLB1),
+						Pad(playerNum).GetButton(enButtonA),
+						Pad(playerNum).GetButton(enButtonLB1),
 						m_camera.getLook(),
-						Pad(0).GetButton(enButtonRB1),
-						Pad(0).GetDown(enButtonX));
+						Pad(playerNum).GetButton(enButtonRB1),
+						Pad(playerNum).GetDown(enButtonX));
 
 	CPlayer::sendAction(action);
 
 	CPlayer::Update();
 
-	if (Pad(0).GetButton(enButtonLT)) {
+	if (Pad(playerNum).GetButton(enButtonLT)) {
 		m_camera.setLeft();
-	} else if (Pad(0).GetButton(enButtonRT)) {
+	} else if (Pad(playerNum).GetButton(enButtonRT)) {
 		m_camera.setRigth();
 	}
 
-	if (Pad(0).GetButton(enButtonDown)) {
+	if (Pad(playerNum).GetButton(enButtonDown)) {
 		m_camera.BackTurn();
 	}
 
-	if (Pad(0).GetDown(enButtonB)) {
+	if (Pad(playerNum).GetDown(enButtonB)) {
 		m_camera.ChangeSlow();
 	}
 
 	m_camera.SetTarget(CPlayer::getPosition());
+}
+
+void MainPlayer::PostRender() {
+	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
+
+	wchar_t countDisp[8];
+	swprintf_s(countDisp, L"áÅ‘°%d‘Ì", team->getZombieCount());
+	font.Draw(countDisp, { 0.1f, 0.1f });
 }

@@ -183,11 +183,14 @@
     <ClCompile Include="Network\NetPlayerManager.cpp" />
     <ClCompile Include="Network\NetPlayerReceiver.cpp" />
     <ClCompile Include="Network\Network.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="sikakukuidou.cpp" />
+    <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Player\Team.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Player\TpsCamera.cpp" />
     <ClCompile Include="ziguzagu.cpp" />
@@ -208,6 +211,8 @@
     <ClInclude Include="Include\ittarikitari.h" />
     <ClInclude Include="Include\kansen.h" />
     <ClInclude Include="Include\MainPlayer.h" />
+    <ClInclude Include="Include\Result.h" />
+    <ClInclude Include="Include\SqSpawner.h" />
     <ClInclude Include="Include\ziguzagu.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
     <ClInclude Include="Network\NetPlayerManager.h" />
@@ -219,6 +224,7 @@
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\Title.h" />
     <ClInclude Include="Include\TpsCamera.h" />
+    <ClInclude Include="Include\Team.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -237,6 +243,10 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\waku.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\HP_in.png" />
+    <ImageContentTask Include="Asset\spriteData\HP_out.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

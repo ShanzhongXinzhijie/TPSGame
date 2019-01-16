@@ -26,7 +26,7 @@ bool Title::Start() {
 }
 
 void Title::Update() {
-	if (Pad(0).GetButton(enButtonA)) {
+	if (Pad(0).GetDown(enButtonA)) {
 		new ConfirmPlayers;
 		delete this;
 	}
