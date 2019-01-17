@@ -22,6 +22,21 @@ void kansen::Update(bool isOnGround)
 
 bool kansen::isAtk()
 {
+	for (const std::pair<int, CPlayer*>playerPair : playersMap) {
+		CPlayer* player = playerPair.second;
+		if (!team->hasPlayer(player)) {
+			CVector3 kyori;
+			kyori = player->getPosition() - citizen_pos;
+			float kaiten = atan2f(kyori.x, kyori.z);
+
+			if (kyori.Length() < 50.0f) {
+				Atk = true;
+			}
+			else {
+				Atk = false;
+			}
+		}
+	}
 	return Atk;
 }
 

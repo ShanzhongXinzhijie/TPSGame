@@ -246,21 +246,21 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CitizenGene.cpp" />
+    <ClCompile Include="Citizen\CitizenGene.cpp" />
     <ClCompile Include="Player\PlayerGene.cpp" />
     <ClCompile Include="Player\HPbar.cpp" />
     <ClCompile Include="Player\ActionSender.cpp" />
     <ClCompile Include="Player\BatBullet.cpp" />
-    <ClCompile Include="CircleWalk.cpp" />
-    <ClCompile Include="Citizen.cpp" />
+    <ClCompile Include="Citizen\CircleWalk.cpp" />
+    <ClCompile Include="Citizen\Citizen.cpp" />
     <ClCompile Include="Player\CPlayer.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="GuiList.cpp" />
-    <ClCompile Include="ICitizenBrain.cpp" />
-    <ClCompile Include="ittarikitari.cpp" />
-    <ClCompile Include="kansen.cpp" />
+    <ClCompile Include="Citizen\ICitizenBrain.cpp" />
+    <ClCompile Include="Citizen\ittarikitari.cpp" />
+    <ClCompile Include="Citizen\kansen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ConfirmPlayers.cpp" />
     <ClCompile Include="Player\MainPlayer.cpp" />
@@ -269,7 +269,7 @@
     <ClCompile Include="Network\NetPlayerReceiver.cpp" />
     <ClCompile Include="Network\Network.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="sikakukuidou.cpp" />
+    <ClCompile Include="Citizen\sikakukuidou.cpp" />
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -279,7 +279,7 @@
     <ClCompile Include="Player\Team.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Player\TpsCamera.cpp" />
-    <ClCompile Include="ziguzagu.cpp" />
+    <ClCompile Include="Citizen\ziguzagu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CitizenGene.h" />
