@@ -57,7 +57,7 @@ void CPlayer::Update() {
 	}
 }
 
-CVector3 CPlayer::getPosition() {
+CVector3 CPlayer::getPosition() const{
 	return m_pos;
 }
 

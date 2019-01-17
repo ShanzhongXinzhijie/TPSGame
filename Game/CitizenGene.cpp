@@ -19,6 +19,37 @@ CitizenGene::~CitizenGene() {
 	}
 }
 
+void CitizenGene::PreUpdate() {
+	if (nowFlame == updatePeriod) {
+		const CPlayer* mp = game->getMainPlayer();
+		const CPlayer* mp2 = game->getMainPlayer2();
+
+		unsigned char delay = updatePeriod;
+
+		for (Citizen* cp : citizenArray) {
+			if ((cp->getPos() - mp->getPosition()).LengthSq() < 200.0f * 200.0f) {
+				continue;
+			}
+			if (mp2 != nullptr && (cp->getPos() - mp2->getPosition()).LengthSq() < 200.0f * 200.0f) {
+				continue;
+			}
+
+			cp->setUpdateDelay(delay, updatePeriod);
+			if (delay > 1) {
+				delay--;
+			} else {
+				delay = updatePeriod;
+			}
+		}
+	}
+
+	if (1 < nowFlame) {
+		nowFlame--;
+	} else {
+		nowFlame = updatePeriod;
+	}
+}
+
 void CitizenGene::addSpawner(const CVector3 & center, float side) {
 	spawnerArray.push_back(new SqSpawner(side, center));
 }

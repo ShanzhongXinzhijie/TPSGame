@@ -15,9 +15,18 @@ public:
 		charaCon.SetPosition(pos);
 	}
 
+	CVector3 getPos() const{
+		return charaCon.GetPosition();
+	}
+
 	bool BatHit(CPlayer* player, CVector3 dir);
 
 	void Kansenzyoutai();
+
+	void setUpdateDelay(unsigned char flame, unsigned char flamePeriod) {
+		updateFlame = flame;
+		nowFlame = flamePeriod;
+	}
 
 private:
 	void Attack();
@@ -44,5 +53,10 @@ private:
 	bool isKenzoku = false;
 
 	SuicideObj::CCollisionObj m_collision;
+
+	float deltaTime = 0;
+
+	unsigned char nowFlame = 0;
+	unsigned char updateFlame = 0;
 };
 

@@ -29,6 +29,14 @@ public:
 		return playerGene.getPlayers();
 	}
 
+	const CPlayer* getMainPlayer() const{
+		return playerGene.getMainPlayer();
+	}
+
+	const CPlayer* getMainPlayer2() const {
+		return playerGene.getMainPlayer2();
+	}
+
 private:
 	Ground* ground = nullptr;
 	Level level;

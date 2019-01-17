@@ -37,7 +37,13 @@ void PlayerGene::createPlayer(bool isMe, int playerNum) {
 	Team* t = teamArray[playerNum%teamCount];
 	SqSpawner* sSpawn = spawnerArray[playerNum%teamCount%spawnerArray.size()];
 	if (isMe) {
-		playersMap[playerNum] = new MainPlayer(playerNum, t, sSpawn->getPos());
+		CPlayer* mp = new MainPlayer(playerNum, t, sSpawn->getPos());
+		playersMap[playerNum] = mp;
+		if (mainPlayer == nullptr) {
+			mainPlayer = mp;
+		} else {
+			mainPlayer2 = mp;
+		}
 	} else {
 		playersMap[playerNum] = new CPlayer(playerNum, t, sSpawn->getPos());
 	}

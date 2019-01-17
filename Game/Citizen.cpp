@@ -23,32 +23,42 @@ Citizen::~Citizen() {
 }
 
 void Citizen::Update() {
-	mover->Update(charaCon.IsOnGround());
+	deltaTime += GetDeltaTimeSec();
+	if (0 == nowFlame || nowFlame == updateFlame) {
 
-	AnimationController& animCon = m_model.GetAnimCon();
-	//UŒ‚
-	if (isKenzoku) {
-		if (attacking) {
-			return;
-		}
-		if (mover->isAtk()) {
-			animCon.Play(anim_attack, animInterpolateSec);
-			attacking = true;
-			return;
-		}
-	}
-	//ˆÚ“®
-	CVector3 moveVec = mover->getMove();
-	if (moveVec.x != 0 || moveVec.z != 0) {
-		animCon.Play(anim_walk, animInterpolateSec);
-	} else {
-		animCon.Play(anim_idle, animInterpolateSec);
-	}
-	m_model.SetPos(charaCon.Execute(moveVec, GetDeltaTimeSec()));
-	m_collision.SetPosition(charaCon.GetPosition());
+		mover->Update(charaCon.IsOnGround());
 
-	//‰ñ“]
-	m_model.SetRot(mover->getTurn());
+		AnimationController& animCon = m_model.GetAnimCon();
+		//UŒ‚
+		if (isKenzoku) {
+			if (attacking) {
+				return;
+			}
+			if (mover->isAtk()) {
+				animCon.Play(anim_attack, animInterpolateSec);
+				attacking = true;
+				return;
+			}
+		}
+		//ˆÚ“®
+		CVector3 moveVec = mover->getMove();
+		if (moveVec.x != 0 || moveVec.z != 0) {
+			animCon.Play(anim_walk, animInterpolateSec);
+		} else {
+			animCon.Play(anim_idle, animInterpolateSec);
+		}
+		m_model.SetPos(charaCon.Execute(moveVec, deltaTime));
+		m_collision.SetPosition(charaCon.GetPosition());
+
+		//‰ñ“]
+		m_model.SetRot(mover->getTurn());
+
+		deltaTime = 0;
+	}
+
+	if (0 < nowFlame) {
+		nowFlame--;
+	}
 }
 
 bool Citizen::BatHit(CPlayer* player, CVector3 dir) {

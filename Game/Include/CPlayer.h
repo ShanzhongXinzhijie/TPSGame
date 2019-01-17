@@ -14,7 +14,7 @@ public:
 	bool Start() override;
 	virtual void Update() override;
 
-	CVector3 getPosition();
+	CVector3 getPosition() const;
 
 	void sendAction(const ActionSender& action);
 
