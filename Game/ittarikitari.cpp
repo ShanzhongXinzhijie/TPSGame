@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Include\ittarikitari.h"
+#include "ittarikitari.h"
 
 
 ittarikitari::ittarikitari()

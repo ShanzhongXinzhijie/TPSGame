@@ -102,15 +102,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/lib/$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;..\..\DemolisherWeapon\DemolisherWeapon\EffekseerRuntime140\Compiled\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;..\..\DemolisherWeapon\DemolisherWeapon\EffekseerRuntime140\Compiled\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/lib/$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;..\..\DemolisherWeapon\DemolisherWeapon\EffekseerRuntime140\Compiled\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;..\..\DemolisherWeapon\DemolisherWeapon\EffekseerRuntime140\Compiled\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">
     <LibraryPath>$(ProjectDir)/../../DemolisherWeapon/DemolisherWeapon/lib/$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;..\..\DemolisherWeapon\DemolisherWeapon\EffekseerRuntime140\Compiled\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;..\..\DemolisherWeapon\DemolisherWeapon\EffekseerRuntime140\Compiled\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>.\Include;..\..\DemolisherWeapon\DemolisherWeapon\bulletPhysics\src;..\..\DemolisherWeapon;..\..;$(IncludePath)</IncludePath>
@@ -140,7 +140,7 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>..\..\DemolisherWeapon/DemolisherWeapon/Photon/Photon-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/LoadBalancing-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Common-cpp/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Include;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Photon-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/LoadBalancing-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Common-cpp/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DemolisherWeapon.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -200,7 +200,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>DW_MASTER;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\DemolisherWeapon/DemolisherWeapon/Photon/Photon-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/LoadBalancing-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Common-cpp/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Include;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Photon-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/LoadBalancing-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Common-cpp/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -226,7 +226,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\DemolisherWeapon/DemolisherWeapon/Photon/Photon-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/LoadBalancing-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Common-cpp/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Include;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Photon-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/LoadBalancing-cpp/inc;..\..\DemolisherWeapon/DemolisherWeapon/Photon/;..\..\DemolisherWeapon/DemolisherWeapon/Photon/Common-cpp/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SupportJustMyCode>false</SupportJustMyCode>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>

@@ -30,7 +30,7 @@ Game::Game() : citizenGene(this){
 	m_netPlayerManager.Init(this);
 #endif
 
-	citizenGene.createCitizen(2);
+	citizenGene.createCitizen(24);
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });
@@ -54,7 +54,7 @@ void Game::Update() {
 }
 
 void Game::PostRender() {
-	wchar_t countDisp[8];
+	wchar_t countDisp[10];
 	swprintf_s(countDisp, L"Žc‚è%.1f•b", timer);
 	font.Draw(countDisp, { 0.1f, 0.05f });
 }

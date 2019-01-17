@@ -33,7 +33,7 @@ private:
 	Ground* ground = nullptr;
 	Level level;
 
-	float timer = 30.0f;
+	float timer = 60.0f;
 
 #ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;

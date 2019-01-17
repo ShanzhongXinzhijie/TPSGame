@@ -1,9 +1,14 @@
 #include "stdafx.h"
-#include "Include\CitizenGene.h"
-#include "Include\SqSpawner.h"
-#include "Include\Citizen.h"
-#include "ittarikitari.h"
+#include "CitizenGene.h"
+#include "SqSpawner.h"
+#include "Citizen.h"
 #include "Game.h"
+
+#include "CircleWalk.h"
+#include "ittarikitari.h"
+#include "sikakukuidou.h"
+#include "ziguzagu.h"
+
 
 CitizenGene::CitizenGene(Game * game) : game(game){
 }
@@ -21,7 +26,21 @@ void CitizenGene::addSpawner(const CVector3 & center, float side) {
 void CitizenGene::createCitizen(unsigned int amount) {
 	size_t spawnCount = spawnerArray.size();
 	for (unsigned int i = 0; i < amount; i++) {
-		Citizen* citizen = new Citizen(game->getPlayers() , new ittarikitari());
+		ICitizenBrain* brain;
+		switch(rand() % 4) {
+		case 0:
+			brain = new CircleWalk();
+			break;
+		case 1:
+			brain = new ittarikitari();
+			break;
+		case 2:
+			brain = new sikakukuidou();
+			break;
+		default:
+			brain = new ziguzagu();
+		}
+		Citizen* citizen = new Citizen(game->getPlayers() , brain);
 		citizenArray.push_back(citizen);
 		citizen->setPos(spawnerArray[i%spawnCount]->getPos());
 	}

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Include\ziguzagu.h"
+#include "ziguzagu.h"
 
 
 ziguzagu::ziguzagu()
