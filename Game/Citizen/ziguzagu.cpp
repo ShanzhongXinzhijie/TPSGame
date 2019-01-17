@@ -11,12 +11,12 @@ ziguzagu::~ziguzagu()
 {
 }
 
-void ziguzagu::Update(bool isOnGround)
+void ziguzagu::Update(bool isOnGround, float deltaTime)
 {
 	if (!isOnGround) {
-		jumpPower -= 980.0f * GetDeltaTimeSec();
+		jumpPower -= 980.0f * deltaTime;
 	}
-	sec -= GetDeltaTimeSec();
+	sec -= deltaTime;
 	if (sec <= 0.0f) {
 		if (hanten == 0) {
 			if (kirikae == 0) {

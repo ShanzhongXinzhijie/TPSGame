@@ -11,12 +11,12 @@ ittarikitari::~ittarikitari()
 {
 }
 
-void ittarikitari::Update(bool isOnGround)
+void ittarikitari::Update(bool isOnGround, float deltaTime)
 {
 	if (!isOnGround) {
-		jumpPower -= 980.0f * GetDeltaTimeSec();
+		jumpPower -= 980.0f * deltaTime;
 	}
-	sec -= GetDeltaTimeSec();
+	sec -= deltaTime;
 	if (sec <= 0.0f) {
 		rot.Multiply(CQuaternion::GetRotationDeg(CVector3::AxisY(), 180 * 1));
 		sec = 4.0f;

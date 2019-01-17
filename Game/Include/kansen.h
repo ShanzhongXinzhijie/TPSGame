@@ -8,7 +8,7 @@ public:
 	kansen(const std::unordered_map<int, CPlayer*>& playersMap,const CVector3& citizen,Team*& team);
 	~kansen();
 
-	void Update(bool isOnGround)override;
+	void Update(bool isOnGround, float deltaTime)override;
 
 	bool isAtk()override;
 

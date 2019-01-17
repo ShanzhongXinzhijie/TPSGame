@@ -5,7 +5,7 @@ public:
 	ittarikitari();
 	~ittarikitari();
 
-	void Update(bool isOnGround) override;
+	void Update(bool isOnGround, float deltaTime) override;
 
 	CVector3 getMove() override;
 	CQuaternion getTurn() override;

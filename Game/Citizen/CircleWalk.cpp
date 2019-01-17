@@ -9,15 +9,15 @@ CircleWalk::CircleWalk() {
 CircleWalk::~CircleWalk() {
 }
 
-void CircleWalk::Update(bool isOnGround) {
-	rot.Multiply(CQuaternion::GetRotationDeg(CVector3::AxisY(), 45 * GetDeltaTimeSec()));
+void CircleWalk::Update(bool isOnGround, float deltaTime) {
+	rot.Multiply(CQuaternion::GetRotationDeg(CVector3::AxisY(), 45 * deltaTime));
 	if (!isOnGround) {
-		jumpPower -= 980.0f * GetDeltaTimeSec();
+		jumpPower -= 980.0f * deltaTime;
 	} else {
 		if (jumpPower < 0) {
 			jumpPower = 0;
 		}
-		sec -= GetDeltaTimeSec();
+		sec -= deltaTime;
 		if (sec < 0){
 			if (rand() % 4 == 0) {
 				jumpPower = 600.0f;

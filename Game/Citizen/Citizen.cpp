@@ -26,7 +26,7 @@ void Citizen::Update() {
 	deltaTime += GetDeltaTimeSec();
 	if (0 == nowFlame || nowFlame == updateFlame) {
 
-		mover->Update(charaCon.IsOnGround());
+		mover->Update(charaCon.IsOnGround(), deltaTime);
 
 		AnimationController& animCon = m_model.GetAnimCon();
 		//UŒ‚

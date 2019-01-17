@@ -12,10 +12,10 @@ kansen::~kansen()
 {
 }
 
-void kansen::Update(bool isOnGround)
+void kansen::Update(bool isOnGround, float deltaTime)
 {
 	if (!isOnGround) {
-		jumpPower -= 980.0f * GetDeltaTimeSec();
+		jumpPower -= 980.0f * deltaTime;
 	}
 	
 }
