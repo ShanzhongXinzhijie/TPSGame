@@ -41,13 +41,6 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ConfirmPlayers.cpp" />
-    <ClCompile Include="Citizen.cpp" />
-    <ClCompile Include="CircleWalk.cpp" />
-    <ClCompile Include="sikakukuidou.cpp" />
-    <ClCompile Include="ziguzagu.cpp" />
-    <ClCompile Include="ittarikitari.cpp" />
-    <ClCompile Include="ICitizenBrain.cpp" />
-    <ClCompile Include="kansen.cpp" />
     <ClCompile Include="GuiList.cpp" />
     <ClCompile Include="Network\Network.cpp" />
     <ClCompile Include="Network\NetPlayerReceiver.cpp" />
@@ -62,8 +55,15 @@
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="Player\Team.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="CitizenGene.cpp" />
     <ClCompile Include="Player\PlayerGene.cpp" />
+    <ClCompile Include="Citizen\CitizenGene.cpp" />
+    <ClCompile Include="Citizen\Citizen.cpp" />
+    <ClCompile Include="Citizen\CircleWalk.cpp" />
+    <ClCompile Include="Citizen\ICitizenBrain.cpp" />
+    <ClCompile Include="Citizen\ittarikitari.cpp" />
+    <ClCompile Include="Citizen\kansen.cpp" />
+    <ClCompile Include="Citizen\sikakukuidou.cpp" />
+    <ClCompile Include="Citizen\ziguzagu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
