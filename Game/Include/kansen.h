@@ -20,7 +20,7 @@ private:
 	CQuaternion rot;
 	float jumpPower = 0;
 
-	bool Atk;
+	bool Atk = false;
 
 	const std::unordered_map<int, CPlayer*>& playersMap;
 
