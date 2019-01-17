@@ -3,7 +3,7 @@
 #include "ICitizenBrain.h"
 #include "kansen.h"
 
-Citizen::Citizen(std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
+Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
 	m_model.Init(L"Resource/modelData/Citizen.cmo", m_animationClips, anim_num);
@@ -44,7 +44,7 @@ void Citizen::Update() {
 	} else {
 		animCon.Play(anim_idle, animInterpolateSec);
 	}
-	m_model.SetPos(charaCon.Execute(moveVec));
+	m_model.SetPos(charaCon.Execute(moveVec, GetDeltaTimeSec()));
 	m_collision.SetPosition(charaCon.GetPosition());
 
 	//‰ñ“]

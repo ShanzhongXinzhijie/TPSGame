@@ -3,15 +3,8 @@
 #include "ConfirmPlayers.h"
 
 Title::Title() {
-}
-
-
-Title::~Title() {
-}
-
-bool Title::Start() {
 	camera.SetPos({ 0, 0, -100 });
-	camera.SetTarget({0, 0, 0});
+	camera.SetTarget({ 0, 0, 0 });
 	camera.UpdateMatrix();
 #ifdef SpritScreen
 	GetCameraList().clear();
@@ -20,7 +13,13 @@ bool Title::Start() {
 #else
 	SetMainCamera(&camera);
 #endif
-	
+}
+
+
+Title::~Title() {
+}
+
+bool Title::Start() {
 	m_sprite.Init(L"Resource/spriteData/Title.dds");
 	return true;
 }

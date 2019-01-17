@@ -5,15 +5,23 @@ class CPlayer;
 
 class Team {
 public:
-	Team(CVector4 color);
+	Team(CVector4 color, const wchar_t* name);
 	~Team();
-
-	void addPlayer(CPlayer* player) {
-		players.insert(player);
-	}
 
 	CVector4 getColor() const{
 		return color;
+	}
+
+	const wchar_t* getName() const {
+		return name;
+	}
+
+	unsigned int getZombieCount() const{
+		return zombieCount;
+	}
+
+	void addPlayer(CPlayer* player) {
+		players.insert(player);
 	}
 
 	void addZombie() {
@@ -24,17 +32,14 @@ public:
 		zombieCount--;
 	}
 
-	unsigned int getZombieCount() {
-		return zombieCount;
-	}
-
-	bool hasPlayer(CPlayer* player) {
+	bool hasPlayer(CPlayer* player) const{
 		return players.count(player) > 0;
 	}
 
 private:
 	unsigned int zombieCount = 0;
 	CVector4 color;
+	const wchar_t* name;
 	std::unordered_set<CPlayer*> players;
 };
 

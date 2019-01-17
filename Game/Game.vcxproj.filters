@@ -30,6 +30,8 @@
     <ClInclude Include="Include\SqSpawner.h" />
     <ClInclude Include="Include\Team.h" />
     <ClInclude Include="Include\Result.h" />
+    <ClInclude Include="Include\CitizenGene.h" />
+    <ClInclude Include="Include\PlayerGene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -60,6 +62,8 @@
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="Player\Team.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="CitizenGene.cpp" />
+    <ClCompile Include="Player\PlayerGene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

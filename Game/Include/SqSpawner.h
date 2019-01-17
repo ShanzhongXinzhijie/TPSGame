@@ -1,7 +1,7 @@
 #pragma once
 class SqSpawner {
 public:
-	SqSpawner(float side = 1000);
+	SqSpawner(float side, const CVector3& pos);
 	~SqSpawner();
 
 	void setPos(const CVector3& pos) {
