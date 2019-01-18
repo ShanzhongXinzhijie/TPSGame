@@ -26,11 +26,12 @@ void CitizenGene::PreUpdate() {
 
 		unsigned char delay = updatePeriod;
 
+		constexpr float length = 500.0f;
 		for (Citizen* cp : citizenArray) {
-			if ((cp->getPos() - mp->getPosition()).LengthSq() < 200.0f * 200.0f) {
+			if ((cp->getPos() - mp->getPosition()).LengthSq() < length * length) {
 				continue;
 			}
-			if (mp2 != nullptr && (cp->getPos() - mp2->getPosition()).LengthSq() < 200.0f * 200.0f) {
+			if (mp2 != nullptr && (cp->getPos() - mp2->getPosition()).LengthSq() < length * length) {
 				continue;
 			}
 

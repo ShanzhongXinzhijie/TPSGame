@@ -7,7 +7,7 @@ MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 #ifdef SpritScreen
 	playerNum(p),
 #endif
-	m_camera(playerNum, position, 100.0f), CPlayer(p,team, position){
+	m_camera(playerNum, position), CPlayer(p,team, position){
 }
 
 
@@ -27,11 +27,18 @@ void MainPlayer::Update() {
 	front.Normalize();
 	moveVec += front * stickInput.y;
 
+	bool shot = Pad(playerNum).GetButton(enButtonRB1);
+	CVector3 look = { 0, 0, 0 };
+	if (shot) {
+		CVector3 pos = CPlayer::getPosition();
+		pos.y += 60;
+		look = m_camera.getLook(pos);
+	}
 	ActionSender action({ moveVec.x,moveVec.z },
 						Pad(playerNum).GetButton(enButtonA),
 						Pad(playerNum).GetButton(enButtonLB1),
-						m_camera.getLook(),
-						Pad(playerNum).GetButton(enButtonRB1),
+						look,
+						shot,
 						Pad(playerNum).GetDown(enButtonX));
 
 	CPlayer::sendAction(action);

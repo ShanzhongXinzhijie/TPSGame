@@ -19,7 +19,7 @@ private:
 	/// <summary>
 	/// (updatePeriod)‰ñ‚Éˆê‰ñUpdate‚ğs‚¤
 	/// </summary>
-	static constexpr unsigned char updatePeriod = 5;
+	static constexpr unsigned char updatePeriod = 10;
 	unsigned char nowFlame = updatePeriod;
 
 	Game* game;

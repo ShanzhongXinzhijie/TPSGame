@@ -45,7 +45,7 @@ private:
 
 	CCharacterController charaCon;
 	ICitizenBrain* mover;
-
+	
 	const std::unordered_map<int, CPlayer*>& playersMap;
 
 	Team* ownerTeam = nullptr; 

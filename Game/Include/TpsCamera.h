@@ -2,10 +2,12 @@
 
 class TpsCamera : public IGameObject {
 public:
-	TpsCamera(int pad, const CVector3& tar, float distance);
+	TpsCamera(int pad, const CVector3& tar);
 	~TpsCamera();
 
 	void Update() override;
+
+	void PostRender() override;
 
 	//ƒJƒƒ‰ˆÊ’uİ’è
 	void SetTarget(const CVector3& vec) {
@@ -45,7 +47,7 @@ public:
 		}
 	}
 
-	CVector3 getLook() const;
+	CVector3 getLook(const CVector3& myPos) const;
 
 private:
 	//ƒJƒƒ‰‰ñ“]
@@ -61,6 +63,8 @@ private:
 	void SetUp(const CVector3& vec) {
 		m_up = vec;
 	}
+
+	CSprite sprite;
 
 	CVector3 m_offsetPos, m_target, m_up;
 	CVector3 m_ar_offsetPos, m_ar_up;
@@ -79,5 +83,9 @@ private:
 	const int padNum;
 
 	bool slow = false;
+
+#ifdef SpritScreen
+	bool isSecond = false;
+#endif
 };
 

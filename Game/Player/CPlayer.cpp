@@ -216,6 +216,7 @@ void CPlayer::Turn() 	{
 		}
 	}
 }
+
 void CPlayer::Shot() {
 	bool shot = false;
 	if (action.isShot()) {

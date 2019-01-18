@@ -41,16 +41,16 @@ private:
 	Ground* ground = nullptr;
 	Level level;
 
-	float timer = 60.0f;
+	float timer = 160.0f;
+
+	PlayerGene playerGene;
+	CitizenGene citizenGene;
 
 #ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;
 #else
 	NetPlayerManager m_netPlayerManager;
 #endif
-
-	PlayerGene playerGene;
-	CitizenGene citizenGene;
 
 	CFont font;
 };

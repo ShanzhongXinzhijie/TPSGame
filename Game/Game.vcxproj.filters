@@ -93,4 +93,7 @@
     <ImageContentTask Include="Asset\spriteData\HP_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_out.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\Target.png" />
+  </ItemGroup>
 </Project>

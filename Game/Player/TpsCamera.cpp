@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "TpsCamera.h"
 
-TpsCamera::TpsCamera(int pad, const CVector3& tar, float distance): padNum(pad){
+#ifdef SpritScreen
+bool g_isSecond = false;
+#endif
+
+TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad){
 	SetTarget(tar);
 	SetOffset(CVector3::AxisZ()*distance);
 	SetUp(CVector3::Up());
@@ -12,9 +16,16 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar, float distance): padNum(pad){
 	//ÉÅÉCÉìÉJÉÅÉâÇ…ê›íË
 #ifdef SpritScreen
 	GetCameraList().push_back(&m_camera);
+	if (g_isSecond) {
+		isSecond = true;
+	} else {
+		g_isSecond = true;
+	}
 #else
 	SetMainCamera(&m_camera);
 #endif
+
+	sprite.Init(L"Resource/spriteData/Target.dds");
 }
 
 TpsCamera::~TpsCamera() {
@@ -90,6 +101,18 @@ void TpsCamera::Update() {
 	m_camera.UpdateMatrix();
 }
 
+void TpsCamera::PostRender() {
+#ifdef SpritScreen
+	if (isSecond) {
+		sprite.Draw({ 0.75f, 0.5f }, CVector2::One(), { 0.5,0.5 });
+	} else {
+		sprite.Draw({ 0.25f, 0.5f }, CVector2::One(), { 0.5,0.5 });
+    }
+#else
+	sprite.Draw({0.5f, 0.5f}, CVector2::One(), { 0.5,0.5 });
+#endif
+}
+
 void TpsCamera::UpdateVector() {
 	m_ar_offsetPos = m_offsetPos, m_ar_up = m_up;
 
@@ -103,8 +126,31 @@ void TpsCamera::UpdateVector() {
 	cq.Multiply(m_ar_up);
 }
 
-CVector3 TpsCamera::getLook() const{
-	CVector3 look = m_camera.GetTarget() - m_camera.GetPos();
-	look.Normalize();
-	return look;
+btVector3 toBtV(CVector3 v) {
+	return btVector3(v.x, v.y, v.z);
 }
+
+CVector3 toCV(btVector3 v) {
+	return CVector3(v.x(), v.y(), v.z());
+}
+
+CVector3 TpsCamera::getLook(const CVector3& myPos) const{
+	using bw = btCollisionWorld;
+	CVector3 lookVec = (m_camera.GetTarget() - m_camera.GetPos())/ distance;
+	btVector3 startPos = toBtV(m_camera.GetPos());
+	btVector3 targetPos = toBtV(m_camera.GetPos() + lookVec * 4000);
+
+	bw::ClosestRayResultCallback callback(startPos, targetPos);
+
+	GetPhysicsWorld().RayTest(startPos, targetPos, callback);
+
+	if (!callback.hasHit()) {
+		return lookVec;
+	}
+
+	CVector3 finalLook = toCV(callback.m_hitPointWorld) - myPos;
+
+	finalLook.Normalize();
+	return finalLook;
+}
+
