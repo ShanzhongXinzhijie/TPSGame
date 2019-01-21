@@ -32,17 +32,12 @@ cbuffer VSPSCb : register(b0){
 	float4x4 mWorld_old;
 	float4x4 mView_old;
 	float4x4 mProj_old;
-
-	int isMotionBlur;//モーションブラーかけるか?
-
-	int3 alignment;
 };
 
 //マテリアルパラメーター
 cbuffer MaterialCb : register(b1) {
-	float4 albedoScale;		//アルベドにかけるスケール
-	float3 emissive;		//エミッシブ(自己発光)
-	int isLighting;			//ライティングするか
+	float4 albedoScale;	//アルベドにかけるスケール
+	float4 emissive;	//エミッシブ(自己発光) wがライティングするか
 }
 
 /////////////////////////////////////////////////////////////
@@ -93,23 +88,7 @@ struct ZPSInput {
 	float4 posInProj	: TEXCOORD1;
 };
 
-/*!
- *@brief	スキン行列を計算。
- */
-/*float4x4 CalcSkinMatrix(VSInputNmTxWeights In)
-{
-	float4x4 skinning = 0;	
-	float w = 0.0f;
-	[unroll]
-    for (int i = 0; i < 3; i++)
-    {
-        skinning += boneMatrix[In.Indices[i]] * In.Weights[i];
-        w += In.Weights[i];
-    }
-    
-    skinning += boneMatrix[In.Indices[3]] * (1.0f - w);
-    return skinning;
-}*/
+
 /*!--------------------------------------------------------------------------------------
  * @brief	スキンなしモデル用の頂点シェーダー。
 -------------------------------------------------------------------------------------- */
@@ -127,7 +106,7 @@ PSInput VSMain( VSInputNmTxVcTangent In )
 	psInput.curPos = pos;
 
 	//ベロシティマップ用情報
-	if (isMotionBlur) {
+#if MOTIONBLUR
 		float4 oldpos = mul(mWorld_old, In.Position);
 
 		if (distance(posW, oldpos.xyz) > 0.0f) {
@@ -143,7 +122,7 @@ PSInput VSMain( VSInputNmTxVcTangent In )
 		else {
 			psInput.lastPos = oldpos;
 		}
-	}
+#endif
 
 	return psInput;
 }
@@ -178,6 +157,7 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 	{
 	
 		float w = 0.0f;
+		[unroll]
 	    for (int i = 0; i < 3; i++)
 	    {
 			//boneMatrixにボーン行列が設定されていて、
@@ -204,23 +184,18 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 	psInput.curPos = pos;
 
 	//ベロシティマップ用情報
-	if (isMotionBlur) {
+#if MOTIONBLUR
 		float4x4 oldskinning = 0;
 		float4 oldpos = 0;
 		{
 			float w = 0.0f;
+			[unroll]
 			for (int i = 0; i < 3; i++)
 			{
-				//boneMatrixOldにボーン行列が設定されていて、
-				//In.indicesは頂点に埋め込まれた、関連しているボーンの番号。
-				//In.weightsは頂点に埋め込まれた、関連しているボーンのウェイト。
 				oldskinning += boneMatrixOld[In.Indices[i]] * In.Weights[i];
 				w += In.Weights[i];
 			}
-			//最後のボーンを計算する。
 			oldskinning += boneMatrixOld[In.Indices[3]] * (1.0f - w);
-			//頂点座標にスキン行列を乗算して、頂点をワールド空間に変換。
-			//mulは乗算命令。
 			oldpos = mul(oldskinning, In.Position);
 		}
 
@@ -237,7 +212,7 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 		else {
 			psInput.lastPos = oldpos;
 		}
-	}
+#endif
 
     return psInput;
 }
@@ -254,6 +229,7 @@ ZPSInput VSMainSkin_RenderZ(VSInputNmTxWeights In)
 	{
 
 		float w = 0.0f;
+		[unroll]
 		for (int i = 0; i < 3; i++)
 		{
 			//boneMatrixにボーン行列が設定されていて、
@@ -308,47 +284,39 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 	Out.viewpos = float4(In.Viewpos, In.curPos.z / In.curPos.w);// In.curPos.z);
 
 	//ライティング用パラメーター
-	Out.lightingParam.rgb = emissive;//エミッシブ(自己発光)
-	Out.lightingParam.a = isLighting;//ライティングするか
+	Out.lightingParam = emissive;
 
 	//速度
-	if (isMotionBlur) {
+#if MOTIONBLUR
 		float2	current = In.curPos.xy / In.curPos.w;
 		float2	last = In.lastPos.xy / In.lastPos.w;
-
-		//if (In.curPos.z < 0.0f) { current *= -1.0f; }
-		//if (In.lastPos.z < 0.0f) { last *= -1.0f;  }
 
 		if (In.curPos.z < 0.0f || In.lastPos.z < 0.0f) {
 			current *= 0.0f; last *= 0.0f;
 		}
 
-		current.xy = current.xy * float2(0.5f, -0.5f) + 0.5f;
-		last.xy = last.xy * float2(0.5f, -0.5f) + 0.5f;
+		current.xy *= float2(0.5f, -0.5f); current.xy += 0.5f;
+		last.xy *= float2(0.5f, -0.5f); last.xy += 0.5f;
+
+		Out.velocity.z = min(In.curPos.z, In.lastPos.z);
+		Out.velocity.w = max(In.curPos.z, In.lastPos.z);
 
 		if (In.isWorldMove) {
-			Out.velocity.xy = current.xy - last.xy;	
-
-			Out.velocity.z = min(In.curPos.z, In.lastPos.z);
-			Out.velocity.w = max(In.curPos.z, In.lastPos.z);
+			Out.velocity.xy = current.xy - last.xy;
 			Out.velocityPS.z = -1.0f;
 			Out.velocityPS.w = -1.0f;
 		}
 		else {
-			Out.velocityPS.xy = current.xy - last.xy;	
-
-			Out.velocity.z = min(In.curPos.z, In.lastPos.z);
-			Out.velocity.w = max(In.curPos.z, In.lastPos.z);
+			Out.velocityPS.xy = current.xy - last.xy;
 			Out.velocityPS.z = min(In.curPos.z, In.lastPos.z);
 			Out.velocityPS.w = max(In.curPos.z, In.lastPos.z);
-		}		
-	}
-	else {
+		}
+#else
 		Out.velocity.z = In.curPos.z;
 		Out.velocity.w = In.curPos.z;
 		Out.velocityPS.z = In.curPos.z;
 		Out.velocityPS.w = In.curPos.z;
-	}
+#endif
 
 	return Out;
 }
