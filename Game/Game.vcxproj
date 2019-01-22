@@ -247,6 +247,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Citizen\CitizenGene.cpp" />
+    <ClCompile Include="Mover\FlyWalker.cpp" />
+    <ClCompile Include="Mover\Walker.cpp" />
     <ClCompile Include="Player\PlayerGene.cpp" />
     <ClCompile Include="Player\HPbar.cpp" />
     <ClCompile Include="Player\ActionSender.cpp" />
@@ -282,6 +284,7 @@
     <ClCompile Include="Citizen\ziguzagu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\CitizenGene.h" />
     <ClInclude Include="Include\HPbar.h" />
     <ClInclude Include="Include\ActionSender.h" />
@@ -302,6 +305,7 @@
     <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\SqSpawner.h" />
     <ClInclude Include="Include\ziguzagu.h" />
+    <ClInclude Include="Include\Walker.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
     <ClInclude Include="Network\NetPlayerManager.h" />
     <ClInclude Include="Network\NetPlayerReceiver.h" />

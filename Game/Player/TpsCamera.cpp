@@ -95,8 +95,12 @@ void TpsCamera::Update() {
 	RotationCamera(stickMove);
 
 	//ÉJÉÅÉâçXêV
-	m_camera.SetPos(m_target + m_ar_offsetPos + GetRight()*side);
-	m_camera.SetTarget(m_target+ GetRight()*side);
+	CVector3 upCamera = {0,0,0};
+	if (!upIsTarget) {
+		upCamera = GetUp()*up;
+	}
+	m_camera.SetPos(m_target + m_ar_offsetPos + GetRight()*side + upCamera);
+	m_camera.SetTarget(m_target+ GetRight()*side + upCamera);
 	m_camera.SetUp(m_ar_up);
 	m_camera.UpdateMatrix();
 }
@@ -134,9 +138,13 @@ CVector3 toCV(btVector3 v) {
 	return CVector3(v.x(), v.y(), v.z());
 }
 
+CVector3 TpsCamera::getLook() const {
+	return (m_camera.GetTarget() - m_camera.GetPos()) / distance;
+}
+
 CVector3 TpsCamera::getLook(const CVector3& myPos) const{
 	using bw = btCollisionWorld;
-	CVector3 lookVec = (m_camera.GetTarget() - m_camera.GetPos())/ distance;
+	CVector3 lookVec = getLook();
 	btVector3 startPos = toBtV(m_camera.GetPos());
 	btVector3 targetPos = toBtV(m_camera.GetPos() + lookVec * 4000);
 

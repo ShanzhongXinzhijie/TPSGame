@@ -10,9 +10,14 @@ public:
 	void PostRender() override;
 
 	//カメラ位置設定
-	void SetTarget(const CVector3& vec) {
+	void SetTarget(const CVector3& vec, bool upIsTarget = true) {
 		m_target = vec;
-		m_target.y += up;
+		if (upIsTarget) {
+			m_target.y += up;
+			this->upIsTarget = true;
+		} else {
+			this->upIsTarget = false;
+		}
 	}
 
 	void SetToMainCamera() {
@@ -47,6 +52,8 @@ public:
 		}
 	}
 
+	CVector3 getLook() const;
+
 	CVector3 getLook(const CVector3& myPos) const;
 
 private:
@@ -73,6 +80,8 @@ private:
 
 	static constexpr float rightSide = 50.0f; //右よりの場合の横移動
 	static constexpr float up = 100.0f;    //カメラ位置　上下
+	bool upIsTarget = false; //カメラの位置を上げるか、ターゲットの位置を上げるか
+
 	const float distance = 100.0f; //カメラの距離
 	float side = rightSide; //カメラの左右
 	bool isRight = true; //カメラが右よりならtrue

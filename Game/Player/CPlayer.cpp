@@ -3,8 +3,9 @@
 #include "BatBullet.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
-	: playerNum(pNum),m_pos(position), team(tem){
+	: playerNum(pNum), team(tem){
 	team->addPlayer(this);
+	mover.SetPosition(position);
 }
 
 CPlayer::~CPlayer() {
@@ -13,6 +14,7 @@ CPlayer::~CPlayer() {
 bool CPlayer::Start() {
 	m_animationClips[anim_run].Load(L"Resource/animData/PlayerRun.tka", true);
 	m_animationClips[anim_walk].Load(L"Resource/animData/PlayerWalk.tka", true);
+	m_animationClips[anim_fly].Load(L"Resource/animData/PlayerFly.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/PlayerIdle.tka", true);
 	m_animationClips[anim_shot].Load(L"Resource/animData/PlayerShot.tka", true);
 	m_animationClips[anim_reload].Load(L"Resource/animData/PlayerReload.tka", false);
@@ -31,9 +33,9 @@ bool CPlayer::Start() {
 		mat->SetAlbedoScale(team->getColor());
 	});
 
-	charaCon.Init(30.0f, 90.0f, m_pos);
+	mover.Init(30.0f, 90.0f, getPosition());
 
-	m_collision.CreateCapsule(m_pos, CQuaternion::Identity(), 30.0f, 80.0f);
+	m_collision.CreateCapsule(getPosition(), CQuaternion::Identity(), 30.0f, 80.0f);
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
 
@@ -43,12 +45,14 @@ bool CPlayer::Start() {
 void CPlayer::Update() {
 	if (m_hp != 0) {
 		if (!onReload) {
-			GravityAndJump();
 			Move();
-			Turn();
 			Shot();
 			Reload();
 		}
+		mover.Update();
+		m_model.SetPos(getPosition());
+		m_model.SetRot(mover.getRotation());
+		m_collision.SetPosition(getPosition());
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
@@ -58,7 +62,7 @@ void CPlayer::Update() {
 }
 
 CVector3 CPlayer::getPosition() const{
-	return m_pos;
+	return mover.GetPosition();
 }
 
 void CPlayer::sendAction(const ActionSender& actionPal) {
@@ -75,7 +79,7 @@ bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
 
 void CPlayer::Hit(const CVector3 & dir) {
 	if (m_hp != 0) {
-		velocity += dir;
+		mover.addVelocity(dir);
 		m_hp--;
 		if (m_hp == 0) {
 			Death();
@@ -95,75 +99,38 @@ void CPlayer::Revive() {
 	m_model.SetIsDraw(true);
 }
 
-void CPlayer::GravityAndJump() {
-	if (!charaCon.IsOnGround()) {
-		velocity.y -= gravity * GetDeltaTimeSec();
-	} else {
-		if (velocity.y < 0) {
-			velocity.y = 0;
-		}
-		if (action.isJump()) {
-			velocity.y = jumpPower;
-		}
-	}
-}
-
 void CPlayer::Move() {
+	mover.fly(action.isFly(), action.getLookVec(), moveSpeed*0.5);
+	if (mover.isFlying()) {
+		mover.turn(action.getLookVec().x, action.getLookVec().z);
+		m_model.GetAnimCon().Play(anim_fly, animInterpolateSec*2);
+		return;
+	}
+
+	//ジャンプ
+	if (action.isJump()) {
+		mover.jump(jumpPower);
+	}
+
+	//移動
 	const CVector2& movement = action.getMovement();
 
-	//ダッシュ判定
 	float speed = moveSpeed;
 	bool dash = false;
-	if (action.isDash()) {
+
+	//移動速度
+	if (action.isShot()) {
+		speed = moveSpeed * 0.5f;
+	}else if(action.isDash()) {
 		speed = moveSpeed * dashMul;
 		dash = true;
 	}
 
-	//射撃中は移動速度減少
-	if (action.isShot()) {
-		speed = moveSpeed * 0.5f;
-	}
+	mover.move(movement*speed);
 
-	//空中にいる場合空気抵抗減少、操作は効きにくくなる。(摩擦は空気抵抗として計算する)
-	float airResist = friction;
-	if (!charaCon.IsOnGround() || action.isJump()) {
-		speed = moveSpeed * 0.1f;
-		airResist *= 0.1f;
-	}
-
-	//x移動
-	velocity.x += movement.x * speed;
-
-	//z移動
-	velocity.z += movement.y * speed;
-
-	//空気抵抗。
-	{
-		char sign = 1;
-		if (velocity.x < 0) {
-			sign = -1;
-		}
-		velocity.x -= airResist * velocity.x * GetDeltaTimeSec();
-		if (velocity.x * sign < 0) {
-			velocity.x = 0;
-		}
-
-		sign = 1;
-		if (velocity.z < 0) {
-			sign = -1;
-		}
-		velocity.z -= airResist * velocity.z * GetDeltaTimeSec();
-		if (velocity.z * sign < 0) {
-			velocity.z = 0;
-		}
-	}
-
-	//位置更新
-	m_pos = charaCon.Execute(velocity);
-
-	//アニメーションと回転
+	//アニメーション
 	if (movement.x != 0 || movement.y != 0) {
-		if (dash && !action.isShot()) {
+		if (dash) {
 			m_model.GetAnimCon().Play(anim_run, animInterpolateSec);
 		} else {
 			m_model.GetAnimCon().Play(anim_walk, animInterpolateSec);
@@ -172,48 +139,11 @@ void CPlayer::Move() {
 		m_model.GetAnimCon().Play(anim_idle, animInterpolateSec);
 	}
 
-	//モデル更新
-	m_model.SetPos(m_pos);
-	//コリジョン更新
-	m_collision.SetPosition(m_pos);
-}
-
-void CPlayer::Turn() 	{
-	float x;
-	float z;
+	//回転
 	if (action.isShot()) {
-		x = action.getLookVec().x;
-		z = action.getLookVec().z;
+		mover.turn(action.getLookVec().x, action.getLookVec().z);
 	} else {
-		x = action.getMovement().x;
-		z = action.getMovement().y;
-	}
-
-	if (z != 0 || x != 0) {
-		float rotRad = atan2f(x, z) - radian;
-		if (rotRad != 0) {
-			char sign = 1;
-			if (rotRad < 0) {
-				sign = -1;
-			}
-			if (CMath::PI < rotRad*sign) {
-				rotRad -= CMath::PI2*sign;
-				sign = -sign;
-			}
-			float delta = GetDeltaTimeSec();
-			if (rotRad*sign < CMath::PI * delta * 7) {
-				radian += rotRad;
-			} else {
-				radian += sign * CMath::PI * delta * 7;
-			}
-			if (radian < -CMath::PI) {
-				radian += CMath::PI2;
-			} else if (CMath::PI < radian) {
-				radian -= CMath::PI2;
-			}
-			m_rot.SetRotation(CVector3::AxisY(), radian);
-			m_model.SetRot(m_rot);
-		}
+		mover.turn(movement.x, movement.y);
 	}
 }
 
@@ -233,7 +163,7 @@ void CPlayer::Shot() {
 
 	if (shot && bulletCount > 0) {
 		CVector3 look = action.getLookVec();
-		CVector3 pos = m_pos;
+		CVector3 pos = getPosition();
 		pos.y += 60;
 		new BatBullet(this, pos, look * 30);
 		bulletCount--;

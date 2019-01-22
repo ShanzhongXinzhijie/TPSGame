@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DemolisherWeapon/physics/character/CCharacterController.h"
+#include "FlyWalker.h"
 #include "ActionSender.h"
 #include "Team.h"
 
@@ -26,6 +26,10 @@ public:
 		return &m_collision.GetCollisionObject();
 	}
 
+	bool isFlying() {
+		return mover.isFlying();
+	}
+
 	Team* team;
 
 	const int playerNum;
@@ -40,8 +44,7 @@ public:
 	}
 	//通信受信で使用
 	void SetPosition(const CVector3& pos) {
-		m_pos = pos;
-		charaCon.SetPosition(m_pos);
+		mover.SetPosition(pos);
 	}
 
 	//死亡処理
@@ -50,9 +53,7 @@ public:
 	void Revive();
 
 private:
-	void GravityAndJump();
 	void Move();
-	void Turn();
 	void Shot();
 	void Reload();
 
@@ -60,6 +61,7 @@ private:
 	enum {
 		anim_run,
 		anim_walk,
+		anim_fly,
 		anim_idle,
 		anim_shot,
 		anim_reload,
@@ -71,11 +73,11 @@ private:
 protected:
 	static constexpr unsigned short constHp = 10;
 	unsigned short m_hp = 10;
+
 private:
 	static constexpr float constDeathCool = 10;
 	float deathCool = 0;
 
-	CVector3 m_pos;
 	CQuaternion m_rot;
 	float radian = 0.0f; //回転量
 
@@ -86,15 +88,12 @@ private:
 	unsigned int bulletCount = constBulletCount;
 	bool onReload = false;
 
-	//物理系
-	static constexpr float moveSpeed = 80.0f;              //移動速度
-	static constexpr float dashMul = 2.0f;	             //ダッシュ倍率
-	static constexpr float friction = 10.0f;	             //摩擦
-	static constexpr float gravity = 980.0f;	             //重力加速度
-	static constexpr float jumpPower = 600.0f;             //ジャンプ力
+	static constexpr float jumpPower = 600.0f; //ジャンプ力
+	static constexpr float moveSpeed = 80.0f; //移動速度
+	static constexpr float dashMul = 2.0f; //ダッシュ倍率
 
-	CVector3 velocity = { 0.0f, 0.0f, 0.0f };	 //速度
-	CCharacterController charaCon;
+	FlyWalker mover;           //動きの管理
+
 	ActionSender action;     //プレイヤーの操作が入っている
 
 	SuicideObj::CCollisionObj m_collision; //コリジョン

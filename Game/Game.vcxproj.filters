@@ -32,6 +32,8 @@
     <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\CitizenGene.h" />
     <ClInclude Include="Include\PlayerGene.h" />
+    <ClInclude Include="Include\Walker.h" />
+    <ClInclude Include="Include\FlyWalker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -64,6 +66,8 @@
     <ClCompile Include="Citizen\kansen.cpp" />
     <ClCompile Include="Citizen\sikakukuidou.cpp" />
     <ClCompile Include="Citizen\ziguzagu.cpp" />
+    <ClCompile Include="Mover\Walker.cpp" />
+    <ClCompile Include="Mover\FlyWalker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -92,8 +96,6 @@
     <ImageContentTask Include="Asset\spriteData\waku.png" />
     <ImageContentTask Include="Asset\spriteData\HP_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_out.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Asset\spriteData\Target.png" />
+    <ImageContentTask Include="Asset\spriteData\Target.png" />
   </ItemGroup>
 </Project>

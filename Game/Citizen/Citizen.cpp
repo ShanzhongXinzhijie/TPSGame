@@ -53,10 +53,7 @@ void Citizen::Update() {
 		//‰ñ“]
 		m_model.SetRot(mover->getTurn());
 
-		m_collision.SetEnable(true);
 		deltaTime = 0;
-	} else {
-		m_collision.SetEnable(false);
 	}
 
 	if (0 < nowFlame) {
