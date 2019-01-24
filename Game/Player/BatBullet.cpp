@@ -53,7 +53,7 @@ bool BatBullet::Start() {
 
 void BatBullet::Update() {
 	CVector3 beforePos = m_pos;
-	m_pos += m_dir;
+	m_pos += m_dir * GetDeltaTimeSec();
 	m_model.SetPos(m_pos);
 	m_collision.SetPosition(m_pos);
 	lifeTime -= GetDeltaTimeSec();

@@ -11,7 +11,7 @@ HPbar::HPbar(){
 HPbar::~HPbar() {
 }
 
-void HPbar::Draw(int hp, int maxHP) {
+void HPbar::Draw(float hp, float maxHP) {
 	m_outSpr.DrawScreenPos(m_pos, CVector2::One(), {0.992f,0.0f});
-	m_inSpr.DrawScreenPos(m_pos, {(float)hp/maxHP ,1.0f}, { 0.992f,0.0f });
+	m_inSpr.DrawScreenPos(m_pos, {hp/maxHP ,1.0f}, { 0.992f,0.0f });
 }

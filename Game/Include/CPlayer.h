@@ -73,6 +73,9 @@ private:
 protected:
 	static constexpr unsigned short constHp = 10;
 	unsigned short m_hp = 10;
+	FlyWalker mover;    //動きの管理
+	static constexpr unsigned int constBulletCount = 50;
+	unsigned int bulletCount = constBulletCount;
 
 private:
 	static constexpr float constDeathCool = 10;
@@ -81,18 +84,14 @@ private:
 	CQuaternion m_rot;
 	float radian = 0.0f; //回転量
 
-	//銃系
 	static constexpr float constShotCool = 0.1f;
 	float shotCool = constShotCool;
-	static constexpr unsigned int constBulletCount = 50;
-	unsigned int bulletCount = constBulletCount;
 	bool onReload = false;
 
+	static constexpr float flyPower = 180000.0f; //飛行力
 	static constexpr float jumpPower = 600.0f; //ジャンプ力
 	static constexpr float moveSpeed = 80.0f; //移動速度
 	static constexpr float dashMul = 2.0f; //ダッシュ倍率
-
-	FlyWalker mover;           //動きの管理
 
 	ActionSender action;     //プレイヤーの操作が入っている
 
