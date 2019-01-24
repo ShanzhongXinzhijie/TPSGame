@@ -5,7 +5,7 @@
 bool g_isSecond = false;
 #endif
 
-TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad){
+TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
 	SetTarget(tar);
 	SetOffset(CVector3::AxisZ()*distance);
 	SetUp(CVector3::Up());
@@ -96,10 +96,14 @@ void TpsCamera::Update() {
 	//ÉJÉÅÉâçXêV
 	CVector3 upCamera = {0,0,0};
 	if (!upIsTarget) {
-		upCamera = GetUp()*up;
+		upCamera = GetUp()*up*0.5;
 	}
-	m_camera.SetPos(m_target + m_ar_offsetPos + GetRight()*side + upCamera);
-	m_camera.SetTarget(m_target+ GetRight()*side + upCamera);
+
+	CVector3 springPower = (m_target - m_springTarget);
+	m_springTarget += springPower*0.3;
+
+	m_camera.SetPos(m_springTarget + m_ar_offsetPos + GetRight()*side + upCamera);
+	m_camera.SetTarget(m_springTarget+ GetRight()*side + upCamera);
 	m_camera.SetUp(m_ar_up);
 	m_camera.UpdateMatrix();
 }

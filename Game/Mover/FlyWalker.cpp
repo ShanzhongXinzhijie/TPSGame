@@ -38,7 +38,7 @@ CQuaternion FlyWalker::getRotation() {
 		float xz = velocity.x*velocity.x + velocity.z*velocity.z;
 		xz = sqrt(xz);
 
-		rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-velocity.y, xz)-CMath::PI * -0.5));
+		rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-velocity.y, xz)-(CMath::PI * -0.5)));
 
 		return rot;
 	} else {
