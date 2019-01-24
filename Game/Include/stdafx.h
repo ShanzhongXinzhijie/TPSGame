@@ -2,6 +2,6 @@
 
 #include "DemolisherWeapon/DWstdafx.h"
 
-//#define SpritScreen
+#define SpritScreen
 
 using namespace DemolisherWeapon;

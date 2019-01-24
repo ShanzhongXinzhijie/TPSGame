@@ -39,11 +39,7 @@ TpsCamera::~TpsCamera() {
 }
 
 void TpsCamera::RotationCamera(const CVector2& rot) {
-	float speed = 1;
-	if (slow) {
-		speed = 0.3f;
-	}
-	m_rot += rot * speed;
+	m_rot += rot;
 	if (m_rot.x < -CMath::PI2) { m_rot.x += CMath::PI2; }
 	if (m_rot.x > CMath::PI2) { m_rot.x -= CMath::PI2; }
 	if (m_rot.y < -CMath::PI / 2.1f) { m_rot.y = -CMath::PI / 2.1f; }
@@ -80,6 +76,9 @@ void TpsCamera::Update() {
 	float len = stickMove.Length(); len = pow(len, 2.0f); //len = pow(25.0f, len)/25.0f; //len -= 1.0f;
 	stickMove.Normalize();
 	stickMove *= len;
+	if (slow) {
+		stickMove *= 0.3;
+	}
 
 	stickMove = stickMove * 0.05f;
 	if (backTurnRad > 0.0f) {

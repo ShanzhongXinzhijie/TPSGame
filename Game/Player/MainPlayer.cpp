@@ -28,23 +28,20 @@ void MainPlayer::Update() {
 	moveVec += front * stickInput.y;
 
 	bool shot = Pad(playerNum).GetButton(enButtonRB1);
-	bool fly = Pad(playerNum).GetButton(enButtonLeft);
 	CVector3 look = { 0, 0, 0 };
-	if (fly) {
-		look = m_camera.getLook();
-	}else
 	if (shot) {
 		CVector3 pos = CPlayer::getPosition();
 		pos.y += 60;
 		look = m_camera.getLook(pos);
+	} else {
+		look = m_camera.getLook();
 	}
 	ActionSender action({ moveVec.x,moveVec.z },
-						Pad(playerNum).GetButton(enButtonA),
+						Pad(playerNum).GetDown(enButtonA),
 						Pad(playerNum).GetButton(enButtonLB1),
 						look,
 						shot,
-						Pad(playerNum).GetDown(enButtonX),
-						fly);
+						Pad(playerNum).GetDown(enButtonX));
 
 	CPlayer::sendAction(action);
 
@@ -56,7 +53,7 @@ void MainPlayer::Update() {
 		m_camera.setRigth();
 	}
 
-	if (Pad(playerNum).GetButton(enButtonRight)) {
+	if (Pad(playerNum).GetButton(enButtonDown)) {
 		m_camera.BackTurn();
 	}
 

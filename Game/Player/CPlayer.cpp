@@ -35,7 +35,7 @@ bool CPlayer::Start() {
 
 	mover.Init(30.0f, 90.0f, getPosition());
 
-	m_collision.CreateCapsule(getPosition(), CQuaternion::Identity(), 30.0f, 80.0f);
+	m_collision.CreateCapsule(getPosition(), CQuaternion::Identity(), 30.0f, 90.0f);
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
 
@@ -100,16 +100,24 @@ void CPlayer::Revive() {
 }
 
 void CPlayer::Move() {
-	mover.fly(action.isFly(), action.getLookVec(), moveSpeed*0.5);
-	if (mover.isFlying()) {
-		mover.turn(action.getLookVec().x, action.getLookVec().z);
-		m_model.GetAnimCon().Play(anim_fly, animInterpolateSec*2);
-		return;
-	}
 
-	//ジャンプ
+	//ジャンプと飛行
 	if (action.isJump()) {
-		mover.jump(jumpPower);
+		if (mover.IsOnGround()) {
+			mover.jump(jumpPower);
+		} else {
+			if (mover.isFlying()) {
+				mover.flyStop();
+			} else {
+				mover.fly(true, action.getLookVec(), flyPower);
+			}
+		}
+	}
+	if (mover.isFlying()) {
+		mover.fly(false, action.getLookVec());
+		mover.turn(action.getLookVec().x, action.getLookVec().z);
+		m_model.GetAnimCon().Play(anim_fly, animInterpolateSec);
+		return;
 	}
 
 	//移動
@@ -162,10 +170,15 @@ void CPlayer::Shot() {
 	}
 
 	if (shot && bulletCount > 0) {
-		CVector3 look = action.getLookVec();
+		CVector3 vec = action.getLookVec() * 1800;
 		CVector3 pos = getPosition();
-		pos.y += 60;
-		new BatBullet(this, pos, look * 30);
+		if (mover.isFlying()) {
+			vec += mover.getVelocity();
+			pos += action.getLookVec() * 100;
+		} else {
+			pos.y += 60;
+		}
+		new BatBullet(this, pos, vec);
 		bulletCount--;
 	}
 }

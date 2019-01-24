@@ -9,24 +9,29 @@ FlyWalker::FlyWalker() {
 FlyWalker::~FlyWalker() {
 }
 
-void FlyWalker::fly(bool isFly, const CVector3 & v, float power) {
+void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
 	if (isFly) {
-		if(!fall){
-			CVector3 flyVelocity = {};
-			flyVelocity += v;
-			flyVelocity.Normalize();
-			flyVelocity.y += 0.2;
-			flyVelocity *= power;
-			addVelocity(flyVelocity);
+		if (flyTimer > c_flyTimer*0.5) {
+			flyPower = power;
+			velocity = v * flyPower;
 			flying = true;
 		}
-	} else {
-		fall = false;
+	} else if(flying) {
+		velocity = v * flyPower * GetDeltaTimeSec();
+		flyPower += -v.y * flyGravity * GetDeltaTimeSec();
+		if (flyPower <= 0) {
+			flyStop();
+		}
 	}
 }
 
+void FlyWalker::flyStop() {
+	velocity *= 0.5f;
+	flying = false;
+}
+
 CQuaternion FlyWalker::getRotation() {
-	if (flying && !fall) {
+	if (flying) {
 		CQuaternion rot;
 		rot.SetRotation(CVector3::AxisY(), atan2f(velocity.x, velocity.z));
 
@@ -42,10 +47,21 @@ CQuaternion FlyWalker::getRotation() {
 }
 
 void FlyWalker::Update() {
-	if (flying && !fall) {
-		if (IsOnGround()) {
-			flying = false;
-			fall = true;
+	if (flying) {
+		flyTimer -= GetDeltaTimeSec();
+		if (flyTimer < 0.0f) {
+			flyTimer = 0.0f;
+		}
+
+		if (IsOnGround() || flyTimer == 0.0f) {
+			flyStop();
+		}
+	} else {
+		if (flyTimer < c_flyTimer) {
+			flyTimer += GetDeltaTimeSec() * 0.5f;
+			if (flyTimer > c_flyTimer) {
+				flyTimer = c_flyTimer;
+			}
 		}
 	}
 	Walker::Update();

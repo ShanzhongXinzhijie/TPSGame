@@ -30,7 +30,7 @@ Game::Game() : citizenGene(this){
 	m_netPlayerManager.Init(this);
 #endif
 
-	citizenGene.createCitizen(100);
+	citizenGene.createCitizen(1);
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });

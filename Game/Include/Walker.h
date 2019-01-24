@@ -14,7 +14,11 @@ public:
 
 	void addVelocity(const CVector3& velocity);
 
-	CQuaternion getRotation() {
+	CVector3 getVelocity()  const{
+		return velocity;
+	}
+
+	CQuaternion getRotation() const{
 		return m_rot;
 	}
 

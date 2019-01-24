@@ -88,9 +88,13 @@ private:
 	unsigned int bulletCount = constBulletCount;
 	bool onReload = false;
 
+	static constexpr float flyPower = 180000.0f; //飛行力
 	static constexpr float jumpPower = 600.0f; //ジャンプ力
 	static constexpr float moveSpeed = 80.0f; //移動速度
 	static constexpr float dashMul = 2.0f; //ダッシュ倍率
+
+	//TODO 時間制限
+	float flyTimer = 0.0f; //飛行残り時間
 
 	FlyWalker mover;           //動きの管理
 
