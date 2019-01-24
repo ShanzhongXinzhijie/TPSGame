@@ -11,14 +11,18 @@ public:
 
 	CQuaternion getRotation();
 
+	float getFlyTimer() {
+		return flyTimer;
+	}
+
 	bool isFlying() {
 		return flying;
 	}
 
 	void Update();
 
-private:
 	static constexpr float c_flyTimer = 10.0f;
+private:
 	float flyTimer = c_flyTimer; //”òs‰Â”\‚Èc‚èŠÔ
 
 	float flyPower = 0.0f;

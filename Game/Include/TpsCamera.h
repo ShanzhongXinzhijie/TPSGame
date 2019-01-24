@@ -78,7 +78,13 @@ private:
 	CVector2 m_rot = {0.0f, 0.0f};
 	GameObj::PerspectiveCamera m_camera;
 
-	static constexpr float rightSide = 50.0f; //右よりの場合の横移動
+	//右よりの場合の横移動
+	static constexpr float rightSide
+#ifdef SpritScreen
+		= 50.0f;
+#else
+		= 100.0f;
+#endif
 	static constexpr float up = 100.0f;    //カメラ位置　上下
 	bool upIsTarget = false; //カメラの位置を上げるか、ターゲットの位置を上げるか
 

@@ -65,8 +65,16 @@ void MainPlayer::Update() {
 }
 
 void MainPlayer::PostRender() {
-	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
+	//HP表示
+	hpbar.Draw(m_hp, constHp);
 
+	//bulletCount 残弾
+	//constBulletCount 最大弾数
+
+	//mover.getFlyTimer() 残り飛行可能時間,半分以上残ってないと飛行開始できない
+	//mover.c_flyTimer 最大飛行可能時間
+
+	//自チームの眷族数の表示
 	wchar_t countDisp[8];
 	swprintf_s(countDisp, L"眷族%d体", team->getZombieCount());
 	font.Draw(countDisp, { 0.1f, 0.1f });

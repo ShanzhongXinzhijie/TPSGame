@@ -4,7 +4,7 @@ public:
 	HPbar();
 	~HPbar();
 
-	void Draw(int hp, int maxHP);
+	void Draw(float hp, float maxHP);
 
 	void setPosition(const CVector2& pos) {
 		m_pos = pos;
