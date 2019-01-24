@@ -22,6 +22,8 @@ private:
 
 	bool Atk = false;
 
+	CVector3 walk;
+
 	const std::unordered_map<int, CPlayer*>& playersMap;
 
 	const CVector3& citizen_pos;

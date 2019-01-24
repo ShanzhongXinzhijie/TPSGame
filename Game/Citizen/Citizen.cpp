@@ -26,7 +26,10 @@ void Citizen::Update() {
 	deltaTime += GetDeltaTimeSec();
 	if (0 == nowFlame || nowFlame == updateFlame) {
 
-		mover->Update(charaCon.IsOnGround(), deltaTime);
+		float delta = deltaTime;
+		deltaTime = 0;
+
+		mover->Update(charaCon.IsOnGround(), delta);
 
 		AnimationController& animCon = m_model.GetAnimCon();
 		//UŒ‚
@@ -47,13 +50,11 @@ void Citizen::Update() {
 		} else {
 			animCon.Play(anim_idle, animInterpolateSec);
 		}
-		m_model.SetPos(charaCon.Execute(moveVec, deltaTime));
+		m_model.SetPos(charaCon.Execute(moveVec, delta));
 		m_collision.SetPosition(charaCon.GetPosition());
 
 		//‰ñ“]
 		m_model.SetRot(mover->getTurn());
-
-		deltaTime = 0;
 	}
 
 	if (0 < nowFlame) {
