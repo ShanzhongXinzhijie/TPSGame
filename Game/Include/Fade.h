@@ -17,7 +17,7 @@ private:
 		Idle
 	};
 	State state = Out;
-	static constexpr float fadePerSec = 1.0f;
+	static constexpr float fadePerSec = 2.0f;
 
 	CSprite sprite;
 	std::function<void()> func;

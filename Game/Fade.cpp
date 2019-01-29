@@ -26,7 +26,8 @@ void Fade::PostRender() {
 			state = Idle;
 		}
 	}
-	sprite.Draw(CVector2::Zero(), { 1280.0f, 720.0f }, CVector2::Zero(), 0.0f, {1.0f, 1.0f, 1.0f, alpha});
+	sprite.Draw(CVector2::Zero(), { 1280.0f, 720.0f }, CVector2::Zero(), 0.0f,
+				{1.0f, 1.0f, 1.0f, alpha},DirectX::SpriteEffects_None, 0.1f);
 }
 
 void Fade::fadeOut() {
