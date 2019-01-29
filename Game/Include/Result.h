@@ -2,6 +2,7 @@
 #include "PlayerGene.h"
 
 class Fade;
+class teamResult;
 
 class Result : public IGameObject{
 public:
@@ -13,8 +14,7 @@ public:
 	void PostRender() override;
 
 private:
-	std::vector<const wchar_t*> names;
-	std::vector<unsigned int> counts;
+	std::vector<teamResult> teamResults;
 
 	GameObj::OrthoCamera camera;
 	CFont m_font;

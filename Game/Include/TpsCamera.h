@@ -102,6 +102,7 @@ private:
 	bool slow = false;
 
 #ifdef SpritScreen
+	static bool s_isSecond;
 	bool isSecond = false;
 #endif
 };

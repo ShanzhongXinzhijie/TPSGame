@@ -4,12 +4,25 @@
 #include "Team.h"
 #include "Fade.h"
 
+class teamResult {
+public:
+	teamResult(const wchar_t* name, unsigned int count) : name(name), count(count) {};
+
+	bool operator <(const teamResult& tr) const{
+		return count < tr.count;
+	}
+	bool operator >(const teamResult& tr) const{
+		return count > tr.count;
+	}
+	const wchar_t * name;
+	unsigned int count;
+};
+
 Result::Result(const PlayerGene & playerGene, Fade* fade) {
 	this->fade = fade;
 	fade->fadeOut();
 	for (Team* t : playerGene.getTeams()) {
-		names.push_back(t->getName());
-		counts.push_back(t->getZombieCount());
+		teamResults.emplace_back(t->getName(), t->getZombieCount());
 	}
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({ 0, 0, 0 });
@@ -45,19 +58,11 @@ void Result::PostRender() {
 
 	m_font.Draw(L"結 果 発 表", { 0.47f,0.1f }, CVector4::White(), { 3.0f,3.0f }, { 0.5f, 0.5f });
 
-	unsigned int maxCount = 0;
-	size_t winerTeam = 0;
+	//ソート
+	std::sort(teamResults.begin(), teamResults.end(), std::greater<teamResult>());
 	wchar_t disp[20];
-	for (size_t i = 0; i < names.size(); i++) {
-		if (maxCount < counts[i]) {
-			maxCount = counts[i];
-			winerTeam = i;
-		}
-		swprintf_s(disp, L"%ls %d 体", names[i], counts[i]);
+	for (size_t i = 0; i < teamResults.size(); i++) {
+		swprintf_s(disp, L"%d位 %ls %d 体",i+1 , teamResults[i].name, teamResults[i].count);
 		m_font.Draw(disp, { 0.47f,0.3f + (i*0.1f) }, CVector4::White(), { 1.5f,1.5f }, { 0.5f, 0.5f });
 	}
-
-	swprintf_s(disp, L"%ls の勝利", names[winerTeam]);
-
-	m_font.Draw(disp, { 0.47f, 0.8f }, CVector4::White(), { 1.5f,1.5f }, { 0.5f, 0.5f });
 }
