@@ -5,9 +5,11 @@
 
 using namespace GameObj;
 
+class Fade;
+
 class ConfirmPlayers : public IGameObject{
 public:
-	ConfirmPlayers();
+	ConfirmPlayers(Fade* fade);
 	~ConfirmPlayers();
 
 	bool Start() override;
@@ -27,5 +29,7 @@ private:
 	
 	GuiList list;
 	CSprite m_sprite;
+
+	Fade* fade;
 };
 

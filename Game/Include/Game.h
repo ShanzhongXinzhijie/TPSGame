@@ -12,9 +12,11 @@
 
 #include "../Network/NetPlayerManager.h"
 
+class Fade;
+
 class Game : public IGameObject{
 public:
-	Game(/*std::unordered_map<int, CVector4>& playersIni*/);
+	Game(Fade* fade);
 	~Game();
 
 	void Update() override;
@@ -53,5 +55,6 @@ private:
 #endif
 
 	CFont font;
+	Fade* fade;
 };
 

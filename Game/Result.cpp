@@ -2,8 +2,11 @@
 #include "Include\Result.h"
 #include "Title.h"
 #include "Team.h"
+#include "Fade.h"
 
-Result::Result(const PlayerGene & playerGene) {
+Result::Result(const PlayerGene & playerGene, Fade* fade) {
+	this->fade = fade;
+	fade->fadeOut();
 	for (Team* t : playerGene.getTeams()) {
 		names.push_back(t->getName());
 		counts.push_back(t->getZombieCount());
@@ -30,8 +33,10 @@ bool Result::Start() {
 
 void Result::Update() {
 	if (Pad(0).GetDown(enButtonA)) {
-		delete this;
-		new Title;
+		fade->fadeIn([&]() {
+			delete this;
+			new Title(fade);
+		});
 	}
 }
 

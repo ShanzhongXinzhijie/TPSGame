@@ -6,8 +6,11 @@
 #include "ziguzagu.h"
 #include "ittarikitari.h"
 #include "Result.h"
+#include "Fade.h"
 
-Game::Game() : citizenGene(this){
+Game::Game(Fade* fade) : citizenGene(this){
+	this->fade = fade;
+	fade->fadeOut();
 
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
 		if (objData.EqualObjectName(L"player1")) {
@@ -46,10 +49,15 @@ Game::~Game() {
 }
 
 void Game::Update() {
-	timer -= GetDeltaTimeSec();
-	if (timer < 0) {
-		new Result(playerGene);
-		delete this;
+	if (timer > 0) {
+		timer -= GetDeltaTimeSec();
+		if (timer <= 0) {
+			timer = 0;
+			fade->fadeIn([&]() {
+				new Result(playerGene, fade);
+				delete this;
+			});
+		}
 	}
 }
 

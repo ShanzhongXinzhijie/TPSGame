@@ -3,10 +3,14 @@
 #include "CPlayer.h"
 #include "Title.h"
 #include "Game.h"
+#include "Fade.h"
 
 #include "Network/Network.h"
 
-ConfirmPlayers::ConfirmPlayers() : list(L"Resource/spriteData/waku.dds") {
+ConfirmPlayers::ConfirmPlayers(Fade* fade) : list(L"Resource/spriteData/waku.dds") {
+	this->fade = fade;
+	fade->fadeOut();
+	
 	camera.SetPos({ 0, 50, 200 });
 	camera.SetTarget({ 0, 50, 0 });
 	camera.UpdateMatrix();
@@ -105,12 +109,16 @@ void ConfirmPlayers::Update() {
 		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { isReady = false; }
 #endif
 		if (isReady) {
-			new Game();
-			delete this;
+			fade->fadeIn([&]() {
+				new Game(fade);
+				delete this;
+			});
 		}
 	} else if (Pad(0).GetDown(enButtonBack)) {
-		new Title;
-		delete this;
+		fade->fadeIn([&]() {
+			new Title(fade);
+			delete this;
+		});
 	}
 }
 

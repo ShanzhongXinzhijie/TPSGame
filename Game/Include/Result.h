@@ -1,9 +1,11 @@
 #pragma once
 #include "PlayerGene.h"
 
+class Fade;
+
 class Result : public IGameObject{
 public:
-	Result(const PlayerGene& playerGene);
+	Result(const PlayerGene& playerGene, Fade* fade);
 	~Result();
 
 	bool Start() override;
@@ -17,5 +19,6 @@ private:
 	GameObj::OrthoCamera camera;
 	CFont m_font;
 	CSprite m_sprite;
+	Fade* fade;
 };
 
