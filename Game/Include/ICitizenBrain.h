@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Citizen.h"
 class ICitizenBrain {
 public:
 	ICitizenBrain();
@@ -11,5 +11,9 @@ public:
 	virtual CQuaternion getTurn() = 0;
 
 	virtual bool isAtk();
+
+	void SetCitizen(Citizen* setCitizen);
+
+	Citizen* citizen;
 };
 

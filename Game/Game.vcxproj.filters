@@ -34,6 +34,7 @@
     <ClInclude Include="Include\PlayerGene.h" />
     <ClInclude Include="Include\Walker.h" />
     <ClInclude Include="Include\FlyWalker.h" />
+    <ClInclude Include="Include\Citizennigeru.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -68,6 +69,7 @@
     <ClCompile Include="Citizen\ziguzagu.cpp" />
     <ClCompile Include="Mover\Walker.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
+    <ClCompile Include="Citizen\Citizennigeru.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

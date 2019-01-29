@@ -12,3 +12,8 @@ ICitizenBrain::~ICitizenBrain() {
 bool ICitizenBrain::isAtk() {
 	return false;
 }
+
+void ICitizenBrain::SetCitizen(Citizen* setCitizen)
+{
+	citizen = setCitizen;
+}

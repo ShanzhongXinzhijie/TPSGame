@@ -16,6 +16,8 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 	m_collision.SetClass(this);
 
 	mover = moveType;
+
+	moveType->SetCitizen(this);
 }
 
 Citizen::~Citizen() {

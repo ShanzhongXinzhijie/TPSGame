@@ -8,6 +8,7 @@
 #include "ittarikitari.h"
 #include "sikakukuidou.h"
 #include "ziguzagu.h"
+#include "Citizennigeru.h"
 
 
 CitizenGene::CitizenGene(Game * game) : game(game){
@@ -59,7 +60,7 @@ void CitizenGene::createCitizen(unsigned int amount) {
 	size_t spawnCount = spawnerArray.size();
 	for (unsigned int i = 0; i < amount; i++) {
 		ICitizenBrain* brain;
-		switch(rand() % 4) {
+		switch(rand() % 5) {
 		case 0:
 			brain = new CircleWalk();
 			break;
@@ -68,6 +69,9 @@ void CitizenGene::createCitizen(unsigned int amount) {
 			break;
 		case 2:
 			brain = new sikakukuidou();
+			break;
+		case 3:
+			brain = new Citizennigeru(game->getPlayers());
 			break;
 		default:
 			brain = new ziguzagu();

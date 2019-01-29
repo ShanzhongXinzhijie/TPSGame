@@ -246,6 +246,7 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Mover\Walker.cpp" />
@@ -284,6 +285,7 @@
     <ClCompile Include="Citizen\ziguzagu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\CitizenGene.h" />
     <ClInclude Include="Include\HPbar.h" />
