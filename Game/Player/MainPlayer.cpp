@@ -66,7 +66,7 @@ void MainPlayer::Update() {
 
 void MainPlayer::PostRender() {
 	//HPï\é¶
-	hpbar.Draw(m_hp, constHp);
+	hpbar.Draw(mover.getFlyTimer(), mover.c_flyTimer);
 
 	//bulletCount écíe
 	//constBulletCount ç≈ëÂíeêî

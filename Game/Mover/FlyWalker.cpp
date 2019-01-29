@@ -11,7 +11,7 @@ FlyWalker::~FlyWalker() {
 
 void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
 	if (isFly) {
-		if (flyTimer > c_flyTimer*0.5) {
+		if (flyTimer > 0.0f) {
 			flyPower = power;
 			velocity = v * flyPower;
 			flying = true;
@@ -57,8 +57,8 @@ void FlyWalker::Update() {
 			flyStop();
 		}
 	} else {
-		if (flyTimer < c_flyTimer) {
-			flyTimer += GetDeltaTimeSec() * 0.5f;
+		if (IsOnGround() && flyTimer < c_flyTimer) {
+			flyTimer += GetDeltaTimeSec();
 			if (flyTimer > c_flyTimer) {
 				flyTimer = c_flyTimer;
 			}
