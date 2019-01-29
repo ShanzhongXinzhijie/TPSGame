@@ -1,9 +1,11 @@
 #pragma once
 using namespace GameObj;
 
+class Fade;
+
 class Title : public IGameObject{
 public:
-	Title();
+	Title(Fade* fade);
 	~Title();
 	
 	bool Start() override;
@@ -14,5 +16,7 @@ private:
 	OrthoCamera camera;
 	CFont m_font;
 	CSprite m_sprite;
+
+	Fade* fade;
 };
 

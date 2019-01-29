@@ -1,8 +1,7 @@
 #include "stdafx.h"
-
 #include "Title.h"
-
 #include "Network/Network.h"
+#include "Fade.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -20,7 +19,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	NetWorkManager networkManager;
 	networkManager.SetName(L"NetWorkManager");
 
-	new Title;
+	Fade fade;
+
+	new Title(&fade);
 
 	//ゲームループ。
 	GetEngine().RunGameLoop();

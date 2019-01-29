@@ -1,8 +1,12 @@
 #include "stdafx.h"
 #include "Title.h"
 #include "ConfirmPlayers.h"
+#include "Fade.h"
 
-Title::Title() {
+Title::Title(Fade* fade) {
+	this->fade = fade;
+	fade->fadeOut();
+
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({ 0, 0, 0 });
 	camera.UpdateMatrix();
@@ -26,8 +30,10 @@ bool Title::Start() {
 
 void Title::Update() {
 	if (Pad(0).GetDown(enButtonA)) {
-		new ConfirmPlayers;
-		delete this;
+		fade->fadeIn([&]() {
+			new ConfirmPlayers(fade);
+			delete this;
+		});
 	}
 }
 

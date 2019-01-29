@@ -2,7 +2,7 @@
 #include "TpsCamera.h"
 
 #ifdef SpritScreen
-bool g_isSecond = false;
+bool TpsCamera::s_isSecond = false;
 #endif
 
 TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
@@ -16,10 +16,11 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
 	//ƒƒCƒ“ƒJƒƒ‰‚Éİ’è
 #ifdef SpritScreen
 	GetCameraList().push_back(&m_camera);
-	if (g_isSecond) {
+	if (s_isSecond) {
 		isSecond = true;
+		s_isSecond = false;
 	} else {
-		g_isSecond = true;
+		s_isSecond = true;
 	}
 #else
 	SetMainCamera(&m_camera);
