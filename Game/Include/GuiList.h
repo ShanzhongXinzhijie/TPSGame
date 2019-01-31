@@ -10,6 +10,7 @@ public:
 	CVector2 scale = CVector2::One();
 	CVector2 pivot = {0.5f, 0.5f};
 	CVector4 color = CVector4::White();
+	float depth = 0.5f;
 
 	float side = 0.0f;
 

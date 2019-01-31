@@ -3,8 +3,9 @@
 #include "Network.h"
 #include "../Include/Game.h"
 
-NetPlayerManager::NetPlayerManager()
+NetPlayerManager::NetPlayerManager() : list(L"Resource/spriteData/waku.dds")
 {
+	list.depth = 0.0f;//最前面に表示
 }
 
 
@@ -70,14 +71,41 @@ void NetPlayerManager::CreatePlayer(int playerNr) {
 	}
 }
 
+void NetPlayerManager::Update() {
+	if (Pad(0).GetDown(enButtonBack)) {
+		m_isView = !m_isView;
+	}
+}
 void NetPlayerManager::PostRender() {
-	//接続状態の表示
+	if (!m_isView) { return; }
+
+	//Ping表示
 	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
-		wchar_t str[256];
-		swprintf_s(str, L"接続\nPing: %dms", GetPhoton()->GetPing_ms());
-		m_font.Draw(str, { 0.0f,0.2f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		list.color = CVector4::White();
+		wchar_t str[128];
+		swprintf_s(str, L"Ping: %dms", GetPhoton()->GetPing_ms());
+		list.values.emplace_back(str);
 	}
 	else {
-		m_font.Draw(L"切断", { 0.0f,0.2f }, { 1.0f, 0.0f, 0.0f, 1.0f });
+		list.color = {1.0f,0.0f,0.0f,1.0f};
+		list.values.emplace_back(L"切断");
 	}
+
+	//ルーム内のプレイヤーを表示
+	const ExitGames::Common::JVector<ExitGames::LoadBalancing::Player*>& players = GetPhoton()->GetPlayers();
+	for (unsigned int i = 0; i < players.getSize(); i++) {
+		list.values.emplace_back(std::to_wstring(players[i]->getNumber()));
+		list.values.back() += L" :";
+		list.values.back() += players[i]->getName().cstr();
+		if (players[i]->getNumber() == GetPhoton()->GetLocalPlayerNumber()) {
+			list.values.back() += L" <<自分";
+		}
+		if (players[i]->getIsMasterClient()) {
+			list.values.back() += L" <<ﾏｽｸﾗ";
+		}
+	}
+
+	list.Draw();
+
+	list.values.clear();
 }

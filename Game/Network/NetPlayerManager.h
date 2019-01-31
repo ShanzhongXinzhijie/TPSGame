@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GuiList.h"
+
 #include"NetPlayerReceiver.h"
 #include"NetPlayerCaster.h"
 
@@ -13,6 +15,7 @@ public:
 
 	void Init(Game* pGame);
 
+	void Update()override;
 	void PostRender()override;
 
 private:
@@ -25,6 +28,8 @@ private:
 	NetPlayerReceiver* m_netReceiver = nullptr;
 	std::unordered_map<int, NetPlayerCaster*> m_playerCastersMap;
 
-	CFont m_font;
+	bool m_isView = false;
+	GuiList list;
+	//CFont m_font;
 };
 
