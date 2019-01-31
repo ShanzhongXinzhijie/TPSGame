@@ -27,7 +27,7 @@ private:
 
 	//ƒQ[ƒ€İ’è
 	float m_timeLimit = 160.0f;
-	UINT m_citizenCnt = 500;
+	int m_citizenCnt = 1;
 	
 	GuiList list;
 	CSprite m_sprite;

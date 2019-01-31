@@ -8,6 +8,7 @@ public:
 
 	void move(CVector2 move);
 	void jump(float jumpPower);
+	void walljump(float jumpPower, CVector2 move);
 	void Update();
 
 	void turn(float x, float z);

@@ -135,7 +135,7 @@ void ConfirmPlayers::Update() {
 		m_timeLimit -= 10.0f; m_timeLimit = max(1.0f, m_timeLimit);
 	}
 	if (Pad(0).GetDown(enButtonLeft)) {
-		m_citizenCnt -= 25; m_citizenCnt = max(1, m_citizenCnt);
+		m_citizenCnt -= 50; m_citizenCnt = max(1, m_citizenCnt);
 	}
 	if (Pad(0).GetDown(enButtonRight)) {
 		m_citizenCnt += 25;

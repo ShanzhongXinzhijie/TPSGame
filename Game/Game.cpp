@@ -8,7 +8,7 @@
 #include "Result.h"
 #include "Fade.h"
 
-Game::Game(Fade* fade, float timeLimit, UINT citizenCnt) : citizenGene(this), timer(timeLimit){
+Game::Game(Fade* fade, float timeLimit, int citizenCnt) : citizenGene(this), timer(timeLimit){
 	this->fade = fade;
 	fade->fadeOut();
 

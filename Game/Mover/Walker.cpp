@@ -20,6 +20,16 @@ void Walker::move(CVector2 move) {
 void Walker::jump(float jumpPower) {
 	if (IsOnGround()) {
 		velocity.y = jumpPower;
+	}	
+}
+
+void Walker::walljump(float jumpPower, CVector2 move) {
+	if (IsContactWall()) {	
+		CVector3 dir = GetContactWallNormal();
+		dir.y = 0.0f;
+		dir += CVector3(move.x, 0.0f, move.y)*0.5f;
+		dir += CVector3::AxisY();
+		velocity = dir * jumpPower;
 	}
 }
 

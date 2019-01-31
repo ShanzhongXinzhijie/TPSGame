@@ -17,6 +17,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
 	SetIsDebugDraw(true);//fps‚Æ‚©•\Ž¦
+	SetPhysicsDebugDrawMode(btIDebugDraw::DBG_DrawWireframe);//”»’è‚Ì•\Ž¦
 
 	NetWorkManager networkManager;
 	networkManager.SetName(L"NetWorkManager");

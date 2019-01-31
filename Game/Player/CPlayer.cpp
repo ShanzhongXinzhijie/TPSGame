@@ -101,11 +101,17 @@ void CPlayer::Revive() {
 
 void CPlayer::Move() {
 
+	const CVector2& movement = action.getMovement();
+
 	//ジャンプと飛行
 	if (action.isJump()) {
 		if (mover.IsOnGround()) {
 			mover.jump(jumpPower);
-		} else {
+		}
+		else if (mover.IsContactWall() && !mover.isFlying()) {
+			//壁ジャンプ
+			mover.walljump(jumpPower, movement);
+		}else{
 			if (mover.isFlying()) {
 				mover.flyStop();
 			} else {
@@ -121,8 +127,6 @@ void CPlayer::Move() {
 	}
 
 	//移動
-	const CVector2& movement = action.getMovement();
-
 	float speed = moveSpeed;
 	bool dash = false;
 
