@@ -14,10 +14,16 @@ public:
 	float getFlyTimer() {
 		return flyTimer;
 	}
+	float getFlyTimerMax() const{
+		return c_flyTimer;
+	}
 
 	bool isFlying() {
 		return flying;
 	}
+
+	//飛行可能時間をセットする
+	void SetFlyTimer(float timer) { flyTimer = timer; }
 
 	void Update();
 
