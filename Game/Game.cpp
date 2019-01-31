@@ -8,7 +8,7 @@
 #include "Result.h"
 #include "Fade.h"
 
-Game::Game(Fade* fade) : citizenGene(this){
+Game::Game(Fade* fade, float timeLimit, UINT citizenCnt) : citizenGene(this), timer(timeLimit){
 	this->fade = fade;
 	fade->fadeOut();
 
@@ -33,7 +33,7 @@ Game::Game(Fade* fade) : citizenGene(this){
 	m_netPlayerManager.Init(this);
 #endif
 
-	citizenGene.createCitizen(500);
+	citizenGene.createCitizen(citizenCnt);
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });

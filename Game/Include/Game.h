@@ -16,7 +16,7 @@ class Fade;
 
 class Game : public IGameObject{
 public:
-	Game(Fade* fade);
+	Game(Fade* fade, float timeLimit, UINT citizenCnt);
 	~Game();
 
 	void Update() override;

@@ -78,8 +78,8 @@ bool ConfirmPlayers::Start() {
 		}
 		min += 1.0f / 8.0f;
 	}
-	//サーバーとルームに接続
-	m_netWork->ConnectJoin(wstr.c_str());
+	//サーバーに接続(その後勝手にルームに入る)
+	m_netWork->Connect(wstr.c_str());
 #endif
 
 	return true;
@@ -109,16 +109,36 @@ void ConfirmPlayers::Update() {
 		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { isReady = false; }
 #endif
 		if (isReady) {
+			//ゲーム開始
 			fade->fadeIn([&]() {
-				new Game(fade);
+				new Game(fade,m_timeLimit,m_citizenCnt);
 				delete this;
 			});
 		}
 	} else if (Pad(0).GetDown(enButtonBack)) {
+#ifndef SpritScreen
+		//サーバーから切断
+		m_netWork->Disconnect();
+#endif
+		//タイトルに戻る
 		fade->fadeIn([&]() {
 			new Title(fade);
 			delete this;
 		});
+	}
+
+	//ゲーム設定
+	if (Pad(0).GetDown(enButtonUp)) {
+		m_timeLimit += 10.0f;
+	}
+	if (Pad(0).GetDown(enButtonDown)) {
+		m_timeLimit -= 10.0f; m_timeLimit = max(1.0f, m_timeLimit);
+	}
+	if (Pad(0).GetDown(enButtonLeft)) {
+		m_citizenCnt -= 25; m_citizenCnt = max(1, m_citizenCnt);
+	}
+	if (Pad(0).GetDown(enButtonRight)) {
+		m_citizenCnt += 25;
 	}
 }
 
@@ -134,18 +154,36 @@ void ConfirmPlayers::PostRender() {
 		//ルーム内のプレイヤーを表示
 		const ExitGames::Common::JVector<ExitGames::LoadBalancing::Player*>& players = GetPhoton()->GetPlayers();
 		for (unsigned int i = 0; i < players.getSize(); i++){
-			list.values.emplace_back(players[i]->getName().cstr());
-			list.values.back() += L" :"; list.values.back() += std::to_wstring(players[i]->getNumber());
+			list.values.emplace_back(std::to_wstring(players[i]->getNumber()));
+			list.values.back() += L" :";
+			list.values.back() += players[i]->getName().cstr();
 			if (players[i]->getNumber() == GetPhoton()->GetLocalPlayerNumber()) {
-				list.values.back() += L"  <<自分";
+				list.values.back() += L" <<自分";
+			}
+			if (players[i]->getIsMasterClient()) {
+				list.values.back() += L" <<ﾏｽｸﾗ";
 			}
 		}
 	}
+	else if (GetPhoton()->GetState() == PhotonNetworkLogic::DISCONNECTED) {
+		list.values.emplace_back(L"切断");
+	}
 	else {
+#ifdef SpritScreen
+		list.values.emplace_back(L"オフラインモード");
+#else
 		list.values.emplace_back(L"接続中...");
+#endif
 	}
 
 	list.Draw();
 
 	list.values.clear();
+
+	//ゲーム設定表示
+	{
+		wchar_t str[128];
+		swprintf_s(str, L"制限時間:%.1f\n人口:%d", m_timeLimit, m_citizenCnt);
+		m_font.Draw(str, { 1.0f,0.0f }, CVector4::White(), CVector2::One(), { 1.0f,0.0f });
+	}
 }

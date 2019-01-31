@@ -8,7 +8,8 @@ class NetWorkManager : public IGameObject{
 public:
 	NetWorkManager() {
 		//フォトン初期化
-		GetEngine().InitPhoton(L"3d457b93-aeb7-4fb7-b958-808dd8b623a4", L"Alpha2c",
+		GetEngine().InitPhoton(L"3d457b93-aeb7-4fb7-b958-808dd8b623a4", NETWORK_VER,
+			//イベント受信時に実行する関数をセット
 			[&](int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj) {
 				for (auto& EventAction : m_eventActionList) {
 					EventAction(playerNr, eventCode, eventContentObj);
@@ -25,8 +26,8 @@ public:
 		);
 	}	
 
-	//Serverに接続してルームに入る
-	void ConnectJoin(const wchar_t* playerName) {
+	//Serverに接続
+	void Connect(const wchar_t* playerName) {
 		if (!GetPhoton()->GetConnected()) {
 			GetPhoton()->ConnectServer(playerName);
 		}
@@ -36,6 +37,10 @@ public:
 		if (GetPhoton()->GetState() == PhotonNetworkLogic::CONNECTED) {
 			GetPhoton()->JoinRoom(L"ああああ", NET_MAX_PLAYER);
 		}
+	}
+	//Serverから切断
+	void Disconnect() {
+		GetPhoton()->DisconnectServer();
 	}
 
 	//イベント受信時に実行する関数を追加

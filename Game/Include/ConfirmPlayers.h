@@ -25,10 +25,13 @@ private:
 	
 	NetWorkManager* m_netWork = nullptr;
 
-	//NetJoinLeaveCaster m_caster;
+	//ƒQ[ƒ€İ’è
+	float m_timeLimit = 160.0f;
+	UINT m_citizenCnt = 500;
 	
 	GuiList list;
 	CSprite m_sprite;
+	CFont m_font;
 
 	Fade* fade;
 };
