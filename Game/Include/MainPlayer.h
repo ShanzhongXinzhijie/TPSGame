@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include "TpsCamera.h"
 #include "HPbar.h"
+#include "Flybar.h"
 
 class MainPlayer :public CPlayer {
 public:
@@ -16,5 +17,6 @@ private:
 	HPbar hpbar;
 	CFont font;
 	TpsCamera m_camera;
+	Flybar flybar;
 };
 

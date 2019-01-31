@@ -248,6 +248,7 @@
   <ItemGroup>
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
+    <ClCompile Include="Player\Flybar.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Mover\Walker.cpp" />
     <ClCompile Include="Player\PlayerGene.cpp" />
@@ -285,6 +286,7 @@
     <ClCompile Include="Citizen\ziguzagu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Flybar.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\CitizenGene.h" />
@@ -344,6 +346,10 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\Target.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
+    <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

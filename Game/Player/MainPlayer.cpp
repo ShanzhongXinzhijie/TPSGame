@@ -76,7 +76,8 @@ void MainPlayer::PostRender() {
 
 	//mover.getFlyTimer() 残り飛行可能時間,半分以上残ってないと飛行開始できない
 	//mover.c_flyTimer 最大飛行可能時間
-
+	flybar.Draw(mover.getFlyTimer(), mover.c_flyTimer);
+	flybar.setPosition({ 1270.0f,120.0f });
 
 	//自チームの眷族数の表示
 	wchar_t countDisp[8];
