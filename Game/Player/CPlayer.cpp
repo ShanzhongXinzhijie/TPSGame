@@ -108,9 +108,10 @@ void CPlayer::Move() {
 	if (mover.IsContactWall()) {
 		//空中に壁に当たりながらジャンプ or 飛行で壁に突っ込む
 		if (!mover.IsOnGround() && action.isJump() || mover.isFlying()) {
-			if (mover.isFlying()) {	mover.flyStop(); }
-			mover.SetFlyTimer(max(0.0f,mover.getFlyTimer() - mover.getFlyTimerMax()*0.025f));//飛行可能時間を消費
-
+			if (mover.isFlying()) {
+				mover.flyStop();
+				mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
+			}
 			mover.walljump(jumpPower, movement);
 			isWalljump = true;
 		}
