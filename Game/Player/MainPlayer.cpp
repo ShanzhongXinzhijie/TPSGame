@@ -69,10 +69,14 @@ void MainPlayer::PostRender() {
 	hpbar.Draw(mover.getFlyTimer(), mover.c_flyTimer);
 
 	//bulletCount 残弾
+	wchar_t countbullet[10];
+	swprintf_s(countbullet, L"残弾%d/50発", bulletCount);
+	font.Draw(countbullet, { 0.7f, 0.9f });
 	//constBulletCount 最大弾数
 
 	//mover.getFlyTimer() 残り飛行可能時間,半分以上残ってないと飛行開始できない
 	//mover.c_flyTimer 最大飛行可能時間
+
 
 	//自チームの眷族数の表示
 	wchar_t countDisp[8];
