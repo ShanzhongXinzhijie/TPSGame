@@ -36,6 +36,7 @@
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\Flybar.h" />
+    <ClInclude Include="Network\NetMasterClientCaster.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -72,6 +73,7 @@
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Player\Flybar.cpp" />
+    <ClCompile Include="Network\NetMasterClientCaster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

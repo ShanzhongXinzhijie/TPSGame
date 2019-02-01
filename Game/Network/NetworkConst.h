@@ -4,12 +4,16 @@ static const int NET_MAX_PLAYER = 20;
 
 enum NetworkEventCode {
 	enPlayerEventStart,
-
 	enPlayerStatus = 1,
 	enKillPlayer,
 	enPlayerDeadOrAlive,
+	enPlayerEventEnd,
 
-	enPlayerEventNum,
+	enMasterClientEventStart,
+	enMasterClientSetting,
+	enMasterClientStartGame,
+	enMasterClientEndGame,
+	enMasterClientEventEnd,
 };
 enum PlayerStatusCode {
 	enFrameCount = 0,

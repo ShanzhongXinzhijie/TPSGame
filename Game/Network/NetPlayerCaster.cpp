@@ -20,13 +20,13 @@ void NetPlayerCaster::PostUpdate() {
 	bool isMe = false;
 	if (m_pCPlayer->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
 		isMe = true;
-	}
-	
-	ExitGames::Common::Hashtable _event;	
-	_event.put((nByte)enFrameCount, m_cnt);//フレーム番号
+	}	
 
 	//自分自身なら実行
 	if (isMe) {
+
+		ExitGames::Common::Hashtable _event;
+		_event.put((nByte)enFrameCount, m_cnt);//フレーム番号
 		
 		//毎フレーム入力状態を送信
 		{
@@ -54,6 +54,9 @@ void NetPlayerCaster::PostUpdate() {
 	//死んでる生きてる
 	if(m_isDead != m_pCPlayer->GetIsDead()){
 		m_isDead = m_pCPlayer->GetIsDead();
+
+		ExitGames::Common::Hashtable _event;
+		_event.put((nByte)enFrameCount, m_cnt);//フレーム番号
 
 		//殺した！
 		if (!isMe) {

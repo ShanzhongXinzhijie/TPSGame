@@ -11,7 +11,7 @@ NetPlayerReceiver::~NetPlayerReceiver()
 
 void NetPlayerReceiver::EventAction(int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj) {
 	//プレイヤー関係のイベントをキューに保存
-	if (eventCode > enPlayerEventStart && eventCode < enPlayerEventNum) {
+	if (eventCode > enPlayerEventStart && eventCode < enPlayerEventEnd) {
 		ExitGames::Common::Hashtable eventContent = ExitGames::Common::ValueObject<ExitGames::Common::Hashtable>(eventContentObj).getDataCopy();
 		//フレーム数
 		if (eventContent.getValue((nByte)enFrameCount)) {

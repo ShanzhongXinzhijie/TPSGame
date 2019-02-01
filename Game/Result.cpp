@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Include\Result.h"
 #include "Title.h"
+#include "ConfirmPlayers.h"
 #include "Team.h"
 #include "Fade.h"
 
@@ -48,7 +49,8 @@ void Result::Update() {
 	if (Pad(0).GetDown(enButtonA)) {
 		fade->fadeIn([&]() {
 			delete this;
-			new Title(fade);
+			//new Title(fade);
+			new ConfirmPlayers(fade);
 		});
 	}
 }
