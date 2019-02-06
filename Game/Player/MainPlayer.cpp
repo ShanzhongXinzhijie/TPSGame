@@ -66,16 +66,14 @@ void MainPlayer::Update() {
 
 void MainPlayer::PostRender() {
 	//HP表示
-	hpbar.Draw(mover.getFlyTimer(), mover.c_flyTimer);
+	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
 
-	//bulletCount 残弾
+	//弾数表示
 	wchar_t countbullet[10];
-	swprintf_s(countbullet, L"残弾%d/50発", bulletCount);
+	swprintf_s(countbullet, L"残弾%d/%d発", bulletCount, constBulletCount);
 	font.Draw(countbullet, { 0.7f, 0.9f });
-	//constBulletCount 最大弾数
 
-	//mover.getFlyTimer() 残り飛行可能時間,半分以上残ってないと飛行開始できない
-	//mover.c_flyTimer 最大飛行可能時間
+	//飛行ゲージ表示
 	flybar.Draw(mover.getFlyTimer(), mover.c_flyTimer);
 	flybar.setPosition({ 1270.0f,120.0f });
 

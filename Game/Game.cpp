@@ -13,14 +13,12 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt) : citizenGene(this), tim
 	fade->fadeOut();
 
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
-		if (objData.EqualObjectName(L"player1")) {
+		if (objData.EqualObjectName(L"player700")) {
 			playerGene.addSpawner(objData.position, 780.0f);
-		} else if (objData.EqualObjectName(L"player2")) {
-			playerGene.addSpawner(objData.position, 780.0f);
-		} else if (objData.EqualObjectName(L"zombie1")) {
-			citizenGene.addSpawner(objData.position, 4600.0f);
-		} else if (objData.EqualObjectName(L"zombie2")) {
-			citizenGene.addSpawner(objData.position, 4600.0f);
+		} else if (objData.EqualObjectName(L"citizen600")) {
+			citizenGene.addSpawner(objData.position, 600.0f);
+		} else if (objData.EqualObjectName(L"citizen1800")) {
+			citizenGene.addSpawner(objData.position, 1800.0f);
 		}
 		return true;
 	});

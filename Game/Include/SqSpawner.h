@@ -8,8 +8,8 @@ public:
 		m_pos = pos;
 	}
 
-	void setSide(float side) {
-		m_side = side;
+	float getSide() {
+		return m_side;
 	}
 
 	CVector3 getPos();
