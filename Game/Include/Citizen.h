@@ -29,6 +29,7 @@ public:
 	}
 
 private:
+	void playSE(const wchar_t * path);
 	void Attack();
 
 	GameObj::CSkinModelRender m_model;

@@ -3,9 +3,14 @@
 #include "ConfirmPlayers.h"
 #include "Fade.h"
 
-Title::Title(Fade* fade) {
+Title::Title(Fade* fade, SuicideObj::CBGM* bgm) : bgm(bgm){
 	this->fade = fade;
 	fade->fadeOut();
+
+	if (bgm == nullptr) {
+		this->bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_title.wav");
+		this->bgm->Play(false, true);
+	}
 
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({ 0, 0, 0 });
@@ -29,9 +34,10 @@ bool Title::Start() {
 }
 
 void Title::Update() {
-	if (Pad(0).GetDown(enButtonA)) {
+	if (Pad(0).GetDown(enButtonA) && fade->isIdel()) {
+		NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
 		fade->fadeIn([&]() {
-			new ConfirmPlayers(fade);
+			new ConfirmPlayers(fade, bgm);
 			delete this;
 		});
 	}

@@ -9,7 +9,7 @@ class Fade;
 
 class ConfirmPlayers : public IGameObject{
 public:
-	ConfirmPlayers(Fade* fade);
+	ConfirmPlayers(Fade* fade, SuicideObj::CBGM* bgm = nullptr);
 	~ConfirmPlayers();
 
 	bool Start() override;
@@ -32,6 +32,8 @@ private:
 	GuiList list;
 	CSprite m_sprite;
 	CFont m_font;
+
+	SuicideObj::CBGM* bgm;
 
 	Fade* fade;
 };

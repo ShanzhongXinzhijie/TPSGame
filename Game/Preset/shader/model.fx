@@ -112,13 +112,16 @@ PSInput VSMain( VSInputNmTxVcTangent In )
 #if MOTIONBLUR
 		float4 oldpos = mul(mWorld_old, In.Position);
 
-		if (distance(posW, oldpos.xyz) > 0.0f) {
+		if (distance((mView[3].xyz - mView_old[3].xyz), (mWorld[3].xyz - mWorld_old[3].xyz)) > 0.0f //distance(posW, oldpos.xyz)
+			|| distance(mWorld[0].xyz, mWorld_old[0].xyz) > 0.0f
+			|| distance(mWorld[1].xyz, mWorld_old[1].xyz) > 0.0f
+			|| distance(mWorld[2].xyz, mWorld_old[2].xyz) > 0.0f){
 			psInput.isWorldMove = true;
 		}
 
 		oldpos = mul(mView_old, oldpos);
 		oldpos = mul(mProj_old, oldpos);
-
+		
 		if (oldpos.z < 0.0f) {
 			psInput.lastPos = pos;
 		}
@@ -202,14 +205,17 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 			oldpos = mul(oldskinning, In.Position);
 		}
 
-		if (distance(posW, oldpos.xyz) > 0.0f) {
+		if (distance((mView[3].xyz - mView_old[3].xyz), (skinning[3].xyz - oldskinning[3].xyz)) > 0.0f
+			|| distance(skinning[0].xyz, oldskinning[0].xyz) > 0.0f
+			|| distance(skinning[1].xyz, oldskinning[1].xyz) > 0.0f
+			|| distance(skinning[2].xyz, oldskinning[2].xyz) > 0.0f) {
 			psInput.isWorldMove = true;
 		}
 
 		oldpos = mul(mView_old, oldpos);
 		oldpos = mul(mProj_old, oldpos);
 
-		if (oldpos.z < 0.0f) {
+		if (oldpos.z < 0.0f){
 			psInput.lastPos = pos;
 		}
 		else {
@@ -291,10 +297,11 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 
 	//‘¬“x
 #if MOTIONBLUR
-		float2	current = In.curPos.xy / In.curPos.w;
-		float2	last = In.lastPos.xy / In.lastPos.w;
 
-		if (In.curPos.z < 0.0f || In.lastPos.z < 0.0f) {
+		float3	current = In.curPos.xyz / In.curPos.w;
+		float3	last = In.lastPos.xyz / In.lastPos.w;
+
+		if (In.lastPos.z < 0.0f) {// || last.z < 0.0f || last.z > 1.0f) {			
 			current *= 0.0f; last *= 0.0f;
 		}
 

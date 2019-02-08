@@ -28,6 +28,10 @@ Result::Result(const PlayerGene & playerGene, Fade* fade) {
 	camera.SetPos({ 0, 0, -100 });
 	camera.SetTarget({ 0, 0, 0 });
 	camera.UpdateMatrix();
+
+	bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_result.wav");
+	bgm->Play(false, true);
+
 #ifdef SpritScreen
 	GetCameraList().clear();
 	GetCameraList().push_back(&camera);
@@ -38,6 +42,7 @@ Result::Result(const PlayerGene & playerGene, Fade* fade) {
 }
 
 Result::~Result() {
+	bgm->Stop();
 }
 
 bool Result::Start() {
@@ -47,9 +52,9 @@ bool Result::Start() {
 
 void Result::Update() {
 	if (Pad(0).GetDown(enButtonA)) {
+		NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
 		fade->fadeIn([&]() {
 			delete this;
-			//new Title(fade);
 			new ConfirmPlayers(fade);
 		});
 	}

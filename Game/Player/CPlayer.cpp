@@ -79,6 +79,7 @@ bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
 
 void CPlayer::Hit(const CVector3 & dir) {
 	if (m_hp != 0) {
+		playSE(L"Resource/sound/SE_damage.wav");
 		mover.addVelocity(dir);
 		m_hp--;
 		if (m_hp == 0) {
@@ -112,6 +113,7 @@ void CPlayer::Move() {
 				mover.flyStop();
 				mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
 			}
+			playSE(L"Resource/sound/SE_jump.wav");
 			mover.walljump(jumpPower, movement);
 			isWalljump = true;
 		}
@@ -120,6 +122,7 @@ void CPlayer::Move() {
 	//ジャンプと飛行
 	if (action.isJump() && !isWalljump) {
 		if (mover.IsOnGround()) {
+			playSE(L"Resource/sound/SE_jump.wav");
 			mover.jump(jumpPower);
 		}
 		else{
@@ -185,6 +188,7 @@ void CPlayer::Shot() {
 	}
 
 	if (shot && bulletCount > 0) {
+		playSE(L"Resource/sound/SE_shot.wav");
 		CVector3 vec = action.getLookVec() * 1800;
 		CVector3 pos = getPosition();
 		if (mover.isFlying()) {
@@ -200,7 +204,15 @@ void CPlayer::Shot() {
 
 void CPlayer::Reload() {
 	if (action.isReload() && bulletCount < constBulletCount) {
+		playSE(L"Resource/sound/SE_reload.wav");
 		m_model.GetAnimCon().Play(anim_reload, 0.5f);
 		onReload = true;
 	}
+}
+
+void CPlayer::playSE(const wchar_t* path) {
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);
+	se->SetPos(mover.GetPosition());//音の位置
+	se->SetDistance(500.0f);//音が聞こえる範囲
+	se->Play(true); //第一引数をtrue
 }

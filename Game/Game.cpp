@@ -23,6 +23,10 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt) : citizenGene(this), tim
 		return true;
 	});
 	ground = new Ground(CVector3::Zero());
+
+	bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_battle.wav");
+	bgm->Play(false, true);
+
 #ifdef SpritScreen
 	createPlayer(true, 0);
 	createPlayer(true, 1);
@@ -43,6 +47,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt) : citizenGene(this), tim
 }
 
 Game::~Game() {
+	bgm->Stop();
 	delete ground;
 }
 

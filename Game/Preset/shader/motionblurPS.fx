@@ -25,17 +25,17 @@ static const float blurscale = -0.15f;// 0.4f;
 static const float BUNBO = 0.002f*(8.0f / samples);//0.001953125f
 
 float4 PSMain(PSInput In) : SV_Target0
-{
-	float4 Out = sceneTexture.Sample(Sampler, In.uv);
-	
+{	
 	//ベロシティマップ取得
-	float3 velocity = VelocityMap.Sample(Sampler, In.uv);
+	float2 velocity = VelocityMap.Sample(Sampler, In.uv);
 	velocity.xy *= blurscale;
 
 	//速度低いと出る
 	if (abs(velocity.x) < BUNBO*0.5f && abs(velocity.y) < BUNBO*0.5f) {//0.001f
-		return Out;
+		discard;
 	}
+
+	float4 Out = sceneTexture.Sample(Sampler, In.uv);
 
 	float loopmax = min(samples, max(abs(velocity.x), abs(velocity.y)) / BUNBO);
 
@@ -45,9 +45,9 @@ float4 PSMain(PSInput In) : SV_Target0
 	for (float i = 0; i < loopmax; i++)
 	{
 		float t = (i + 1) / loopmax;
-		float sampz = VelocityMap.Sample(Sampler, In.uv + t * velocity).w;
-		if (sampz > 0.0f){// && velocity.z < sampz + Z_OFFSET) {//手前のピクセルからはサンプルしない
-			Out += sceneTexture.Sample(Sampler, In.uv + t * velocity);
+		float sampz = VelocityMap.Sample(Sampler, In.uv + t * velocity.xy).w;
+		if (sampz > 0.0f) {// && velocity.z < sampz + Z_OFFSET) {//手前のピクセルからはサンプルしない
+			Out += sceneTexture.Sample(Sampler, In.uv + t * velocity.xy);
 			samplecnt += 1.0f;
 		}
 	}

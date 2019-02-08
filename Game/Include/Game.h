@@ -54,6 +54,7 @@ private:
 	NetPlayerManager m_netPlayerManager;
 #endif
 
+	SuicideObj::CBGM* bgm;
 	CFont font;
 	Fade* fade;
 };

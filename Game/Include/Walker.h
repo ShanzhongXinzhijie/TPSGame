@@ -24,12 +24,20 @@ public:
 	}
 
 protected:
+	void playSE(const wchar_t* path);
+
 	CVector3 velocity = { 0.0f, 0.0f, 0.0f };	 //‘¬“x
 
 	CQuaternion m_rot;
 	float radian = 0.0f; //‰ñ“]—Ê
 
+	bool beforeGround = true;
+
 	static constexpr float friction = 10.0f; //–€C
 	static constexpr float gravity = 980.0f; //d—Í‰Á‘¬“x
+
+	SuicideObj::CSE* footSe = nullptr;
+	static constexpr float c_footTime = 200.0f;
+	float footTime = 0.0f;
 };
 

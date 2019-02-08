@@ -7,10 +7,16 @@
 
 #include "Network/Network.h"
 
-ConfirmPlayers::ConfirmPlayers(Fade* fade) : list(L"Resource/spriteData/waku.dds") {
+ConfirmPlayers::ConfirmPlayers(Fade* fade, SuicideObj::CBGM* bgm)
+	: list(L"Resource/spriteData/waku.dds") , bgm(bgm){
 	this->fade = fade;
 	fade->fadeOut();
 	
+	if (bgm == nullptr) {
+		this->bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_title.wav");
+		this->bgm->Play(false, true);
+	}
+
 	camera.SetPos({ 0, 50, 200 });
 	camera.SetTarget({ 0, 50, 0 });
 	camera.UpdateMatrix();
@@ -108,9 +114,11 @@ void ConfirmPlayers::Update() {
 		//ルームに入るのを待つ
 		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { isReady = false; }
 #endif
-		if (isReady) {
+		if (isReady && fade->isIdel()) {
 			//ゲーム開始
+			NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
 			fade->fadeIn([&]() {
+				bgm->Stop();
 				new Game(fade,m_timeLimit,m_citizenCnt);
 				delete this;
 			});
@@ -122,7 +130,7 @@ void ConfirmPlayers::Update() {
 #endif
 		//タイトルに戻る
 		fade->fadeIn([&]() {
-			new Title(fade);
+			new Title(fade, bgm);
 			delete this;
 		});
 	}

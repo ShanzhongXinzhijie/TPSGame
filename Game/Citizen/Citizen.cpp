@@ -40,6 +40,7 @@ void Citizen::Update() {
 				return;
 			}
 			if (mover->isAtk()) {
+				playSE(L"Resource/sound/SE_zombieAtk.wav");
 				animCon.Play(anim_attack, animInterpolateSec);
 				attacking = true;
 				return;
@@ -65,10 +66,13 @@ void Citizen::Update() {
 }
 
 bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
+	playSE(L"Resource/sound/SE_damage.wav");
 	if (ownerTeam != player->team) {
 		if (!isKenzoku) {
 			Kansenzyoutai();
 		}
+
+		playSE(L"Resource/sound/SE_zombie.wav");
 
 		if (ownerTeam != nullptr) {
 			ownerTeam->removeZombie();
@@ -110,6 +114,13 @@ void Citizen::Kansenzyoutai()
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);
 
 	isKenzoku = true;
+}
+
+void Citizen::playSE(const wchar_t * path) {
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);
+	se->SetPos(charaCon.GetPosition());//‰¹‚ÌˆÊ’u
+	se->SetDistance(500.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
+	se->Play(true); //‘æˆêˆø”‚ğtrue
 }
 
 void Citizen::Attack() {

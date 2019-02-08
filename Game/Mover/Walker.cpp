@@ -70,8 +70,22 @@ void Walker::Update() {
 		}
 	}
 
+	if (!beforeGround && IsOnGround()) {
+		playSE(L"Resource/sound/SE_fall.wav");
+	}
+	beforeGround = IsOnGround();
+
 	//位置更新
 	Execute(velocity);
+
+	//SE
+	if (IsOnGround() && velocity.LengthSq() > 10.0f*10.0f) {
+		footTime += GetDeltaTimeSec() * velocity.Length();
+		if (footTime > c_footTime) {
+			playSE(L"Resource/sound/SE_foot.wav");
+			footTime = 0.0f;
+		}
+	}
 }
 
 void Walker::turn(float x, float z) {
@@ -104,6 +118,13 @@ void Walker::turn(float x, float z) {
 
 void Walker::addVelocity(const CVector3& v) {
 	velocity += v;
+}
+
+void Walker::playSE(const wchar_t * path) {
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);
+	se->SetPos(GetPosition());//音の位置
+	se->SetDistance(500.0f);//音が聞こえる範囲
+	se->Play(true); //第一引数をtrue
 }
 
 
