@@ -31,12 +31,16 @@ public:
 			m_netEventReceiver.EventAction(playerNr, eventCode, eventContentObj);
 		}
 		);
+
+		//エラー処理
+		GetEngine().GetPhoton()->SetErrorReturnAction([&](int errorCode, const wchar_t* errorString, const wchar_t* errorPoint) { ErrorReceiver(errorCode, errorString, errorPoint); });
 	}	
 
 	//Serverに接続
 	void Connect(const wchar_t* playerName) {
 		if (!GetPhoton()->GetConnected()) {
 			GetPhoton()->ConnectServer(playerName);
+			m_errorMes.clear();
 		}
 	}
 	void Update()override {
@@ -61,6 +65,35 @@ public:
 	NetGameEventReceiver& GetNetEventReceiver() {
 		return m_netEventReceiver;
 	}
+
+	//最新のエラーメッセージ取得
+	const wchar_t* GetErrorMessage()const { return m_errorMes.c_str(); }
+
+	//エラー出てるか取得
+	bool GetIsError()const { return !m_errorMes.empty(); }
+
+private:
+
+	//エラー発生時の処理
+	void ErrorReceiver(int errorCode, const wchar_t* errorString, const wchar_t* errorPoint) {
+		m_errorMes.clear();
+
+		wchar_t str[16];
+		swprintf_s(str, L"%d:", errorCode);
+		m_errorMes += str;
+
+		m_errorMes += errorString;
+
+		m_errorMes += L"(";
+		m_errorMes += errorPoint;
+		m_errorMes += L")";
+
+		if (errorCode == ExitGames::LoadBalancing::ErrorCode::GAME_CLOSED) {
+			m_errorMes += L"\nもう始まってる！";
+		}
+	}
+
+	std::wstring m_errorMes;
 
 private:
 	//イベント受信時に実行する関数
