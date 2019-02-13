@@ -22,6 +22,8 @@ private:
 	static constexpr unsigned char updatePeriod = 10;
 	unsigned char nowFlame = updatePeriod;
 
+	float allSize = 0;
+
 	Game* game;
 	std::vector<Citizen*> citizenArray;
 	std::vector<SqSpawner*> spawnerArray;

@@ -14,18 +14,19 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	fade->fadeOut();
 
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
-		if (objData.EqualObjectName(L"player1")) {
+		if (objData.EqualObjectName(L"player700")) {
 			playerGene.addSpawner(objData.position, 780.0f);
-		} else if (objData.EqualObjectName(L"player2")) {
-			playerGene.addSpawner(objData.position, 780.0f);
-		} else if (objData.EqualObjectName(L"zombie1")) {
-			citizenGene.addSpawner(objData.position, 4600.0f);
-		} else if (objData.EqualObjectName(L"zombie2")) {
-			citizenGene.addSpawner(objData.position, 4600.0f);
+		} else if (objData.EqualObjectName(L"citizen600")) {
+			citizenGene.addSpawner(objData.position, 600.0f);
+		} else if (objData.EqualObjectName(L"citizen1800")) {
+			citizenGene.addSpawner(objData.position, 1800.0f);
 		}
 		return true;
 	});
 	ground = new Ground(CVector3::Zero());
+
+	bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_battle.wav");
+	bgm->Play(false, true);
 
 #ifdef SpritScreen
 	createPlayer(true, 0);
@@ -64,6 +65,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 }
 
 Game::~Game() {
+	bgm->Stop();
 	delete ground;
 }
 

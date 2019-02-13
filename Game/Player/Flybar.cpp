@@ -12,6 +12,6 @@ Flybar::~Flybar(){
 }
 
 void Flybar::Draw(float flypower, float maxflypower) {
-	m_outSpr.DrawScreenPos(m_pos, CVector2::One(), { 0.992f,0.0f });
-	m_inSpr.DrawScreenPos(m_pos, { flypower / maxflypower ,1.0f }, { 0.992f,0.0f });
+	m_outSpr.DrawScreenPos(m_pos, CVector2::One(), { 1.0f,0.0f });
+	m_inSpr.DrawScreenPos(m_pos, { flypower / maxflypower ,1.0f }, { 1.0f,0.0f });
 }

@@ -54,30 +54,44 @@ void CitizenGene::PreUpdate() {
 
 void CitizenGene::addSpawner(const CVector3 & center, float side) {
 	spawnerArray.push_back(new SqSpawner(side, center));
+	allSize += side * side;
 }
 
 void CitizenGene::createCitizen(unsigned int amount) {
 	size_t spawnCount = spawnerArray.size();
-	for (unsigned int i = 0; i < amount; i++) {
-		ICitizenBrain* brain;
-		switch(rand() % 5) {
-		case 0:
-			brain = new CircleWalk();
-			break;
-		case 1:
-			brain = new ittarikitari();
-			break;
-		case 2:
-			brain = new sikakukuidou();
-			break;
-		case 3:
-			brain = new Citizennigeru(game->getPlayers());
-			break;
-		default:
-			brain = new ziguzagu();
+	float nowSize = allSize;
+	for (SqSpawner* sp : spawnerArray) {
+
+		unsigned int createNum;
+		{
+			float spSize = sp->getSide();
+			spSize *= spSize;
+			createNum = (spSize / nowSize) * amount;
+			nowSize -= spSize;
+			amount -= createNum;
 		}
-		Citizen* citizen = new Citizen(game->getPlayers() , brain);
-		citizenArray.push_back(citizen);
-		citizen->setPos(spawnerArray[i%spawnCount]->getPos());
+
+		for (unsigned int i = 0; i < createNum; i++) {
+			ICitizenBrain* brain;
+			switch (rand() % 5) {
+			case 0:
+				brain = new CircleWalk();
+				break;
+			case 1:
+				brain = new ittarikitari();
+				break;
+			case 2:
+				brain = new sikakukuidou();
+				break;
+			case 3:
+				brain = new Citizennigeru(game->getPlayers());
+				break;
+			default:
+				brain = new ziguzagu();
+			}
+			Citizen* citizen = new Citizen(game->getPlayers(), brain);
+			citizenArray.push_back(citizen);
+			citizen->setPos(sp->getPos());
+		}
 	}
 }

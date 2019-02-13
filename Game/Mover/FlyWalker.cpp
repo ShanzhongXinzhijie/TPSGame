@@ -7,18 +7,29 @@ FlyWalker::FlyWalker() {
 
 
 FlyWalker::~FlyWalker() {
+	if (se != nullptr) {
+		se->Stop();
+	}
 }
 
 void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
 	if (isFly) {
 		if (flyTimer > 0.0f) {
+			playSE(L"Resource/sound/SE_fly.wav");
+			se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_flying.wav");
+			se->SetPos(GetPosition());
+			se->SetDistance(500.0f);
+			se->Play(true, true);
 			flyPower = power;
 			velocity = v * flyPower;
 			flying = true;
 		}
 	} else if(flying) {
+		if (se != nullptr) {
+			se->SetPos(GetPosition());
+		}
+
 		velocity = v * flyPower * GetDeltaTimeSec();
-		flyPower += -v.y * flyGravity * GetDeltaTimeSec();
 		if (flyPower <= 0) {
 			flyStop();
 		}
@@ -28,6 +39,8 @@ void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
 void FlyWalker::flyStop() {
 	velocity *= 0.5f;
 	flying = false;
+	se->Stop();
+	se = nullptr;
 }
 
 CQuaternion FlyWalker::getRotation() {

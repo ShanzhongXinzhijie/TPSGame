@@ -5,7 +5,7 @@ class Fade;
 
 class Title : public IGameObject{
 public:
-	Title(Fade* fade);
+	Title(Fade* fade, SuicideObj::CBGM* bgm = nullptr);
 	~Title();
 	
 	bool Start() override;
@@ -16,6 +16,8 @@ private:
 	OrthoCamera camera;
 	CFont m_font;
 	CSprite m_sprite;
+
+	SuicideObj::CBGM* bgm;
 
 	Fade* fade;
 };

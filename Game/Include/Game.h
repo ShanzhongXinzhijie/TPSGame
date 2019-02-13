@@ -59,6 +59,7 @@ private:
 	NetWorkManager* m_netWork = nullptr;
 #endif
 
+	SuicideObj::CBGM* bgm;
 	CFont font;
 	Fade* fade;
 };

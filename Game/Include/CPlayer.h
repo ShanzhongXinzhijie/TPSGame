@@ -56,6 +56,7 @@ private:
 	void Move();
 	void Shot();
 	void Reload();
+	void playSE(const wchar_t* path);
 
 	GameObj::CSkinModelRender m_model;
 	enum {

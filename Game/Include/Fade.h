@@ -9,6 +9,10 @@ public:
 	void fadeOut();
 	void fadeIn(const std::function<void()>& function);
 
+	bool isIdel() {
+		return state == Idle;
+	};
+
 private:
 	float alpha = 1.0f;
 	enum State {

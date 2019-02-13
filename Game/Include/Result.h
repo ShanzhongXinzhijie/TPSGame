@@ -16,6 +16,8 @@ public:
 private:
 	std::vector<teamResult> teamResults;
 
+	SuicideObj::CBGM* bgm;
+
 	GameObj::OrthoCamera camera;
 	CFont m_font;
 	CSprite m_sprite;

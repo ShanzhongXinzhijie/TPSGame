@@ -27,12 +27,13 @@ public:
 
 	void Update();
 
-	static constexpr float c_flyTimer = 10.0f;
+	static constexpr float c_flyTimer = 5.0f;
 private:
 	float flyTimer = c_flyTimer; //飛行可能な残り時間
 
 	float flyPower = 0.0f;
 	bool flying = false;
-	static constexpr float flyGravity = gravity *100; //重力加速度
+
+	SuicideObj::CSE* se = nullptr;
 };
 
