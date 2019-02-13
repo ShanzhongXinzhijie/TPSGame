@@ -32,6 +32,10 @@ public:
 		zombieCount--;
 	}
 
+	void setZombie(int cnt) {
+		zombieCount = cnt;
+	}
+
 	bool hasPlayer(CPlayer* player) const{
 		return players.count(player) > 0;
 	}

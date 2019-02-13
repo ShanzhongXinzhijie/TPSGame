@@ -2,6 +2,7 @@
 #include "Citizen.h"
 #include "ICitizenBrain.h"
 #include "kansen.h"
+#include "GameWaiter.h"
 
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
@@ -25,6 +26,10 @@ Citizen::~Citizen() {
 }
 
 void Citizen::Update() {
+
+	//ゲームがウェイト状態なら終わる
+	if (GameWaiter::GetIsWait()) { return; }
+
 	deltaTime += GetDeltaTimeSec();
 	if (0 == nowFlame || nowFlame == updateFlame) {
 

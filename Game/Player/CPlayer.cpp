@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CPlayer.h"
 #include "BatBullet.h"
+#include "GameWaiter.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem){
@@ -43,6 +44,9 @@ bool CPlayer::Start() {
 };
 
 void CPlayer::Update() {
+	//ゲームがウェイト状態なら終わる
+	if (GameWaiter::GetIsWait()) { return; }
+
 	if (m_hp != 0) {
 		if (!onReload) {
 			Move();

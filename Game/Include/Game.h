@@ -11,12 +11,14 @@
 #include "CitizenGene.h"
 
 #include "../Network/NetPlayerManager.h"
+#include "../Network/NetGameEventCaster.h"
+#include "../Network/NetWork.h"
 
 class Fade;
 
 class Game : public IGameObject{
 public:
-	Game(Fade* fade, float timeLimit, int citizenCnt);
+	Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms);
 	~Game();
 
 	void Update() override;
@@ -43,6 +45,7 @@ private:
 	Ground* ground = nullptr;
 	Level level;
 
+	float m_waitGameStartTimer_sec = 0.0f;
 	float timer = 160.0f;
 
 	PlayerGene playerGene;
@@ -52,6 +55,8 @@ private:
 	GameObj::PerspectiveCamera karicamera;
 #else
 	NetPlayerManager m_netPlayerManager;
+	NetGameEventCaster m_netEventCaster;
+	NetWorkManager* m_netWork = nullptr;
 #endif
 
 	CFont font;

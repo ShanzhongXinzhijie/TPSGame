@@ -2,6 +2,7 @@
 
 #include "ActionSender.h"
 #include "NetPlayerReceiver.h"
+#include "NetGameEventReceiver.h"
 #include "NetworkConst.h"
 
 class NetWorkManager : public IGameObject{
@@ -23,6 +24,12 @@ public:
 			[&](int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj) {
 				m_netPlyReceiver.EventAction(playerNr, eventCode, eventContentObj);
 			}
+		);
+
+		AddEventAction(
+			[&](int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj) {
+			m_netEventReceiver.EventAction(playerNr, eventCode, eventContentObj);
+		}
 		);
 	}	
 
@@ -51,10 +58,14 @@ public:
 	NetPlayerReceiver& GetNetPlayerReceiver() {
 		return m_netPlyReceiver;
 	}
+	NetGameEventReceiver& GetNetEventReceiver() {
+		return m_netEventReceiver;
+	}
 
 private:
 	//イベント受信時に実行する関数
 	std::list<std::function<void(int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContentObj)>> m_eventActionList;
 
 	NetPlayerReceiver m_netPlyReceiver;
+	NetGameEventReceiver m_netEventReceiver;
 };

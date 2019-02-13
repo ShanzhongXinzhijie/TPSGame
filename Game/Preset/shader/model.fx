@@ -2,6 +2,7 @@
  * @brief	モデルシェーダー。
  */
 
+#include"MotionBlurHeader.h"
 
 /////////////////////////////////////////////////////////////
 // Shader Resource View
@@ -33,8 +34,10 @@ cbuffer VSPSCb : register(b0){
 	float4x4 mView_old;
 	float4x4 mProj_old;
 
-	float4 depthBias;
-	//float depthBiasScaleFromNearToFar;
+	//カメラの移動量
+	float4 camMoveVec;//w:しきい値≒距離スケール
+
+	float4 depthBias;//x:max=(1.0f) y:max=(far-near) z:ブラーの近距離しきい値
 };
 
 //マテリアルパラメーター
@@ -112,19 +115,29 @@ PSInput VSMain( VSInputNmTxVcTangent In )
 #if MOTIONBLUR
 		float4 oldpos = mul(mWorld_old, In.Position);
 
-		if (distance(posW, oldpos.xyz) > 0.0f) {
+		oldpos.xyz = lerp(posW, oldpos.xyz, MotionBlurScale);
+
+		float3 trans = float3(mWorld._m03, mWorld._m13, mWorld._m23);
+		float3 transOld = float3(mWorld_old._m03, mWorld_old._m13, mWorld_old._m23);
+		transOld = lerp(trans, transOld, MotionBlurScale);
+		trans -= transOld;
+
+		if (length(trans) > camMoveVec.w
+			&& distance(camMoveVec.xyz, trans) > camMoveVec.w
+			|| distance(float3(mWorld._m00, mWorld._m10, mWorld._m20), float3(mWorld_old._m00, mWorld_old._m10, mWorld_old._m20)) > 0.0f
+			|| distance(float3(mWorld._m01, mWorld._m11, mWorld._m21), float3(mWorld_old._m01, mWorld_old._m11, mWorld_old._m21)) > 0.0f
+			|| distance(float3(mWorld._m02, mWorld._m12, mWorld._m22), float3(mWorld_old._m02, mWorld_old._m12, mWorld_old._m22)) > 0.0f
+		){
 			psInput.isWorldMove = true;
 		}
 
-		oldpos = mul(mView_old, oldpos);
-		oldpos = mul(mProj_old, oldpos);
+		float4 oldpos2 = mul(mView_old, oldpos);
+		oldpos = mul(mView, oldpos);
+		oldpos.xyz = lerp(oldpos.xyz, oldpos2.xyz, MotionBlurScale);
 
-		if (oldpos.z < 0.0f) {
-			psInput.lastPos = pos;
-		}
-		else {
-			psInput.lastPos = oldpos;
-		}
+		oldpos = mul(mProj_old, oldpos);
+		
+		psInput.lastPos = oldpos;
 #endif
 
 	return psInput;
@@ -202,19 +215,29 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 			oldpos = mul(oldskinning, In.Position);
 		}
 
-		if (distance(posW, oldpos.xyz) > 0.0f) {
+		oldpos.xyz = lerp(posW, oldpos.xyz, MotionBlurScale);
+
+		float3 trans = float3(skinning._m03, skinning._m13, skinning._m23);
+		float3 transOld = float3(oldskinning._m03, oldskinning._m13, oldskinning._m23);
+		transOld = lerp(trans, transOld, MotionBlurScale);
+		trans -= transOld;
+
+		if (length(trans) > camMoveVec.w
+			&& distance(camMoveVec.xyz, trans) > camMoveVec.w
+			|| distance(float3(skinning._m00, skinning._m10, skinning._m20), float3(oldskinning._m00, oldskinning._m10, oldskinning._m20)) > 0.0f
+			|| distance(float3(skinning._m01, skinning._m11, skinning._m21), float3(oldskinning._m01, oldskinning._m11, oldskinning._m21)) > 0.0f
+			|| distance(float3(skinning._m02, skinning._m12, skinning._m22), float3(oldskinning._m02, oldskinning._m12, oldskinning._m22)) > 0.0f
+		) {
 			psInput.isWorldMove = true;
 		}
 
-		oldpos = mul(mView_old, oldpos);
-		oldpos = mul(mProj_old, oldpos);
+		float4 oldpos2 = mul(mView_old, oldpos);
+		oldpos = mul(mView, oldpos);
+		oldpos.xyz = lerp(oldpos.xyz, oldpos2.xyz, MotionBlurScale);
 
-		if (oldpos.z < 0.0f) {
-			psInput.lastPos = pos;
-		}
-		else {
-			psInput.lastPos = oldpos;
-		}
+		oldpos = mul(mProj_old, oldpos);
+			
+		psInput.lastPos = oldpos;
 #endif
 
     return psInput;
@@ -284,18 +307,25 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 	Out.normal = In.Normal;
 
 	//ビュー座標
-	Out.viewpos = float4(In.Viewpos, In.curPos.z / In.curPos.w + depthBias.x);
+	Out.viewpos = float4(In.Viewpos.x, In.Viewpos.y, In.Viewpos.z + depthBias.y, In.curPos.z / In.curPos.w + depthBias.x);
 
 	//ライティング用パラメーター
 	Out.lightingParam = emissive;
 
 	//速度
 #if MOTIONBLUR
-		float2	current = In.curPos.xy / In.curPos.w;
-		float2	last = In.lastPos.xy / In.lastPos.w;
 
-		if (In.curPos.z < 0.0f || In.lastPos.z < 0.0f) {
-			current *= 0.0f; last *= 0.0f;
+		float2	current = In.curPos.xy / In.curPos.w;
+		float2	last = In.lastPos.xy / In.lastPos.w;		
+
+		if (In.lastPos.z < 0.0f) {
+		//if (last.z < 0.0f || last.z > 1.0f) {
+			Out.velocity.z = min(In.curPos.z, In.lastPos.z) + depthBias.y;
+			Out.velocity.w = max(In.curPos.z, In.lastPos.z) + depthBias.y; 
+			Out.velocityPS.z = -1.0f;
+			Out.velocityPS.w = -1.0f;
+			return Out;
+			//discard; 
 		}
 
 		current.xy *= float2(0.5f, -0.5f); current.xy += 0.5f;
@@ -304,21 +334,32 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 		Out.velocity.z = min(In.curPos.z, In.lastPos.z) + depthBias.y;
 		Out.velocity.w = max(In.curPos.z, In.lastPos.z) + depthBias.y;
 
-		if (In.isWorldMove) {
+		if (In.isWorldMove || In.curPos.z + depthBias.y < depthBias.z) {
 			Out.velocity.xy = current.xy - last.xy;
-			Out.velocityPS.z = -1.0f;
+
+			Out.velocityPS.z = max(In.curPos.z, In.lastPos.z) + depthBias.y;
 			Out.velocityPS.w = -1.0f;
+
+			//Out.albedo.r = 1.0f; Out.albedo.b = 0.0f; Out.albedo.g = 0.0f;
 		}
 		else {
 			Out.velocityPS.xy = current.xy - last.xy;
+			
 			Out.velocityPS.z = min(In.curPos.z, In.lastPos.z) + depthBias.y;
 			Out.velocityPS.w = max(In.curPos.z, In.lastPos.z) + depthBias.y;
+
+			if (abs(Out.velocityPS.x) < BUNBO*0.5f && abs(Out.velocityPS.y) < BUNBO*0.5f) {
+				Out.velocityPS.z = Out.velocityPS.w;
+				Out.velocityPS.w = -1.0f;
+			}
+
+			//Out.albedo.r *= 0.1f; Out.albedo.b = 1.0f; Out.albedo.g *= 0.1f;
 		}
 #else
 		Out.velocity.z = In.curPos.z + depthBias.y;
 		Out.velocity.w = In.curPos.z + depthBias.y;
-		Out.velocityPS.z = In.curPos.z + depthBias.y;
-		Out.velocityPS.w = In.curPos.z + depthBias.y;
+		Out.velocityPS.z = -1.0f;// In.curPos.z + depthBias.y;
+		Out.velocityPS.w = -1.0f;// In.curPos.z + depthBias.y;
 #endif
 
 	return Out;

@@ -86,6 +86,7 @@ bool ConfirmPlayers::Start() {
 }
 
 void ConfirmPlayers::Update() {
+
 #ifdef SpritScreen
 	for (int num = 1; num < 4; num++) {
 
@@ -100,22 +101,28 @@ void ConfirmPlayers::Update() {
 #endif
 
 	if (Pad(0).GetDown(enButtonStart)) {
+		bool isJoin = true;
 #ifdef SpritScreen
 		GetCameraList().clear();
-#endif
-		bool isReady = true;
-#ifndef SpritScreen
+#else
 		//ルームに入るのを待つ
-		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { isReady = false; }
+		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { isJoin = false; }
 #endif
-		if (isReady) {
+		if (isJoin) {
+#ifdef SpritScreen
+			int seed = CMath::RandomInt();
 			//ゲーム開始
 			fade->fadeIn([&]() {
-				new Game(fade,m_timeLimit,m_citizenCnt);
-				delete this;
+				new Game(fade,m_timeLimit,m_citizenCnt, seed, -1);
+				delete this; return;
 			});
+#else
+			//Ready!
+			m_netEventCaster.SendReady(m_isReady ? false : true);
+#endif
 		}
-	} else if (Pad(0).GetDown(enButtonBack)) {
+	} 
+	else if (Pad(0).GetDown(enButtonBack)) {//タイトルに戻る
 #ifndef SpritScreen
 		//サーバーから切断
 		m_netWork->Disconnect();
@@ -123,22 +130,82 @@ void ConfirmPlayers::Update() {
 		//タイトルに戻る
 		fade->fadeIn([&]() {
 			new Title(fade);
-			delete this;
+			delete this; return;
 		});
 	}
 
-	//ゲーム設定
-	if (Pad(0).GetDown(enButtonUp)) {
-		m_timeLimit += 10.0f;
+#ifndef SpritScreen
+	if (GetPhoton()->GetIsMasterClient()) {
+		//マスタークライアント
+
+		bool start = false;
+		//強制的に開始
+		if (Pad(0).GetButton(enButtonA) && Pad(0).GetButton(enButtonStart)) {
+			start = true;
+		}
+		//全員Readyで開始
+		if (m_allReady) {
+			start = true;
+		}
+		if (start) {
+			//Ready初期化しとく
+			m_isReady = false;
+			m_netEventCaster.SendReady(false);
+
+			//ゲーム設定とゲーム開始送信
+			m_netEventCaster.SendRoomSetting_TimeLimit(m_timeLimit);
+			m_netEventCaster.SendRoomSetting_CitizenCount(m_citizenCnt);
+			int seed = CMath::RandomInt();
+			m_netEventCaster.SendGameStart(seed);
+
+			//ゲーム開始
+			fade->fadeIn([&]() {
+				new Game(fade, m_timeLimit, m_citizenCnt, seed, GetPhoton()->GetSeverTime_ms());
+				delete this; return;
+			});
+		}
 	}
-	if (Pad(0).GetDown(enButtonDown)) {
-		m_timeLimit -= 10.0f; m_timeLimit = max(1.0f, m_timeLimit);
+	else if(m_netWork->GetNetEventReceiver().GetGameState() == NetGameEventReceiver::enGameStart){
+		//通常クライアント
+
+		//Ready初期化しとく
+		m_isReady = false;
+		m_netEventCaster.SendReady(false);
+
+		const ExitGames::Common::Hashtable& properties = GetPhoton()->GetRoomProperty();
+		m_timeLimit = ((ExitGames::Common::ValueObject<float>*)(properties.getValue(TIME_LIMIT)))->getDataCopy();
+		m_citizenCnt = ((ExitGames::Common::ValueObject<int>*)(properties.getValue(CITIZEN_COUNT)))->getDataCopy();
+
+		//ゲーム開始
+		fade->fadeIn([&]() {
+			new Game(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
+			delete this; return;
+		});
 	}
-	if (Pad(0).GetDown(enButtonLeft)) {
-		m_citizenCnt -= 50; m_citizenCnt = max(1, m_citizenCnt);
-	}
-	if (Pad(0).GetDown(enButtonRight)) {
-		m_citizenCnt += 25;
+#endif
+
+	bool isCanChangeSetting = true;
+#ifndef SpritScreen
+	if (!GetPhoton()->GetIsMasterClient()) { isCanChangeSetting = false; }
+#endif
+	if (isCanChangeSetting) {
+		//ゲーム設定
+		if (Pad(0).GetDown(enButtonUp)) {
+			m_timeLimit += 10.0f;
+			m_netEventCaster.SendRoomSetting_TimeLimit(m_timeLimit);
+		}
+		if (Pad(0).GetDown(enButtonDown)) {
+			m_timeLimit -= 10.0f; m_timeLimit = max(1.0f, m_timeLimit);
+			m_netEventCaster.SendRoomSetting_TimeLimit(m_timeLimit);
+		}
+		if (Pad(0).GetDown(enButtonLeft)) {
+			m_citizenCnt -= 50; m_citizenCnt = max(1, m_citizenCnt);
+			m_netEventCaster.SendRoomSetting_CitizenCount(m_citizenCnt);
+		}
+		if (Pad(0).GetDown(enButtonRight)) {
+			m_citizenCnt += 25;
+			m_netEventCaster.SendRoomSetting_CitizenCount(m_citizenCnt);
+		}
 	}
 }
 
@@ -151,18 +218,41 @@ void ConfirmPlayers::PostRender() {
 		swprintf_s(str, L"Ping: %dms", GetPhoton()->GetPing_ms());
 		list.values.emplace_back(str);
 
+		//Readyをカウント
+		int readyCnt = 0;
+
 		//ルーム内のプレイヤーを表示
 		const ExitGames::Common::JVector<ExitGames::LoadBalancing::Player*>& players = GetPhoton()->GetPlayers();
 		for (unsigned int i = 0; i < players.getSize(); i++){
 			list.values.emplace_back(std::to_wstring(players[i]->getNumber()));
 			list.values.back() += L" :";
 			list.values.back() += players[i]->getName().cstr();
+
+			bool isMine = false;
 			if (players[i]->getNumber() == GetPhoton()->GetLocalPlayerNumber()) {
+				isMine = true;
 				list.values.back() += L" <<自分";
 			}
 			if (players[i]->getIsMasterClient()) {
 				list.values.back() += L" <<ﾏｽｸﾗ";
 			}
+
+			const ExitGames::Common::Hashtable& eventContent = players[i]->getCustomProperties();
+			if (eventContent.getValue(PLAYER_READY)
+				&& ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue(PLAYER_READY)))->getDataCopy()
+			) {
+				list.values.back() += L" <<Ready!";
+				if (isMine) { m_isReady = true; }
+				readyCnt++;
+			}
+			else {
+				if (isMine) { m_isReady = false; }
+			}
+		}
+
+		if (readyCnt == players.getSize()) {
+			//全員Ready
+			m_allReady = true;
 		}
 	}
 	else if (GetPhoton()->GetState() == PhotonNetworkLogic::DISCONNECTED) {
@@ -182,6 +272,18 @@ void ConfirmPlayers::PostRender() {
 
 	//ゲーム設定表示
 	{
+#ifndef SpritScreen
+		//通常クライアントは情報更新
+		if (!GetPhoton()->GetIsMasterClient()) {
+			const ExitGames::Common::Hashtable& properties = GetPhoton()->GetRoomProperty();
+			if (properties.getValue(TIME_LIMIT)) {
+				m_timeLimit = ((ExitGames::Common::ValueObject<float>*)(properties.getValue(TIME_LIMIT)))->getDataCopy();
+			}
+			if (properties.getValue(CITIZEN_COUNT)) {
+				m_citizenCnt = ((ExitGames::Common::ValueObject<int>*)(properties.getValue(CITIZEN_COUNT)))->getDataCopy();
+			}
+		}
+#endif
 		wchar_t str[128];
 		swprintf_s(str, L"制限時間:%.1f\n人口:%d", m_timeLimit, m_citizenCnt);
 		m_font.Draw(str, { 1.0f,0.0f }, CVector4::White(), CVector2::One(), { 1.0f,0.0f });

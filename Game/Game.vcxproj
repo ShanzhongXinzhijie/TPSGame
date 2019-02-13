@@ -248,7 +248,9 @@
   <ItemGroup>
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
-    <ClCompile Include="Network\NetMasterClientCaster.cpp" />
+    <ClCompile Include="GameWaiter.cpp" />
+    <ClCompile Include="Network\NetGameEventReceiver.cpp" />
+    <ClCompile Include="Network\NetGameEventCaster.cpp" />
     <ClCompile Include="Player\Flybar.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Mover\Walker.cpp" />
@@ -287,6 +289,7 @@
     <ClCompile Include="Citizen\ziguzagu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\GameWaiter.h" />
     <ClInclude Include="Include\Flybar.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\FlyWalker.h" />
@@ -311,7 +314,8 @@
     <ClInclude Include="Include\SqSpawner.h" />
     <ClInclude Include="Include\ziguzagu.h" />
     <ClInclude Include="Include\Walker.h" />
-    <ClInclude Include="Network\NetMasterClientCaster.h" />
+    <ClInclude Include="Network\NetGameEventReceiver.h" />
+    <ClInclude Include="Network\NetGameEventCaster.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
     <ClInclude Include="Network\NetPlayerManager.h" />
     <ClInclude Include="Network\NetPlayerReceiver.h" />

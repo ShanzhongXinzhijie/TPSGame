@@ -36,7 +36,9 @@
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\Flybar.h" />
-    <ClInclude Include="Network\NetMasterClientCaster.h" />
+    <ClInclude Include="Network\NetGameEventCaster.h" />
+    <ClInclude Include="Network\NetGameEventReceiver.h" />
+    <ClInclude Include="Include\GameWaiter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -73,7 +75,9 @@
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Player\Flybar.cpp" />
-    <ClCompile Include="Network\NetMasterClientCaster.cpp" />
+    <ClCompile Include="Network\NetGameEventCaster.cpp" />
+    <ClCompile Include="Network\NetGameEventReceiver.cpp" />
+    <ClCompile Include="GameWaiter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

@@ -2,6 +2,7 @@
 #include <unordered_set>
 #include "GuiList.h"
 #include "Network/Network.h"
+#include "Network/NetGameEventCaster.h"
 
 using namespace GameObj;
 
@@ -18,12 +19,12 @@ public:
 	void PostRender() override;
 
 private:
-
 	PerspectiveCamera camera;
 	CDirectionLight m_dirlight;
 	std::unordered_set<int> players;
 	
 	NetWorkManager* m_netWork = nullptr;
+	NetGameEventCaster m_netEventCaster; bool m_isReady = false; bool m_allReady = false;
 
 	//ƒQ[ƒ€İ’è
 	float m_timeLimit = 160.0f;

@@ -11,11 +11,20 @@ NetPlayerManager::NetPlayerManager() : list(L"Resource/spriteData/waku.dds")
 
 NetPlayerManager::~NetPlayerManager()
 {
+	//ƒvƒŒƒCƒ„[íœ
 	for (const std::pair<int, NetPlayerCaster*>& ppp : m_playerCastersMap) {
 		m_netReceiver->RemovePlayer(ppp.first);
 		delete ppp.second;
 		m_game->removePlayer(ppp.first);
 	}
+
+	//ŠÖ”‰ğœ
+	GetPhoton()->SetJoinEventAction(
+		nullptr
+	);
+	GetPhoton()->SetLeaveEventAction(
+		nullptr
+	);
 }
 
 
