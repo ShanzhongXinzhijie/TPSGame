@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include "BatBullet.h"
 #include "GameWaiter.h"
+#include "Wing.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem){
@@ -140,10 +141,18 @@ void CPlayer::Move() {
 		}
 	}
 	if (mover.isFlying()) {
+		if (wing == nullptr) {
+			wing = new Wing(mover);
+		}
 		mover.fly(false, action.getLookVec());
 		mover.turn(action.getLookVec().x, action.getLookVec().z);
 		m_model.GetAnimCon().Play(anim_fly, animInterpolateSec);
 		return;
+	} else {
+		if (wing != nullptr) {
+			wing->closeDelete();
+			wing = nullptr;
+		}
 	}
 
 	//ˆÚ“®

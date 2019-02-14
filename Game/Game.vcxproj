@@ -287,6 +287,7 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Player\TpsCamera.cpp" />
     <ClCompile Include="Citizen\ziguzagu.cpp" />
+    <ClCompile Include="Player\Wing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\GameWaiter.h" />
@@ -327,6 +328,7 @@
     <ClInclude Include="Include\Title.h" />
     <ClInclude Include="Include\TpsCamera.h" />
     <ClInclude Include="Include\Team.h" />
+    <ClInclude Include="Include\Wing.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -335,6 +337,7 @@
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\Wing.FBX" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

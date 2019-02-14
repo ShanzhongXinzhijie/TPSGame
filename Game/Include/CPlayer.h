@@ -5,6 +5,7 @@
 #include "Team.h"
 
 class CPlayerCamera;
+class Wing;
 
 class CPlayer : public IGameObject {
 public:
@@ -81,6 +82,8 @@ protected:
 	unsigned int bulletCount = constBulletCount;
 
 private:
+	Wing* wing = nullptr; //—ƒ
+
 	static constexpr float constDeathCool = 10;
 	float deathCool = 0;
 

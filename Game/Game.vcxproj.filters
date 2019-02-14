@@ -39,6 +39,7 @@
     <ClInclude Include="Network\NetGameEventCaster.h" />
     <ClInclude Include="Network\NetGameEventReceiver.h" />
     <ClInclude Include="Include\GameWaiter.h" />
+    <ClInclude Include="Include\Wing.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Network\NetGameEventCaster.cpp" />
     <ClCompile Include="Network\NetGameEventReceiver.cpp" />
     <ClCompile Include="GameWaiter.cpp" />
+    <ClCompile Include="Player\Wing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -88,6 +90,7 @@
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
+    <MeshContentTask Include="Asset\modelData\Wing.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
