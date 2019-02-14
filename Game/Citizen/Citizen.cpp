@@ -3,6 +3,7 @@
 #include "ICitizenBrain.h"
 #include "kansen.h"
 #include "GameWaiter.h"
+#include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
@@ -72,6 +73,11 @@ void Citizen::Update() {
 
 bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 	playSE(L"Resource/sound/SE_damage.wav");
+	CVector3&& pos = getPos();
+	pos.y += 60.0f;
+	using namespace GameObj::Suicider;
+	new CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
+
 	if (ownerTeam != player->team) {
 		if (!isKenzoku) {
 			Kansenzyoutai();

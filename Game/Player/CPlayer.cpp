@@ -11,6 +11,7 @@ CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 }
 
 CPlayer::~CPlayer() {
+	delete wing;
 }
 
 bool CPlayer::Start() {
@@ -86,6 +87,10 @@ bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
 
 void CPlayer::Hit(const CVector3 & dir) {
 	if (m_hp != 0) {
+		CVector3&& pos = getPosition();
+		pos.y += 60.0f;
+		using namespace GameObj::Suicider;
+		new CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 		playSE(L"Resource/sound/SE_damage.wav");
 		mover.addVelocity(dir);
 		m_hp--;
