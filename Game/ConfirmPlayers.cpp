@@ -93,6 +93,13 @@ bool ConfirmPlayers::Start() {
 
 void ConfirmPlayers::Update() {
 
+#ifndef SpritScreen
+	//エラー出たら切断
+	if (m_netWork->GetIsError()) {
+		m_netWork->Disconnect();
+	}
+#endif
+
 #ifdef SpritScreen
 	for (int num = 1; num < 4; num++) {
 
@@ -143,6 +150,7 @@ void ConfirmPlayers::Update() {
 	}
 
 #ifndef SpritScreen
+	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
 	if (GetPhoton()->GetIsMasterClient()) {
 		//マスタークライアント
 
@@ -190,11 +198,14 @@ void ConfirmPlayers::Update() {
 			delete this; return;
 		});
 	}
+	}
 #endif
 
 	bool isCanChangeSetting = true;
 #ifndef SpritScreen
-	if (!GetPhoton()->GetIsMasterClient()) { isCanChangeSetting = false; }
+	if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED || !GetPhoton()->GetIsMasterClient()) {
+		isCanChangeSetting = false; 
+	}
 #endif
 	if (isCanChangeSetting) {
 		//ゲーム設定
@@ -264,13 +275,15 @@ void ConfirmPlayers::PostRender() {
 		}
 	}
 	else if (GetPhoton()->GetState() == PhotonNetworkLogic::DISCONNECTED) {
-		list.values.emplace_back(L"切断");
+		list.values.emplace_back(L"切断\n");
+		list.values.back() += m_netWork->GetErrorMessage();
 	}
 	else {
 #ifdef SpritScreen
 		list.values.emplace_back(L"オフラインモード");
 #else
-		list.values.emplace_back(L"接続中...");
+		list.values.emplace_back(L"接続中...\n");
+		list.values.back() += m_netWork->GetErrorMessage();
 #endif
 	}
 
@@ -282,7 +295,7 @@ void ConfirmPlayers::PostRender() {
 	{
 #ifndef SpritScreen
 		//通常クライアントは情報更新
-		if (!GetPhoton()->GetIsMasterClient()) {
+		if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED && !GetPhoton()->GetIsMasterClient()) {
 			const ExitGames::Common::Hashtable& properties = GetPhoton()->GetRoomProperty();
 			if (properties.getValue(TIME_LIMIT)) {
 				m_timeLimit = ((ExitGames::Common::ValueObject<float>*)(properties.getValue(TIME_LIMIT)))->getDataCopy();
