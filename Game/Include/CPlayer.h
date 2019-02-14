@@ -66,6 +66,8 @@ private:
 		anim_idle,
 		anim_shot,
 		anim_reload,
+		anim_jump,
+		anim_fall,
 		anim_num,
 	};
 	AnimationClip m_animationClips[anim_num];

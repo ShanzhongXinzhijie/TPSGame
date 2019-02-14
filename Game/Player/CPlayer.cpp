@@ -19,6 +19,8 @@ bool CPlayer::Start() {
 	m_animationClips[anim_idle].Load(L"Resource/animData/PlayerIdle.tka", true);
 	m_animationClips[anim_shot].Load(L"Resource/animData/PlayerShot.tka", true);
 	m_animationClips[anim_reload].Load(L"Resource/animData/PlayerReload.tka", false);
+	m_animationClips[anim_jump].Load(L"Resource/animData/PlayerJump.tka", true);
+	m_animationClips[anim_fall].Load(L"Resource/animData/PlayerFall.tka", true);
 
 	m_model.Init(L"Resource/modelData/PlayerVanp.cmo", m_animationClips, anim_num);
 
@@ -159,14 +161,22 @@ void CPlayer::Move() {
 	mover.move(movement*speed);
 
 	//アニメーション
-	if (movement.x != 0 || movement.y != 0) {
-		if (dash) {
-			m_model.GetAnimCon().Play(anim_run, animInterpolateSec);
+	if (mover.IsOnGround()) {
+		if (movement.x != 0 || movement.y != 0) {
+			if (dash) {
+				m_model.GetAnimCon().Play(anim_run, animInterpolateSec);
+			} else {
+				m_model.GetAnimCon().Play(anim_walk, animInterpolateSec);
+			}
 		} else {
-			m_model.GetAnimCon().Play(anim_walk, animInterpolateSec);
+			m_model.GetAnimCon().Play(anim_idle, animInterpolateSec);
 		}
 	} else {
-		m_model.GetAnimCon().Play(anim_idle, animInterpolateSec);
+		if (mover.getVelocity().y > 0) {
+			m_model.GetAnimCon().Play(anim_jump, animInterpolateSec);
+		} else {
+			m_model.GetAnimCon().Play(anim_fall, animInterpolateSec);
+		}
 	}
 
 	//回転
