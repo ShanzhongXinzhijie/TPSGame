@@ -32,8 +32,8 @@ public:
 		isRight = true;
 	}
 
-	void ChangeSlow() {
-		slow = !slow;
+	void setSlow(bool slow) {
+		this->slow = slow;
 	}
 
 	CVector3 GetFront() const {
