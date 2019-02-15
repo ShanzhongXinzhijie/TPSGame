@@ -89,8 +89,7 @@ void CPlayer::Hit(const CVector3 & dir) {
 	if (m_hp != 0) {
 		CVector3&& pos = getPosition();
 		pos.y += 60.0f;
-		using namespace GameObj::Suicider;
-		new CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
+		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 		playSE(L"Resource/sound/SE_damage.wav");
 		mover.addVelocity(dir);
 		m_hp--;
@@ -226,12 +225,23 @@ void CPlayer::Shot() {
 			pos.y += 60;
 		}
 		new BatBullet(this, pos, vec);
+		
+		vec = action.getLookVec();
+
+		CQuaternion rot;
+		rot.SetRotation(CVector3::AxisY(), atan2f(vec.x, vec.z));
+		float xz = sqrt( vec.x*vec.x + vec.z*vec.z );
+		rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-vec.y, xz)));
+
+		pos += vec * 50;
+		new GameObj::Suicider::CEffekseer(L"Resource/effect/shot.efk", 1.0f, pos, rot);
 		bulletCount--;
 	}
 }
 
 void CPlayer::Reload() {
 	if (action.isReload() && bulletCount < constBulletCount) {
+		new GameObj::Suicider::CEffekseer(L"Resource/effect/reload.efk", 1.0f, getPosition());
 		playSE(L"Resource/sound/SE_reload.wav");
 		m_model.GetAnimCon().Play(anim_reload, 0.5f);
 		onReload = true;

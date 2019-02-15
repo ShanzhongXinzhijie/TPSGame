@@ -75,8 +75,7 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 	playSE(L"Resource/sound/SE_damage.wav");
 	CVector3&& pos = getPos();
 	pos.y += 60.0f;
-	using namespace GameObj::Suicider;
-	new CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
+	new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 
 	if (ownerTeam != player->team) {
 		if (!isKenzoku) {
