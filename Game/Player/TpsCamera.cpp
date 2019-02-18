@@ -5,6 +5,15 @@
 bool TpsCamera::s_isSecond = false;
 #endif
 
+
+btVector3 toBtV(CVector3 v) {
+	return btVector3(v.x, v.y, v.z);
+}
+
+CVector3 toCV(btVector3 v) {
+	return CVector3(v.x(), v.y(), v.z());
+}
+
 TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
 	SetTarget(tar);
 	SetOffset(CVector3::AxisZ()*distance);
@@ -78,7 +87,7 @@ void TpsCamera::Update() {
 	stickMove.Normalize();
 	stickMove *= len;
 	if (slow) {
-		stickMove *= 0.3;
+		stickMove *= 0.3f;
 	}
 
 	stickMove = stickMove * 0.05f;
@@ -100,11 +109,24 @@ void TpsCamera::Update() {
 		upCamera = GetUp()*up*0.5;
 	}
 
+	//ÉoÉlÉJÉÅÉâ
 	CVector3 springPower = (m_target - m_springTarget);
-	m_springTarget += springPower*0.3;
+	m_springTarget += springPower*0.3f;
 
-	m_camera.SetPos(m_springTarget + m_ar_offsetPos + GetRight()*side + upCamera);
-	m_camera.SetTarget(m_springTarget+ GetRight()*side + upCamera);
+	CVector3 target = m_springTarget + GetRight()*side + upCamera;
+	CVector3 pos = target + m_ar_offsetPos;
+
+	//è·äQï®îªíË
+	btCollisionWorld::ClosestRayResultCallback callback(toBtV(m_springTarget), toBtV(pos));
+	GetPhysicsWorld().RayTest(toBtV(m_springTarget), toBtV(pos), callback);
+	if (callback.hasHit()) {
+		CVector3 p = toCV(callback.m_hitPointWorld);
+		target += GetRight() * GetRight().Dot(p - pos);
+		pos = p;
+	}
+
+	m_camera.SetPos(pos);
+	m_camera.SetTarget(target);
 	m_camera.SetUp(m_ar_up);
 	m_camera.UpdateMatrix();
 }
@@ -132,14 +154,6 @@ void TpsCamera::UpdateVector() {
 	cq.SetRotation(CVector3::AxisY(), m_rot.x);
 	cq.Multiply(m_ar_offsetPos);
 	cq.Multiply(m_ar_up);
-}
-
-btVector3 toBtV(CVector3 v) {
-	return btVector3(v.x, v.y, v.z);
-}
-
-CVector3 toCV(btVector3 v) {
-	return CVector3(v.x(), v.y(), v.z());
 }
 
 CVector3 TpsCamera::getLook() const {
