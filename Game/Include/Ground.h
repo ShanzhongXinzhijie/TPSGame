@@ -13,6 +13,7 @@ private:
 
 	CVector3 m_pos;
 
-	GameObj::CDirectionLight m_dirlight[2];
+	GameObj::CDirectionLight m_dirlight;
+	ShadowMapHandler shadowMap;
 };
 
