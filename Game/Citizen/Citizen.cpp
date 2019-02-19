@@ -4,6 +4,7 @@
 #include "kansen.h"
 #include "GameWaiter.h"
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
+#include "CollisionMaskConst.h"
 
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
@@ -16,6 +17,14 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 80.0f);
 	m_collision.SetName(L"Citizen");
 	m_collision.SetClass(this);
+
+	//マスクとグループの設定
+	m_collision.All_Off_Group();
+	m_collision.On_OneGroup(CollisionMaskConst::Citizen);
+	m_collision.Off_OneMask(CollisionMaskConst::Citizen);
+
+	//これは喰らい判定
+	m_collision.SetIsHurtCollision(true);
 
 	mover = moveType;
 

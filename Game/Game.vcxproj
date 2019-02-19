@@ -290,6 +290,7 @@
     <ClCompile Include="Player\Wing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\CollisionMaskConst.h" />
     <ClInclude Include="Include\GameWaiter.h" />
     <ClInclude Include="Include\Flybar.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
