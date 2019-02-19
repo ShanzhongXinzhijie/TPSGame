@@ -121,6 +121,9 @@ void TpsCamera::Update() {
 	GetPhysicsWorld().RayTest(toBtV(m_springTarget), toBtV(pos), callback);
 	if (callback.hasHit()) {
 		CVector3 p = toCV(callback.m_hitPointWorld);
+		CVector3 v = m_springTarget - p;
+		v.Normalize();
+		p = p + v * 10;
 		target += GetRight() * GetRight().Dot(p - pos);
 		pos = p;
 	}
@@ -157,13 +160,15 @@ void TpsCamera::UpdateVector() {
 }
 
 CVector3 TpsCamera::getLook() const {
-	return (m_camera.GetTarget() - m_camera.GetPos()) / distance;
+	CVector3 v = m_camera.GetTarget() - m_camera.GetPos();
+	v.Normalize();
+	return v;
 }
 
 CVector3 TpsCamera::getLook(const CVector3& myPos) const{
 	using bw = btCollisionWorld;
 	CVector3 lookVec = getLook();
-	btVector3 startPos = toBtV(m_camera.GetPos());
+	btVector3 startPos = toBtV(m_camera.GetPos() + lookVec * 100);
 	btVector3 targetPos = toBtV(m_camera.GetPos() + lookVec * 4000);
 
 	bw::ClosestRayResultCallback callback(startPos, targetPos);
