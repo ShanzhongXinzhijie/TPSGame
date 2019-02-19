@@ -56,11 +56,7 @@ void MainPlayer::Update() {
 	if (Pad(playerNum).GetButton(enButtonDown)) {
 		m_camera.BackTurn();
 	}
-
-	if (Pad(playerNum).GetDown(enButtonY)) {
-		m_camera.ChangeSlow();
-	}
-
+	m_camera.setSlow(shot);
 	m_camera.SetTarget(CPlayer::getPosition(), !CPlayer::isFlying());
 }
 

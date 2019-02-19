@@ -5,6 +5,15 @@
 bool TpsCamera::s_isSecond = false;
 #endif
 
+
+btVector3 toBtV(CVector3 v) {
+	return btVector3(v.x, v.y, v.z);
+}
+
+CVector3 toCV(btVector3 v) {
+	return CVector3(v.x(), v.y(), v.z());
+}
+
 TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
 	SetTarget(tar);
 	SetOffset(CVector3::AxisZ()*distance);
@@ -12,7 +21,7 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
 	m_rot = CVector2::Zero();
 	UpdateVector();
 	Update();
-	m_camera.SetFar(3000.0f);
+	m_camera.SetFar(8000.0f);
 	//メインカメラに設定
 #ifdef SpritScreen
 	GetCameraList().push_back(&m_camera);
@@ -78,7 +87,7 @@ void TpsCamera::Update() {
 	stickMove.Normalize();
 	stickMove *= len;
 	if (slow) {
-		stickMove *= 0.3;
+		stickMove *= 0.3f;
 	}
 
 	stickMove = stickMove * 0.05f;
@@ -100,11 +109,27 @@ void TpsCamera::Update() {
 		upCamera = GetUp()*up*0.5;
 	}
 
+	//バネカメラ
 	CVector3 springPower = (m_target - m_springTarget);
-	m_springTarget += springPower*0.3;
+	m_springTarget += springPower*0.3f;
 
-	m_camera.SetPos(m_springTarget + m_ar_offsetPos + GetRight()*side + upCamera);
-	m_camera.SetTarget(m_springTarget+ GetRight()*side + upCamera);
+	CVector3 target = m_springTarget + GetRight()*side + upCamera;
+	CVector3 pos = target + m_ar_offsetPos;
+
+	//障害物判定
+	btCollisionWorld::ClosestRayResultCallback callback(toBtV(m_springTarget), toBtV(pos));
+	GetPhysicsWorld().RayTest(toBtV(m_springTarget), toBtV(pos), callback);
+	if (callback.hasHit()) {
+		CVector3 p = toCV(callback.m_hitPointWorld);
+		CVector3 v = m_springTarget - p;
+		v.Normalize();
+		p = p + v * 10;
+		target += GetRight() * GetRight().Dot(p - pos);
+		pos = p;
+	}
+
+	m_camera.SetPos(pos);
+	m_camera.SetTarget(target);
 	m_camera.SetUp(m_ar_up);
 	m_camera.UpdateMatrix();
 }
@@ -134,22 +159,16 @@ void TpsCamera::UpdateVector() {
 	cq.Multiply(m_ar_up);
 }
 
-btVector3 toBtV(CVector3 v) {
-	return btVector3(v.x, v.y, v.z);
-}
-
-CVector3 toCV(btVector3 v) {
-	return CVector3(v.x(), v.y(), v.z());
-}
-
 CVector3 TpsCamera::getLook() const {
-	return (m_camera.GetTarget() - m_camera.GetPos()) / distance;
+	CVector3 v = m_camera.GetTarget() - m_camera.GetPos();
+	v.Normalize();
+	return v;
 }
 
 CVector3 TpsCamera::getLook(const CVector3& myPos) const{
 	using bw = btCollisionWorld;
 	CVector3 lookVec = getLook();
-	btVector3 startPos = toBtV(m_camera.GetPos());
+	btVector3 startPos = toBtV(m_camera.GetPos() + lookVec * 100);
 	btVector3 targetPos = toBtV(m_camera.GetPos() + lookVec * 4000);
 
 	bw::ClosestRayResultCallback callback(startPos, targetPos);

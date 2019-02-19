@@ -7,8 +7,8 @@
 
 
 PlayerGene::PlayerGene() {
-	teamArray.push_back(new Team({ 1,0.5f,0.5f,1 }, L"赤チーム"));
-	teamArray.push_back(new Team({ 0.5f,0.5f,1,1 }, L"青チーム"));
+	teamArray.push_back(new Team({ 1,0.0f,0.0f,1 }, L"赤チーム"));
+	teamArray.push_back(new Team({ 0.0f,0.0f,1,1 }, L"青チーム"));
 }
 
 

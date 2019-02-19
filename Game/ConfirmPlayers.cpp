@@ -176,6 +176,7 @@ void ConfirmPlayers::Update() {
 
 			//ゲーム開始
 			fade->fadeIn([&]() {
+				bgm->Stop();
 				new Game(fade, m_timeLimit, m_citizenCnt, seed, GetPhoton()->GetSeverTime_ms());
 				delete this; return;
 			});
@@ -194,6 +195,7 @@ void ConfirmPlayers::Update() {
 
 		//ゲーム開始
 		fade->fadeIn([&]() {
+			bgm->Stop();
 			new Game(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
 			delete this; return;
 		});

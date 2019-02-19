@@ -9,6 +9,7 @@
 #include "Team.h"
 #include "PlayerGene.h"
 #include "CitizenGene.h"
+#include "DemolisherWeapon/Graphic/Light/Lights.h"
 
 #include "../Network/NetPlayerManager.h"
 #include "../Network/NetGameEventCaster.h"
@@ -42,6 +43,7 @@ public:
 	}
 
 private:
+	GameObj::CDirectionLight light;
 	Ground* ground = nullptr;
 	Level level;
 
