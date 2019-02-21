@@ -32,7 +32,8 @@ private:
 	void playSE(const wchar_t * path);
 	void Attack();
 
-	GameObj::CSkinModelRender m_model;
+	GameObj::CInstancingModelRender m_model;
+	GameObj::CSkinModelRender m_modelAttack;
 	enum {
 		anim_walk,
 		anim_idle,

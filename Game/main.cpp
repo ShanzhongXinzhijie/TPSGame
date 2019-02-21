@@ -8,7 +8,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ƒQ[ƒ€‚Ì‰Šú‰»B
 	InitEngineParameter initparam;
 
-	//initparam.variableFpsMaxSec = -1.0f;
+	initparam.variableFpsMaxSec = -1.0f;
 
 #ifdef SpritScreen
 	initparam.isSplitScreen = enSide_TwoSplit;

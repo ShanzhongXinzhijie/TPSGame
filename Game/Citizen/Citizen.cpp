@@ -9,7 +9,7 @@
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
-	m_model.Init(L"Resource/modelData/Citizen.cmo", m_animationClips, anim_num);
+	m_model.Init(1024, L"Resource/modelData/Citizen.cmo", m_animationClips, 2);
 	m_model.SetPos({ 300,100,300 });
 
 	charaCon.Init(15.0f, 80.0f, { 300,100,300 });
@@ -48,7 +48,6 @@ void Citizen::Update() {
 
 		mover->Update(charaCon.IsOnGround(), delta);
 
-		AnimationController& animCon = m_model.GetAnimCon();
 		//UŒ‚
 		if (isKenzoku) {
 			if (attacking) {
@@ -56,23 +55,27 @@ void Citizen::Update() {
 			}
 			if (mover->isAtk()) {
 				playSE(L"Resource/sound/SE_zombieAtk.wav");
-				animCon.Play(anim_attack, animInterpolateSec);
+				m_modelAttack.GetAnimCon().Play(anim_attack);
 				attacking = true;
+				m_model.SetIsDraw(false);
+				m_modelAttack.SetEnable(true);//—LŒø‰»
 				return;
 			}
 		}
 		//ˆÚ“®
 		CVector3 moveVec = mover->getMove();
 		if (moveVec.x != 0 || moveVec.z != 0) {
-			animCon.Play(anim_walk, animInterpolateSec);
+			m_model.ChangeAnim(anim_walk);
 		} else {
-			animCon.Play(anim_idle, animInterpolateSec);
+			m_model.ChangeAnim(anim_idle);
 		}
 		m_model.SetPos(charaCon.Execute(moveVec, delta));
+		m_modelAttack.SetPos(charaCon.Execute(moveVec, delta));
 		m_collision.SetPosition(charaCon.GetPosition());
 
 		//‰ñ“]
 		m_model.SetRot(mover->getTurn());
+		m_modelAttack.SetRot(mover->getTurn());
 	}
 
 	if (0 < nowFlame) {
@@ -99,9 +102,9 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 		ownerTeam = player->team;
 		ownerTeam->addZombie();
 
-		m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
-			mat->SetAlbedoScale(ownerTeam->getColor());
-		});
+		//m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
+		//	mat->SetAlbedoScale(ownerTeam->getColor());
+		//});
 	}
 	return true;
 }
@@ -116,18 +119,21 @@ void Citizen::Kansenzyoutai()
 	m_animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
 	m_animationClips[anim_attack].Load(L"Resource/animData/VanpAttack.tka", false);
 
-	m_model.~CSkinModelRender();
-	new(&m_model) GameObj::CSkinModelRender();
-	m_model.Init(L"Resource/modelData/Vanp.cmo", m_animationClips, anim_num);
+	m_model.Init(1024, L"Resource/modelData/Vanp.cmo", m_animationClips, 2);
 	m_model.SetPos(charaCon.GetPosition());
-	m_model.GetAnimCon().AddAnimationEventListener([&](const wchar_t* clipName, const wchar_t* evName) {
+
+	m_modelAttack.Init(L"Resource/modelData/Vanp.cmo", &m_animationClips[anim_attack], 1);
+	m_modelAttack.SetPos(charaCon.GetPosition());
+	m_modelAttack.GetAnimCon().AddAnimationEventListener([&](const wchar_t* clipName, const wchar_t* evName) {
 		if (std::wcscmp(evName, L"attack") == 0) {
 			Attack();
 		} else if (std::wcscmp(evName, L"attackEnd") == 0) {
-			m_model.GetAnimCon().Play(anim_idle, animInterpolateSec);
+			m_model.SetIsDraw(true);
+			m_modelAttack.SetEnable(false);//–³Œø‰»
 			attacking = false;
 		}
 	});
+	m_modelAttack.SetEnable(false);//–³Œø‰»
 
 	delete mover;
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);
