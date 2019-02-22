@@ -29,23 +29,24 @@ public:
 		updateFlame = flame;
 		nowFlame = flamePeriod;
 	}
-
+	
 private:
 	void playSE(const wchar_t * path);
 	void Attack();
 
+	//インスタンシング用モデル
 	GameObj::CInstancingModelRender m_model;
-	GameObj::CSkinModelRender m_modelAttack;
-	static constexpr float InstancingNum = 1024;
-	enum {
+	static constexpr int InstancingNum = 1024;//インスタンシング最大数
+	enum InsAnimNum{
 		anim_walk,
 		anim_idle,
-		anim_attack,
 		anim_num,
 	};
-	AnimationClip m_animationClips[anim_num];
+	InstancingCitizenColorManager* m_ptrCitizenColorManager[(int)anim_num * 2] = { nullptr };//市民の色を変えるクラス(市民とゾンビ、2つ分用意)
+	//攻撃アニメ用モデル
+	GameObj::CSkinModelRender m_modelAttack;
+	AnimationClip m_attackAnimationClip;
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
-	InstancingCitizenColorManager* m_ptrCitizenColorManager[4] = { nullptr };
 
 	bool attacking = false;
 

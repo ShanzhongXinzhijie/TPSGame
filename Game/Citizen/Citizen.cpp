@@ -7,18 +7,21 @@
 #include "CollisionMaskConst.h"
 
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
-	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
-	m_animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
-	m_model.Init(InstancingNum, L"Resource/modelData/Citizen.cmo", m_animationClips, 2);
+	//インスタンシングモデル
+	AnimationClip animationClips[anim_num];
+	animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
+	animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
+	m_model.Init(InstancingNum, L"Resource/modelData/Citizen.cmo", animationClips, anim_num);
 	m_model.SetPos({ 300,100,300 });
-
-	for (int i = 0; i < 2; i++) {
+	//インスタンシングモデルの色変えるクラス
+	for (int i = 0; i < anim_num; i++) {
 		wchar_t name[32];
-		if (i == 0) { wcscpy_s(name, L"CitizenWalk"); }
-		if (i == 1) { wcscpy_s(name, L"CitizenIdle"); }
+		if (i == anim_walk) { wcscpy_s(name, L"CitizenWalk"); }
+		if (i == anim_idle) { wcscpy_s(name, L"CitizenIdle"); }
 
 		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
 		if (!m_ptrCitizenColorManager[i]) {
+			//なければ作る
 			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i));
 			m_ptrCitizenColorManager[i]->SetName(name);
 		}
@@ -69,6 +72,7 @@ void Citizen::Update() {
 				playSE(L"Resource/sound/SE_zombieAtk.wav");
 				m_modelAttack.GetAnimCon().Replay(0);
 				attacking = true;
+
 				//表示するモデルを切り替え
 				m_model.SetIsDraw(false);
 				m_modelAttack.SetEnable(true);
@@ -125,30 +129,29 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 
 void Citizen::Kansenzyoutai()
 {
-	for (AnimationClip& clip : m_animationClips) {
-		clip.~AnimationClip();
-		new(&clip) AnimationClip();
-	}
-	m_animationClips[anim_walk].Load(L"Resource/animData/VanpWalk.tka", true);
-	m_animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
-	m_animationClips[anim_attack].Load(L"Resource/animData/VanpAttack.tka", false);
-
-	m_model.Init(InstancingNum, L"Resource/modelData/Vanp.cmo", m_animationClips, 2);
+	//インスタンシングモデル
+	AnimationClip animationClips[anim_num];
+	animationClips[anim_walk].Load(L"Resource/animData/VanpWalk.tka", true);
+	animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
+	m_model.Init(InstancingNum, L"Resource/modelData/Vanp.cmo", animationClips, anim_num);
 	m_model.SetPos(charaCon.GetPosition());
-
-	for (int i = 2; i < 4; i++) {
+	//インスタンシングモデルの色変えるクラス
+	for (int i = anim_num; i < (int)anim_num * 2; i++) {
 		wchar_t name[32];
-		if (i == 2) { wcscpy_s(name, L"VanpWalk"); }
-		if (i == 3) { wcscpy_s(name, L"VanpIdle"); }
+		if (i == (int)anim_num + anim_walk) { wcscpy_s(name, L"VanpWalk"); }
+		if (i == (int)anim_num + anim_idle) { wcscpy_s(name, L"VanpIdle"); }
 
 		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
 		if (!m_ptrCitizenColorManager[i]) {
-			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i-2));
+			//なければ作る
+			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i - (int)anim_num));
 			m_ptrCitizenColorManager[i]->SetName(name);
 		}
 	}
 
-	m_modelAttack.Init(L"Resource/modelData/Vanp.cmo", &m_animationClips[anim_attack], 1);
+	//攻撃モデル
+	m_attackAnimationClip.Load(L"Resource/animData/VanpAttack.tka", false);
+	m_modelAttack.Init(L"Resource/modelData/Vanp.cmo", &m_attackAnimationClip, 1);
 	m_modelAttack.SetPos(charaCon.GetPosition());
 	m_modelAttack.GetAnimCon().AddAnimationEventListener([&](const wchar_t* clipName, const wchar_t* evName) {
 		if (std::wcscmp(evName, L"attack") == 0) {
@@ -157,6 +160,7 @@ void Citizen::Kansenzyoutai()
 			//表示するモデルを切り替え
 			m_model.SetIsDraw(true);
 			m_modelAttack.SetEnable(false);
+
 			attacking = false;
 		}
 	});
@@ -203,7 +207,7 @@ void Citizen::Attack() {
 void Citizen::PostLoopUpdate() {
 	if (m_model.GetIsDraw()) {//インスタンシング描画するなら
 		//インスタンシングモデルにカラーのセット
-		int index = (isKenzoku ? 2 : 0) + m_model.GetPlayAnimNum();
+		int index = (isKenzoku ? (int)anim_num : 0) + m_model.GetPlayAnimNum();
 		if (ownerTeam) {
 			m_ptrCitizenColorManager[index]->AddColor(ownerTeam->getColor());
 		}
