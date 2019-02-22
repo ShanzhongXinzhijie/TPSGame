@@ -41,6 +41,7 @@
     <ClInclude Include="Include\GameWaiter.h" />
     <ClInclude Include="Include\Wing.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
+    <ClInclude Include="Include\InstancingCitizenColorManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Network\NetGameEventReceiver.cpp" />
     <ClCompile Include="GameWaiter.cpp" />
     <ClCompile Include="Player\Wing.cpp" />
+    <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

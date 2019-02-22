@@ -210,6 +210,11 @@ void ConfirmPlayers::Update() {
 	}
 #endif
 	if (isCanChangeSetting) {
+		//ゲーム設定をルームプロパティから初期化
+		if (!m_isInitRoomSetting) {
+			ReloadRoomSettingFromProperies();
+			m_isInitRoomSetting = true;
+		}
 		//ゲーム設定
 		if (Pad(0).GetDown(enButtonUp)) {
 			m_timeLimit += 10.0f;
@@ -298,17 +303,21 @@ void ConfirmPlayers::PostRender() {
 #ifndef SpritScreen
 		//通常クライアントは情報更新
 		if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED && !GetPhoton()->GetIsMasterClient()) {
-			const ExitGames::Common::Hashtable& properties = GetPhoton()->GetRoomProperty();
-			if (properties.getValue(TIME_LIMIT)) {
-				m_timeLimit = ((ExitGames::Common::ValueObject<float>*)(properties.getValue(TIME_LIMIT)))->getDataCopy();
-			}
-			if (properties.getValue(CITIZEN_COUNT)) {
-				m_citizenCnt = ((ExitGames::Common::ValueObject<int>*)(properties.getValue(CITIZEN_COUNT)))->getDataCopy();
-			}
+			ReloadRoomSettingFromProperies();
 		}
 #endif
 		wchar_t str[128];
 		swprintf_s(str, L"制限時間:%.1f\n人口:%d", m_timeLimit, m_citizenCnt);
 		m_font.Draw(str, { 1.0f,0.0f }, CVector4::White(), CVector2::One(), { 1.0f,0.0f });
+	}
+}
+
+void ConfirmPlayers::ReloadRoomSettingFromProperies() {
+	const ExitGames::Common::Hashtable& properties = GetPhoton()->GetRoomProperty();
+	if (properties.getValue(TIME_LIMIT)) {
+		m_timeLimit = ((ExitGames::Common::ValueObject<float>*)(properties.getValue(TIME_LIMIT)))->getDataCopy();
+	}
+	if (properties.getValue(CITIZEN_COUNT)) {
+		m_citizenCnt = ((ExitGames::Common::ValueObject<int>*)(properties.getValue(CITIZEN_COUNT)))->getDataCopy();
 	}
 }

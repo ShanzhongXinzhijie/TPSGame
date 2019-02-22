@@ -9,8 +9,20 @@
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
 	m_animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
 	m_animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
-	m_model.Init(1024, L"Resource/modelData/Citizen.cmo", m_animationClips, 2);
+	m_model.Init(InstancingNum, L"Resource/modelData/Citizen.cmo", m_animationClips, 2);
 	m_model.SetPos({ 300,100,300 });
+
+	for (int i = 0; i < 2; i++) {
+		wchar_t name[32];
+		if (i == 0) { wcscpy_s(name, L"CitizenWalk"); }
+		if (i == 1) { wcscpy_s(name, L"CitizenIdle"); }
+
+		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
+		if (!m_ptrCitizenColorManager[i]) {
+			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i));
+			m_ptrCitizenColorManager[i]->SetName(name);
+		}
+	}
 
 	charaCon.Init(15.0f, 80.0f, { 300,100,300 });
 
@@ -55,10 +67,12 @@ void Citizen::Update() {
 			}
 			if (mover->isAtk()) {
 				playSE(L"Resource/sound/SE_zombieAtk.wav");
-				m_modelAttack.GetAnimCon().Play(anim_attack);
+				m_modelAttack.GetAnimCon().Replay(0);
 				attacking = true;
+				//表示するモデルを切り替え
 				m_model.SetIsDraw(false);
-				m_modelAttack.SetEnable(true);//有効化
+				m_modelAttack.SetEnable(true);
+				m_modelAttack.RefreshWorldMatrix();//リフレッシュ
 				return;
 			}
 		}
@@ -70,7 +84,7 @@ void Citizen::Update() {
 			m_model.ChangeAnim(anim_idle);
 		}
 		m_model.SetPos(charaCon.Execute(moveVec, delta));
-		m_modelAttack.SetPos(charaCon.Execute(moveVec, delta));
+		m_modelAttack.SetPos(charaCon.GetPosition());
 		m_collision.SetPosition(charaCon.GetPosition());
 
 		//回転
@@ -102,9 +116,9 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 		ownerTeam = player->team;
 		ownerTeam->addZombie();
 
-		//m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
-		//	mat->SetAlbedoScale(ownerTeam->getColor());
-		//});
+		m_modelAttack.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
+			mat->SetAlbedoScale(ownerTeam->getColor());
+		});
 	}
 	return true;
 }
@@ -119,8 +133,20 @@ void Citizen::Kansenzyoutai()
 	m_animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
 	m_animationClips[anim_attack].Load(L"Resource/animData/VanpAttack.tka", false);
 
-	m_model.Init(1024, L"Resource/modelData/Vanp.cmo", m_animationClips, 2);
+	m_model.Init(InstancingNum, L"Resource/modelData/Vanp.cmo", m_animationClips, 2);
 	m_model.SetPos(charaCon.GetPosition());
+
+	for (int i = 2; i < 4; i++) {
+		wchar_t name[32];
+		if (i == 2) { wcscpy_s(name, L"VanpWalk"); }
+		if (i == 3) { wcscpy_s(name, L"VanpIdle"); }
+
+		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
+		if (!m_ptrCitizenColorManager[i]) {
+			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i-2));
+			m_ptrCitizenColorManager[i]->SetName(name);
+		}
+	}
 
 	m_modelAttack.Init(L"Resource/modelData/Vanp.cmo", &m_animationClips[anim_attack], 1);
 	m_modelAttack.SetPos(charaCon.GetPosition());
@@ -128,8 +154,9 @@ void Citizen::Kansenzyoutai()
 		if (std::wcscmp(evName, L"attack") == 0) {
 			Attack();
 		} else if (std::wcscmp(evName, L"attackEnd") == 0) {
+			//表示するモデルを切り替え
 			m_model.SetIsDraw(true);
-			m_modelAttack.SetEnable(false);//無効化
+			m_modelAttack.SetEnable(false);
 			attacking = false;
 		}
 	});
@@ -171,4 +198,17 @@ void Citizen::Attack() {
 			}
 		}
 	});
+}
+
+void Citizen::PostLoopUpdate() {
+	if (m_model.GetIsDraw()) {//インスタンシング描画するなら
+		//インスタンシングモデルにカラーのセット
+		int index = (isKenzoku ? 2 : 0) + m_model.GetPlayAnimNum();
+		if (ownerTeam) {
+			m_ptrCitizenColorManager[index]->AddColor(ownerTeam->getColor());
+		}
+		else {
+			m_ptrCitizenColorManager[index]->AddColor(CVector4::One());
+		}
+	}
 }

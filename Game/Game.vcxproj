@@ -246,6 +246,7 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
     <ClCompile Include="GameWaiter.cpp" />
@@ -290,6 +291,7 @@
     <ClCompile Include="Player\Wing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
     <ClInclude Include="Include\GameWaiter.h" />
     <ClInclude Include="Include\Flybar.h" />

@@ -1,6 +1,7 @@
 #pragma once
 #include "DemolisherWeapon/physics/character/CCharacterController.h"
 #include "CPlayer.h"
+#include "InstancingCitizenColorManager.h"
 
 class ICitizenBrain;
 
@@ -10,6 +11,7 @@ public:
 	~Citizen();
 
 	void Update() override;
+	void PostLoopUpdate() override;
 
 	void setPos(const CVector3& pos) {
 		charaCon.SetPosition(pos);
@@ -34,6 +36,7 @@ private:
 
 	GameObj::CInstancingModelRender m_model;
 	GameObj::CSkinModelRender m_modelAttack;
+	static constexpr float InstancingNum = 1024;
 	enum {
 		anim_walk,
 		anim_idle,
@@ -42,6 +45,7 @@ private:
 	};
 	AnimationClip m_animationClips[anim_num];
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
+	InstancingCitizenColorManager* m_ptrCitizenColorManager[4] = { nullptr };
 
 	bool attacking = false;
 

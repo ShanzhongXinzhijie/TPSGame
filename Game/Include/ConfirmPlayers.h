@@ -19,6 +19,9 @@ public:
 	void PostRender() override;
 
 private:
+	void ReloadRoomSettingFromProperies();
+
+private:
 	PerspectiveCamera camera;
 	CDirectionLight m_dirlight;
 	std::unordered_set<int> players;
@@ -27,6 +30,7 @@ private:
 	NetGameEventCaster m_netEventCaster; bool m_isReady = false; bool m_allReady = false;
 
 	//ƒQ[ƒ€İ’è
+	bool m_isInitRoomSetting = false;
 	float m_timeLimit = 160.0f;
 	int m_citizenCnt = 1;
 	

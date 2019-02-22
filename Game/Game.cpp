@@ -55,13 +55,13 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	//ゲーム開始タイマー設定
 	int t = GetPhoton()->GetSeverTime_ms(); 
 	if (t < 0 && startTime_ms >= 0) { startTime_ms = INT_MIN; }
-	m_waitGameStartTimer_sec = CMath::Clamp(7.0f - (t - startTime_ms)*0.001f, 0.0f, 7.0f);
+	m_waitGameStartTimer_sec = CMath::Clamp(15.0f - (t - startTime_ms)*0.001f, 0.0f, 15.0f);
 	//ゲームをウェイト状態にする
-	GameWaiter::SetIsWait(true);
+	if (m_waitGameStartTimer_sec > 0.0f) { GameWaiter::SetIsWait(true); }
 #endif
 
 	//次のフレームの可変フレーム無効
-	GetEngine().UnableVariableFramerateOnce();
+	//GetEngine().UnableVariableFramerateOnce();
 }
 
 Game::~Game() {
