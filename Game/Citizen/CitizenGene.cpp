@@ -89,7 +89,7 @@ void CitizenGene::createCitizen(unsigned int amount) {
 			default:
 				brain = new ziguzagu();
 			}
-			Citizen* citizen = new Citizen(game->getPlayers(), brain);
+			Citizen* citizen = new Citizen(game->getPlayers(), brain, i);
 			citizenArray.push_back(citizen);
 			citizen->setPos(sp->getPos());
 		}

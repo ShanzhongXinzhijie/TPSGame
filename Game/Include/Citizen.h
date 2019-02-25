@@ -7,7 +7,7 @@ class ICitizenBrain;
 
 class Citizen : public IGameObject{
 public:
-	Citizen(const std::unordered_map<int, CPlayer*>& players, ICitizenBrain* moveType);
+	Citizen(const std::unordered_map<int, CPlayer*>& players, ICitizenBrain* moveType, unsigned int id);
 	~Citizen();
 
 	void Update() override;
@@ -34,11 +34,15 @@ private:
 	void playSE(const wchar_t * path);
 	void Attack();
 
+	unsigned int m_uniqueID = 0;
+
 	//インスタンシング用モデル
 	GameObj::CInstancingModelRender m_model;
 	static constexpr int InstancingNum = 1024;//インスタンシング最大数
 	enum InsAnimNum{
-		anim_walk,
+		anim_walk0,
+		anim_walk1,
+		anim_walk2,
 		anim_idle,
 		anim_num,
 	};

@@ -6,17 +6,21 @@
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 #include "CollisionMaskConst.h"
 
-Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType): playersMap(pm){
+Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType, unsigned int id): playersMap(pm), m_uniqueID(id){
 	//インスタンシングモデル
 	AnimationClip animationClips[anim_num];
-	animationClips[anim_walk].Load(L"Resource/animData/CitizenWalk.tka", true);
+	animationClips[anim_walk0].Load(L"Resource/animData/CitizenWalk.tka", true);
+	animationClips[anim_walk1].Load(L"Resource/animData/CitizenWalk.tka", true, 0.3f);
+	animationClips[anim_walk2].Load(L"Resource/animData/CitizenWalk.tka", true, 0.6f);
 	animationClips[anim_idle].Load(L"Resource/animData/CitizenIdle.tka", true);
 	m_model.Init(InstancingNum, L"Resource/modelData/Citizen.cmo", animationClips, anim_num);
 	m_model.SetPos({ 300,100,300 });
 	//インスタンシングモデルの色変えるクラス
 	for (int i = 0; i < anim_num; i++) {
 		wchar_t name[32];
-		if (i == anim_walk) { wcscpy_s(name, L"CitizenWalk"); }
+		if (i == anim_walk0) { wcscpy_s(name, L"CitizenWalk0"); }
+		if (i == anim_walk1) { wcscpy_s(name, L"CitizenWalk1"); }
+		if (i == anim_walk2) { wcscpy_s(name, L"CitizenWalk2"); }
 		if (i == anim_idle) { wcscpy_s(name, L"CitizenIdle"); }
 
 		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
@@ -83,7 +87,7 @@ void Citizen::Update() {
 		//移動
 		CVector3 moveVec = mover->getMove();
 		if (moveVec.x != 0 || moveVec.z != 0) {
-			m_model.ChangeAnim(anim_walk);
+			m_model.ChangeAnim((int)anim_walk0 + (m_uniqueID % 3));
 		} else {
 			m_model.ChangeAnim(anim_idle);
 		}
@@ -131,14 +135,18 @@ void Citizen::Kansenzyoutai()
 {
 	//インスタンシングモデル
 	AnimationClip animationClips[anim_num];
-	animationClips[anim_walk].Load(L"Resource/animData/VanpWalk.tka", true);
+	animationClips[anim_walk0].Load(L"Resource/animData/VanpWalk.tka", true);
+	animationClips[anim_walk1].Load(L"Resource/animData/VanpWalk.tka", true, 0.3f);
+	animationClips[anim_walk2].Load(L"Resource/animData/VanpWalk.tka", true, 0.6f);
 	animationClips[anim_idle].Load(L"Resource/animData/VanpIdle.tka", true);
 	m_model.Init(InstancingNum, L"Resource/modelData/Vanp.cmo", animationClips, anim_num);
 	m_model.SetPos(charaCon.GetPosition());
 	//インスタンシングモデルの色変えるクラス
 	for (int i = anim_num; i < (int)anim_num * 2; i++) {
 		wchar_t name[32];
-		if (i == (int)anim_num + anim_walk) { wcscpy_s(name, L"VanpWalk"); }
+		if (i == (int)anim_num + anim_walk0) { wcscpy_s(name, L"VanpWalk0"); }
+		if (i == (int)anim_num + anim_walk1) { wcscpy_s(name, L"VanpWalk1"); }
+		if (i == (int)anim_num + anim_walk2) { wcscpy_s(name, L"VanpWalk2"); }
 		if (i == (int)anim_num + anim_idle) { wcscpy_s(name, L"VanpIdle"); }
 
 		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
