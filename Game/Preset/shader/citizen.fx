@@ -4,10 +4,10 @@
 
 StructuredBuffer<float4> Colors : register(t5);
 
-PSOutput_RenderGBuffer PSMain_Citizen(PSInput In, uint instanceID : SV_InstanceID) {
+PSOutput_RenderGBuffer PSMain_Citizen(PSInput In){//, uint instanceID : SV_InstanceID) {
 	PSOutput_RenderGBuffer Out = PSMain_RenderGBuffer(In);
 	
-	Out.albedo *= Colors[instanceID];
+	Out.albedo *= Colors[In.instanceID];
 
 	return Out;
 }
