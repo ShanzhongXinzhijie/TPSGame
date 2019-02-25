@@ -6,6 +6,10 @@ Ground::Ground(CVector3 pos)  : m_pos(pos){
 }
 
 bool Ground::Start() {
+	m_skyModel.Init(L"Resource/modelData/sky.cmo");
+	m_skyModel.SetIsMostDepth(true);
+	m_skyModel.SetIsShadowCaster(false);
+
 	m_model.Init(L"Resource/modelData/Ground.cmo");
 	m_model.SetPos(m_pos);
 	m_model.SetIsShadowCaster(true);
@@ -22,4 +26,5 @@ bool Ground::Start() {
 }
 
 void Ground::Update() {
+	m_skyModel.SetPos(GetMainCamera()->GetPos());
 }

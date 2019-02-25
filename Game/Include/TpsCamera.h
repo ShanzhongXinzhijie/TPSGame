@@ -5,7 +5,7 @@ public:
 	TpsCamera(int pad, const CVector3& tar);
 	~TpsCamera();
 
-	void Update() override;
+	void PreUpdate() override;
 
 	void PostRender() override;
 

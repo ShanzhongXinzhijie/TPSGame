@@ -77,7 +77,7 @@ void TpsCamera::moveLR() {
 	}
 }
 
-void TpsCamera::Update() {
+void TpsCamera::PreUpdate() {
 	moveLR();
 	//ÉJÉÅÉââÒì]
 	CVector2 stickMove = Pad(padNum).GetStick(enLR::R);
@@ -117,8 +117,8 @@ void TpsCamera::Update() {
 	CVector3 pos = target + m_ar_offsetPos;
 
 	//è·äQï®îªíË
-	btCollisionWorld::ClosestRayResultCallback callback(toBtV(m_springTarget), toBtV(pos));
-	GetPhysicsWorld().RayTest(toBtV(m_springTarget), toBtV(pos), callback);
+	btCollisionWorld::ClosestRayResultCallback callback(toBtV(m_target), toBtV(pos));
+	GetPhysicsWorld().RayTest(toBtV(m_target), toBtV(pos), callback);
 	if (callback.hasHit()) {
 		CVector3 p = toCV(callback.m_hitPointWorld);
 		CVector3 v = m_springTarget - p;

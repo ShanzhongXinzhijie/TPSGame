@@ -338,6 +338,7 @@
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\sky.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Wing.FBX" />
