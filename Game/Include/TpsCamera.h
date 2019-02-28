@@ -24,6 +24,10 @@ public:
 		SetMainCamera(&m_camera);
 	}
 
+	void setZoomMagnif(float magnification) {
+		zoom = 1.0f / magnification;
+	}
+
 	void setLeft() {
 		isRight = false;
 	}
@@ -60,7 +64,7 @@ private:
 	//ƒJƒƒ‰‰ñ“]
 	void RotationCamera(const CVector2& rot);
 	//‰ñ“]Œã‚ÌÀ•WZo
-	void UpdateVector();
+	void UpdateVector(const CVector2& rot);
 
 	void moveLR();
 
@@ -77,6 +81,9 @@ private:
 	CVector3 m_ar_offsetPos, m_ar_up;
 	CVector2 m_rot = {0.0f, 0.0f};
 	GameObj::PerspectiveCamera m_camera;
+
+	static constexpr float viewAngle = 3.14f*0.5f; //‹–ìŠp
+	float zoom = 1.0f; //‹–ìŠp‚Ìk¬—¦
 
 	CVector3 m_springTarget = m_target; //‚Î‚ËƒJƒƒ‰‚ÌˆÊ’u
 

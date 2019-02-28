@@ -42,6 +42,8 @@
     <ClInclude Include="Include\Wing.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
+    <ClInclude Include="Include\Weapon.h" />
+    <ClInclude Include="Include\HandGun.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -83,6 +85,8 @@
     <ClCompile Include="GameWaiter.cpp" />
     <ClCompile Include="Player\Wing.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
+    <ClCompile Include="Player\Weapon\Weapon.cpp" />
+    <ClCompile Include="Player\Weapon\HandGun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
