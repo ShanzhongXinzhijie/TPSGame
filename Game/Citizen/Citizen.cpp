@@ -31,9 +31,9 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 		}
 	}
 
-	charaCon.Init(15.0f, 80.0f, { 300,100,300 });
+	charaCon.Init(30.0f, 100.0f, { 300,100,300 });
 
-	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 80.0f);
+	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 100.0f);
 	m_collision.SetName(L"Citizen");
 	m_collision.SetClass(this);
 
@@ -173,6 +173,10 @@ void Citizen::Kansenzyoutai()
 		}
 	});
 	m_modelAttack.SetEnable(false);//–³Œø‰»
+
+	charaCon.RemoveRigidBoby();
+	charaCon.Init(30.0f, 130.0f, charaCon.GetPosition());
+	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 130.0f);
 
 	delete mover;
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);
