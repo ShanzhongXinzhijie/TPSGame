@@ -31,9 +31,10 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 		}
 	}
 
-	charaCon.Init(30.0f, 100.0f, { 300,100,300 });
-
-	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 100.0f);
+	charaCon.Init(30.0f, 40.0f, { 300,100,300 });
+	CVector3 pos = charaCon.GetPosition();
+	pos.y += charaCon.GetCollider()->GetHeight() / 2 + charaCon.GetCollider()->GetRadius();
+	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 40.0f);
 	m_collision.SetName(L"Citizen");
 	m_collision.SetClass(this);
 
@@ -93,7 +94,9 @@ void Citizen::Update() {
 		}
 		m_model.SetPos(charaCon.Execute(moveVec, delta));
 		m_modelAttack.SetPos(charaCon.GetPosition());
-		m_collision.SetPosition(charaCon.GetPosition());
+		CVector3 pos = charaCon.GetPosition();
+		pos.y += charaCon.GetCollider()->GetHeight() / 2 + charaCon.GetCollider()->GetRadius();
+		m_collision.SetPosition(pos);
 
 		//‰ñ“]
 		m_model.SetRot(mover->getTurn());
@@ -175,8 +178,10 @@ void Citizen::Kansenzyoutai()
 	m_modelAttack.SetEnable(false);//–³Œø‰»
 
 	charaCon.RemoveRigidBoby();
-	charaCon.Init(30.0f, 130.0f, charaCon.GetPosition());
-	m_collision.CreateCapsule(charaCon.GetPosition(), CQuaternion::Identity(), 30.0f, 130.0f);
+	charaCon.Init(30.0f, 70.0f, charaCon.GetPosition());
+	CVector3 pos = charaCon.GetPosition();
+	pos.y += charaCon.GetCollider()->GetHeight() / 2 + charaCon.GetCollider()->GetRadius();
+	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 70.0f);
 
 	delete mover;
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);
