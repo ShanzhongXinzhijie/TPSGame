@@ -174,10 +174,14 @@ void ConfirmPlayers::Update() {
 			int seed = CMath::RandomInt();
 			m_netEventCaster.SendGameStart(seed);
 
+			//•Û‘¶
+			m_seed = seed;
+			m_startTime = GetPhoton()->GetSeverTime_ms();
+
 			//ƒQ[ƒ€ŠJŽn
 			fade->fadeIn([&]() {
 				bgm->Stop();
-				new Game(fade, m_timeLimit, m_citizenCnt, seed, GetPhoton()->GetSeverTime_ms());
+				new Game(fade, m_timeLimit, m_citizenCnt, m_seed, m_startTime);
 				delete this; return;
 			});
 		}

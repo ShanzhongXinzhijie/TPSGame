@@ -41,5 +41,6 @@ private:
 	SuicideObj::CBGM* bgm;
 
 	Fade* fade;
+	int m_seed = 0, m_startTime = 0;//マスクラ用。Fadeに渡すラムダ関数用。
 };
 
