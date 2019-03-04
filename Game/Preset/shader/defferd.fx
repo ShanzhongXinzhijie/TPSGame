@@ -32,6 +32,7 @@ cbuffer ShadowCb : register(b1) {
 	float4 cascadeArea[SHADOWMAP_NUM];//x:カスケード距離(Near) y:カスケード距離(Far) z:4000.0f/Width(平行投影カメラ) w:4000.0f/Height(平行投影カメラ)
 
 	int boolAO;//AOを有効にするか
+	int boolAmbientCube;//環境キューブマップ有効か?
 };
 struct HideInShadow {
 	float flag[SHADOWMAP_NUM];
@@ -202,6 +203,8 @@ Texture2D<float > depthMap		: register(t2);
 Texture2D<float4> PosMap		: register(t3);
 Texture2D<float > AoMap			: register(t4);
 Texture2D<float4> lightParamTex	: register(t5);
+//環境キューブマップ
+TextureCube<float3> AmbientCubeMap: register(t6);
 
 struct VSDefferdInput {
 	float4 pos : SV_Position;
@@ -257,12 +260,12 @@ float4 PSMain(PSDefferdInput In) : SV_Target0
 
 	float3 normal = normalMap.Sample(Sampler, In.uv).xyz;
 	float4 viewpos = PosMap.Sample(Sampler, In.uv);
-	float3 worldpos = CalcWorldPosFromUVZ(In.uv, viewpos.w);// , ViewProjInv);
+	float3 worldpos = CalcWorldPosFromUVZ(In.uv, viewpos.w);
 	float4 lightParam = lightParamTex.Sample(Sampler, In.uv);
 
 	//ライティング無効
 	if (!lightParam.a) {
-		return float4(saturate(albedo.rgb + lightParam.rgb), albedo.w);//エミッシブ加算
+		return float4(albedo.rgb + lightParam.rgb, albedo.w);//float4(saturate(albedo.rgb + lightParam.rgb), albedo.w);//エミッシブ加算
 	}
 
 	//シャドウマップの範囲に入っているか判定
@@ -333,13 +336,18 @@ float4 PSMain(PSDefferdInput In) : SV_Target0
 	}
 
 	//アンビエント
-	Out += albedo.xyz * ambientLight * ambientOcclusion;
+	if (boolAmbientCube) {
+		Out += albedo.xyz * AmbientCubeMap.SampleLevel(Sampler, normal, 8) * ambientLight * ambientOcclusion;
+	}
+	else {
+		Out += albedo.xyz * ambientLight * ambientOcclusion;
+	}
 
 	//エミッシブを加算
 	Out += lightParam.rgb;
 
 	//0.0~1.0で出力
-	Out = saturate(Out);
+	//Out = saturate(Out);
 	return float4(Out, albedo.w);
 	
 }

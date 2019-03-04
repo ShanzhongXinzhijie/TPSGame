@@ -58,20 +58,23 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	{
 		//パッド入力
 		if (eventContent.getValue((nByte)enActionSender)) {
+			//ボタン入力のビットフィールドを取得
+			nByte buttons = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 5))))->getDataCopy();
+			//アクションセンダーをセット
 			m_status[playerNr].m_actionSender = ActionSender(
 				{
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 0))))->getDataCopy() / 100.0f - 1.0f,
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 1))))->getDataCopy() / 100.0f - 1.0f
 				},
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 2))))->getDataCopy(),
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 3))))->getDataCopy(),
+				(buttons & 0b1) != 0,
+				(buttons & 0b10) != 0,
 				{
-					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 5))))->getDataCopy() / 100.0f - 1.0f,
-					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 6))))->getDataCopy() / 100.0f - 1.0f,
-					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 7))))->getDataCopy() / 100.0f - 1.0f
+					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 2))))->getDataCopy() / 100.0f - 1.0f,
+					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 3))))->getDataCopy() / 100.0f - 1.0f,
+					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy() / 100.0f - 1.0f
 				},
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy(),
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 8))))->getDataCopy()
+				(buttons & 0b100) != 0,
+				(buttons & 0b1000) != 0
 			);
 		}
 
