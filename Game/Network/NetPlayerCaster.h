@@ -21,6 +21,6 @@ private:
 
 	bool m_isDead = false;
 
-	std::list<std::pair<int, int>> m_sendKenzokuList;
+	std::list<std::tuple<int, int, CVector3>> m_sendKenzokuList;
 };
 

@@ -98,17 +98,22 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 		for (int i = 0; i < num; i++) {
 			int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
 			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
+			//座標
+			CVector3 pos;
+			pos.x = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.y = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.z = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
 			
 			auto C = m_citizensStatus.find(id);
 			if (C == m_citizensStatus.end()) {
 				//新規作成
-				m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr });
+				m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr, pos });
 			}
 			else {
 				//時間が新しい or 時間が同じでプレイヤー番号が大きい
 				if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
 					//上書き
-					C->second = { time, playerNr };
+					C->second = { time, playerNr, pos };
 				}
 			}
 		}
@@ -206,11 +211,12 @@ void NetPlayerReceiver::UpdateCitizen() {
 			if (!citizen) { continue; }
 			//時間が新しい or 時間が同じでプレイヤー番号が大きい
 			if (citizen->GetLastKenzokuingCnt() < cs.second.timeCnt || citizen->GetLastKenzokuingCnt() == cs.second.timeCnt && cs.second.plyNum > citizen->GetLastKenzokuingPly()) {
-				//更新(市民の情報二種)・眷属化
+				//更新(市民の情報二種・座標)・眷属化
 				if (m_pCPlayer[cs.second.plyNum]) {
 					citizen->SetLastKenzokuingCnt(cs.second.timeCnt);
 					citizen->SetLastKenzokuingPly(cs.second.plyNum);
-					citizen->BatHit(m_pCPlayer[cs.second.plyNum], CVector3::Zero());
+					citizen->setPos(cs.second.pos);
+					citizen->ChangeToKenzoku(m_pCPlayer[cs.second.plyNum]);
 				}
 			}
 		}

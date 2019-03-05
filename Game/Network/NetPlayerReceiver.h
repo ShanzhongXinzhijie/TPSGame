@@ -70,6 +70,7 @@ private:
 	struct CitizensStatus {
 		int timeCnt = INT_MIN;
 		int plyNum = -1;
+		CVector3 pos;
 	};
 	std::unordered_map<int, CitizensStatus> m_citizensStatus;
 

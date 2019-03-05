@@ -66,8 +66,12 @@ void NetPlayerCaster::PostUpdate() {
 			_event.put((nByte)1, (int)m_sendKenzokuList.size());//‘”
 			int i = 2;
 			for (auto& K : m_sendKenzokuList) {
-				_event.put(i, K.first);  i++;//ID
-				_event.put(i, K.second); i++;//ŠÔ
+				_event.put(i, std::get<0>(K)); i++;//ID
+				_event.put(i, std::get<1>(K)); i++;//ŠÔ
+				//À•W
+				_event.put(i, (int)std::get<2>(K).x); i++;
+				_event.put(i, (int)std::get<2>(K).y); i++;
+				_event.put(i, (int)std::get<2>(K).z); i++;
 			}
 			m_sendKenzokuList.clear();
 
@@ -107,7 +111,7 @@ void NetPlayerCaster::PostUpdate() {
 }
 
 void NetPlayerCaster::SendNewKenzoku(::Citizen* pkenzoku) {
-	m_sendKenzokuList.emplace_back(std::make_pair((int)pkenzoku->GetUniqueID(), m_cnt));
+	m_sendKenzokuList.emplace_back(std::make_tuple((int)pkenzoku->GetUniqueID(), m_cnt, pkenzoku->getPos()));
 	pkenzoku->SetLastKenzokuingCnt(m_cnt);
 	pkenzoku->SetLastKenzokuingPly(m_cnt);
 }

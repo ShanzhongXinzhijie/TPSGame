@@ -22,6 +22,8 @@ public:
 	}
 
 	bool BatHit(CPlayer* player, CVector3 dir);
+	
+	void ChangeToKenzoku(CPlayer* player);//แล‘ฎป
 
 	void Kansenzyoutai();
 
