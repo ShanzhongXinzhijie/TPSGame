@@ -4,6 +4,8 @@
 #include "ActionSender.h"
 #include "Team.h"
 
+#include "../NetWork/NetPlayerCaster.h"
+
 class CPlayerCamera;
 class Wing;
 
@@ -102,4 +104,10 @@ private:
 	ActionSender action;     //プレイヤーの操作が入っている
 
 	SuicideObj::CCollisionObj m_collision; //コリジョン
+
+	//通信キャスター
+	NetPlayerCaster* m_netCaster = nullptr;
+public:
+	void SetNetCaster(NetPlayerCaster* netcaster) { m_netCaster = netcaster; }
+	NetPlayerCaster* GetNetCaster() { return m_netCaster; }
 };

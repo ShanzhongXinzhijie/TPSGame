@@ -127,6 +127,11 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 		m_modelAttack.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 			mat->SetAlbedoScale(ownerTeam->getColor());
 		});
+
+		//Ž©•ª‚ÌáÅ‘®‚É‚È‚Á‚½‚±‚Æ‚ð‘—M
+		if (player->playerNum == GetPhoton()->GetLocalPlayerNumber() && player->GetNetCaster()) {
+			player->GetNetCaster()->SendNewKenzoku(this);
+		}
 	}
 	return true;
 }

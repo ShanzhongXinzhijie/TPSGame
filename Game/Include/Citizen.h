@@ -29,6 +29,8 @@ public:
 		updateFlame = flame;
 		nowFlame = flamePeriod;
 	}
+
+	unsigned int GetUniqueID()const { return m_uniqueID; }
 	
 private:
 	void playSE(const wchar_t * path);
@@ -69,5 +71,22 @@ private:
 
 	unsigned char nowFlame = 0;
 	unsigned char updateFlame = 0;
+
+	//通信用
+	int m_lastKenzokuingCnt = INT_MIN;//最後に眷属化したタイミング
+	int m_lastKenzokuingPly = -1;//最後に眷属化させたプレイヤー
+public:
+	void SetLastKenzokuingCnt(int cnt) {
+		m_lastKenzokuingCnt = cnt;
+	}
+	int GetLastKenzokuingCnt()const {
+		return m_lastKenzokuingCnt;
+	}
+	void SetLastKenzokuingPly(int playerNum) {
+		m_lastKenzokuingPly = playerNum;
+	}
+	int GetLastKenzokuingPly()const {
+		return m_lastKenzokuingPly;
+	}
 };
 

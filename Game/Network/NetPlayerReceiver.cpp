@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "NetPlayerReceiver.h"
-
+#include "Citizen.h"
 
 NetPlayerReceiver::NetPlayerReceiver()
 {
@@ -90,6 +90,31 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	}
 	break;
 
+	case enKenzoku:
+	{
+		//áÅ‘®‰»
+		int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy();
+		int i2 = 2;
+		for (int i = 0; i < num; i++) {
+			int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
+			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ŽžŠÔ
+			
+			auto C = m_citizensStatus.find(id);
+			if (C == m_citizensStatus.end()) {
+				//V‹Kì¬
+				m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr });
+			}
+			else {
+				//ŽžŠÔ‚ªV‚µ‚¢ or ŽžŠÔ‚ª“¯‚¶‚ÅƒvƒŒƒCƒ„[”Ô†‚ª‘å‚«‚¢
+				if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
+					//ã‘‚«
+					C->second = { time, playerNr };
+				}
+			}
+		}
+	}
+	break;
+
 	case enKillPlayer:
 	{
 		//ŽE‚³‚ê‚½
@@ -120,6 +145,8 @@ void NetPlayerReceiver::PreUpdate() {
 
 		//ƒvƒŒƒCƒ„[‚Éî•ñ“n‚·
 		UpdatePlayer(i);
+		//Žs–¯‚Éî•ñ“n‚·
+		UpdateCitizen();
 
 		//ƒJƒEƒ“ƒ^[i‚ß‚é
 		if (!m_status[i].m_isNoReceive) { m_status[i].m_cnt++; }
@@ -133,6 +160,8 @@ void NetPlayerReceiver::PostLoopUpdate() {
 
 		//ƒvƒŒƒCƒ„[‚Éî•ñ“n‚·
 		UpdatePlayer(i);
+		//Žs–¯‚Éî•ñ“n‚·
+		UpdateCitizen();
 	}
 }
 
@@ -166,5 +195,25 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 			m_status[playerNr].m_isUpdateDead = false;
 		}
 
+	}
+}
+
+//Žs–¯‚Éî•ñ“n‚·
+void NetPlayerReceiver::UpdateCitizen() {
+	if (m_citizenGene) {
+		for (auto& cs : m_citizensStatus) {
+			auto citizen = m_citizenGene->GetCitizen(cs.first);
+			if (!citizen) { continue; }
+			//ŽžŠÔ‚ªV‚µ‚¢ or ŽžŠÔ‚ª“¯‚¶‚ÅƒvƒŒƒCƒ„[”Ô†‚ª‘å‚«‚¢
+			if (citizen->GetLastKenzokuingCnt() < cs.second.timeCnt || citizen->GetLastKenzokuingCnt() == cs.second.timeCnt && cs.second.plyNum > citizen->GetLastKenzokuingPly()) {
+				//XV(Žs–¯‚Ìî•ñ“ñŽí)EáÅ‘®‰»
+				if (m_pCPlayer[cs.second.plyNum]) {
+					citizen->SetLastKenzokuingCnt(cs.second.timeCnt);
+					citizen->SetLastKenzokuingPly(cs.second.plyNum);
+					citizen->BatHit(m_pCPlayer[cs.second.plyNum], CVector3::Zero());
+				}
+			}
+		}
+		m_citizensStatus.clear();
 	}
 }
