@@ -44,6 +44,7 @@
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\Weapon.h" />
     <ClInclude Include="Include\HandGun.h" />
+    <ClInclude Include="Include\Rifle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Player\Weapon\HandGun.cpp" />
+    <ClCompile Include="Player\Weapon\Rifle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -100,6 +102,7 @@
     <MeshContentTask Include="Asset\modelData\Wing.FBX" />
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
+    <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

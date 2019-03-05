@@ -1,0 +1,23 @@
+#include "stdafx.h"
+#include "Rifle.h"
+
+
+Rifle::Rifle(CPlayer* player, GameObj::CSkinModelRender* playerModel,
+			 unsigned int shotAnim, unsigned int reloadAnim)
+	:Weapon(player, playerModel, getInfo(shotAnim, reloadAnim)){
+}
+
+
+Rifle::~Rifle() {
+}
+
+WeaponInfo Rifle::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
+	WeaponInfo info;
+	info.modelPath = L"Resource/modelData/Rifle.cmo";
+	info.maxBullet = 20;
+	info.shotCool = 2.0f;
+	info.zoomScale = 5.0f;
+	info.shotAnimNum = shotAnim;
+	info.reloadAnimNum = reloadAnim;
+	return info;
+}

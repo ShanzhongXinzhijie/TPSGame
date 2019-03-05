@@ -2,19 +2,37 @@
 
 class CPlayer;
 
+struct WeaponInfo{
+	const wchar_t* modelPath;
+	unsigned int shotAnimNum;
+	unsigned int reloadAnimNum;
+	unsigned int maxBullet;
+	float shotCool;
+	float zoomScale = 1.0f;
+};
+
 class Weapon : public IGameObject{
 public:
 	Weapon(CPlayer* player,
 		   GameObj::CSkinModelRender* playerModel,
-		   const wchar_t* weaponModelPath,
-		   float zoomScale = 1.0f);
+		   const WeaponInfo& info);
 	~Weapon();
 
-	virtual void shot() = 0;
+	void shot();
 
-	virtual void drawBulletCount(CFont& font) = 0;
+	void drawBulletCount(CFont& font);
 
-	virtual void reload() = 0;
+	void reload();
+
+	void Activate() {
+		isActive = true;
+		weaponModel.SetIsDraw(true);
+	}
+
+	void Inactivate() {
+		isActive = false;
+		weaponModel.SetIsDraw(false);
+	}
 
 	virtual void setBulletCount(int) = 0;
 	virtual int  getBulletCount()const = 0;
@@ -27,15 +45,28 @@ public:
 		return zoomScale;
 	}
 
-	void Update() override final;
+	void PreUpdate() override;
+
+	void Update() override;
 
 protected:
 	CPlayer* player;
 	GameObj::CSkinModelRender* playerModel;
 	GameObj::CSkinModelRender weaponModel;
 
+	const float zoomScale;
+
+	const unsigned int shotAnimNum;
+	const unsigned int reloadAnimNum;
+
+	const float c_ShotCool = 0.1f;
+	float shotCool = c_ShotCool;
+
+	const unsigned int maxBullet;
+	unsigned int bulletCount = maxBullet;
+
 	bool reloading;
 
-	const float zoomScale;
+	bool isActive = false;
 };
 

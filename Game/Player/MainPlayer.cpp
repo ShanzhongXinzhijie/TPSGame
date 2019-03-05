@@ -67,7 +67,7 @@ void MainPlayer::PostRender() {
 	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
 
 	//弾数表示
-	weapon[0]->drawBulletCount(font);
+	weapon[activeWeapon]->drawBulletCount(font);
 
 	//飛行ゲージ表示
 	flybar.Draw(mover.getFlyTimer(), mover.c_flyTimer);

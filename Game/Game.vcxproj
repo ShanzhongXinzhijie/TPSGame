@@ -279,6 +279,7 @@
     <ClCompile Include="Network\Network.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Citizen\sikakukuidou.cpp" />
+    <ClCompile Include="Player\Weapon\Rifle.cpp" />
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -336,6 +337,7 @@
     <ClInclude Include="Include\Team.h" />
     <ClInclude Include="Include\Wing.h" />
     <ClInclude Include="Include\Weapon.h" />
+    <ClInclude Include="Include\Rifle.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -343,6 +345,7 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />

@@ -75,7 +75,9 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy() / 100.0f - 1.0f
 				},
 				(buttons & 0b100) != 0,
-				(buttons & 0b1000) != 0
+				(buttons & 0b1000) != 0,
+				(buttons & 0b10000) != 0,
+				(buttons & 0b100000) != 0
 			);
 			//”òs’†‚Ìƒtƒ‰ƒO
 			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;

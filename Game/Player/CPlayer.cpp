@@ -4,6 +4,7 @@
 #include "GameWaiter.h"
 #include "Wing.h"
 #include "HandGun.h"
+#include "Rifle.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem){
@@ -38,7 +39,10 @@ bool CPlayer::Start() {
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
 
-	weapon[0] = new HandGun(this, &m_model, anim_shot, anim_reload);
+	weapon[HUND_GUN] = new HandGun(this, &m_model, anim_shot, anim_reload);
+	weapon[RIFLE] = new Rifle(this, &m_model, anim_shot, anim_reload);
+	activeWeapon = HUND_GUN;
+	weapon[HUND_GUN]->Activate();
 
 	return true;
 };
@@ -48,7 +52,7 @@ void CPlayer::Update() {
 	if (GameWaiter::GetIsWait()) { return; }
 
 	if (m_hp != 0) {
-		if (!weapon[0]->isReloading()) {
+		if (!weapon[activeWeapon]->isReloading()) {
 			Move();
 			Shot();
 			Reload();
@@ -200,14 +204,23 @@ void CPlayer::Move() {
 
 void CPlayer::Shot() {
 	if (action.isShot()) {
-		weapon[0]->shot();
+		weapon[activeWeapon]->shot();
 	}
 }
 
 void CPlayer::Reload() {
 	if (action.isReload()) {
-		weapon[0]->reload();
+		weapon[activeWeapon]->reload();
 	}
+}
+
+void CPlayer::changeWeapon(unsigned char nextWeapon) {
+	if (activeWeapon == nextWeapon || nextWeapon >= WEAPON_NUM) {
+		return;
+	}
+	weapon[activeWeapon]->Inactivate();
+	weapon[nextWeapon]->Activate();
+	activeWeapon = nextWeapon;
 }
 
 void CPlayer::playSE(const wchar_t* path) {

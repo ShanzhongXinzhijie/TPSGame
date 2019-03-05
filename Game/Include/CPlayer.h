@@ -81,11 +81,11 @@ public:
 	void Revive();
 
 	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
-	static constexpr int weaponNum = 1;//武器の数
 private:
 	void Move();
 	void Shot();
 	void Reload();
+	void changeWeapon(unsigned char weapon);
 	void playSE(const wchar_t* path);
 
 	GameObj::CSkinModelRender m_model;
@@ -106,7 +106,13 @@ protected:
 	static constexpr unsigned short constHp = 10;
 	unsigned short m_hp = 10;
 	FlyWalker mover;    //動きの管理
-	Weapon* weapon[weaponNum]; //武器
+	enum {
+		HUND_GUN,
+		RIFLE,
+		WEAPON_NUM
+	};
+	unsigned char activeWeapon = -1;
+	Weapon* weapon[WEAPON_NUM]; //武器
 private:
 	Wing* wing = nullptr; //翼
 

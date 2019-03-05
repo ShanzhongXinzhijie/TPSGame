@@ -54,6 +54,9 @@ void NetPlayerCaster::PostUpdate() {
 		if (AS.isJump()) { bottuns = bottuns | 0b1; }
 		if (AS.isDash()) { bottuns = bottuns | 0b10; }
 		if (AS.isShot()) { bottuns = bottuns | 0b100; }
+		if (AS.isReload()) { bottuns = bottuns | 0b1000; }
+		if (AS.isWeaponLeft()) { bottuns = bottuns | 0b10000; }
+		if (AS.isWeaponRight()) { bottuns = bottuns | 0b100000; }
 		if (m_isReload)  { bottuns = bottuns | 0b1000; } m_isReload = false;
 		if (m_pCPlayer->isFlying()){ bottuns = bottuns | 0b10000; }
 		_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
