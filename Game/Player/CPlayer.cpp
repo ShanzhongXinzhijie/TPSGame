@@ -38,9 +38,10 @@ bool CPlayer::Start() {
 		mat->SetAlbedoScale(team->getColor());
 	});
 
-	mover.Init(30.0f, 90.0f, getPosition());
-
-	m_collision.CreateCapsule(getPosition(), CQuaternion::Identity(), 30.0f, 90.0f);
+	mover.Init(30.0f, 40.0f, getPosition());
+	CVector3 pos = getPosition();
+	pos.y += mover.GetCollider()->GetHeight() / 2 + mover.GetCollider()->GetRadius();
+	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 40.0f);
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
 
@@ -60,7 +61,9 @@ void CPlayer::Update() {
 		mover.Update();
 		m_model.SetPos(getPosition());
 		m_model.SetRot(mover.getRotation());
-		m_collision.SetPosition(getPosition());
+		CVector3 pos = getPosition();
+		pos.y += mover.GetCollider()->GetHeight()/2 + mover.GetCollider()->GetRadius();
+		m_collision.SetPosition(pos);
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
