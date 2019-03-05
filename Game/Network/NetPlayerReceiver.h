@@ -1,7 +1,8 @@
 #pragma once
 #include "NetworkConst.h"
 #include "NetPlayerCaster.h"
-#include"../Include/CPlayer.h"
+#include "CPlayer.h"
+#include "CitizenGene.h"
 #include <queue>
 
 struct OnlinePlayerStatus {
@@ -28,12 +29,13 @@ public:
 	void RunEvent(int playerNr, bool frameSkip = false);
 	//プレイヤーに情報渡す
 	void UpdatePlayer(int playerNr);
+	//市民に情報渡す
+	void UpdateCitizen();
 
 	//プレイヤー設定
 	void SetPlayer(CPlayer* pCPlayer, NetPlayerCaster* pCaster) {
 		m_pCPlayer[pCPlayer->playerNum] = pCPlayer;
 		m_pCaster[pCPlayer->playerNum] = pCaster;
-
 		//この時点までの情報渡す
 		UpdatePlayer(pCPlayer->playerNum);
 	}
@@ -46,10 +48,31 @@ public:
 		std::queue<std::tuple<NetworkEventCode, int, ExitGames::Common::Hashtable>>().swap(m_eventContentQueue[plyNum]);
 	}
 
+	//市民設定
+	void SetCitizenGene(CitizenGene* ptr) {
+		m_citizenGene = ptr;
+		if (m_citizenGene) {
+			//この時点までの情報渡す
+			UpdateCitizen();
+		}
+		else {
+			//ステータスをクリア
+			m_citizensStatus.clear();
+		}
+	}
+
 private:
 	CPlayer* m_pCPlayer[NET_MAX_PLAYER + 1] = { nullptr };
 	NetPlayerCaster* m_pCaster[NET_MAX_PLAYER + 1] = { nullptr };
 	OnlinePlayerStatus m_status[NET_MAX_PLAYER + 1];
+
+	CitizenGene* m_citizenGene = nullptr;
+	struct CitizensStatus {
+		int timeCnt = INT_MIN;
+		int plyNum = -1;
+		CVector3 pos;
+	};
+	std::unordered_map<int, CitizensStatus> m_citizensStatus;
 
 	std::queue<std::tuple<NetworkEventCode, int, ExitGames::Common::Hashtable>> m_eventContentQueue[NET_MAX_PLAYER + 1];
 };

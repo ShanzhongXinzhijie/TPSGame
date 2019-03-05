@@ -1,6 +1,7 @@
 #pragma once
 
 class CPlayer;
+class Citizen;
 
 class NetPlayerCaster : public IQSGameObject
 {
@@ -12,10 +13,14 @@ public:
 
 	void SetIsDead(bool isdead) { m_isDead = isdead; }
 
+	void SendNewKenzoku(::Citizen* pkenzoku);
+
 private:
 	CPlayer* m_pCPlayer = nullptr;
 	int m_cnt = INT_MIN;
 
 	bool m_isDead = false;
+
+	std::list<std::tuple<int, int, CVector3>> m_sendKenzokuList;
 };
 

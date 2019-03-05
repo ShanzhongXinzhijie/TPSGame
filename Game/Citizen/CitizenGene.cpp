@@ -60,6 +60,7 @@ void CitizenGene::addSpawner(const CVector3 & center, float side) {
 void CitizenGene::createCitizen(unsigned int amount) {
 	size_t spawnCount = spawnerArray.size();
 	float nowSize = allSize;
+	unsigned int id = 0;
 	for (SqSpawner* sp : spawnerArray) {
 
 		unsigned int createNum;
@@ -89,7 +90,8 @@ void CitizenGene::createCitizen(unsigned int amount) {
 			default:
 				brain = new ziguzagu();
 			}
-			Citizen* citizen = new Citizen(game->getPlayers(), brain, i);
+			Citizen* citizen = new Citizen(game->getPlayers(), brain, id); 
+			id++;
 			citizenArray.push_back(citizen);
 			citizen->setPos(sp->getPos());
 		}

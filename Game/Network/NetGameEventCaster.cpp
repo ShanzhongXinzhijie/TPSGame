@@ -42,8 +42,8 @@ void NetGameEventCaster::SendGameStart(int seed) {
 
 	//ƒQ[ƒ€ŠJn
 	ExitGames::Common::Hashtable _event;
-	_event.put((nByte)(enSeed), seed);
-	_event.put((nByte)(enSeverTime), GetPhoton()->GetSeverTime_ms());
+	_event.put<nByte, int>((nByte)(enSeed), seed);
+	_event.put<nByte, int>((nByte)(enSeverTime), GetPhoton()->GetSeverTime_ms());
 
 	GetPhoton()->Send(enMasterClientStartGame, _event, true);
 }

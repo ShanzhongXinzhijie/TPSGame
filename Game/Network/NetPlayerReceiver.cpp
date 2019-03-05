@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "NetPlayerReceiver.h"
-
+#include "Citizen.h"
 
 NetPlayerReceiver::NetPlayerReceiver()
 {
@@ -58,20 +58,23 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	{
 		//パッド入力
 		if (eventContent.getValue((nByte)enActionSender)) {
+			//ボタン入力のビットフィールドを取得
+			nByte buttons = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 5))))->getDataCopy();
+			//アクションセンダーをセット
 			m_status[playerNr].m_actionSender = ActionSender(
 				{
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 0))))->getDataCopy() / 100.0f - 1.0f,
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 1))))->getDataCopy() / 100.0f - 1.0f
 				},
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 2))))->getDataCopy(),
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 3))))->getDataCopy(),
+				(buttons & 0b1) != 0,
+				(buttons & 0b10) != 0,
 				{
-					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 5))))->getDataCopy() / 100.0f - 1.0f,
-					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 6))))->getDataCopy() / 100.0f - 1.0f,
-					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 7))))->getDataCopy() / 100.0f - 1.0f
+					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 2))))->getDataCopy() / 100.0f - 1.0f,
+					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 3))))->getDataCopy() / 100.0f - 1.0f,
+					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy() / 100.0f - 1.0f
 				},
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 4))))->getDataCopy(),
-				((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 8))))->getDataCopy()
+				(buttons & 0b100) != 0,
+				(buttons & 0b1000) != 0
 			);
 		}
 
@@ -83,6 +86,36 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enPosition + 1))))->getDataCopy(),
 				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enPosition + 2))))->getDataCopy()
 			);
+		}
+	}
+	break;
+
+	case enKenzoku:
+	{
+		//眷属化
+		int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy();
+		int i2 = 2;
+		for (int i = 0; i < num; i++) {
+			int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
+			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
+			//座標
+			CVector3 pos;
+			pos.x = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.y = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.z = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			
+			auto C = m_citizensStatus.find(id);
+			if (C == m_citizensStatus.end()) {
+				//新規作成
+				m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr, pos });
+			}
+			else {
+				//時間が新しい or 時間が同じでプレイヤー番号が大きい
+				if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
+					//上書き
+					C->second = { time, playerNr, pos };
+				}
+			}
 		}
 	}
 	break;
@@ -117,6 +150,8 @@ void NetPlayerReceiver::PreUpdate() {
 
 		//プレイヤーに情報渡す
 		UpdatePlayer(i);
+		//市民に情報渡す
+		UpdateCitizen();
 
 		//カウンター進める
 		if (!m_status[i].m_isNoReceive) { m_status[i].m_cnt++; }
@@ -130,6 +165,8 @@ void NetPlayerReceiver::PostLoopUpdate() {
 
 		//プレイヤーに情報渡す
 		UpdatePlayer(i);
+		//市民に情報渡す
+		UpdateCitizen();
 	}
 }
 
@@ -163,5 +200,26 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 			m_status[playerNr].m_isUpdateDead = false;
 		}
 
+	}
+}
+
+//市民に情報渡す
+void NetPlayerReceiver::UpdateCitizen() {
+	if (m_citizenGene) {
+		for (auto& cs : m_citizensStatus) {
+			auto citizen = m_citizenGene->GetCitizen(cs.first);
+			if (!citizen) { continue; }
+			//時間が新しい or 時間が同じでプレイヤー番号が大きい
+			if (citizen->GetLastKenzokuingCnt() < cs.second.timeCnt || citizen->GetLastKenzokuingCnt() == cs.second.timeCnt && cs.second.plyNum > citizen->GetLastKenzokuingPly()) {
+				//更新(市民の情報二種・座標)・眷属化
+				if (m_pCPlayer[cs.second.plyNum]) {
+					citizen->SetLastKenzokuingCnt(cs.second.timeCnt);
+					citizen->SetLastKenzokuingPly(cs.second.plyNum);
+					citizen->setPos(cs.second.pos);
+					citizen->ChangeToKenzoku(m_pCPlayer[cs.second.plyNum]);
+				}
+			}
+		}
+		m_citizensStatus.clear();
 	}
 }

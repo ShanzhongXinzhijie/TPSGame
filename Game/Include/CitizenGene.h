@@ -15,6 +15,10 @@ public:
 
 	void createCitizen(unsigned int amount);
 
+	Citizen* GetCitizen(unsigned int index) {
+		if (index >= citizenArray.size()) { return nullptr; }
+		return citizenArray[index];
+	}
 private:
 	/// <summary>
 	/// (updatePeriod)‰ñ‚Éˆê‰ñUpdate‚ğs‚¤

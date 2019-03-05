@@ -51,6 +51,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 
 #ifndef SpritScreen
 	m_netWork = FindGO<NetWorkManager>(L"NetWorkManager");
+	m_netWork->GetNetPlayerReceiver().SetCitizenGene(&citizenGene);
 
 	//ゲーム開始タイマー設定
 	int t = GetPhoton()->GetSeverTime_ms(); 
@@ -67,6 +68,10 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 Game::~Game() {
 	bgm->Stop();
 	delete ground;
+
+#ifndef SpritScreen
+	m_netWork->GetNetPlayerReceiver().SetCitizenGene(nullptr);
+#endif
 }
 
 void Game::Update() {

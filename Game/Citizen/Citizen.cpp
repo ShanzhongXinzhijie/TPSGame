@@ -114,6 +114,23 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 	pos.y += 60.0f;
 	new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 
+	bool canKenzokuing = false;
+#ifndef SpritScreen
+	//’ÊMŽž‚ÍŽ©•ª‚ÌáÅ‘®‰»‚¾‚¯ŽÀs
+	if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+		canKenzokuing = true;
+	}
+#else
+	canKenzokuing = true;
+#endif
+	if (canKenzokuing){
+		//áÅ‘®‰»
+		ChangeToKenzoku(player);
+	}
+	return true;
+}
+
+void Citizen::ChangeToKenzoku(CPlayer* player) {
 	if (ownerTeam != player->team) {
 		if (!isKenzoku) {
 			Kansenzyoutai();
@@ -130,8 +147,12 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 		m_modelAttack.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 			mat->SetAlbedoScale(ownerTeam->getColor());
 		});
+
+		//Ž©•ª‚ÌáÅ‘®‚É‚È‚Á‚½‚±‚Æ‚ð‘—M
+		if (player->playerNum == GetPhoton()->GetLocalPlayerNumber() && player->GetNetCaster()) {
+			player->GetNetCaster()->SendNewKenzoku(this);
+		}
 	}
-	return true;
 }
 
 void Citizen::Kansenzyoutai()
