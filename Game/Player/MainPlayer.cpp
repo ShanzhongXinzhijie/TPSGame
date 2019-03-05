@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MainPlayer.h"
 #include "ActionSender.h"
+#include "Weapon.h"
 
 MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 	:
@@ -15,17 +16,18 @@ MainPlayer::~MainPlayer() {
 }
 
 void MainPlayer::Update() {
-	CVector2 stickInput = Pad(playerNum).GetStick(enLR::L);
 
 	CVector3 moveVec;
-	//カメラ横方向の移動量
-	moveVec += m_camera.GetRight() * stickInput.x;
-
-	//カメラ前後方向の移動量
-	CVector3 front = m_camera.GetFront();
-	front.y = 0;
-	front.Normalize();
-	moveVec += front * stickInput.y;
+	{
+		CVector2 stickInput = Pad(playerNum).GetStick(enLR::L);
+		//カメラ横方向の移動量
+		moveVec += m_camera.GetRight() * stickInput.x;
+		//カメラ前後方向の移動量
+		CVector3 front = m_camera.GetFront();
+		front.y = 0;
+		front.Normalize();
+		moveVec += front * stickInput.y;
+	}
 
 	bool shot = Pad(playerNum).GetButton(enButtonRB1);
 	CVector3 look = { 0, 0, 0 };
@@ -47,9 +49,9 @@ void MainPlayer::Update() {
 
 	CPlayer::Update();
 
-	if (Pad(playerNum).GetButton(enButtonLT)) {
+	if (Pad(playerNum).GetButton(enButtonLeft)) {
 		m_camera.setLeft();
-	} else if (Pad(playerNum).GetButton(enButtonRT)) {
+	} else if (Pad(playerNum).GetButton(enButtonRight)) {
 		m_camera.setRigth();
 	}
 
@@ -65,9 +67,7 @@ void MainPlayer::PostRender() {
 	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
 
 	//弾数表示
-	wchar_t countbullet[10];
-	swprintf_s(countbullet, L"残弾%d/%d発", bulletCount, constBulletCount);
-	font.Draw(countbullet, { 0.7f, 0.9f });
+	weapon[0]->drawBulletCount(font);
 
 	//飛行ゲージ表示
 	flybar.Draw(mover.getFlyTimer(), mover.c_flyTimer);

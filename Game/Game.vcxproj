@@ -250,6 +250,7 @@
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
     <ClCompile Include="GameWaiter.cpp" />
+    <ClCompile Include="Player\Weapon\HandGun.cpp" />
     <ClCompile Include="Network\NetGameEventReceiver.cpp" />
     <ClCompile Include="Network\NetGameEventCaster.cpp" />
     <ClCompile Include="Player\Flybar.cpp" />
@@ -289,8 +290,10 @@
     <ClCompile Include="Player\TpsCamera.cpp" />
     <ClCompile Include="Citizen\ziguzagu.cpp" />
     <ClCompile Include="Player\Wing.cpp" />
+    <ClCompile Include="Player\Weapon\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
     <ClInclude Include="Include\GameWaiter.h" />
@@ -332,11 +335,13 @@
     <ClInclude Include="Include\TpsCamera.h" />
     <ClInclude Include="Include\Team.h" />
     <ClInclude Include="Include\Wing.h" />
+    <ClInclude Include="Include\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
+    <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />

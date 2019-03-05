@@ -3,6 +3,7 @@
 #include "BatBullet.h"
 #include "GameWaiter.h"
 #include "Wing.h"
+#include "HandGun.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem){
@@ -26,14 +27,6 @@ bool CPlayer::Start() {
 
 	m_model.Init(L"Resource/modelData/PlayerVanp.cmo", m_animationClips, anim_num);
 
-	m_model.GetAnimCon().GetAnimation(0).AddAnimationEventListener(
-		[&](const wchar_t* clipName, const wchar_t* eventName) {
-		if (std::wcscmp(eventName, L"Reload") == 0) {
-			onReload = false;
-			bulletCount = constBulletCount;
-		}
-	});
-
 	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 		mat->SetAlbedoScale(team->getColor());
 	});
@@ -45,6 +38,8 @@ bool CPlayer::Start() {
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
 
+	weapon[0] = new HandGun(this, &m_model, anim_shot, anim_reload);
+
 	return true;
 };
 
@@ -53,7 +48,7 @@ void CPlayer::Update() {
 	if (GameWaiter::GetIsWait()) { return; }
 
 	if (m_hp != 0) {
-		if (!onReload) {
+		if (!weapon[0]->isReloading()) {
 			Move();
 			Shot();
 			Reload();
@@ -204,50 +199,14 @@ void CPlayer::Move() {
 }
 
 void CPlayer::Shot() {
-	bool shot = false;
 	if (action.isShot()) {
-		m_model.GetAnimCon().Play(anim_shot, animInterpolateSec);
-	}
-	if (shotCool <= 0) {
-		if (action.isShot()) {
-			shot = true;
-			shotCool = constShotCool;
-		}
-	} else {
-		shotCool -= GetDeltaTimeSec();
-	}
-
-	if (shot && bulletCount > 0) {
-		playSE(L"Resource/sound/SE_shot.wav");
-		CVector3 vec = action.getLookVec() * 1800;
-		CVector3 pos = getPosition();
-		if (mover.isFlying()) {
-			vec += mover.getVelocity();
-			pos += action.getLookVec() * 100;
-		} else {
-			pos.y += 60;
-		}
-		new BatBullet(this, pos, vec);
-		
-		vec = action.getLookVec();
-
-		CQuaternion rot;
-		rot.SetRotation(CVector3::AxisY(), atan2f(vec.x, vec.z));
-		float xz = sqrt( vec.x*vec.x + vec.z*vec.z );
-		rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-vec.y, xz)));
-
-		pos += vec * 50;
-		new GameObj::Suicider::CEffekseer(L"Resource/effect/shot.efk", 1.0f, pos, rot);
-		bulletCount--;
+		weapon[0]->shot();
 	}
 }
 
 void CPlayer::Reload() {
-	if (action.isReload() && bulletCount < constBulletCount) {
-		new GameObj::Suicider::CEffekseer(L"Resource/effect/reload.efk", 1.0f, getPosition());
-		playSE(L"Resource/sound/SE_reload.wav");
-		m_model.GetAnimCon().Play(anim_reload, 0.5f);
-		onReload = true;
+	if (action.isReload()) {
+		weapon[0]->reload();
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "ActionSender.h"
 #include "Team.h"
 
+class Weapon;
 #include "../NetWork/NetPlayerCaster.h"
 
 class CPlayerCamera;
@@ -33,6 +34,10 @@ public:
 		return mover.isFlying();
 	}
 
+	CVector3 getVelocity() {
+		return mover.getVelocity();
+	}
+
 	Team* team;
 
 	const int playerNum;
@@ -55,6 +60,7 @@ public:
 	//蘇生処理
 	void Revive();
 
+	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
 private:
 	void Move();
 	void Shot();
@@ -74,15 +80,12 @@ private:
 		anim_num,
 	};
 	AnimationClip m_animationClips[anim_num];
-	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
 
 protected:
 	static constexpr unsigned short constHp = 10;
 	unsigned short m_hp = 10;
 	FlyWalker mover;    //動きの管理
-	static constexpr unsigned int constBulletCount = 50;
-	unsigned int bulletCount = constBulletCount;
-
+	Weapon* weapon[1]; //武器
 private:
 	Wing* wing = nullptr; //翼
 
@@ -91,10 +94,6 @@ private:
 
 	CQuaternion m_rot;
 	float radian = 0.0f; //回転量
-
-	static constexpr float constShotCool = 0.1f;
-	float shotCool = constShotCool;
-	bool onReload = false;
 
 	static constexpr float flyPower = 180000.0f; //飛行力
 	static constexpr float jumpPower = 600.0f; //ジャンプ力
