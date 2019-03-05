@@ -99,6 +99,7 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\Wing.FBX" />
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
+    <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

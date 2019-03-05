@@ -5,7 +5,9 @@
 
 HandGun::HandGun(CPlayer* player, GameObj::CSkinModelRender* playerModel, unsigned int shotAnim,
 				 unsigned int reloadAnim)
-	:Weapon(player, playerModel), shotAnimationNum(shotAnim), reloadAnimationNum(reloadAnim){
+	:Weapon(player, playerModel, L"Resource/modelData/HundGun.cmo"),
+	shotAnimNum(shotAnim),
+	reloadAnimNum(reloadAnim){
 
 	playerModel->GetAnimCon().GetAnimation(0).AddAnimationEventListener(
 		[&](const wchar_t* clipName, const wchar_t* eventName) {
@@ -27,7 +29,7 @@ void HandGun::PreUpdate() {
 }
 
 void HandGun::shot() {
-	playerModel->GetAnimCon().Play(shotAnimationNum, CPlayer::animInterpolateSec);
+	playerModel->GetAnimCon().Play(shotAnimNum, CPlayer::animInterpolateSec);
 
 	if (shotCool <= 0) {
 		shotCool = constShotCool;
@@ -77,7 +79,7 @@ void HandGun::reload() {
 		se->SetPos(player->getPosition());//‰¹‚ÌˆÊ’u
 		se->SetDistance(500.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
 		se->Play(true); //‘æˆêˆø”‚ðtrue
-		playerModel->GetAnimCon().Play(reloadAnimationNum, CPlayer::animInterpolateSec);
+		playerModel->GetAnimCon().Play(reloadAnimNum, CPlayer::animInterpolateSec);
 	}
 }
 

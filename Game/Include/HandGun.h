@@ -4,7 +4,7 @@
 class HandGun : public Weapon{
 public:
 	HandGun(CPlayer* player, GameObj::CSkinModelRender* playerModel,
-			unsigned int shotAnimationNum, unsigned int reloadAnimationNum);
+			unsigned int shotAnimNum, unsigned int reloadAnimNum);
 	~HandGun();
 
 	void PreUpdate() override;
@@ -13,8 +13,8 @@ public:
 	void drawBulletCount(CFont& font) override;
 
 private:
-	const unsigned int shotAnimationNum;
-	const unsigned int reloadAnimationNum;
+	const unsigned int shotAnimNum;
+	const unsigned int reloadAnimNum;
 
 	static constexpr float constShotCool = 0.1f;
 	float shotCool = constShotCool;

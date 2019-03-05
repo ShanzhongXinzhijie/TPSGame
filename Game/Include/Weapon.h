@@ -4,7 +4,10 @@ class CPlayer;
 
 class Weapon : public IGameObject{
 public:
-	Weapon(CPlayer* player, GameObj::CSkinModelRender* playerModel);
+	Weapon(CPlayer* player,
+		   GameObj::CSkinModelRender* playerModel,
+		   const wchar_t* weaponModelPath,
+		   float zoomScale = 1.0f);
 	~Weapon();
 
 	virtual void shot() = 0;
@@ -21,12 +24,15 @@ public:
 		return zoomScale;
 	}
 
+	void Update() override final;
+
 protected:
 	CPlayer* player;
 	GameObj::CSkinModelRender* playerModel;
+	GameObj::CSkinModelRender weaponModel;
 
 	bool reloading;
 
-	float zoomScale = 1.0f;
+	const float zoomScale;
 };
 
