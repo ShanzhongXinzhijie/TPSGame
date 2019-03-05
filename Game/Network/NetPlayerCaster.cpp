@@ -26,6 +26,11 @@ void NetPlayerCaster::PostUpdate() {
 
 	//自分自身なら実行
 	if (isMe) {
+		const ActionSender& AS = m_pCPlayer->GetActionSender();
+
+		//リロードの入力を記録(入力が1fしかtrueにならないため、4fに一回の送信タイミングでの取得では抜けができる)
+		if (!m_isReload) { m_isReload = AS.isReload(); }
+
 	//4Fに一回送信
 	if (m_cnt % 4 == 0) {		
 		ExitGames::Common::Hashtable _event;
@@ -34,7 +39,6 @@ void NetPlayerCaster::PostUpdate() {
 		_event.put((nByte)enFrameCount, m_cnt);
 
 		//アナログ入力
-		const ActionSender& AS = m_pCPlayer->GetActionSender();
 		_event.put((nByte)(enActionSender + 0), (nByte)(std::round(AS.getMovement().x*100.0f) + 100));
 		_event.put((nByte)(enActionSender + 1), (nByte)(std::round(AS.getMovement().y*100.0f) + 100));
 		_event.put((nByte)(enActionSender + 2), (nByte)(std::round(AS.getLookVec().x*100.0f) + 100));
@@ -45,7 +49,7 @@ void NetPlayerCaster::PostUpdate() {
 		if (AS.isJump()) { bottuns = bottuns | 0b1; }
 		if (AS.isDash()) { bottuns = bottuns | 0b10; }
 		if (AS.isShot()) { bottuns = bottuns | 0b100; }
-		if (AS.isReload()) { bottuns = bottuns | 0b1000; }
+		if (m_isReload)  { bottuns = bottuns | 0b1000; } m_isReload = false;
 		_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
 
 		//座標

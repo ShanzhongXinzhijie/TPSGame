@@ -19,6 +19,8 @@ private:
 	CPlayer* m_pCPlayer = nullptr;
 	int m_cnt = INT_MIN;
 
+	bool m_isReload = false;
+
 	bool m_isDead = false;
 
 	std::list<std::tuple<int, int, CVector3>> m_sendKenzokuList;
