@@ -19,7 +19,7 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
 	SetOffset(CVector3::AxisZ()*distance);
 	SetUp(CVector3::Up());
 	m_rot = CVector2::Zero();
-	UpdateVector();
+	UpdateVector(m_rot);
 	Update();
 	m_camera.SetFar(8000.0f);
 	//メインカメラに設定
@@ -54,8 +54,6 @@ void TpsCamera::RotationCamera(const CVector2& rot) {
 	if (m_rot.x > CMath::PI2) { m_rot.x -= CMath::PI2; }
 	if (m_rot.y < -CMath::PI / 2.1f) { m_rot.y = -CMath::PI / 2.1f; }
 	if (m_rot.y > CMath::PI/2.1f) { m_rot.y = CMath::PI/2.1f; }
-
-	UpdateVector();
 }
 
 void TpsCamera::moveLR() {
@@ -78,30 +76,36 @@ void TpsCamera::moveLR() {
 }
 
 void TpsCamera::PreUpdate() {
+	//視野角
+	float angleBias = 1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom);
+	m_camera.SetViewAngle(viewAngle * angleBias);
+
 	moveLR();
+	{//後方転回
+		CVector2 backMove;
+		if (backTurnRad > 0.0f) {
+			float rad = CMath::PI * GetDeltaTimeSec() / backTurnSpeed;
+			if (backTurnRad < rad) {
+				backMove.x += backTurnRad;
+				backTurnRad = 0.0f;
+			} else {
+				backMove.x += rad;
+				backTurnRad -= rad;
+			}
+		}
+		RotationCamera(backMove);
+	}
 	//カメラ回転
 	CVector2 stickMove = Pad(padNum).GetStick(enLR::R);
-
-	//二次関数的な入力にする
-	float len = stickMove.Length(); len = pow(len, 2.0f); //len = pow(25.0f, len)/25.0f; //len -= 1.0f;
+	float len = stickMove.Length();
+	len = pow(len, 2) * 0.04f;//二次関数的な入力にする
 	stickMove.Normalize();
-	stickMove *= len;
+	stickMove *= len * angleBias;
 	if (slow) {
 		stickMove *= 0.3f;
 	}
-
-	stickMove = stickMove * 0.05f;
-	if (backTurnRad > 0.0f) {
-		float rad = CMath::PI * GetDeltaTimeSec() / backTurnSpeed;
-		if (backTurnRad < rad) {
-			stickMove.x += backTurnRad;
-			backTurnRad = 0.0f;
-		} else {
-			stickMove.x += rad;
-			backTurnRad -= rad;
-		}
-	}
 	RotationCamera(stickMove);
+	UpdateVector(m_rot);
 
 	//カメラ更新
 	CVector3 upCamera = {0,0,0};
@@ -146,15 +150,15 @@ void TpsCamera::PostRender() {
 #endif
 }
 
-void TpsCamera::UpdateVector() {
+void TpsCamera::UpdateVector(const CVector2& rot) {
 	m_ar_offsetPos = m_offsetPos, m_ar_up = m_up;
 
 	CQuaternion cq;
-	cq.SetRotation(CVector3::AxisX(), m_rot.y);
+	cq.SetRotation(CVector3::AxisX(), rot.y);
 	cq.Multiply(m_ar_offsetPos);
 	cq.Multiply(m_ar_up);
 
-	cq.SetRotation(CVector3::AxisY(), m_rot.x);
+	cq.SetRotation(CVector3::AxisY(), rot.x);
 	cq.Multiply(m_ar_offsetPos);
 	cq.Multiply(m_ar_up);
 }
