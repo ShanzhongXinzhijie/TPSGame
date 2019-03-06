@@ -13,7 +13,7 @@ public:
 	void Update() override;
 
 private:
-	class Callback : public CW::ConvexResultCallback {
+	/*class Callback : public CW::ConvexResultCallback {
 	public:
 		bool isHit = false;
 
@@ -28,7 +28,7 @@ private:
 			}
 			return 0.0f;
 		}
-	};
+	};*/
 
 	CVector3 getHitVec() const;
 

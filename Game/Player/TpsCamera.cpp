@@ -77,8 +77,11 @@ void TpsCamera::moveLR() {
 
 void TpsCamera::PreUpdate() {
 	//Ž‹–ìŠp
-	float angleBias = 1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom);
-	m_camera.SetViewAngle(viewAngle * angleBias);
+	float angleBias = 1.0f;
+	if (!Pad(padNum).GetButton(enButtonY)) {
+		angleBias = 1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom);
+		m_camera.SetViewAngle(viewAngle * angleBias);
+	}
 
 	moveLR();
 	{//Œã•û“]‰ñ

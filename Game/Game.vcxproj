@@ -246,6 +246,7 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
@@ -259,7 +260,7 @@
     <ClCompile Include="Player\PlayerGene.cpp" />
     <ClCompile Include="Player\HPbar.cpp" />
     <ClCompile Include="Player\ActionSender.cpp" />
-    <ClCompile Include="Player\BatBullet.cpp" />
+    <ClCompile Include="Player\Bullet\BatBullet.cpp" />
     <ClCompile Include="Citizen\CircleWalk.cpp" />
     <ClCompile Include="Citizen\Citizen.cpp" />
     <ClCompile Include="Player\CPlayer.cpp" />
@@ -280,6 +281,7 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Citizen\sikakukuidou.cpp" />
     <ClCompile Include="Player\Weapon\Rifle.cpp" />
+    <ClCompile Include="Player\Bullet\RifleBullet.cpp" />
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -294,6 +296,7 @@
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
@@ -338,6 +341,7 @@
     <ClInclude Include="Include\Wing.h" />
     <ClInclude Include="Include\Weapon.h" />
     <ClInclude Include="Include\Rifle.h" />
+    <ClInclude Include="Include\RifleBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />

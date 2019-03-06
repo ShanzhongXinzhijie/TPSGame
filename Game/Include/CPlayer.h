@@ -85,7 +85,7 @@ private:
 	void Move();
 	void Shot();
 	void Reload();
-	void changeWeapon(unsigned char weapon);
+	void changeWeapon(bool left, bool Right);
 	void playSE(const wchar_t* path);
 
 	GameObj::CSkinModelRender m_model;

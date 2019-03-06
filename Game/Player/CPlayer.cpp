@@ -56,6 +56,7 @@ void CPlayer::Update() {
 			Move();
 			Shot();
 			Reload();
+			changeWeapon(action.isWeaponLeft(), action.isWeaponRight());
 		}
 		mover.Update();
 		m_model.SetPos(getPosition());
@@ -214,10 +215,14 @@ void CPlayer::Reload() {
 	}
 }
 
-void CPlayer::changeWeapon(unsigned char nextWeapon) {
-	if (activeWeapon == nextWeapon || nextWeapon >= WEAPON_NUM) {
-		return;
-	}
+void CPlayer::changeWeapon(bool left, bool right) {
+	if (!left && !right) { return; }
+	short nextWeapon = activeWeapon;
+	if (left) { nextWeapon -= 1;}
+	if (right) { nextWeapon += 1;}
+	if (nextWeapon < 0) { nextWeapon = WEAPON_NUM - 1;}
+	if (nextWeapon >= WEAPON_NUM) { nextWeapon = 0;}
+	
 	weapon[activeWeapon]->Inactivate();
 	weapon[nextWeapon]->Activate();
 	activeWeapon = nextWeapon;

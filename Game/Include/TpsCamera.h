@@ -24,8 +24,8 @@ public:
 		SetMainCamera(&m_camera);
 	}
 
-	void setZoomMagnif(float magnification) {
-		zoom = 1.0f / magnification;
+	void setZoomScale(float zoomScale) {
+		zoom = 1.0f / zoomScale;
 	}
 
 	void setLeft() {

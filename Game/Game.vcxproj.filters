@@ -45,6 +45,8 @@
     <ClInclude Include="Include\Weapon.h" />
     <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\Rifle.h" />
+    <ClInclude Include="Include\Bullet.h" />
+    <ClInclude Include="Include\RifleBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -60,7 +62,6 @@
     <ClCompile Include="Network\NetPlayerManager.cpp" />
     <ClCompile Include="Network\NetPlayerCaster.cpp" />
     <ClCompile Include="Player\ActionSender.cpp" />
-    <ClCompile Include="Player\BatBullet.cpp" />
     <ClCompile Include="Player\CPlayer.cpp" />
     <ClCompile Include="Player\TpsCamera.cpp" />
     <ClCompile Include="Player\MainPlayer.cpp" />
@@ -89,6 +90,9 @@
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Player\Weapon\HandGun.cpp" />
     <ClCompile Include="Player\Weapon\Rifle.cpp" />
+    <ClCompile Include="Player\Bullet\BatBullet.cpp" />
+    <ClCompile Include="Player\Bullet\RifleBullet.cpp" />
+    <ClCompile Include="Player\Bullet\Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

@@ -60,16 +60,20 @@ void BatBullet::Update() {
 	if (lifeTime < 0) {
 		delete this; return;
 	}
+	btVector3 startVec(beforePos.x, beforePos.y, beforePos.z);
+	btVector3 endVec(m_pos.x, m_pos.y, m_pos.z);
 	btTransform start, end;
 	start.setIdentity();
 	end.setIdentity();
-	start.setOrigin(btVector3(beforePos.x, beforePos.y, beforePos.z));
-	end.setOrigin(btVector3(m_pos.x, m_pos.y, m_pos.z));
+	start.setOrigin(startVec);
+	end.setOrigin(startVec);
 
-	Callback callback;
+	CW::ClosestConvexResultCallback callback(startVec, endVec);
+	callback.m_collisionFilterMask = ~(CCollisionObjFilter | btCollisionObject::CF_CHARACTER_OBJECT);
+
 	GetEngine().GetPhysicsWorld().ConvexSweepTest
 	((const btConvexShape*)m_collision.GetCollisionObject().getCollisionShape(), start, end, callback);
-	if (callback) {
+	if (callback.hasHit()) {
 		DeleteGO(this, false);
 	}
 }
