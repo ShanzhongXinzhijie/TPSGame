@@ -16,6 +16,9 @@ public:
 
 	virtual void reload() = 0;
 
+	virtual void setBulletCount(int) = 0;
+	virtual int  getBulletCount()const = 0;
+
 	bool isReloading() const{
 		return reloading;
 	};

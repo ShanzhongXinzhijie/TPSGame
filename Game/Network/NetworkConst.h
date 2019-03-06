@@ -19,6 +19,7 @@ enum PlayerStatusCode {
 	enFrameCount = 0,
 	enActionSender = 1,
 	enPosition = 11,
+	enBulletCnt = 20,
 };
 
 //プレイヤープロパティのキー

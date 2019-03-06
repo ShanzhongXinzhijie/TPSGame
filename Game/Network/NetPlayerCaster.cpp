@@ -3,6 +3,7 @@
 #include "CPlayer.h"
 #include "Citizen.h"
 #include "Network.h"
+#include "Weapon.h"
 
 NetPlayerCaster::NetPlayerCaster(CPlayer* pCPlayer)
 {
@@ -31,6 +32,9 @@ void NetPlayerCaster::PostUpdate() {
 		//リロードの入力を記録(入力が1fしかtrueにならないため、4fに一回の送信タイミングでの取得では抜けができる)
 		if (!m_isReload) { m_isReload = AS.isReload(); }
 
+		//弾数送信のクールダウン時間進める
+		m_coolDowmSendBulletCnt = max(m_coolDowmSendBulletCnt - 1, 0);
+
 	//4Fに一回送信
 	if (m_cnt % 4 == 0) {		
 		ExitGames::Common::Hashtable _event;
@@ -51,6 +55,16 @@ void NetPlayerCaster::PostUpdate() {
 		if (AS.isShot()) { bottuns = bottuns | 0b100; }
 		if (m_isReload)  { bottuns = bottuns | 0b1000; } m_isReload = false;
 		_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
+
+		//弾数
+		if (AS.isShot() && m_coolDowmSendBulletCnt <= 0) {//射撃するなら送る
+			const Weapon* const * weapons = m_pCPlayer->GetWeapons();
+			for (int i = 0; i < CPlayer::weaponNum; i++)
+			{
+				_event.put((nByte)(enBulletCnt + i), weapons[i]->getBulletCount());
+			}
+			m_coolDowmSendBulletCnt = 60;
+		}
 
 		//座標
 		_event.put((nByte)(enPosition + 0), (int)std::round(m_pCPlayer->getPosition().x));

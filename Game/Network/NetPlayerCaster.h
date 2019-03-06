@@ -21,6 +21,8 @@ private:
 
 	bool m_isReload = false;
 
+	int m_coolDowmSendBulletCnt = 0;
+
 	bool m_isDead = false;
 
 	std::list<std::tuple<int, int, CVector3>> m_sendKenzokuList;

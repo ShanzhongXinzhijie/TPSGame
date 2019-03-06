@@ -50,6 +50,9 @@ public:
 	bool GetIsDead()const {
 		return m_hp == 0 ? true : false;
 	}
+	Weapon** GetWeapons() {
+		return weapon;
+	}
 	//通信受信で使用
 	void SetPosition(const CVector3& pos) {
 		mover.SetPosition(pos);
@@ -61,6 +64,7 @@ public:
 	void Revive();
 
 	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
+	static constexpr int weaponNum = 1;//武器の数
 private:
 	void Move();
 	void Shot();
@@ -85,7 +89,7 @@ protected:
 	static constexpr unsigned short constHp = 10;
 	unsigned short m_hp = 10;
 	FlyWalker mover;    //動きの管理
-	Weapon* weapon[1]; //武器
+	Weapon* weapon[weaponNum]; //武器
 private:
 	Wing* wing = nullptr; //翼
 

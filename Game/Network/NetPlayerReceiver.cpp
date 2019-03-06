@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "NetPlayerReceiver.h"
 #include "Citizen.h"
+#include "Weapon.h"
 
 NetPlayerReceiver::NetPlayerReceiver()
 {
@@ -76,6 +77,15 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				(buttons & 0b100) != 0,
 				(buttons & 0b1000) != 0
 			);
+		}
+
+		//弾数
+		if (eventContent.getValue((nByte)enBulletCnt)) {
+			m_status[playerNr].m_isUpd8BulletCnt = true;
+			for (int i = 0; i < CPlayer::weaponNum; i++)
+			{
+				m_status[playerNr].m_bulletCnt[i] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enBulletCnt + i))))->getDataCopy();
+			}
 		}
 
 		//座標
@@ -177,7 +187,15 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 		if (playerNr != GetPhoton()->GetLocalPlayerNumber()) {//自分は除く
 			//アクション
 			m_pCPlayer[playerNr]->sendAction(m_status[playerNr].m_actionSender);
-
+			//弾数
+			if (m_status[playerNr].m_isUpd8BulletCnt) {
+				Weapon** w = m_pCPlayer[playerNr]->GetWeapons();
+				for (int i = 0; i < CPlayer::weaponNum; i++)
+				{
+					w[i]->setBulletCount(m_status[playerNr].m_bulletCnt[i]);
+				}
+				m_status[playerNr].m_isUpd8BulletCnt = false;
+			}
 			//座標
 			if (m_status[playerNr].m_isUpdatePos) {
 				m_pCPlayer[playerNr]->SetPosition(m_status[playerNr].m_pos);

@@ -11,6 +11,13 @@ public:
 	void shot() override;
 	void reload() override;
 	void drawBulletCount(CFont& font) override;
+	
+	void setBulletCount(int cnt)override {
+		bulletCount = cnt;
+	}
+	int getBulletCount()const override {
+		return bulletCount;
+	}
 
 private:
 	const unsigned int shotAnimNum;
