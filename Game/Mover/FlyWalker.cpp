@@ -39,8 +39,10 @@ void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
 void FlyWalker::flyStop() {
 	velocity *= 0.5f;
 	flying = false;
-	se->Stop();
-	se = nullptr;
+	if (se) {
+		se->Stop();
+		se = nullptr;
+	}
 }
 
 CQuaternion FlyWalker::getRotation() {

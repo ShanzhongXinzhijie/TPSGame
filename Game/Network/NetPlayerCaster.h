@@ -21,6 +21,7 @@ private:
 
 	bool m_isReload = false;
 
+	int m_coolDowmSendFlyTimer = 0;
 	int m_coolDowmSendBulletCnt = 0;
 
 	bool m_isDead = false;

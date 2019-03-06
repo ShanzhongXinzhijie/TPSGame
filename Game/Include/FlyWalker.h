@@ -11,7 +11,7 @@ public:
 
 	CQuaternion getRotation();
 
-	float getFlyTimer() {
+	float getFlyTimer() const{
 		return flyTimer;
 	}
 	float getFlyTimerMax() const{
@@ -21,6 +21,13 @@ public:
 	bool isFlying() {
 		return flying;
 	}
+	float GetFlyPower()const {
+		return flyPower;
+	}
+
+	//通信受信で使う
+	void SetIsFly(bool f) { flying = f; }
+	void SetFlyPower(float p) { flyPower = p; }
 
 	//飛行可能時間をセットする
 	void SetFlyTimer(float timer) { flyTimer = timer; }

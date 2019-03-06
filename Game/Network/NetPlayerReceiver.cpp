@@ -77,6 +77,14 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				(buttons & 0b100) != 0,
 				(buttons & 0b1000) != 0
 			);
+			//飛行中のフラグ
+			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;
+		}
+
+		//フライ情報
+		if (eventContent.getValue((nByte)enFlyTimer)) {
+			m_status[playerNr].m_isUpd8FlyTimer = true;
+			m_status[playerNr].m_flyTimer = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enFlyTimer)))->getDataCopy();
 		}
 
 		//弾数
@@ -97,6 +105,15 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enPosition + 2))))->getDataCopy()
 			);
 		}
+		//ベロシティ
+		if (eventContent.getValue((nByte)enVelocity)) {
+			m_status[playerNr].m_isUpd8Velocity = true;
+			m_status[playerNr].m_velocity.Set(
+				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enVelocity + 0))))->getDataCopy(),
+				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enVelocity + 1))))->getDataCopy(),
+				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enVelocity + 2))))->getDataCopy()
+			);
+		}
 	}
 	break;
 
@@ -110,9 +127,9 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
 			//座標
 			CVector3 pos;
-			pos.x = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			pos.y = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			pos.z = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+			pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
 			
 			auto C = m_citizensStatus.find(id);
 			if (C == m_citizensStatus.end()) {
@@ -187,6 +204,18 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 		if (playerNr != GetPhoton()->GetLocalPlayerNumber()) {//自分は除く
 			//アクション
 			m_pCPlayer[playerNr]->sendAction(m_status[playerNr].m_actionSender);
+			//フライ情報
+			if (m_status[playerNr].m_isUpd8FlyTimer) {
+				m_pCPlayer[playerNr]->SetFlyTimer(m_status[playerNr].m_flyTimer);
+				m_status[playerNr].m_isUpd8FlyTimer = false;
+			}
+			//飛行フラグ
+			if (m_status[playerNr].m_isFly) {
+				if (!m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->fly(); }
+			}
+			else {
+				if ( m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->flyStop(); }
+			}
 			//弾数
 			if (m_status[playerNr].m_isUpd8BulletCnt) {
 				Weapon** w = m_pCPlayer[playerNr]->GetWeapons();
@@ -200,6 +229,11 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 			if (m_status[playerNr].m_isUpdatePos) {
 				m_pCPlayer[playerNr]->SetPosition(m_status[playerNr].m_pos);
 				m_status[playerNr].m_isUpdatePos = false;
+			}
+			//ベロシティ
+			if (m_status[playerNr].m_isUpd8Velocity) {
+				m_pCPlayer[playerNr]->SetVelocity(m_status[playerNr].m_velocity);
+				m_status[playerNr].m_isUpd8Velocity = false;
 			}
 		}
 

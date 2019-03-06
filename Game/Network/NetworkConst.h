@@ -18,7 +18,9 @@ enum NetworkEventCode {
 enum PlayerStatusCode {
 	enFrameCount = 0,
 	enActionSender = 1,
+	enFlyTimer = 10,
 	enPosition = 11,
+	enVelocity = 14,
 	enBulletCnt = 20,
 };
 

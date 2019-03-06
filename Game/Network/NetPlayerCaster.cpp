@@ -32,7 +32,8 @@ void NetPlayerCaster::PostUpdate() {
 		//リロードの入力を記録(入力が1fしかtrueにならないため、4fに一回の送信タイミングでの取得では抜けができる)
 		if (!m_isReload) { m_isReload = AS.isReload(); }
 
-		//弾数送信のクールダウン時間進める
+		//クールダウン時間進める
+		m_coolDowmSendFlyTimer = max(m_coolDowmSendFlyTimer - 1, 0);
 		m_coolDowmSendBulletCnt = max(m_coolDowmSendBulletCnt - 1, 0);
 
 	//4Fに一回送信
@@ -48,13 +49,20 @@ void NetPlayerCaster::PostUpdate() {
 		_event.put((nByte)(enActionSender + 2), (nByte)(std::round(AS.getLookVec().x*100.0f) + 100));
 		_event.put((nByte)(enActionSender + 3), (nByte)(std::round(AS.getLookVec().y*100.0f) + 100));
 		_event.put((nByte)(enActionSender + 4), (nByte)(std::round(AS.getLookVec().z*100.0f) + 100));
-		//ボタン入力
+		//ボタン入力・フラグ
 		nByte bottuns = 0;
 		if (AS.isJump()) { bottuns = bottuns | 0b1; }
 		if (AS.isDash()) { bottuns = bottuns | 0b10; }
 		if (AS.isShot()) { bottuns = bottuns | 0b100; }
 		if (m_isReload)  { bottuns = bottuns | 0b1000; } m_isReload = false;
+		if (m_pCPlayer->isFlying()){ bottuns = bottuns | 0b10000; }
 		_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
+
+		//フライ情報
+		if (m_pCPlayer->isFlying() && m_coolDowmSendFlyTimer <= 0) {
+			_event.put((nByte)enFlyTimer, (int)m_pCPlayer->getFlyTimer());
+			m_coolDowmSendFlyTimer = 60;
+		}
 
 		//弾数
 		if (AS.isShot() && m_coolDowmSendBulletCnt <= 0) {//射撃するなら送る
@@ -70,6 +78,11 @@ void NetPlayerCaster::PostUpdate() {
 		_event.put((nByte)(enPosition + 0), (int)std::round(m_pCPlayer->getPosition().x));
 		_event.put((nByte)(enPosition + 1), (int)std::round(m_pCPlayer->getPosition().y));
 		_event.put((nByte)(enPosition + 2), (int)std::round(m_pCPlayer->getPosition().z));
+
+		//ベロシティ 
+		_event.put((nByte)(enVelocity + 0), (int)std::round(m_pCPlayer->getVelocity().x));
+		_event.put((nByte)(enVelocity + 1), (int)std::round(m_pCPlayer->getVelocity().y));
+		_event.put((nByte)(enVelocity + 2), (int)std::round(m_pCPlayer->getVelocity().z));
 
 		//送信
 		GetPhoton()->Send(enPlayerStatus, _event);		

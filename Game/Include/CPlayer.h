@@ -33,6 +33,9 @@ public:
 	bool isFlying() {
 		return mover.isFlying();
 	}
+	float getFlyPower()const {
+		return mover.GetFlyPower();
+	}
 
 	CVector3 getVelocity() {
 		return mover.getVelocity();
@@ -47,6 +50,9 @@ public:
 	const ActionSender& GetActionSender()const {
 		return action;
 	}
+	float getFlyTimer()const {
+		return mover.getFlyTimer();
+	}
 	bool GetIsDead()const {
 		return m_hp == 0 ? true : false;
 	}
@@ -56,6 +62,17 @@ public:
 	//通信受信で使用
 	void SetPosition(const CVector3& pos) {
 		mover.SetPosition(pos);
+	}
+	void SetVelocity(const CVector3& vel) {
+		mover.SetVelocity(vel);
+	}
+	void SetIsFly(bool f) { mover.SetIsFly(f); }
+	void SetFlyTimer(float p) { mover.SetFlyTimer(p); }
+	void fly() {
+		mover.fly(true, action.getLookVec(), flyPower);
+	}
+	void flyStop() {
+		mover.flyStop();
 	}
 
 	//死亡処理
