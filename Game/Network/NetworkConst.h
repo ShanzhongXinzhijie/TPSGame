@@ -4,10 +4,10 @@ static const int NET_MAX_PLAYER = 20;
 
 enum NetworkEventCode {
 	enPlayerEventStart,
-	enPlayerStatus = 1,
+	enNormal = 1,
 	enKillPlayer,
 	enPlayerDeadOrAlive,
-	enKenzoku,
+	enReliable,
 	enPlayerEventEnd,
 
 	enMasterClientEventStart,
@@ -22,6 +22,9 @@ enum PlayerStatusCode {
 	enPosition = 11,
 	enVelocity = 14,
 	enBulletCnt = 20,
+	enZombiePosAvg = 120,
+	enZombiePosSync = 121,
+	enZombiePos = 122,
 };
 
 //プレイヤープロパティのキー

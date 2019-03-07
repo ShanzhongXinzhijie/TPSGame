@@ -55,7 +55,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 
 	switch (eventCode){
 
-	case enPlayerStatus:
+	case enNormal:
 	{
 		//パッド入力
 		if (eventContent.getValue((nByte)enActionSender)) {
@@ -116,10 +116,41 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				(float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enVelocity + 2))))->getDataCopy()
 			);
 		}
+
+		//市民位置
+		int offset = 0;
+		if (eventContent.getValue((nByte)enZombiePosAvg)) {
+			int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enZombiePosAvg)))->getDataCopy();
+			for (int i = 0; i < num; i++) {
+				//id
+				int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				//座標
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				m_citizenPosListAvg.emplace_back(std::make_pair(id,pos));
+			}
+		}
+		if (eventContent.getValue((nByte)enZombiePosSync)) {
+			int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enZombiePosSync)))->getDataCopy();
+			for (int i = 0; i < num; i++) {
+				//id
+				int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				//時間
+				int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				//座標
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				m_citizenPosListSync.emplace_back(std::make_tuple(id, pos, playerNr, time));
+			}
+		}
 	}
 	break;
 
-	case enKenzoku:
+	case enReliable:
 	{
 		//眷属化
 		int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy();
@@ -275,5 +306,28 @@ void NetPlayerReceiver::UpdateCitizen() {
 			}
 		}
 		m_citizensStatus.clear();
+
+		//位置平均
+		for (auto& cs : m_citizenPosListAvg) {
+			auto citizen = m_citizenGene->GetCitizen(cs.first);
+			if (!citizen) { continue; }
+			//更新
+			citizen->setPos((citizen->getPos() + cs.second)*0.5f);
+		}
+		m_citizenPosListAvg.clear();
+
+		//位置同期
+		for (auto& cs : m_citizenPosListSync) {
+			auto citizen = m_citizenGene->GetCitizen(std::get<0>(cs));
+			if (!citizen) { continue; }
+			//時間が新しい or 時間が同じでプレイヤー番号が大きいか等しい
+			if (citizen->GetTargetCnt() < std::get<3>(cs) || citizen->GetTargetCnt() == std::get<3>(cs) && std::get<2>(cs) >= citizen->GetTargetPly()) {
+				//更新
+				citizen->setPos(std::get<1>(cs));
+				citizen->SetTargetPly(std::get<2>(cs));
+				citizen->SetTargetCnt(std::get<3>(cs));
+			}
+		}
+		m_citizenPosListSync.clear();
 	}
 }

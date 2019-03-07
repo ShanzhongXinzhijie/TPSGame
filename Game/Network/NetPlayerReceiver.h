@@ -62,6 +62,8 @@ public:
 		else {
 			//ステータスをクリア
 			m_citizensStatus.clear();
+			m_citizenPosListAvg.clear();
+			m_citizenPosListSync.clear();
 		}
 	}
 
@@ -77,6 +79,8 @@ private:
 		CVector3 pos;
 	};
 	std::unordered_map<int, CitizensStatus> m_citizensStatus;
+	std::list<std::pair<int, CVector3>> m_citizenPosListAvg;
+	std::list<std::tuple<int, CVector3, int, int>> m_citizenPosListSync;
 
 	std::queue<std::tuple<NetworkEventCode, int, ExitGames::Common::Hashtable>> m_eventContentQueue[NET_MAX_PLAYER + 1];
 };

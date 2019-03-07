@@ -16,6 +16,8 @@ public:
 
 	void SendNewKenzoku(::Citizen* pkenzoku);
 
+	int GetCnt()const { return m_cnt; }
+
 private:
 	CPlayer* m_pCPlayer = nullptr;
 	int m_cnt = INT_MIN;

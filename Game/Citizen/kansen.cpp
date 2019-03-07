@@ -34,6 +34,16 @@ void kansen::Update(bool isOnGround, float deltaTime)
 			if (kyori.Length() < 300.0f) {
 				walk = kyori;
 				rot.SetRotation(CVector3::AxisY(), kaiten);
+
+#ifndef SpritScreen
+				//Ž©•ª’Ç‚¢‚©‚¯‚é‚È‚çˆÊ’u“¯Šú
+				if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+					citizen->SetIsSend(true);
+					citizen->SetIsAvg(false);
+					citizen->SetTargetPly(player->playerNum);
+					citizen->SetTargetCnt(player->GetNetCaster()->GetCnt());
+				}
+#endif
 				break;
 			}
 		}

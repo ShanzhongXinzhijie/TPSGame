@@ -36,6 +36,16 @@ void Citizennigeru::Update(bool isOnGround, float deltaTime)
 			kyori2 *= 500;
 			walk = kyori2;
 			rot.SetRotation(CVector3::AxisY(), kaiten);
+
+#ifndef SpritScreen
+			//Ž©•ª‚©‚ç“¦‚°‚é‚È‚çˆÊ’u“¯Šú
+			if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+				citizen->SetIsSend(true);
+				citizen->SetIsAvg(false);
+				citizen->SetTargetPly(player->playerNum);
+				citizen->SetTargetCnt(player->GetNetCaster()->GetCnt());
+			}
+#endif
 			break;
 		}
 	}

@@ -39,6 +39,43 @@ void NetPlayerCaster::PostUpdate() {
 		m_coolDowmSendFlyTimer = max(m_coolDowmSendFlyTimer - 1, 0);
 		m_coolDowmSendBulletCnt = max(m_coolDowmSendBulletCnt - 1, 0);
 
+		//確実な送信
+		{
+			ExitGames::Common::Hashtable _event;
+			//フレーム番号
+			_event.put((nByte)enFrameCount, m_cnt);
+
+			bool isSend = false;
+
+			//12Fに一回送信
+			if (m_cnt % 12 == 0) {
+				//眷属化を送信
+				if (m_sendKenzokuList.size() > 0) {
+					_event.put((nByte)1, (int)m_sendKenzokuList.size());//総数
+					int i = 2;
+					for (auto& K : m_sendKenzokuList) {
+						_event.put(i, std::get<0>(K)); i++;//ID
+						_event.put(i, std::get<1>(K)); i++;//時間
+						//座標
+						const CVector3& pos = m_citizenGene->GetCitizen(std::get<0>(K))->getPos();
+						_event.put(i, (int)pos.x); i++;
+						_event.put(i, (int)pos.y); i++;
+						_event.put(i, (int)pos.z); i++;
+						//今回は以後送信しない
+						m_citizenGene->GetCitizen(std::get<0>(K))->SetIsSend(false);
+					}
+					m_sendKenzokuList.clear();
+
+					isSend = true;
+				}
+			}
+
+			//確実な送信
+			if (isSend) {
+				GetPhoton()->Send(enReliable, _event, true);
+			}
+		}
+
 		//確実でない送信
 		{
 			ExitGames::Common::Hashtable _event;
@@ -95,54 +132,66 @@ void NetPlayerCaster::PostUpdate() {
 				isSend = true;
 			}
 
-			//12Fに一回送信
-			if (m_cnt % 12 == 0) {
-				//自分に関わる市民・ゾンビの位置
-				//かぶったらプレイヤー番号大きい方
+			//36Fに一回送信
+			if (m_cnt % 36 == 0) {
+				//市民・ゾンビの位置
+				int citiNum = m_citizenGene->GetCitizenNum();
+				int offset = 0;
+				bool isCiti = false;
 
-				//位置の近い市民・ゾンビの位置
-				//平均で適応
-			
-				isSend = true;
+				//位置平均するやつら
+				int avgNum = 0; 
+				for (int i = 0; i < citiNum; i++) {
+					Citizen* C = m_citizenGene->GetCitizen(i);
+					if (C->GetIsSend()) {
+						isCiti = true;
+						//位置平均
+						if (C->GetIsAvg()) {
+							_event.put(((int)enZombiePos + offset), i); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().x)); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().y)); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().z)); offset++;
+							avgNum++;
+							//もう送らない
+							C->SetIsSend(false);
+							isSend = true;
+						}
+					}
+				}	
+				if(avgNum > 0){
+					//数
+					_event.put((nByte)enZombiePosAvg, avgNum);
+				}
+				if(isCiti){
+				//位置同期するやつら
+				int syncNum = 0;
+				for (int i = 0; i < citiNum; i++) {
+					Citizen* C = m_citizenGene->GetCitizen(i);
+					if (C->GetIsSend()) {
+						//位置同期
+						if (!C->GetIsAvg()) {
+							_event.put(((int)enZombiePos + offset), i); offset++;
+							_event.put(((int)enZombiePos + offset), m_cnt); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().x)); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().y)); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().z)); offset++;
+							syncNum++;
+							//もう送らない
+							C->SetIsSend(false);
+							isSend = true;
+						}
+					}
+				}
+				if (syncNum > 0) {
+					//数
+					_event.put((nByte)enZombiePosSync, syncNum);
+				}
+				}
 			}
 
 			//送信
 			if (isSend) {
-				GetPhoton()->Send(enPlayerStatus, _event);
-			}
-		}
-		//確実な送信
-		{
-			ExitGames::Common::Hashtable _event;
-			//フレーム番号
-			_event.put((nByte)enFrameCount, m_cnt);
-
-			bool isSend = false;
-
-			//12Fに一回送信
-			if (m_cnt % 12 == 0) {			
-				//眷属化を送信
-				if (m_sendKenzokuList.size() > 0) {				
-					_event.put((nByte)1, (int)m_sendKenzokuList.size());//総数
-					int i = 2;
-					for (auto& K : m_sendKenzokuList) {
-						_event.put(i, std::get<0>(K)); i++;//ID
-						_event.put(i, std::get<1>(K)); i++;//時間
-						//座標
-						const CVector3& pos = m_citizenGene->GetCitizen(std::get<0>(K))->getPos();
-						_event.put(i, (int)pos.x); i++;
-						_event.put(i, (int)pos.y); i++;
-						_event.put(i, (int)pos.z); i++;
-					}
-					m_sendKenzokuList.clear();		
-
-					isSend = true;
-				}			
-			}
-
-			//確実な送信
-			if (isSend) {
-				GetPhoton()->Send(enKenzoku, _event, true);
+				GetPhoton()->Send(enNormal, _event);
 			}
 		}
 	}

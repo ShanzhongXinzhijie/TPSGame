@@ -19,6 +19,10 @@ public:
 		if (index >= citizenArray.size()) { return nullptr; }
 		return citizenArray[index];
 	}
+	size_t GetCitizenNum()const {
+		return citizenArray.size();
+	}
+
 private:
 	/// <summary>
 	/// (updatePeriod)‰ñ‚Éˆê‰ñUpdate‚ğs‚¤

@@ -79,10 +79,23 @@ private:
 	unsigned char nowFlame = 0;
 	unsigned char updateFlame = 0;
 
-	//通信用
+//////通信用
+	bool m_isSend = false, m_sendType_Avg = false;
+	int m_targetply = -1, m_targetCnt = INT_MIN;
+	//眷属化系
 	int m_lastKenzokuingCnt = INT_MIN;//最後に眷属化したタイミング
 	int m_lastKenzokuingPly = -1;//最後に眷属化させたプレイヤー
 public:
+	void SetIsSend(bool issend) { m_isSend = issend; }
+	bool GetIsSend()const { return m_isSend; }
+	void SetIsAvg(bool is) { m_sendType_Avg = is; }
+	bool GetIsAvg()const { return m_sendType_Avg; }
+	void SetTargetPly(int playerNum) { m_targetply = playerNum; }
+	int GetTargetPly()const { return m_targetply; }
+	void SetTargetCnt(int cnt) { m_targetCnt = cnt; }
+	int GetTargetCnt()const { return m_targetCnt; }
+
+	//眷属化系
 	void SetLastKenzokuingCnt(int cnt) {
 		m_lastKenzokuingCnt = cnt;
 	}
