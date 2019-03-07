@@ -58,6 +58,10 @@ private:
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
 
 	bool attacking = false;
+	const unsigned int attackPower = 200;
+
+	const unsigned int maxHp = 250;
+	unsigned int m_hp = maxHp;
 
 	CCharacterController charaCon;
 	ICitizenBrain* mover;

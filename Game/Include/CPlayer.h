@@ -25,7 +25,7 @@ public:
 
 	bool BatHit(Bullet* bullet);
 
-	void Hit(const CVector3& dir);
+	void Hit(const CVector3& dir, unsigned int damage);
 
 	const btCollisionObject* getCollisionObj() {
 		return &m_collision.GetCollisionObject();
@@ -104,8 +104,8 @@ private:
 	AnimationClip m_animationClips[anim_num];
 
 protected:
-	static constexpr unsigned short constHp = 10;
-	unsigned short m_hp = 10;
+	static constexpr unsigned short maxHp = 1000;
+	unsigned short m_hp = maxHp;
 	FlyWalker mover;    //ìÆÇ´ÇÃä«óù
 	enum {
 		HUND_GUN,

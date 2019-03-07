@@ -14,6 +14,9 @@ CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 
 CPlayer::~CPlayer() {
 	delete wing;
+	for (Weapon* wp : weapon) {
+		delete wp;
+	}
 }
 
 bool CPlayer::Start() {
@@ -81,22 +84,29 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 }
 
 bool CPlayer::BatHit(Bullet* bullet) {
-	if (bullet->getShooter()->team != this->team) {
-		Hit(bullet->getHitVec());
-		return true;
+	CPlayer* shooter = bullet->getShooter();
+	if (shooter == this) {
+		return false;
 	}
-	return false;
+	unsigned int damage = 0;
+	if (shooter->team != this->team) {
+		damage = bullet->getDamage();
+	}
+	Hit(bullet->getHitVec(), damage);
+	return true;
 }
 
-void CPlayer::Hit(const CVector3 & dir) {
+void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 	if (m_hp != 0) {
 		CVector3&& pos = getPosition();
 		pos.y += 60.0f;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 		playSE(L"Resource/sound/SE_damage.wav");
 		mover.addVelocity(dir);
-		m_hp--;
-		if (m_hp == 0) {
+		if (m_hp > damage) {
+			m_hp -= damage;
+		} else {
+			m_hp = 0;
 			Death();
 		}
 	}
@@ -110,7 +120,7 @@ void CPlayer::Death() {
 }
 //ëhê∂èàóù
 void CPlayer::Revive() {
-	m_hp = constHp;
+	m_hp = maxHp;
 	m_model.SetIsDraw(true);
 }
 

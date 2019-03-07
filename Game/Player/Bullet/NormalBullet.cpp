@@ -5,8 +5,9 @@
 
 using SuicideObj::CCollisionObj;
 
-NormalBullet::NormalBullet(CPlayer* player,CVector3 position, CVector3 direction, const wchar_t* modelPath)
-	: Bullet(player, position, direction, modelPath){
+NormalBullet::NormalBullet(CPlayer* player,CVector3 position, CVector3 direction,
+						   const wchar_t* modelPath, unsigned int damage)
+	: Bullet(player, position, direction, modelPath, damage){
 }
 
 

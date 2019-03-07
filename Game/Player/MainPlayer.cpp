@@ -85,7 +85,7 @@ void MainPlayer::Update() {
 
 void MainPlayer::PostRender() {
 	//HP•\Ž¦
-	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
+	hpbar.Draw(CPlayer::m_hp, CPlayer::maxHp);
 
 	//’e”•\Ž¦
 	weapon[activeWeapon]->drawBulletCount(font);

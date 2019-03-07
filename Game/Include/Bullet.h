@@ -7,10 +7,14 @@ class Bullet : public IGameObject {
 	using CW = btCollisionWorld;
 
 public:
-	Bullet(CPlayer* player, CVector3 position, CVector3 direction, const wchar_t* modelPath);
+	Bullet(CPlayer* player, CVector3 position, CVector3 direction,
+		   const wchar_t* modelPath, unsigned int damage);
 	~Bullet();
 	void Update() override;
 
+	unsigned int getDamage() {
+		return damage;
+	}
 	CVector3 getHitVec() const;
 	CPlayer* getShooter() {
 		return shotPlayer;
@@ -26,6 +30,8 @@ private:
 	CVector3 m_dir;
 	float lifeTime = 5;
 	CPlayer* const shotPlayer;
+
+	unsigned int damage;
 
 	SuicideObj::CCollisionObj m_collision;
 };

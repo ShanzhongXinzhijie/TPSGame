@@ -13,7 +13,7 @@ HandGun::~HandGun() {
 }
 
 Bullet* HandGun::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
-	return new NormalBullet(player, pos, dir*3000.0f, L"Resource/modelData/Bat.cmo");
+	return new NormalBullet(player, pos, dir*3000.0f, L"Resource/modelData/Bat.cmo", 84);
 }
 
 WeaponInfo HandGun::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {

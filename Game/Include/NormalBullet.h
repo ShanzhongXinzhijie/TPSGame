@@ -6,7 +6,8 @@ class CPlayer;
 
 class NormalBullet : public Bullet{
 public:
-	NormalBullet(CPlayer* player, CVector3 position, CVector3 direction, const wchar_t* modelPath);
+	NormalBullet(CPlayer* player, CVector3 position, CVector3 direction,
+				 const wchar_t* modelPath, unsigned int damage);
 	~NormalBullet();
 };
 
