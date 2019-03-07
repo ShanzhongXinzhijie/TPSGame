@@ -146,13 +146,13 @@ void Game::PostRender() {
 
 	if (m_waitGameStartTimer_sec > 0.0f) {
 		wchar_t countDisp[24];
-		swprintf_s(countDisp, L"ŠJŽn‚Ü‚Å...%.1f•b", m_waitGameStartTimer_sec);
+		swprintf_s(countDisp, L"Ready... %.1f sec", m_waitGameStartTimer_sec);
 		font.Draw(countDisp, { 0.5f, 0.5f }, CVector4::White(), CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None,0.0f);
 		return;
 	}
 
-	wchar_t countDisp[10];
-	swprintf_s(countDisp, L"Žc‚è%.1f•b", timer);
+	wchar_t countDisp[20];
+	swprintf_s(countDisp, L"Time: %.1f sec", timer);
 	font.Draw(countDisp, { 0.1f, 0.05f });
 }
 

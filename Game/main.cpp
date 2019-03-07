@@ -24,6 +24,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	NetWorkManager networkManager;
 	networkManager.SetName(L"NetWorkManager");
 
+	CFont::LoadDefaultFont(L"Preset/Font/default.spritefont");
+
 	Fade fade;
 
 	new Title(&fade);
