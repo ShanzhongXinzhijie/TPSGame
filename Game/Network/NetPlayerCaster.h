@@ -2,11 +2,12 @@
 
 class CPlayer;
 class Citizen;
+class CitizenGene;
 
 class NetPlayerCaster : public IQSGameObject
 {
 public:
-	NetPlayerCaster(CPlayer* pCPlayer);
+	NetPlayerCaster(CPlayer* pCPlayer, CitizenGene* citizenGene);
 	~NetPlayerCaster();
 
 	void PostUpdate() override;
@@ -26,6 +27,7 @@ private:
 
 	bool m_isDead = false;
 
-	std::list<std::tuple<int, int, CVector3>> m_sendKenzokuList;
+	CitizenGene* m_citizenGene = nullptr;
+	std::list<std::pair<int, int>> m_sendKenzokuList;
 };
 
