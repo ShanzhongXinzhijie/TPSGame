@@ -13,7 +13,7 @@ public:
 	NetPlayerManager();
 	~NetPlayerManager();
 
-	void Init(Game* pGame);
+	void Init(Game* pGame, CitizenGene* citizenGene);
 
 	void Update()override;
 	void PostRender()override;
@@ -25,6 +25,7 @@ private:
 	void CreatePlayer(int playerNr);
 	
 	Game* m_game = nullptr;
+	CitizenGene* m_citizenGene = nullptr;
 	NetPlayerReceiver* m_netReceiver = nullptr;
 	std::unordered_map<int, NetPlayerCaster*> m_playerCastersMap;
 

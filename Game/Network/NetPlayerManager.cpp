@@ -40,8 +40,9 @@ void NetPlayerManager::LeaveEventAction(int playerNr, bool isInactive) {
 	m_game->removePlayer(playerNr);
 }
 
-void NetPlayerManager::Init(Game* pGame) {
+void NetPlayerManager::Init(Game* pGame, CitizenGene* citizenGene) {
 	m_game = pGame;
+	m_citizenGene = citizenGene;
 	m_netReceiver = &FindGO<NetWorkManager>(L"NetWorkManager")->GetNetPlayerReceiver();
 
 	const ExitGames::Common::JVector<ExitGames::LoadBalancing::Player*>& players = GetPhoton()->GetPlayers();
@@ -75,7 +76,7 @@ void NetPlayerManager::CreatePlayer(int playerNr) {
 		}
 		//ƒvƒŒƒCƒ„[ì¬
 		m_game->createPlayer(isMe, playerNr);
-		m_playerCastersMap[playerNr] = new NetPlayerCaster(m_game->getPlayer(playerNr));
+		m_playerCastersMap[playerNr] = new NetPlayerCaster(m_game->getPlayer(playerNr), m_citizenGene);
 		m_netReceiver->SetPlayer(m_game->getPlayer(playerNr), m_playerCastersMap[playerNr]);
 	}
 }

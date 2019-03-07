@@ -33,7 +33,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	createPlayer(true, 1);
 #else
 	//プレイヤーマネージャーの初期化(プレイヤーの作成)
-	m_netPlayerManager.Init(this);
+	m_netPlayerManager.Init(this, &citizenGene);
 #endif
 
 	//乱数同期

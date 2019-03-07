@@ -4,12 +4,15 @@
 #include "Citizen.h"
 #include "Network.h"
 #include "Weapon.h"
+#include "CitizenGene.h"
 
-NetPlayerCaster::NetPlayerCaster(CPlayer* pCPlayer)
+NetPlayerCaster::NetPlayerCaster(CPlayer* pCPlayer, CitizenGene* citizenGene)
 {
 	m_pCPlayer = pCPlayer;
 	m_pCPlayer->SetNetCaster(this);
 	m_isDead = m_pCPlayer->GetIsDead();
+
+	m_citizenGene = citizenGene;
 }
 
 NetPlayerCaster::~NetPlayerCaster()
@@ -84,6 +87,9 @@ void NetPlayerCaster::PostUpdate() {
 		_event.put((nByte)(enVelocity + 1), (int)std::round(m_pCPlayer->getVelocity().y));
 		_event.put((nByte)(enVelocity + 2), (int)std::round(m_pCPlayer->getVelocity().z));
 
+		//自分に関わる市民・ゾンビの位置
+
+
 		//送信
 		GetPhoton()->Send(enPlayerStatus, _event);		
 	}
@@ -100,13 +106,14 @@ void NetPlayerCaster::PostUpdate() {
 				_event.put(i, std::get<0>(K)); i++;//ID
 				_event.put(i, std::get<1>(K)); i++;//時間
 				//座標
-				_event.put(i, (int)std::get<2>(K).x); i++;
-				_event.put(i, (int)std::get<2>(K).y); i++;
-				_event.put(i, (int)std::get<2>(K).z); i++;
+				const CVector3& pos = m_citizenGene->GetCitizen(std::get<0>(K))->getPos();
+				_event.put(i, (int)pos.x); i++;
+				_event.put(i, (int)pos.y); i++;
+				_event.put(i, (int)pos.z); i++;
 			}
 			m_sendKenzokuList.clear();
 
-			//送信
+			//確実な送信
 			GetPhoton()->Send(enKenzoku, _event, true);
 		}
 	}
@@ -142,7 +149,7 @@ void NetPlayerCaster::PostUpdate() {
 }
 
 void NetPlayerCaster::SendNewKenzoku(::Citizen* pkenzoku) {
-	m_sendKenzokuList.emplace_back(std::make_tuple((int)pkenzoku->GetUniqueID(), m_cnt, pkenzoku->getPos()));
+	m_sendKenzokuList.emplace_back(std::make_pair((int)pkenzoku->GetUniqueID(), m_cnt));
 	pkenzoku->SetLastKenzokuingCnt(m_cnt);
-	pkenzoku->SetLastKenzokuingPly(m_cnt);
+	pkenzoku->SetLastKenzokuingPly(GetPhoton()->GetLocalPlayerNumber());
 }
