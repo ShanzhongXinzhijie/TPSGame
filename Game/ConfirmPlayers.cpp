@@ -79,7 +79,7 @@ bool ConfirmPlayers::Start() {
 			default:
 				break;
 			}
-			wstr += L"中村";
+			wstr += L"NAKAMURA";
 			break;
 		}
 		min += 1.0f / 8.0f;
@@ -261,10 +261,10 @@ void ConfirmPlayers::PostRender() {
 			bool isMine = false;
 			if (players[i]->getNumber() == GetPhoton()->GetLocalPlayerNumber()) {
 				isMine = true;
-				list.values.back() += L" <<自分";
+				list.values.back() += L" <<It's me";
 			}
 			if (players[i]->getIsMasterClient()) {
-				list.values.back() += L" <<ﾏｽｸﾗ";
+				list.values.back() += L" <<マスクラ";
 			}
 
 			const ExitGames::Common::Hashtable& eventContent = players[i]->getCustomProperties();
@@ -286,14 +286,14 @@ void ConfirmPlayers::PostRender() {
 		}
 	}
 	else if (GetPhoton()->GetState() == PhotonNetworkLogic::DISCONNECTED) {
-		list.values.emplace_back(L"切断\n");
+		list.values.emplace_back(L"disconnect\n");
 		list.values.back() += m_netWork->GetErrorMessage();
 	}
 	else {
 #ifdef SpritScreen
 		list.values.emplace_back(L"オフラインモード");
 #else
-		list.values.emplace_back(L"接続中...\n");
+		list.values.emplace_back(L"Connecting...\n");
 		list.values.back() += m_netWork->GetErrorMessage();
 #endif
 	}
@@ -311,7 +311,7 @@ void ConfirmPlayers::PostRender() {
 		}
 #endif
 		wchar_t str[128];
-		swprintf_s(str, L"制限時間:%.1f\n人口:%d", m_timeLimit, m_citizenCnt);
+		swprintf_s(str, L"Time:%.1f\nCitizen:%d", m_timeLimit, m_citizenCnt);
 		m_font.Draw(str, { 1.0f,0.0f }, CVector4::White(), CVector2::One(), { 1.0f,0.0f });
 	}
 }

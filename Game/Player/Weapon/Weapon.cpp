@@ -97,7 +97,7 @@ void Weapon::Update() {
 }
 
 void Weapon::drawBulletCount(CFont & font) {
-	wchar_t countbullet[10];
-	swprintf_s(countbullet, L"Žc’e%d/%d”­", bulletCount, maxBullet);
+	wchar_t countbullet[20];
+	swprintf_s(countbullet, L"Bullet: %d / %d", bulletCount, maxBullet);
 	font.Draw(countbullet, { 0.7f, 0.9f });
 }

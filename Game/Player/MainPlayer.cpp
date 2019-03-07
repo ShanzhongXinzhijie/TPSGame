@@ -95,7 +95,7 @@ void MainPlayer::PostRender() {
 	flybar.setPosition({ 1270.0f,120.0f });
 
 	//Ž©ƒ`[ƒ€‚ÌáÅ‘°”‚Ì•\Ž¦
-	wchar_t countDisp[8];
-	swprintf_s(countDisp, L"áÅ‘°%d‘Ì", team->getZombieCount());
+	wchar_t countDisp[12];
+	swprintf_s(countDisp, L"Zombie:%d", team->getZombieCount());
 	font.Draw(countDisp, { 0.1f, 0.1f });
 }

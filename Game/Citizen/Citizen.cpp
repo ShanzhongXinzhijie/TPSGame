@@ -121,7 +121,7 @@ bool Citizen::BatHit(Bullet* bullet) {
 		if (m_hp > bullet->getDamage()) {
 			m_hp -= bullet->getDamage();
 		} else {
-			m_hp = 0;
+			m_hp = maxHp;
 
 			bool canKenzokuing = false;
 #ifndef SpritScreen
