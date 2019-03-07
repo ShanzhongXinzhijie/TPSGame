@@ -82,6 +82,11 @@ public:
 	void Revive();
 
 	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
+	enum {//武器の列挙
+		HUND_GUN,
+		RIFLE,
+		WEAPON_NUM
+	};
 private:
 	void Move();
 	void Shot();
@@ -107,11 +112,6 @@ protected:
 	static constexpr unsigned short maxHp = 1000;
 	unsigned short m_hp = maxHp;
 	FlyWalker mover;    //動きの管理
-	enum {
-		HUND_GUN,
-		RIFLE,
-		WEAPON_NUM
-	};
 	unsigned char activeWeapon = -1;
 	Weapon* weapon[WEAPON_NUM]; //武器
 private:

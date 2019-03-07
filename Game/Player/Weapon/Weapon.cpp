@@ -64,7 +64,6 @@ void Weapon::shot() {
 	float xz = sqrt(vec.x*vec.x + vec.z*vec.z);
 	rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-vec.y, xz)));
 
-	pos += vec * 50;
 	new GameObj::Suicider::CEffekseer(L"Resource/effect/shot.efk", 1.0f, pos, rot);
 	bulletCount--;
 }

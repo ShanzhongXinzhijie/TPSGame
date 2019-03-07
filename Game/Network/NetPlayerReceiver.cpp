@@ -76,8 +76,8 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				},
 				(buttons & 0b100) != 0,
 				(buttons & 0b1000) != 0,
-				(buttons & 0b10000) != 0,
-				(buttons & 0b100000) != 0
+				(buttons & 0b100000) != 0,
+				(buttons & 0b1000000) != 0
 			);
 			//îÚçsíÜÇÃÉtÉâÉO
 			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;
@@ -92,7 +92,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 		//íeêî
 		if (eventContent.getValue((nByte)enBulletCnt)) {
 			m_status[playerNr].m_isUpd8BulletCnt = true;
-			for (int i = 0; i < CPlayer::weaponNum; i++)
+			for (int i = 0; i < CPlayer::WEAPON_NUM; i++)
 			{
 				m_status[playerNr].m_bulletCnt[i] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enBulletCnt + i))))->getDataCopy();
 			}
@@ -221,7 +221,7 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 			//íeêî
 			if (m_status[playerNr].m_isUpd8BulletCnt) {
 				Weapon** w = m_pCPlayer[playerNr]->GetWeapons();
-				for (int i = 0; i < CPlayer::weaponNum; i++)
+				for (int i = 0; i < CPlayer::WEAPON_NUM; i++)
 				{
 					w[i]->setBulletCount(m_status[playerNr].m_bulletCnt[i]);
 				}

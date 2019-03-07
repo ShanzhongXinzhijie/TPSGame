@@ -35,12 +35,16 @@ public:
 		weaponModel.SetIsDraw(false);
 	}
 
-	virtual void setBulletCount(int) = 0;
-	virtual int  getBulletCount()const = 0;
+	void setBulletCount(int bulletCount) {
+		this->bulletCount = bulletCount;
+	}
+	int getBulletCount()const {
+		return bulletCount;
+	}
 
 	bool isReloading() const{
 		return reloading;
-	};
+	}
 
 	float getZoomScale() const {
 		return zoomScale;

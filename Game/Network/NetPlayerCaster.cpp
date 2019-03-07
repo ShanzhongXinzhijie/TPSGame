@@ -54,11 +54,10 @@ void NetPlayerCaster::PostUpdate() {
 		if (AS.isJump()) { bottuns = bottuns | 0b1; }
 		if (AS.isDash()) { bottuns = bottuns | 0b10; }
 		if (AS.isShot()) { bottuns = bottuns | 0b100; }
-		if (AS.isReload()) { bottuns = bottuns | 0b1000; }
-		if (AS.isWeaponLeft()) { bottuns = bottuns | 0b10000; }
-		if (AS.isWeaponRight()) { bottuns = bottuns | 0b100000; }
 		if (m_isReload)  { bottuns = bottuns | 0b1000; } m_isReload = false;
 		if (m_pCPlayer->isFlying()){ bottuns = bottuns | 0b10000; }
+		if (AS.isWeaponLeft()) { bottuns = bottuns | 0b100000; }
+		if (AS.isWeaponRight()) { bottuns = bottuns | 0b1000000; }
 		_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
 
 		//ƒtƒ‰ƒCî•ñ
@@ -70,7 +69,7 @@ void NetPlayerCaster::PostUpdate() {
 		//’e”
 		if (AS.isShot() && m_coolDowmSendBulletCnt <= 0) {//ËŒ‚‚·‚é‚È‚ç‘—‚é
 			const Weapon* const * weapons = m_pCPlayer->GetWeapons();
-			for (int i = 0; i < CPlayer::weaponNum; i++)
+			for (int i = 0; i < CPlayer::WEAPON_NUM; i++)
 			{
 				_event.put((nByte)(enBulletCnt + i), weapons[i]->getBulletCount());
 			}
