@@ -2,6 +2,7 @@
 #include "Citizen.h"
 #include "ICitizenBrain.h"
 #include "kansen.h"
+#include "Bullet.h"
 #include "GameWaiter.h"
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 #include "CollisionMaskConst.h"
@@ -108,24 +109,34 @@ void Citizen::Update() {
 	}
 }
 
-bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
+bool Citizen::BatHit(Bullet* bullet) {
 	playSE(L"Resource/sound/SE_damage.wav");
-	CVector3&& pos = getPos();
+	CVector3 pos = getPos();
 	pos.y += 60.0f;
 	new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 
-	bool canKenzokuing = false;
+	//自チームの攻撃はダメージを受けない
+	if (ownerTeam != bullet->getShooter()->team) {
+
+		if (m_hp > bullet->getDamage()) {
+			m_hp -= bullet->getDamage();
+		} else {
+			m_hp = 0;
+
+			bool canKenzokuing = false;
 #ifndef SpritScreen
-	//通信時は自分の眷属化だけ実行
-	if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
-		canKenzokuing = true;
-	}
+			//通信時は自分の眷属化だけ実行
+			if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+				canKenzokuing = true;
+			}
 #else
-	canKenzokuing = true;
+			canKenzokuing = true;
 #endif
-	if (canKenzokuing){
-		//眷属化
-		ChangeToKenzoku(player);
+			if (canKenzokuing) {
+				//眷属化
+				ChangeToKenzoku(bullet->getShooter());
+			}
+		}
 	}
 	return true;
 }
@@ -235,7 +246,7 @@ void Citizen::Attack() {
 			if (!ownerTeam->hasPlayer(p)) {
 				CVector3 v = vec * 20;
 				v.y += 200;
-				p->Hit(v);
+				p->Hit(v, attackPower);
 				atkCol->Delete();
 			}
 		}

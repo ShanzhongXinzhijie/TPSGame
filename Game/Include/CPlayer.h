@@ -4,9 +4,10 @@
 #include "ActionSender.h"
 #include "Team.h"
 
-class Weapon;
 #include "../NetWork/NetPlayerCaster.h"
 
+class Weapon;
+class Bullet;
 class CPlayerCamera;
 class Wing;
 
@@ -22,9 +23,9 @@ public:
 
 	void sendAction(const ActionSender& action);
 
-	bool BatHit(CPlayer* player,const CVector3& dir);
+	bool BatHit(Bullet* bullet);
 
-	void Hit(const CVector3& dir);
+	void Hit(const CVector3& dir, unsigned int damage);
 
 	const btCollisionObject* getCollisionObj() {
 		return &m_collision.GetCollisionObject();
@@ -81,11 +82,16 @@ public:
 	void Revive();
 
 	static constexpr float animInterpolateSec = 0.2f;        //アニメーション補間時間
-	static constexpr int weaponNum = 1;//武器の数
+	enum {//武器の列挙
+		HUND_GUN,
+		RIFLE,
+		WEAPON_NUM
+	};
 private:
 	void Move();
 	void Shot();
 	void Reload();
+	void changeWeapon(bool left, bool Right);
 	void playSE(const wchar_t* path);
 
 	GameObj::CSkinModelRender m_model;
@@ -103,10 +109,11 @@ private:
 	AnimationClip m_animationClips[anim_num];
 
 protected:
-	static constexpr unsigned short constHp = 10;
-	unsigned short m_hp = 10;
+	static constexpr unsigned short maxHp = 1000;
+	unsigned short m_hp = maxHp;
 	FlyWalker mover;    //動きの管理
-	Weapon* weapon[weaponNum]; //武器
+	unsigned char activeWeapon = -1;
+	Weapon* weapon[WEAPON_NUM]; //武器
 private:
 	Wing* wing = nullptr; //翼
 

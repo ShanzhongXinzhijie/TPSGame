@@ -18,5 +18,8 @@ private:
 	CFont font;
 	TpsCamera m_camera;
 	Flybar flybar;
+
+	bool triggerL = false;
+	bool triggerR = false;
 };
 

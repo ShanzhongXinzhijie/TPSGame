@@ -246,6 +246,7 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
     <ClCompile Include="Citizen\CitizenGene.cpp" />
@@ -259,7 +260,7 @@
     <ClCompile Include="Player\PlayerGene.cpp" />
     <ClCompile Include="Player\HPbar.cpp" />
     <ClCompile Include="Player\ActionSender.cpp" />
-    <ClCompile Include="Player\BatBullet.cpp" />
+    <ClCompile Include="Player\Bullet\NormalBullet.cpp" />
     <ClCompile Include="Citizen\CircleWalk.cpp" />
     <ClCompile Include="Citizen\Citizen.cpp" />
     <ClCompile Include="Player\CPlayer.cpp" />
@@ -279,6 +280,7 @@
     <ClCompile Include="Network\Network.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Citizen\sikakukuidou.cpp" />
+    <ClCompile Include="Player\Weapon\Rifle.cpp" />
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -293,6 +295,7 @@
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
@@ -303,7 +306,7 @@
     <ClInclude Include="Include\CitizenGene.h" />
     <ClInclude Include="Include\HPbar.h" />
     <ClInclude Include="Include\ActionSender.h" />
-    <ClInclude Include="Include\BatBullet.h" />
+    <ClInclude Include="Include\NormalBullet.h" />
     <ClInclude Include="Include\CircleWalk.h" />
     <ClInclude Include="Include\Citizen.h" />
     <ClInclude Include="Include\CPlayer.h" />
@@ -336,6 +339,7 @@
     <ClInclude Include="Include\Team.h" />
     <ClInclude Include="Include\Wing.h" />
     <ClInclude Include="Include\Weapon.h" />
+    <ClInclude Include="Include\Rifle.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -343,6 +347,8 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
+    <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
+    <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />

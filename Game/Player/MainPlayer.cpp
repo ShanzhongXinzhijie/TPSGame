@@ -38,12 +38,32 @@ void MainPlayer::Update() {
 	} else {
 		look = m_camera.getLook();
 	}
+
+	bool weaponLeft = false;
+	bool weaponRight = false;
+	if (Pad(playerNum).GetButton(enButtonY)) {
+		if (Pad(playerNum).GetTrigger(enLR::L) > 0.2f) {
+			weaponLeft = !triggerL;
+			triggerL = true;
+		} else {
+			triggerL = false;
+		}
+		if (Pad(playerNum).GetTrigger(enLR::R) > 0.2f) {
+			weaponRight = !triggerR;
+			triggerR = true;
+		} else {
+			triggerR = false;
+		}
+	}
+
 	ActionSender action({ moveVec.x,moveVec.z },
 						Pad(playerNum).GetDown(enButtonA),
 						Pad(playerNum).GetButton(enButtonLB1),
 						look,
 						shot,
-						Pad(playerNum).GetDown(enButtonX));
+						Pad(playerNum).GetDown(enButtonX),
+						weaponLeft,
+						weaponRight);
 
 	CPlayer::sendAction(action);
 
@@ -58,16 +78,17 @@ void MainPlayer::Update() {
 	if (Pad(playerNum).GetButton(enButtonDown)) {
 		m_camera.BackTurn();
 	}
+	m_camera.setZoomScale(weapon[activeWeapon]->getZoomScale());
 	m_camera.setSlow(shot);
 	m_camera.SetTarget(CPlayer::getPosition(), !CPlayer::isFlying());
 }
 
 void MainPlayer::PostRender() {
 	//HP表示
-	hpbar.Draw(CPlayer::m_hp, CPlayer::constHp);
+	hpbar.Draw(CPlayer::m_hp, CPlayer::maxHp);
 
 	//弾数表示
-	weapon[0]->drawBulletCount(font);
+	weapon[activeWeapon]->drawBulletCount(font);
 
 	//飛行ゲージ表示
 	flybar.Draw(mover.getFlyTimer(), mover.c_flyTimer);

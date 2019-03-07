@@ -4,6 +4,7 @@
 #include "InstancingCitizenColorManager.h"
 
 class ICitizenBrain;
+class Bullet;
 
 class Citizen : public IGameObject{
 public:
@@ -21,7 +22,7 @@ public:
 		return charaCon.GetPosition();
 	}
 
-	bool BatHit(CPlayer* player, CVector3 dir);
+	bool BatHit(Bullet* bullet);
 	
 	void ChangeToKenzoku(CPlayer* player);//眷属化
 
@@ -57,6 +58,10 @@ private:
 	static constexpr float animInterpolateSec = 0.2f;    //アニメーション補間時間
 
 	bool attacking = false;
+	const unsigned int attackPower = 200;
+
+	const unsigned int maxHp = 250;
+	unsigned int m_hp = maxHp;
 
 	CCharacterController charaCon;
 	ICitizenBrain* mover;

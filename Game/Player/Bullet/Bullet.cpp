@@ -1,21 +1,14 @@
 #include "stdafx.h"
-#include "BatBullet.h"
+#include "Bullet.h"
 #include "CPlayer.h"
 #include "Citizen.h"
 
 using SuicideObj::CCollisionObj;
 
-BatBullet::BatBullet(CPlayer* player,CVector3 position, CVector3 direction)
-	: m_pos(position), m_dir(direction), shotPlayer(player){
-}
-
-
-BatBullet::~BatBullet() {
-
-}
-
-bool BatBullet::Start() {
-	m_model.Init(L"Resource/modelData/Bat.cmo");
+Bullet::Bullet(CPlayer* player, CVector3 position, CVector3 direction,
+			   const wchar_t* modelPath, unsigned int damage)
+	: m_pos(position), m_dir(direction), shotPlayer(player), damage(damage){
+	m_model.Init(modelPath);
 	m_model.SetPos(m_pos);
 
 	//モデル回転
@@ -31,50 +24,59 @@ bool BatBullet::Start() {
 
 	//コリジョン初期化
 	m_collision.CreateSphere(m_pos, CQuaternion::Identity(), 20.0f);
-	m_collision.SetName(L"BatBullet");
+	m_collision.SetName(L"Bullet");
 	m_collision.SetClass(this);
 
 	//弾がヒットした時の処理
-	m_collision.SetCallback([&](CCollisionObj::SCallbackParam& callback){
+	m_collision.SetCallback([&](CCollisionObj::SCallbackParam& callback) {
 		if (callback.EqualName(L"CPlayer")) {
-			if (callback.GetClass<CPlayer>()->BatHit(shotPlayer, getHitVec())) {
+			if (callback.GetClass<CPlayer>()->BatHit(this)) {
 				DeleteGO(this, false);
 			}
 
 		} else if (callback.EqualName(L"Citizen")) {
-			if (callback.GetClass<Citizen>()->BatHit(shotPlayer, getHitVec())) {
+			if (callback.GetClass<Citizen>()->BatHit(this)) {
 				DeleteGO(this, false);
 			}
 		}
 	});
-
-	return true;
 }
 
-void BatBullet::Update() {
-	CVector3 beforePos = m_pos;
-	m_pos += m_dir * GetDeltaTimeSec();
-	m_model.SetPos(m_pos);
-	m_collision.SetPosition(m_pos);
+
+Bullet::~Bullet() {
+
+}
+
+void Bullet::Update() {
 	lifeTime -= GetDeltaTimeSec();
 	if (lifeTime < 0) {
 		delete this; return;
 	}
+
+	CVector3 beforePos = m_pos;
+	m_pos += m_dir * GetDeltaTimeSec();
+	m_model.SetPos(m_pos);
+	m_collision.SetPosition(m_pos);
+
+	btVector3 startVec(beforePos.x, beforePos.y, beforePos.z);
+	btVector3 endVec(m_pos.x, m_pos.y, m_pos.z);
 	btTransform start, end;
 	start.setIdentity();
 	end.setIdentity();
-	start.setOrigin(btVector3(beforePos.x, beforePos.y, beforePos.z));
-	end.setOrigin(btVector3(m_pos.x, m_pos.y, m_pos.z));
+	start.setOrigin(startVec);
+	end.setOrigin(endVec);
 
-	Callback callback;
+	CW::ClosestConvexResultCallback callback(startVec, endVec);
+	callback.m_collisionFilterMask = 2;
+
 	GetEngine().GetPhysicsWorld().ConvexSweepTest
 	((const btConvexShape*)m_collision.GetCollisionObject().getCollisionShape(), start, end, callback);
-	if (callback) {
+	if (callback.hasHit()) {
 		DeleteGO(this, false);
 	}
 }
 
-CVector3 BatBullet::getHitVec() const{
+CVector3 Bullet::getHitVec() const {
 	CVector3 v = m_dir;
 	v.Normalize();
 	v *= 100;

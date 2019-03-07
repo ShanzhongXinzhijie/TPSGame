@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "CPlayer.h"
-#include "BatBullet.h"
 #include "GameWaiter.h"
 #include "Wing.h"
 #include "HandGun.h"
+#include "Rifle.h"
+#include "Bullet.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem){
@@ -13,6 +14,9 @@ CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 
 CPlayer::~CPlayer() {
 	delete wing;
+	for (Weapon* wp : weapon) {
+		delete wp;
+	}
 }
 
 bool CPlayer::Start() {
@@ -38,7 +42,10 @@ bool CPlayer::Start() {
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
 
-	weapon[0] = new HandGun(this, &m_model, anim_shot, anim_reload);
+	weapon[HUND_GUN] = new HandGun(this, &m_model, anim_shot, anim_reload);
+	weapon[RIFLE] = new Rifle(this, &m_model, anim_shot, anim_reload);
+	activeWeapon = HUND_GUN;
+	weapon[HUND_GUN]->Activate();
 
 	return true;
 };
@@ -48,10 +55,11 @@ void CPlayer::Update() {
 	if (GameWaiter::GetIsWait()) { return; }
 
 	if (m_hp != 0) {
-		if (!weapon[0]->isReloading()) {
+		if (!weapon[activeWeapon]->isReloading()) {
 			Move();
 			Shot();
 			Reload();
+			changeWeapon(action.isWeaponLeft(), action.isWeaponRight());
 		}
 		mover.Update();
 		m_model.SetPos(getPosition());
@@ -75,23 +83,30 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
 
-bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
-	if (this != player) {
-		Hit(dir);
-		return true;
+bool CPlayer::BatHit(Bullet* bullet) {
+	CPlayer* shooter = bullet->getShooter();
+	if (shooter == this) {
+		return false;
 	}
-	return false;
+	unsigned int damage = 0;
+	if (shooter->team != this->team) {
+		damage = bullet->getDamage();
+	}
+	Hit(bullet->getHitVec(), damage);
+	return true;
 }
 
-void CPlayer::Hit(const CVector3 & dir) {
+void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 	if (m_hp != 0) {
 		CVector3&& pos = getPosition();
 		pos.y += 60.0f;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 		playSE(L"Resource/sound/SE_damage.wav");
 		mover.addVelocity(dir);
-		m_hp--;
-		if (m_hp == 0) {
+		if (m_hp > damage) {
+			m_hp -= damage;
+		} else {
+			m_hp = 0;
 			Death();
 		}
 	}
@@ -105,7 +120,7 @@ void CPlayer::Death() {
 }
 //‘h¶ˆ—
 void CPlayer::Revive() {
-	m_hp = constHp;
+	m_hp = maxHp;
 	m_model.SetIsDraw(true);
 }
 
@@ -200,14 +215,27 @@ void CPlayer::Move() {
 
 void CPlayer::Shot() {
 	if (action.isShot()) {
-		weapon[0]->shot();
+		weapon[activeWeapon]->shot();
 	}
 }
 
 void CPlayer::Reload() {
 	if (action.isReload()) {
-		weapon[0]->reload();
+		weapon[activeWeapon]->reload();
 	}
+}
+
+void CPlayer::changeWeapon(bool left, bool right) {
+	if (!left && !right) { return; }
+	short nextWeapon = activeWeapon;
+	if (left) { nextWeapon -= 1;}
+	if (right) { nextWeapon += 1;}
+	if (nextWeapon < 0) { nextWeapon = WEAPON_NUM - 1;}
+	if (nextWeapon >= WEAPON_NUM) { nextWeapon = 0;}
+	
+	weapon[activeWeapon]->Inactivate();
+	weapon[nextWeapon]->Activate();
+	activeWeapon = nextWeapon;
 }
 
 void CPlayer::playSE(const wchar_t* path) {
