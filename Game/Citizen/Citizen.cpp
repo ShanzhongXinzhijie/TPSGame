@@ -2,6 +2,7 @@
 #include "Citizen.h"
 #include "ICitizenBrain.h"
 #include "kansen.h"
+#include "Bullet.h"
 #include "GameWaiter.h"
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 #include "CollisionMaskConst.h"
@@ -108,7 +109,7 @@ void Citizen::Update() {
 	}
 }
 
-bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
+bool Citizen::BatHit(Bullet* bullet) {
 	playSE(L"Resource/sound/SE_damage.wav");
 	CVector3&& pos = getPos();
 	pos.y += 60.0f;
@@ -117,7 +118,7 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 	bool canKenzokuing = false;
 #ifndef SpritScreen
 	//’ÊMŽž‚ÍŽ©•ª‚ÌáÅ‘®‰»‚¾‚¯ŽÀs
-	if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+	if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
 		canKenzokuing = true;
 	}
 #else
@@ -125,7 +126,7 @@ bool Citizen::BatHit(CPlayer* player, CVector3 dir) {
 #endif
 	if (canKenzokuing){
 		//áÅ‘®‰»
-		ChangeToKenzoku(player);
+		ChangeToKenzoku(bullet->getShooter());
 	}
 	return true;
 }

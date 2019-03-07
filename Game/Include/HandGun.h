@@ -8,6 +8,7 @@ public:
 	~HandGun();
 
 private:
+	Bullet* createBullet(CPlayer* player, CVector3 pos, CVector3 dir) override;
 	static WeaponInfo getInfo(unsigned int shotAnim, unsigned int reloadAnim);
 };
 

@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Include\ActionSender.h" />
-    <ClInclude Include="Include\BatBullet.h" />
     <ClInclude Include="Include\Citizen.h" />
     <ClInclude Include="Include\ConfirmPlayers.h" />
     <ClInclude Include="Include\CPlayer.h" />
@@ -46,7 +45,7 @@
     <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\Rifle.h" />
     <ClInclude Include="Include\Bullet.h" />
-    <ClInclude Include="Include\RifleBullet.h" />
+    <ClInclude Include="Include\NormalBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -90,9 +89,8 @@
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Player\Weapon\HandGun.cpp" />
     <ClCompile Include="Player\Weapon\Rifle.cpp" />
-    <ClCompile Include="Player\Bullet\BatBullet.cpp" />
-    <ClCompile Include="Player\Bullet\RifleBullet.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
+    <ClCompile Include="Player\Bullet\NormalBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -107,6 +105,7 @@
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
+    <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

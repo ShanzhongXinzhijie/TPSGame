@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "CPlayer.h"
-#include "BatBullet.h"
 #include "GameWaiter.h"
 #include "Wing.h"
 #include "HandGun.h"
 #include "Rifle.h"
+#include "Bullet.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem){
@@ -80,9 +80,9 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
 
-bool CPlayer::BatHit(CPlayer* player, const CVector3& dir) {
-	if (this != player) {
-		Hit(dir);
+bool CPlayer::BatHit(Bullet* bullet) {
+	if (bullet->getShooter()->team != this->team) {
+		Hit(bullet->getHitVec());
 		return true;
 	}
 	return false;

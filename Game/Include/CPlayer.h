@@ -4,9 +4,10 @@
 #include "ActionSender.h"
 #include "Team.h"
 
-class Weapon;
 #include "../NetWork/NetPlayerCaster.h"
 
+class Weapon;
+class Bullet;
 class CPlayerCamera;
 class Wing;
 
@@ -22,7 +23,7 @@ public:
 
 	void sendAction(const ActionSender& action);
 
-	bool BatHit(CPlayer* player,const CVector3& dir);
+	bool BatHit(Bullet* bullet);
 
 	void Hit(const CVector3& dir);
 

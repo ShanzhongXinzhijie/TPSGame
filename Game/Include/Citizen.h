@@ -4,6 +4,7 @@
 #include "InstancingCitizenColorManager.h"
 
 class ICitizenBrain;
+class Bullet;
 
 class Citizen : public IGameObject{
 public:
@@ -21,7 +22,7 @@ public:
 		return charaCon.GetPosition();
 	}
 
-	bool BatHit(CPlayer* player, CVector3 dir);
+	bool BatHit(Bullet* bullet);
 	
 	void ChangeToKenzoku(CPlayer* player);//แล‘ฎป
 

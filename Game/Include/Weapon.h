@@ -1,6 +1,7 @@
 #pragma once
 
 class CPlayer;
+class Bullet;
 
 struct WeaponInfo{
 	const wchar_t* modelPath;
@@ -50,6 +51,8 @@ public:
 	void Update() override;
 
 protected:
+	virtual Bullet* createBullet(CPlayer* player, CVector3 pos, CVector3 dir) = 0;
+
 	CPlayer* player;
 	GameObj::CSkinModelRender* playerModel;
 	GameObj::CSkinModelRender weaponModel;

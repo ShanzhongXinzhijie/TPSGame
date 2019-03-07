@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Weapon.h"
 #include "CPlayer.h"
-#include "BatBullet.h"
+#include "Bullet.h"
 
 Weapon::Weapon(CPlayer* player,GameObj::CSkinModelRender* playerModel,const WeaponInfo& info)
 	: player(player), playerModel(playerModel),
@@ -44,16 +44,19 @@ void Weapon::shot() {
 	se->Play(true); //‘æˆêˆø”‚ğtrue
 
 	//’e‚ğŒü‚«(•ûŒü)‚ÆêŠ‚ğw’è‚µ‚Ä”­Ë
-	CVector3 vec = action.getLookVec() * 5000;
+	CVector3 vec = action.getLookVec();
 	if (player->isFlying()) {
-		vec += player->getVelocity();
 		pos += action.getLookVec() * 100;
 	} else {
+		pos += action.getLookVec() * 50;
 		pos.y += 60;
 	}
-	new BatBullet(player, pos, vec);
 
-	vec = action.getLookVec();
+	Bullet* bullet = createBullet(player, pos, vec);
+
+	if (player->isFlying()) {
+		bullet->addVelocity(player->getVelocity());
+	}
 
 	//’e‚ÌŒü‚«(‰ñ“])‚ğİ’è
 	CQuaternion rot;
