@@ -61,6 +61,8 @@ void Citizen::Update() {
 	//ゲームがウェイト状態なら終わる
 	if (GameWaiter::GetIsWait()) { return; }
 
+	m_netCnt++;//通信用カウンタ進める
+
 	deltaTime += GetDeltaTimeSec();
 	if (0 == nowFlame || nowFlame == updateFlame) {
 
@@ -110,13 +112,8 @@ void Citizen::Update() {
 
 #ifndef SpritScreen
 	//距離がプレイヤー(自分)に近いと位置同期
-	if (!m_isSend && (playersMap.at(GetPhoton()->GetLocalPlayerNumber())->getPosition() - getPos()).LengthSq() < 100.0f*100.0f) {
-		//m_isSend = true; 
-		//m_sendType_Avg = true;
-		SetIsSend(true);
-		SetIsAvg(false);
-		SetTargetPly(GetPhoton()->GetLocalPlayerNumber());
-		SetTargetCnt(playersMap.at(GetPhoton()->GetLocalPlayerNumber())->GetNetCaster()->GetCnt());
+	if ((playersMap.at(GetPhoton()->GetLocalPlayerNumber())->getPosition() - getPos()).LengthSq() < 100.0f*100.0f) {
+		playersMap.at(GetPhoton()->GetLocalPlayerNumber())->GetNetCaster()->SendSyncCitizen(this);
 	}
 #endif
 }

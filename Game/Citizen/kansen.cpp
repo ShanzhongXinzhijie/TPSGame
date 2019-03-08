@@ -38,10 +38,7 @@ void kansen::Update(bool isOnGround, float deltaTime)
 #ifndef SpritScreen
 				//Ž©•ª’Ç‚¢‚©‚¯‚é‚È‚çˆÊ’u“¯Šú
 				if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
-					citizen->SetIsSend(true);
-					citizen->SetIsAvg(false);
-					citizen->SetTargetPly(player->playerNum);
-					citizen->SetTargetCnt(player->GetNetCaster()->GetCnt());
+					player->GetNetCaster()->SendSyncCitizen(citizen);
 				}
 #endif
 				break;

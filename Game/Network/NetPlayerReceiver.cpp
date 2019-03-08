@@ -150,7 +150,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	}
 	break;
 
-	case enReliable:
+	case enKenzoku:
 	{
 		//眷属化
 		int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy();
@@ -291,6 +291,7 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 //市民に情報渡す
 void NetPlayerReceiver::UpdateCitizen() {
 	if (m_citizenGene) {
+		//眷属化
 		for (auto& cs : m_citizensStatus) {
 			auto citizen = m_citizenGene->GetCitizen(cs.first);
 			if (!citizen) { continue; }
@@ -312,6 +313,7 @@ void NetPlayerReceiver::UpdateCitizen() {
 			auto citizen = m_citizenGene->GetCitizen(cs.first);
 			if (!citizen) { continue; }
 			//更新
+			//citizen->SetIsSend(false);
 			citizen->setPos((citizen->getPos() + cs.second)*0.5f);
 		}
 		m_citizenPosListAvg.clear();
@@ -323,6 +325,7 @@ void NetPlayerReceiver::UpdateCitizen() {
 			//時間が新しい or 時間が同じでプレイヤー番号が大きいか等しい
 			if (citizen->GetTargetCnt() < std::get<3>(cs) || citizen->GetTargetCnt() == std::get<3>(cs) && std::get<2>(cs) >= citizen->GetTargetPly()) {
 				//更新
+				citizen->SetIsSend(false);
 				citizen->setPos(std::get<1>(cs));
 				citizen->SetTargetPly(std::get<2>(cs));
 				citizen->SetTargetCnt(std::get<3>(cs));

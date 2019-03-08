@@ -72,7 +72,7 @@ void NetPlayerCaster::PostUpdate() {
 
 			//確実な送信
 			if (isSend) {
-				GetPhoton()->Send(enReliable, _event, true);
+				GetPhoton()->Send(enKenzoku, _event, true);
 			}
 		}
 
@@ -171,13 +171,15 @@ void NetPlayerCaster::PostUpdate() {
 						//位置同期
 						if (!C->GetIsAvg()) {
 							_event.put(((int)enZombiePos + offset), i); offset++;
-							_event.put(((int)enZombiePos + offset), m_cnt); offset++;
+							_event.put(((int)enZombiePos + offset), C->GetNetCnt()); offset++;
 							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().x)); offset++;
 							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().y)); offset++;
 							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().z)); offset++;
 							syncNum++;
 							//もう送らない
 							C->SetIsSend(false);
+							C->SetTargetPly(m_pCPlayer->playerNum);
+							C->SetTargetCnt(C->GetNetCnt());
 							isSend = true;
 						}
 					}
@@ -226,7 +228,21 @@ void NetPlayerCaster::PostUpdate() {
 }
 
 void NetPlayerCaster::SendNewKenzoku(::Citizen* pkenzoku) {
-	m_sendKenzokuList.emplace_back(std::make_pair((int)pkenzoku->GetUniqueID(), m_cnt));
-	pkenzoku->SetLastKenzokuingCnt(m_cnt);
+	m_sendKenzokuList.emplace_back(std::make_pair((int)pkenzoku->GetUniqueID(), pkenzoku->GetNetCnt()));
+	pkenzoku->SetLastKenzokuingCnt(pkenzoku->GetNetCnt());
 	pkenzoku->SetLastKenzokuingPly(GetPhoton()->GetLocalPlayerNumber());
 }
+
+void NetPlayerCaster::SendAvgCitizen(::Citizen* pcitizen) {
+	pcitizen->SetIsSend(true);
+	pcitizen->SetIsAvg(true);
+}
+
+void NetPlayerCaster::SendSyncCitizen(::Citizen* pcitizen) {
+	pcitizen->SetIsSend(true);
+	pcitizen->SetIsAvg(false);
+	pcitizen->SetTargetPly(m_pCPlayer->playerNum);
+	pcitizen->SetTargetCnt(pcitizen->GetNetCnt());
+}
+
+//平均送信は既にsend=trueならしない

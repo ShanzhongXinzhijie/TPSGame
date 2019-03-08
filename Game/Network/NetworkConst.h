@@ -7,7 +7,7 @@ enum NetworkEventCode {
 	enNormal = 1,
 	enKillPlayer,
 	enPlayerDeadOrAlive,
-	enReliable,
+	enKenzoku,
 	enPlayerEventEnd,
 
 	enMasterClientEventStart,

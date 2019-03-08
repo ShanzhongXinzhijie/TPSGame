@@ -15,8 +15,8 @@ public:
 	void SetIsDead(bool isdead) { m_isDead = isdead; }
 
 	void SendNewKenzoku(::Citizen* pkenzoku);
-
-	int GetCnt()const { return m_cnt; }
+	void SendAvgCitizen(::Citizen* pcitizen);
+	void SendSyncCitizen(::Citizen* pcitizen);
 
 private:
 	CPlayer* m_pCPlayer = nullptr;
