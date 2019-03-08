@@ -62,7 +62,7 @@ void NetPlayerCaster::PostUpdate() {
 						_event.put(i, (int)pos.y); i++;
 						_event.put(i, (int)pos.z); i++;
 						//今回は以後送信しない
-						m_citizenGene->GetCitizen(std::get<0>(K))->SetIsSend(false);
+						//m_citizenGene->GetCitizen(std::get<0>(K))->SetIsSend(false);
 					}
 					m_sendKenzokuList.clear();
 
@@ -135,9 +135,9 @@ void NetPlayerCaster::PostUpdate() {
 			//36Fに一回送信
 			if (m_cnt % 36 == 0) {
 				//市民・ゾンビの位置
-				int citiNum = m_citizenGene->GetCitizenNum();
+				int citiNum = (int)m_citizenGene->GetCitizenNum();
 				int offset = 0;
-				bool isCiti = false;
+				/*bool isCiti = false;
 
 				//位置平均するやつら
 				int avgNum = 0; 
@@ -162,7 +162,7 @@ void NetPlayerCaster::PostUpdate() {
 					//数
 					_event.put((nByte)enZombiePosAvg, avgNum);
 				}
-				if(isCiti){
+				if(isCiti){*/
 				//位置同期するやつら
 				int syncNum = 0;
 				for (int i = 0; i < citiNum; i++) {
@@ -188,7 +188,7 @@ void NetPlayerCaster::PostUpdate() {
 					//数
 					_event.put((nByte)enZombiePosSync, syncNum);
 				}
-				}
+				//}
 			}
 
 			//送信
