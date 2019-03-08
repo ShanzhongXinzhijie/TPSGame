@@ -98,7 +98,7 @@ void NetPlayerManager::PostRender() {
 	}
 	else {
 		list.color = {1.0f,0.0f,0.0f,1.0f};
-		list.values.emplace_back(L"切断");
+		list.values.emplace_back(L"Disconnect");
 	}
 
 	//ルーム内のプレイヤーを表示
@@ -108,10 +108,10 @@ void NetPlayerManager::PostRender() {
 		list.values.back() += L" :";
 		list.values.back() += players[i]->getName().cstr();
 		if (players[i]->getNumber() == GetPhoton()->GetLocalPlayerNumber()) {
-			list.values.back() += L" <<自分";
+			list.values.back() += L" <<YOU";
 		}
 		if (players[i]->getIsMasterClient()) {
-			list.values.back() += L" <<ﾏｽｸﾗ";
+			list.values.back() += L" <<Master";
 		}
 	}
 
