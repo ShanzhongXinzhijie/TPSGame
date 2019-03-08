@@ -133,7 +133,12 @@ void NetPlayerCaster::PostUpdate() {
 			}
 
 			//36Fに一回送信
-			if (m_cnt % 36 == 0) {
+			//if (m_cnt % 36 == 0) {
+
+			if (m_sendCitiInd < 0) {
+				m_sendCitiInd = CMath::RandomInt() % (int)m_citizenGene->GetCitizenNum();
+			}
+
 				//市民・ゾンビの位置
 				int citiNum = (int)m_citizenGene->GetCitizenNum();
 				int offset = 0;
@@ -167,9 +172,10 @@ void NetPlayerCaster::PostUpdate() {
 				int syncNum = 0;
 				for (int i = 0; i < citiNum; i++) {
 					Citizen* C = m_citizenGene->GetCitizen(i);
-					if (C->GetIsSend()) {
+					//意思を持った送信は36fに一回
+					if (C->GetIsSend() && m_cnt % 36 == 0 || m_sendCitiInd <= i && m_sendCitiInd + 4 > i) {
 						//位置同期
-						if (!C->GetIsAvg()) {
+						if (!C->GetIsAvg() || m_sendCitiInd <= i && m_sendCitiInd + 4 > i) {
 							_event.put(((int)enZombiePos + offset), i); offset++;
 							_event.put(((int)enZombiePos + offset), C->GetNetCnt()); offset++;
 							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().x)); offset++;
@@ -189,7 +195,13 @@ void NetPlayerCaster::PostUpdate() {
 					_event.put((nByte)enZombiePosSync, syncNum);
 				}
 				//}
+
+			m_sendCitiInd += 4;
+			if (m_sendCitiInd >= citiNum) {
+				m_sendCitiInd -= citiNum;
 			}
+
+			//}
 
 			//送信
 			if (isSend) {

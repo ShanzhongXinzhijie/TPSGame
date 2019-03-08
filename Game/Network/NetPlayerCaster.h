@@ -29,6 +29,7 @@ private:
 
 	bool m_isDead = false;
 
+	int m_sendCitiInd = -1;
 	CitizenGene* m_citizenGene = nullptr;
 	std::list<std::pair<int, int>> m_sendKenzokuList;
 };
