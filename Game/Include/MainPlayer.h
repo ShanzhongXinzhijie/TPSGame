@@ -3,6 +3,7 @@
 #include "TpsCamera.h"
 #include "HPbar.h"
 #include "Flybar.h"
+#include "WeaponHolder.h"
 
 class MainPlayer :public CPlayer {
 public:
@@ -19,7 +20,6 @@ private:
 	TpsCamera m_camera;
 	Flybar flybar;
 
-	bool triggerL = false;
-	bool triggerR = false;
+	WeaponHolder wepHolder;
 };
 

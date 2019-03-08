@@ -293,6 +293,7 @@
     <ClCompile Include="Citizen\ziguzagu.cpp" />
     <ClCompile Include="Player\Wing.cpp" />
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
+    <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Bullet.h" />
@@ -340,6 +341,7 @@
     <ClInclude Include="Include\Wing.h" />
     <ClInclude Include="Include\Weapon.h" />
     <ClInclude Include="Include\Rifle.h" />
+    <ClInclude Include="Include\WeaponHolder.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -374,6 +376,13 @@
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\HundGun.png" />
+    <ImageContentTask Include="Asset\spriteData\LButton.png" />
+    <ImageContentTask Include="Asset\spriteData\RButton.png" />
+    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
+    <ImageContentTask Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

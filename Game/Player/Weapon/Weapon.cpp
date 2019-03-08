@@ -9,6 +9,7 @@ Weapon::Weapon(CPlayer* player,GameObj::CSkinModelRender* playerModel,const Weap
 	c_ShotCool(info.shotCool), maxBullet(info.maxBullet), zoomScale(info.zoomScale){
 
 	weaponModel.Init(info.modelPath);
+	weaponSprite.Init(info.spritePath);
 	Inactivate();
 
 	playerModel->GetAnimCon().GetAnimation(0).AddAnimationEventListener(

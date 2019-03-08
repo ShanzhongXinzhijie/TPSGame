@@ -226,7 +226,7 @@ void CPlayer::Reload() {
 }
 
 void CPlayer::changeWeapon(bool left, bool right) {
-	if (!left && !right) { return; }
+	if (left == right) { return; }
 	short nextWeapon = activeWeapon;
 	if (left) { nextWeapon -= 1;}
 	if (right) { nextWeapon += 1;}

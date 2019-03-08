@@ -19,6 +19,7 @@ Bullet* HandGun::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 WeaponInfo HandGun::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
 	WeaponInfo info;
 	info.modelPath = L"Resource/modelData/HundGun.cmo";
+	info.spritePath = L"Resource/spriteData/HundGun.dds";
 	info.maxBullet = 50;
 	info.shotCool = 0.2f;
 	info.zoomScale = 1.0f;

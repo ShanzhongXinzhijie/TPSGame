@@ -8,7 +8,7 @@ MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 #ifdef SpritScreen
 	playerNum(p),
 #endif
-	m_camera(playerNum, position), CPlayer(p,team, position){
+	m_camera(playerNum, position), CPlayer(p,team, position), wepHolder(CPlayer::weapon, CPlayer::WEAPON_NUM){
 }
 
 
@@ -29,8 +29,22 @@ void MainPlayer::Update() {
 		moveVec += front * stickInput.y;
 	}
 
-	bool shot = Pad(playerNum).GetButton(enButtonRB1);
+	bool shot = false;
+	bool dash = false;
+
+	bool weaponLeft = false;
+	bool weaponRight = false;
+	if (Pad(playerNum).GetButton(enButtonY)) {
+		weaponLeft = Pad(playerNum).GetDown(enButtonLB1);
+		weaponRight = Pad(playerNum).GetDown(enButtonRB1);
+		wepHolder.changeWeapon(weaponLeft, weaponRight);
+	} else {
+		dash = Pad(playerNum).GetButton(enButtonLB1);
+		shot = Pad(playerNum).GetButton(enButtonRB1);
+	}
+
 	CVector3 look = { 0, 0, 0 };
+
 	if (shot) {
 		CVector3 pos = CPlayer::getPosition();
 		pos.y += 60;
@@ -39,26 +53,9 @@ void MainPlayer::Update() {
 		look = m_camera.getLook();
 	}
 
-	bool weaponLeft = false;
-	bool weaponRight = false;
-	if (Pad(playerNum).GetButton(enButtonY)) {
-		if (Pad(playerNum).GetTrigger(enLR::L) > 0.2f) {
-			weaponLeft = !triggerL;
-			triggerL = true;
-		} else {
-			triggerL = false;
-		}
-		if (Pad(playerNum).GetTrigger(enLR::R) > 0.2f) {
-			weaponRight = !triggerR;
-			triggerR = true;
-		} else {
-			triggerR = false;
-		}
-	}
-
 	ActionSender action({ moveVec.x,moveVec.z },
 						Pad(playerNum).GetDown(enButtonA),
-						Pad(playerNum).GetButton(enButtonLB1),
+						dash,
 						look,
 						shot,
 						Pad(playerNum).GetDown(enButtonX),
@@ -98,4 +95,6 @@ void MainPlayer::PostRender() {
 	wchar_t countDisp[12];
 	swprintf_s(countDisp, L"Zombie:%d", team->getZombieCount());
 	font.Draw(countDisp, { 0.1f, 0.1f });
+
+	wepHolder.draw();
 }

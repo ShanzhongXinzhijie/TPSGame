@@ -46,6 +46,7 @@
     <ClInclude Include="Include\Rifle.h" />
     <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\NormalBullet.h" />
+    <ClInclude Include="Include\WeaponHolder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Player\Weapon\Rifle.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Player\Bullet\NormalBullet.cpp" />
+    <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -127,5 +129,12 @@
     <ImageContentTask Include="Asset\spriteData\Target.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\HundGun.png" />
+    <Image Include="Asset\spriteData\LButton.png" />
+    <Image Include="Asset\spriteData\RButton.png" />
+    <Image Include="Asset\spriteData\Rifle.png" />
+    <Image Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
 </Project>

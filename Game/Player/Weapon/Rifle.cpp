@@ -18,6 +18,7 @@ Bullet* Rifle::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 WeaponInfo Rifle::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
 	WeaponInfo info;
 	info.modelPath = L"Resource/modelData/Rifle.cmo";
+	info.spritePath = L"Resource/spriteData/Rifle.dds";
 	info.maxBullet = 20;
 	info.shotCool = 2.0f;
 	info.zoomScale = 5.0f;

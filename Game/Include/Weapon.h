@@ -5,6 +5,7 @@ class Bullet;
 
 struct WeaponInfo{
 	const wchar_t* modelPath;
+	const wchar_t* spritePath;
 	unsigned int shotAnimNum;
 	unsigned int reloadAnimNum;
 	unsigned int maxBullet;
@@ -34,12 +35,12 @@ public:
 		isActive = false;
 		weaponModel.SetIsDraw(false);
 	}
+	int getBulletCount()const {
+		return bulletCount;
+	}
 
 	void setBulletCount(int bulletCount) {
 		this->bulletCount = bulletCount;
-	}
-	int getBulletCount()const {
-		return bulletCount;
 	}
 
 	bool isReloading() const{
@@ -48,6 +49,10 @@ public:
 
 	float getZoomScale() const {
 		return zoomScale;
+	}
+
+	CSprite& getSpriteRef() {
+		return weaponSprite;
 	}
 
 	void PreUpdate() override;
@@ -60,6 +65,7 @@ protected:
 	CPlayer* player;
 	GameObj::CSkinModelRender* playerModel;
 	GameObj::CSkinModelRender weaponModel;
+	CSprite weaponSprite;
 
 	const float zoomScale;
 
