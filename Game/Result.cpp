@@ -47,6 +47,7 @@ Result::~Result() {
 
 bool Result::Start() {
 	m_sprite.Init(L"Resource/spriteData/Title.dds");
+	m_font.UseSystemFont();
 	return true;
 }
 
