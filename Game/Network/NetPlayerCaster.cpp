@@ -234,8 +234,10 @@ void NetPlayerCaster::SendNewKenzoku(::Citizen* pkenzoku) {
 }
 
 void NetPlayerCaster::SendAvgCitizen(::Citizen* pcitizen) {
-	pcitizen->SetIsSend(true);
-	pcitizen->SetIsAvg(true);
+	if (!pcitizen->GetIsSend()) {
+		pcitizen->SetIsSend(true);
+		pcitizen->SetIsAvg(true);
+	}
 }
 
 void NetPlayerCaster::SendSyncCitizen(::Citizen* pcitizen) {
@@ -244,5 +246,3 @@ void NetPlayerCaster::SendSyncCitizen(::Citizen* pcitizen) {
 	pcitizen->SetTargetPly(m_pCPlayer->playerNum);
 	pcitizen->SetTargetCnt(pcitizen->GetNetCnt());
 }
-
-//•½‹Ï‘—M‚ÍŠù‚Ésend=true‚È‚ç‚µ‚È‚¢
