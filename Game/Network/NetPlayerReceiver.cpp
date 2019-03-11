@@ -147,6 +147,27 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				m_citizenPosListSync.emplace_back(std::make_tuple(id, pos, playerNr, time));
 			}
 		}
+		//市民Mover
+		if (eventContent.getValue((nByte)enZombieMover)) {
+			int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enZombieMover)))->getDataCopy();
+			for (int i = 0; i < num; i++) {
+				//id
+				int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				//時間
+				int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				//座標
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				//MoverVec
+				CVector3 MoverVec;
+				MoverVec.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				MoverVec.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				MoverVec.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(((int)enZombiePos + offset))))->getDataCopy(); offset++;
+				m_citizenMoverSyncList.emplace_back(std::make_tuple(id, pos, playerNr, time, MoverVec));
+			}
+		}
 	}
 	break;
 
@@ -332,5 +353,21 @@ void NetPlayerReceiver::UpdateCitizen() {
 			}
 		}
 		m_citizenPosListSync.clear();
+
+		//Mover同期
+		for (auto& cs : m_citizenMoverSyncList) {
+			auto citizen = m_citizenGene->GetCitizen(std::get<0>(cs));
+			if (!citizen) { continue; }
+			//時間が新しい or 時間が同じでプレイヤー番号が大きいか等しい
+			if (citizen->GetSyncMoverCnt() < std::get<3>(cs) || citizen->GetSyncMoverCnt() == std::get<3>(cs) && std::get<2>(cs) >= citizen->GetSyncMoverPly()) {
+				//更新
+				citizen->SetIsSendMover(false);
+				citizen->setPos(std::get<1>(cs));
+				citizen->SetSyncMoverPly(std::get<2>(cs));
+				citizen->SetSyncMoverCnt(std::get<3>(cs));
+				citizen->SetMoverNetVec(std::get<4>(cs));
+			}
+		}
+		m_citizenMoverSyncList.clear();		
 	}
 }

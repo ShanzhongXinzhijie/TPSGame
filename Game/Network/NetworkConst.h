@@ -24,7 +24,8 @@ enum PlayerStatusCode {
 	enBulletCnt = 20,
 	enZombiePosAvg = 120,
 	enZombiePosSync = 121,
-	enZombiePos = 122,
+	enZombieMover = 122,
+	enZombiePos = 123,
 };
 
 //プレイヤープロパティのキー

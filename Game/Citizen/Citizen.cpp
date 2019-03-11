@@ -41,8 +41,8 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 
 	//マスクとグループの設定
 	m_collision.All_Off_Group();
-	m_collision.On_OneGroup(CollisionMaskConst::Citizen);
-	m_collision.Off_OneMask(CollisionMaskConst::Citizen);
+	m_collision.On_OneGroup(CollisionMaskConst::encolCitizen);
+	m_collision.Off_OneMask(CollisionMaskConst::encolCitizen);
 
 	//これは喰らい判定
 	m_collision.SetIsHurtCollision(true);
@@ -274,4 +274,11 @@ void Citizen::PostLoopUpdate() {
 			m_ptrCitizenColorManager[index]->AddColor(CVector4::One());
 		}
 	}
+}
+
+const CVector3& Citizen::GetMoverNetVec()const {
+	return mover->GetNetVec();
+}
+void Citizen::SetMoverNetVec(const CVector3& v) {
+	mover->SetNetVec(v);
 }

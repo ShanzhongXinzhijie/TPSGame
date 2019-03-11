@@ -15,5 +15,13 @@ public:
 	void SetCitizen(Citizen* setCitizen);
 
 	Citizen* citizen;
+
+	//í êMóp
+	virtual CVector3 GetNetVec() const{
+		return { -1.0f,-1.0f,-1.0f };
+	}
+	virtual void SetNetVec(const CVector3& v) {
+		v;
+	}
 };
 

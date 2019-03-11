@@ -4,6 +4,11 @@
 
 #include"MotionBlurHeader.h"
 
+#if defined(ALL)
+#define MOTIONBLUR 1
+#define NORMAL_MAP 1
+#endif
+
 /////////////////////////////////////////////////////////////
 // Shader Resource View
 /////////////////////////////////////////////////////////////
@@ -422,7 +427,7 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 	Out.lightingParam.x = dot(floor(emissive.xyz * 256.0f), float3(1.0f, 256.0f, 65536.0f));//エミッシブ
 	Out.lightingParam.y = emissive.w;//ライティングするか?
 	Out.lightingParam.z = 0.0f;//メタリック
-	Out.lightingParam.w = 0.125f;//シャイニネス
+	Out.lightingParam.w = 0.38f;//シャイニネス
 
 	//速度
 #if MOTIONBLUR

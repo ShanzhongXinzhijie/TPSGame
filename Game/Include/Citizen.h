@@ -87,13 +87,18 @@ private:
 	//áÅ‘®‰»Œn
 	int m_lastKenzokuingCnt = INT_MIN;//ÅŒã‚ÉáÅ‘®‰»‚µ‚½ƒ^ƒCƒ~ƒ“ƒO
 	int m_lastKenzokuingPly = -1;//ÅŒã‚ÉáÅ‘®‰»‚³‚¹‚½ƒvƒŒƒCƒ„[
+	//MoverŒn
+	bool m_isSendMover = false;
+	int m_moverPly = -1, m_moverCnt = INT_MIN;
 public:
 	int GetNetCnt()const { return m_netCnt; }
+	
 	//ˆê“¯ŠïŒ`
 	void SetIsSend(bool issend) { m_isSend = issend; }
 	bool GetIsSend()const { return m_isSend; }
 	void SetIsAvg(bool is) { m_sendType_Avg = is; }
 	bool GetIsAvg()const { return m_sendType_Avg; }
+
 	void SetTargetPly(int playerNum) { m_targetply = playerNum; }
 	int GetTargetPly()const { return m_targetply; }
 	void SetTargetCnt(int cnt) {
@@ -103,6 +108,7 @@ public:
 		}
 	}
 	int GetTargetCnt()const { return m_targetCnt; }
+	
 	//áÅ‘®‰»Œn
 	void SetLastKenzokuingCnt(int cnt) {
 		m_lastKenzokuingCnt = cnt;
@@ -119,5 +125,22 @@ public:
 	int GetLastKenzokuingPly()const {
 		return m_lastKenzokuingPly;
 	}
+
+	//MoverŒn
+	void SetIsSendMover(bool issend) { m_isSendMover = issend; }
+	bool GetIsSendMover()const { return m_isSendMover; }
+
+	void SetSyncMoverPly(int playerNum) { m_moverPly = playerNum; }
+	int GetSyncMoverPly()const { return m_moverPly; }
+	void SetSyncMoverCnt(int cnt) {
+		m_moverCnt = cnt;
+		if (m_moverCnt > m_netCnt) {
+			m_netCnt = m_moverCnt;
+		}
+	}
+	int GetSyncMoverCnt()const { return m_moverCnt; }
+
+	const CVector3& GetMoverNetVec()const;
+	void SetMoverNetVec(const CVector3&);
 };
 

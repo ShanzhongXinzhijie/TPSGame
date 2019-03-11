@@ -40,7 +40,7 @@ void Citizennigeru::Update(bool isOnGround, float deltaTime)
 #ifndef SpritScreen
 			//Ž©•ª‚©‚ç“¦‚°‚é‚È‚çˆÊ’u“¯Šú
 			if (player->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
-				player->GetNetCaster()->SendSyncCitizen(citizen);
+				player->GetNetCaster()->SendMover(citizen);
 			}
 #endif
 			break;

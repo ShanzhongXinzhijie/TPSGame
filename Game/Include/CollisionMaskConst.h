@@ -1,6 +1,6 @@
 #pragma once
 
 enum CollisionMaskConst {
-	Default = 1,
-	Citizen,
+	encolDefault = 1,
+	encolCitizen,
 };

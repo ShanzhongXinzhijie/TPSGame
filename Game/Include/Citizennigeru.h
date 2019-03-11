@@ -10,6 +10,14 @@ public:
 
 	CVector3 getMove() override;
 	CQuaternion getTurn() override;
+
+	//í êMóp
+	CVector3 GetNetVec()const override {
+		return walk;
+	}
+	void SetNetVec(const CVector3& v) override {
+		walk = v;
+	}
 private:
 
 	const std::unordered_map<int, CPlayer*>& playersMap;

@@ -31,7 +31,8 @@ void InstancingCitizenColorManager::Init(GameObj::InstancingModel* insModel) {
 	GetEngine().GetGraphicsEngine().GetD3DDevice()->CreateShaderResourceView(m_colorSB, &descSRV, &m_colorSRV);
 
 	//シェーダをロード
-	m_psShader.Load("Preset/shader/citizen.fx", "PSMain_Citizen", Shader::EnType::PS);
+	D3D_SHADER_MACRO macros[] = { "INSTANCING", "1", "ALL", "1", NULL, NULL };
+	m_psShader.Load("Preset/shader/citizen.fx", "PSMain_Citizen", Shader::EnType::PS, "PSMain_Citizen", macros);
 	//シェーダをセット
 	m_insModel->GetModelRender().GetSkinModel().FindMaterialSetting(
 		[&](MaterialSetting* mat) {

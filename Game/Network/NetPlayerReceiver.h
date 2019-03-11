@@ -81,6 +81,7 @@ private:
 	std::unordered_map<int, CitizensStatus> m_citizensStatus;
 	std::list<std::pair<int, CVector3>> m_citizenPosListAvg;
 	std::list<std::tuple<int, CVector3, int, int>> m_citizenPosListSync;
+	std::list<std::tuple<int, CVector3, int, int, CVector3>> m_citizenMoverSyncList;
 
 	std::queue<std::tuple<NetworkEventCode, int, ExitGames::Common::Hashtable>> m_eventContentQueue[NET_MAX_PLAYER + 1];
 };

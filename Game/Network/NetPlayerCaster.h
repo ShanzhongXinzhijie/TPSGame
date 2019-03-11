@@ -15,6 +15,7 @@ public:
 	void SetIsDead(bool isdead) { m_isDead = isdead; }
 
 	void SendNewKenzoku(::Citizen* pkenzoku);
+	void SendMover(::Citizen* pkenzoku);
 	void SendAvgCitizen(::Citizen* pcitizen);
 	void SendSyncCitizen(::Citizen* pcitizen);
 
@@ -31,6 +32,7 @@ private:
 
 	int m_sendCitiInd = -1;
 	CitizenGene* m_citizenGene = nullptr;
-	std::list<std::pair<int, int>> m_sendKenzokuList;
+	std::list<std::pair<::Citizen*, int>> m_sendKenzokuList;
+	std::list<::Citizen*> m_sendAvgList, m_sendSyncList, m_sendMoverList;
 };
 

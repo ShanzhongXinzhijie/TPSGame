@@ -54,10 +54,10 @@ void NetPlayerCaster::PostUpdate() {
 					_event.put((nByte)1, (int)m_sendKenzokuList.size());//総数
 					int i = 2;
 					for (auto& K : m_sendKenzokuList) {
-						_event.put(i, std::get<0>(K)); i++;//ID
+						_event.put(i, (int)std::get<0>(K)->GetUniqueID()); i++;//ID
 						_event.put(i, std::get<1>(K)); i++;//時間
 						//座標
-						const CVector3& pos = m_citizenGene->GetCitizen(std::get<0>(K))->getPos();
+						const CVector3& pos = std::get<0>(K)->getPos();
 						_event.put(i, (int)pos.x); i++;
 						_event.put(i, (int)pos.y); i++;
 						_event.put(i, (int)pos.z); i++;
@@ -133,75 +133,99 @@ void NetPlayerCaster::PostUpdate() {
 			}
 
 			//36Fに一回送信
-			//if (m_cnt % 36 == 0) {
-
-			if (m_sendCitiInd < 0) {
-				m_sendCitiInd = CMath::RandomInt() % (int)m_citizenGene->GetCitizenNum();
-			}
-
+			if (m_cnt % 36 == 0) {
 				//市民・ゾンビの位置
 				int citiNum = (int)m_citizenGene->GetCitizenNum();
 				int offset = 0;
-				/*bool isCiti = false;
 
-				//位置平均するやつら
-				int avgNum = 0; 
-				for (int i = 0; i < citiNum; i++) {
-					Citizen* C = m_citizenGene->GetCitizen(i);
-					if (C->GetIsSend()) {
-						isCiti = true;
-						//位置平均
-						if (C->GetIsAvg()) {
-							_event.put(((int)enZombiePos + offset), i); offset++;
-							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().x)); offset++;
-							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().y)); offset++;
-							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().z)); offset++;
+				//ランダム送信
+				if (m_sendCitiInd < 0) {
+					m_sendCitiInd = CMath::RandomInt() % (int)m_citizenGene->GetCitizenNum();
+				}
+				for (int i = m_sendCitiInd; i < min(citiNum, m_sendCitiInd + 4); i++) {
+					SendAvgCitizen(m_citizenGene->GetCitizen(i));
+				}
+				m_sendCitiInd += 4;
+				if (m_sendCitiInd >= citiNum) {
+					m_sendCitiInd -= citiNum;
+					if (m_sendCitiInd >= citiNum) {
+						m_sendCitiInd = -1;
+					}
+				}
+				
+				//位置平均
+				if (m_sendAvgList.size() > 0) {
+					int avgNum = 0;
+					for (auto& K : m_sendAvgList) {
+						if (K->GetIsAvg()) {
+							_event.put(((int)enZombiePos + offset), (int)K->GetUniqueID()); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().x)); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().y)); offset++;
+							_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().z)); offset++;
 							avgNum++;
 							//もう送らない
-							C->SetIsSend(false);
-							isSend = true;
+							K->SetIsSend(false);
 						}
 					}
-				}	
-				if(avgNum > 0){
-					//数
-					_event.put((nByte)enZombiePosAvg, avgNum);
-				}
-				if(isCiti){*/
-				//位置同期するやつら
-				int syncNum = 0;
-				for (int i = 0; i < citiNum; i++) {
-					Citizen* C = m_citizenGene->GetCitizen(i);
-					//意思を持った送信は36fに一回
-					if (C->GetIsSend() && m_cnt % 36 == 0 || m_sendCitiInd <= i && m_sendCitiInd + 4 > i) {
-						//位置同期
-						if (!C->GetIsAvg() || m_sendCitiInd <= i && m_sendCitiInd + 4 > i) {
-							_event.put(((int)enZombiePos + offset), i); offset++;
-							_event.put(((int)enZombiePos + offset), C->GetNetCnt()); offset++;
-							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().x)); offset++;
-							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().y)); offset++;
-							_event.put(((int)enZombiePos + offset), (int)std::round(C->getPos().z)); offset++;
-							syncNum++;
-							//もう送らない
-							C->SetIsSend(false);
-							C->SetTargetPly(m_pCPlayer->playerNum);
-							C->SetTargetCnt(C->GetNetCnt());
-							isSend = true;
-						}
-					}
-				}
-				if (syncNum > 0) {
-					//数
-					_event.put((nByte)enZombiePosSync, syncNum);
-				}
-				//}
+					m_sendAvgList.clear();
 
-			m_sendCitiInd += 4;
-			if (m_sendCitiInd >= citiNum) {
-				m_sendCitiInd -= citiNum;
+					if (avgNum > 0) {
+						//数
+						_event.put((nByte)enZombiePosAvg, avgNum);
+						isSend = true;
+					}
+				}
+				//位置同期
+				if (m_sendSyncList.size() > 0) {
+					int syncNum = 0;
+					for (auto& K : m_sendSyncList) {
+						_event.put(((int)enZombiePos + offset), (int)K->GetUniqueID()); offset++;
+						_event.put(((int)enZombiePos + offset), K->GetNetCnt()); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().x)); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().y)); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().z)); offset++;
+						syncNum++;
+						//もう送らない
+						K->SetIsSend(false);
+						K->SetTargetPly(m_pCPlayer->playerNum);
+						K->SetTargetCnt(K->GetNetCnt());
+					}
+					m_sendSyncList.clear();
+
+					if (syncNum > 0) {
+						//数
+						_event.put((nByte)enZombiePosSync, syncNum);
+						isSend = true;
+					}
+				}
+				//Mover同期
+				if (m_sendMoverList.size() > 0) {
+					int Num = 0;
+					for (auto& K : m_sendMoverList) {
+						_event.put(((int)enZombiePos + offset), (int)K->GetUniqueID()); offset++;
+						_event.put(((int)enZombiePos + offset), K->GetNetCnt()); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().x)); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().y)); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(K->getPos().z)); offset++;
+						CVector3 MoverVec = K->GetMoverNetVec();
+						_event.put(((int)enZombiePos + offset), (int)std::round(MoverVec.x)); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(MoverVec.y)); offset++;
+						_event.put(((int)enZombiePos + offset), (int)std::round(MoverVec.z)); offset++;
+						Num++;
+						//もう送らない
+						K->SetIsSendMover(false);
+						K->SetSyncMoverPly(m_pCPlayer->playerNum);
+						K->SetSyncMoverCnt(K->GetNetCnt());
+					}
+					m_sendMoverList.clear();
+
+					if (Num > 0) {
+						//数
+						_event.put((nByte)enZombieMover, Num);
+						isSend = true;
+					}
+				}
 			}
-
-			//}
 
 			//送信
 			if (isSend) {
@@ -240,19 +264,33 @@ void NetPlayerCaster::PostUpdate() {
 }
 
 void NetPlayerCaster::SendNewKenzoku(::Citizen* pkenzoku) {
-	m_sendKenzokuList.emplace_back(std::make_pair((int)pkenzoku->GetUniqueID(), pkenzoku->GetNetCnt()));
+	m_sendKenzokuList.emplace_back(std::make_pair(pkenzoku, pkenzoku->GetNetCnt()));
 	pkenzoku->SetLastKenzokuingCnt(pkenzoku->GetNetCnt());
 	pkenzoku->SetLastKenzokuingPly(GetPhoton()->GetLocalPlayerNumber());
 }
 
+void NetPlayerCaster::SendMover(::Citizen* pcitizen) {
+	if (!pcitizen->GetIsSendMover()) {
+		m_sendMoverList.emplace_back(pcitizen);
+	}
+	pcitizen->SetIsSendMover(true);
+	pcitizen->SetSyncMoverCnt(pcitizen->GetNetCnt());
+	pcitizen->SetSyncMoverPly(GetPhoton()->GetLocalPlayerNumber());
+}
+
 void NetPlayerCaster::SendAvgCitizen(::Citizen* pcitizen) {
-	if (!pcitizen->GetIsSend()) {
+	if (!pcitizen->GetIsSend() && !pcitizen->GetIsSendMover()) {
+		m_sendAvgList.emplace_back(pcitizen);
+		
 		pcitizen->SetIsSend(true);
 		pcitizen->SetIsAvg(true);
 	}
 }
 
 void NetPlayerCaster::SendSyncCitizen(::Citizen* pcitizen) {
+	if (!pcitizen->GetIsSend()) {
+		m_sendSyncList.emplace_back(pcitizen);
+	}
 	pcitizen->SetIsSend(true);
 	pcitizen->SetIsAvg(false);
 	pcitizen->SetTargetPly(m_pCPlayer->playerNum);
