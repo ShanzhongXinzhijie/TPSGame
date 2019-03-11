@@ -89,7 +89,7 @@ private:
 		m_errorMes += L")";
 
 		if (errorCode == ExitGames::LoadBalancing::ErrorCode::GAME_CLOSED) {
-			m_errorMes += L"\n‚à‚¤n‚Ü‚Á‚Ä‚éI";
+			m_errorMes += L"\n‚à‚¤‚Í‚¶‚Ü‚Á‚Ä‚éI";
 		}
 	}
 
