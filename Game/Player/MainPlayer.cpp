@@ -2,6 +2,7 @@
 #include "MainPlayer.h"
 #include "ActionSender.h"
 #include "Weapon.h"
+#include "GameWaiter.h"
 
 MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 	:
@@ -35,9 +36,12 @@ void MainPlayer::Update() {
 	bool weaponLeft = false;
 	bool weaponRight = false;
 	if (Pad(playerNum).GetButton(enButtonY)) {
-		weaponLeft = Pad(playerNum).GetDown(enButtonLB1);
-		weaponRight = Pad(playerNum).GetDown(enButtonRB1);
-		wepHolder.changeWeapon(weaponLeft, weaponRight);
+		wepHolder.pushY();
+		if (!GameWaiter::GetIsWait()) {
+			weaponLeft = Pad(playerNum).GetDown(enButtonLB1);
+			weaponRight = Pad(playerNum).GetDown(enButtonRB1);
+			wepHolder.changeWeapon(weaponLeft, weaponRight);
+		}
 	} else {
 		dash = Pad(playerNum).GetButton(enButtonLB1);
 		shot = Pad(playerNum).GetButton(enButtonRB1);
