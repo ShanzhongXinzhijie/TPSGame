@@ -143,7 +143,7 @@ void NetPlayerCaster::PostUpdate() {
 					m_sendCitiInd = CMath::RandomInt() % (int)m_citizenGene->GetCitizenNum();
 				}
 				for (int i = m_sendCitiInd; i < min(citiNum, m_sendCitiInd + 4); i++) {
-					SendAvgCitizen(m_citizenGene->GetCitizen(i));
+					SendSyncCitizen(m_citizenGene->GetCitizen(i));
 				}
 				m_sendCitiInd += 4;
 				if (m_sendCitiInd >= citiNum) {
