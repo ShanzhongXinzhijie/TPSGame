@@ -299,6 +299,7 @@
   <ItemGroup>
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\Bullet.h" />
+    <ClInclude Include="Include\DeckType.h" />
     <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />

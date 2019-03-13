@@ -7,7 +7,7 @@ public:
 	void Draw();
 
 	CVector2 position = { 0.5f, 0.5f };
-	CVector2 scale = CVector2::One();
+	CVector2 fontscale = CVector2::One(), backscale = CVector2::One();
 	CVector2 pivot = {0.5f, 0.5f};
 	CVector4 color = CVector4::White();
 	float depth = 0.5f;

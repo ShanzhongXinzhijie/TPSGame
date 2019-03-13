@@ -4,7 +4,7 @@
 #include "Title.h"
 #include "Game.h"
 #include "Fade.h"
-
+#include "DeckType.h"
 #include "Network/Network.h"
 
 ConfirmPlayers::ConfirmPlayers(Fade* fade, SuicideObj::CBGM* bgm)
@@ -48,42 +48,17 @@ bool ConfirmPlayers::Start() {
 	std::wstring wstr;
 	float randam = CMath::RandomZeroToOne();
 	float min = 0.0f;
-	for (int i = 0; i < 8; i++) {
-		if (randam < min + 1.0f / 8.0f) {
-			switch (i)
-			{
-			case 0:
-				wstr = L"エルフ";
-				break;
-			case 1:
-				wstr = L"ロイヤル";
-				break;
-			case 2:
-				wstr = L"ウィッチ";
-				break;
-			case 3:
-				wstr = L"ドラゴン";
-				break;
-			case 4:
-				wstr = L"ネクロ";
-				break;
-			case 5:
-				wstr = L"ヴァンパイア";
-				break;
-			case 6:
-				wstr = L"ビショップ";
-				break;
-			case 7:
-				wstr = L"ネメシス";
-				break;
-			default:
-				break;
-			}
-			wstr += L"NAKAMURA";
-			break;
-		}
-		min += 1.0f / 8.0f;
-	}
+
+	//名前作成
+	int r = 0;
+	r = CMath::RandomInt() % DECK_TYPE_MAX;
+	wstr += DECK_TYPE[r];
+	wstr += L" ";
+	r = CMath::RandomInt() % CHARA_TYPE_MAX;
+	wstr += CHARA_TYPE[r];
+	wstr += L" ";
+	wstr += L"NAKAMURA";
+
 	//サーバーに接続(その後勝手にルームに入る)
 	m_netWork->Connect(wstr.c_str());
 #endif
@@ -264,7 +239,7 @@ void ConfirmPlayers::PostRender() {
 				list.values.back() += L" <<It's me";
 			}
 			if (players[i]->getIsMasterClient()) {
-				list.values.back() += L" <<マスクラ";
+				list.values.back() += L" <<Master";
 			}
 
 			const ExitGames::Common::Hashtable& eventContent = players[i]->getCustomProperties();
@@ -299,6 +274,7 @@ void ConfirmPlayers::PostRender() {
 #endif
 	}
 
+	list.fontscale = { 0.62f,0.62f };
 	list.Draw();
 
 	list.values.clear();

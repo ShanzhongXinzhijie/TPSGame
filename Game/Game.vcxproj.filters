@@ -48,6 +48,7 @@
     <ClInclude Include="Include\NormalBullet.h" />
     <ClInclude Include="Include\WeaponHolder.h" />
     <ClInclude Include="Ginger\Ginger.h" />
+    <ClInclude Include="Include\DeckType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -122,6 +122,7 @@ void NetPlayerManager::PostRender() {
 		}
 	}
 
+	list.fontscale = { 0.62f,0.62f };
 	list.Draw();
 
 	list.values.clear();
