@@ -47,6 +47,7 @@
     <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\NormalBullet.h" />
     <ClInclude Include="Include\WeaponHolder.h" />
+    <ClInclude Include="Ginger\Ginger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Player\Bullet\NormalBullet.cpp" />
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
+    <ClCompile Include="Ginger\Ginger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -108,6 +110,7 @@
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
     <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
+    <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -129,12 +132,10 @@
     <ImageContentTask Include="Asset\spriteData\Target.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Asset\spriteData\HundGun.png" />
-    <Image Include="Asset\spriteData\LButton.png" />
-    <Image Include="Asset\spriteData\RButton.png" />
-    <Image Include="Asset\spriteData\Rifle.png" />
-    <Image Include="Asset\spriteData\YButton.png" />
+    <ImageContentTask Include="Asset\spriteData\HundGun.png" />
+    <ImageContentTask Include="Asset\spriteData\LButton.png" />
+    <ImageContentTask Include="Asset\spriteData\RButton.png" />
+    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
+    <ImageContentTask Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
 </Project>

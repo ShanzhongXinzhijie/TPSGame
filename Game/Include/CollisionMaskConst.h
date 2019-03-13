@@ -2,5 +2,5 @@
 
 enum CollisionMaskConst {
 	encolDefault = 1,
-	encolCitizen,
+	encolKurai,
 };

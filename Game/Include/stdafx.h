@@ -4,6 +4,6 @@
 
 //#define SpritScreen
 
-static const wchar_t NETWORK_VER[] = L"Alpha11";
+static const wchar_t NETWORK_VER[] = L"Alpha12";
 
 using namespace DemolisherWeapon;

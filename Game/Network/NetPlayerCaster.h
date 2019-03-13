@@ -30,7 +30,7 @@ private:
 
 	bool m_isDead = false;
 
-	int m_sendCitiInd = -1;
+	//int m_sendCitiInd = -1;
 	CitizenGene* m_citizenGene = nullptr;
 	std::list<std::pair<::Citizen*, int>> m_sendKenzokuList;
 	std::list<::Citizen*> m_sendAvgList, m_sendSyncList, m_sendMoverList;

@@ -8,6 +8,7 @@
 #include "Result.h"
 #include "Fade.h"
 #include "GameWaiter.h"
+#include "Ginger/Ginger.h"
 
 Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) : citizenGene(this), timer(timeLimit){
 	this->fade = fade;
@@ -40,6 +41,11 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	srand(seed);
 	//s–¯ì¬
 	citizenGene.createCitizen(citizenCnt);
+
+	//_Ğì¬
+	/*for (int i = 0; i < 64; i++) {
+		new Ginger(timeLimit);
+	}*/
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });

@@ -139,7 +139,7 @@ void NetPlayerCaster::PostUpdate() {
 				int offset = 0;
 
 				//ƒ‰ƒ“ƒ_ƒ€‘—M
-				if (m_sendCitiInd < 0) {
+				/*if (m_sendCitiInd < 0) {
 					m_sendCitiInd = CMath::RandomInt() % (int)m_citizenGene->GetCitizenNum();
 				}
 				for (int i = m_sendCitiInd; i < min(citiNum, m_sendCitiInd + 4); i++) {
@@ -151,7 +151,7 @@ void NetPlayerCaster::PostUpdate() {
 					if (m_sendCitiInd >= citiNum) {
 						m_sendCitiInd = -1;
 					}
-				}
+				}*/
 				
 				//ˆÊ’u•½‹Ï
 				if (m_sendAvgList.size() > 0) {
