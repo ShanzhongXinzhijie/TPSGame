@@ -43,9 +43,9 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	citizenGene.createCitizen(citizenCnt);
 
 	//_Ğì¬
-	/*for (int i = 0; i < 64; i++) {
-		new Ginger(timeLimit);
-	}*/
+	for (int i = 0; i < 6; i++) {
+		new Ginger((int)timeLimit);
+	}
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });

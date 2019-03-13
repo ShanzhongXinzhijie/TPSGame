@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Ginger.h"
 #include "CollisionMaskConst.h"
+#include "DemolisherWeapon/physics/CollisionAttr.h"
 
 Ginger::Ginger(int time)
 {
@@ -12,8 +13,32 @@ Ginger::~Ginger()
 
 bool Ginger::Start() {
 	m_model.Init(L"Resource\\modelData\\Ginger.cmo", enFbxUpAxisY);
-	m_pos = { 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f), 0.0f, 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f) };
-	//ƒŒƒC‚Å”»’è
+	m_pos = { 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f), -100.0f, 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f) };
+	
+	if (rand() % 100 > 12) {
+		//ƒŒƒC‚Å”»’è
+		btVector3 rayStart = btVector3(m_pos.x, 3000.0f, m_pos.z);
+		btVector3 rayEnd = btVector3(m_pos.x, -50.0f, m_pos.z);
+		btCollisionWorld::AllHitsRayResultCallback gnd_ray(rayStart, rayEnd);
+		GetEngine().GetPhysicsWorld().RayTest(rayStart, rayEnd, gnd_ray);
+		if (gnd_ray.hasHit()) {
+			for (int i = 0; i < gnd_ray.m_collisionObjects.size(); ++i) {
+				const btCollisionObject* col = gnd_ray.m_collisionObjects[i];
+				if (col->getUserIndex() == enCollisionAttr_Character
+					|| col->getInternalType() == btCollisionObject::CO_GHOST_OBJECT
+					) {
+					continue;
+				}
+				if (m_pos.y < gnd_ray.m_hitPointWorld[i].y()) {
+					m_pos.y = gnd_ray.m_hitPointWorld[i].y();
+				}
+			}
+		}
+	}
+	else {
+		m_pos.y = 3000.0f;
+	}
+
 	m_model.SetPos(m_pos);
 	m_rot.SetRotationDeg(CVector3::AxisY(), 360.0f*(rand() % 101 * 0.01f));
 	m_model.SetRot(m_rot);
