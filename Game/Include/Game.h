@@ -42,6 +42,10 @@ public:
 		return playerGene.getMainPlayer2();
 	}
 
+	const CitizenGene& GetCitizenGene()const {
+		return citizenGene;
+	}
+
 private:
 	GameObj::CDirectionLight light;
 	Ground* ground = nullptr;

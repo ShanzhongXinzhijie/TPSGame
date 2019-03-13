@@ -19,7 +19,7 @@ public:
 	bool Start() override;
 	virtual void Update() override;
 
-	CVector3 getPosition() const;
+	const CVector3& getPosition() const;
 
 	void sendAction(const ActionSender& action);
 
@@ -85,6 +85,7 @@ public:
 	enum {//•Ší‚Ì—ñ‹“
 		HUND_GUN,
 		RIFLE,
+		LAZER,
 		WEAPON_NUM
 	};
 private:

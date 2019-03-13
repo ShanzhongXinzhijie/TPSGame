@@ -88,6 +88,8 @@ void Weapon::PreUpdate() {
 }
 
 void Weapon::Update() {
+	WeaponUpdate();
+
 	Bone* arm = playerModel->FindBone(L"Bone022");
 	CQuaternion rot = arm->GetRotation();
 	rot.Multiply(CQuaternion::GetRotationDeg(CVector3::AxisX(), 90.0f));
