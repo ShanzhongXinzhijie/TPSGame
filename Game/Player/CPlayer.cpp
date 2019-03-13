@@ -7,7 +7,7 @@
 #include "Bullet.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
-	: playerNum(pNum), team(tem){
+	: playerNum(pNum), team(tem), miniHpbar(maxHp){
 	team->addPlayer(this);
 	mover.SetPosition(position);
 }
@@ -65,6 +65,7 @@ void CPlayer::Update() {
 		mover.Update();
 		m_model.SetPos(getPosition());
 		m_model.SetRot(mover.getRotation());
+		miniHpbar.setPos(getPosition());
 		CVector3 pos = getPosition();
 		pos.y += mover.GetCollider()->GetHeight()/2 + mover.GetCollider()->GetRadius();
 		m_collision.SetPosition(pos);
@@ -106,6 +107,7 @@ void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 		mover.addVelocity(dir);
 		if (m_hp > damage) {
 			m_hp -= damage;
+			miniHpbar.display(m_hp);
 		} else {
 			m_hp = 0;
 			Death();

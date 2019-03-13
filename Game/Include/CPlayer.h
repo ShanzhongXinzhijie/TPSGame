@@ -3,6 +3,7 @@
 #include "FlyWalker.h"
 #include "ActionSender.h"
 #include "Team.h"
+#include "MiniHPbar.h"
 
 class NetPlayerCaster;
 
@@ -116,6 +117,7 @@ private:
 protected:
 	static constexpr unsigned short maxHp = 1000;
 	unsigned short m_hp = maxHp;
+	MiniHPbar miniHpbar;
 	FlyWalker mover;    //“®‚«‚ÌŠÇ—
 	unsigned char activeWeapon = -1;
 	Weapon* weapon[WEAPON_NUM]; //•Ší

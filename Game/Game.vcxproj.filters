@@ -47,6 +47,7 @@
     <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\NormalBullet.h" />
     <ClInclude Include="Include\WeaponHolder.h" />
+    <ClInclude Include="Include\MiniHPbar.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\DeckType.h" />
     <ClInclude Include="Include\CConfig.h" />
@@ -135,10 +136,12 @@
     <ImageContentTask Include="Asset\spriteData\Target.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-    <ImageContentTask Include="Asset\spriteData\HundGun.png" />
-    <ImageContentTask Include="Asset\spriteData\LButton.png" />
-    <ImageContentTask Include="Asset\spriteData\RButton.png" />
-    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
-    <ImageContentTask Include="Asset\spriteData\YButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\HundGun.png" />
+    <Image Include="Asset\spriteData\LButton.png" />
+    <Image Include="Asset\spriteData\RButton.png" />
+    <Image Include="Asset\spriteData\Rifle.png" />
+    <Image Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,8 @@
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 #include "CollisionMaskConst.h"
 
-Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType, unsigned int id): playersMap(pm), m_uniqueID(id){
+Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType, unsigned int id)
+	:playersMap(pm), m_uniqueID(id),miniHpbar(maxHp){
 	//インスタンシングモデル
 	AnimationClip animationClips[anim_num];
 	animationClips[anim_walk0].Load(L"Resource/animData/CitizenWalk.tka", true);
@@ -104,6 +105,8 @@ void Citizen::Update() {
 		//回転
 		m_model.SetRot(mover->getTurn());
 		m_modelAttack.SetRot(mover->getTurn());
+
+		miniHpbar.setPos(charaCon.GetPosition());
 	}
 
 	if (0 < nowFlame) {
@@ -146,6 +149,7 @@ bool Citizen::BatHit(Bullet* bullet) {
 				ChangeToKenzoku(bullet->getShooter());
 			}
 		}
+		miniHpbar.display(m_hp);
 	}
 	return true;
 }
