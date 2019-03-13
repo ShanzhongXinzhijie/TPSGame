@@ -288,6 +288,7 @@ void ConfirmPlayers::PostRender() {
 	else if (GetPhoton()->GetState() == PhotonNetworkLogic::DISCONNECTED) {
 		list.values.emplace_back(L"disconnect\n");
 		list.values.back() += m_netWork->GetErrorMessage();
+		list.values.back() += L"\n\n(BACK)ƒ{ƒ^ƒ“‚Åƒ‚ƒhƒ‹";
 	}
 	else {
 #ifdef SpritScreen
