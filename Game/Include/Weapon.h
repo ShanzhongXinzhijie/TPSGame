@@ -62,6 +62,7 @@ public:
 protected:
 	virtual Bullet* createBullet(CPlayer* player, CVector3 pos, CVector3 dir) = 0;
 	virtual void WeaponUpdate() {};
+	virtual void PreShot() {};
 
 	CPlayer* player;
 	GameObj::CSkinModelRender* playerModel;

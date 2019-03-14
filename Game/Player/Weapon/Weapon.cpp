@@ -25,6 +25,8 @@ Weapon::~Weapon() {
 }
 
 void Weapon::shot() {
+	PreShot();
+
 	playerModel->GetAnimCon().Play(shotAnimNum, CPlayer::animInterpolateSec);
 
 	if (shotCool <= 0) {
@@ -55,7 +57,7 @@ void Weapon::shot() {
 
 	Bullet* bullet = createBullet(player, pos, vec);
 
-	if (player->isFlying()) {
+	if (player->isFlying() && bullet) {
 		bullet->addVelocity(player->getVelocity());
 	}
 

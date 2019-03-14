@@ -16,6 +16,7 @@ Lazer::~Lazer() {
 }
 
 Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
+	if (m_num < 0) { return nullptr; }//ノーロック
 	return new NormalBullet(player, pos, dir*5000.0f, L"Resource/modelData/RifleBullet.cmo", 250);
 }
 
@@ -53,7 +54,12 @@ namespace{
 void Lazer::WeaponUpdate(){
 
 	m_num = -1;
-	if (!isActive) { return; }
+	if (!isActive) {
+		if (m_eff) { delete m_eff; m_eff = nullptr; }
+		m_effCnt = 0.0f;
+		m_charge = 0.0f;
+		return;
+	}
 
 	bool isFirst = true;	
 	float distance = -1.0f;
@@ -121,6 +127,49 @@ void Lazer::WeaponUpdate(){
 		}
 	}
 	
+	//チャージエフェクト
+	if (m_isOnEFF) {
+		m_effCnt -= GetDeltaTimeSec();
+		CVector3 pos = player->getPosition();
+		//SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_shot.wav");
+		//se->SetPos(pos);//音の位置
+		//se->SetDistance(500.0f);//音が聞こえる範囲
+		//se->Play(true); //第一引数をtrue
+
+		//弾を向き(方向)と場所を指定して発射
+		if (player->isFlying()) {
+			pos += player->GetActionSender().getLookVec() * (100.0f + 50.0f);
+		}
+		else {
+			pos += player->GetActionSender().getLookVec() * (50.0f + 50.0f);
+			pos.y += 60.0f;
+		}
+		if (m_effCnt <= 0.0f) {
+			if (m_eff) { delete m_eff; m_eff = nullptr;}
+			m_eff = new SuicideObj::CEffekseer(L"Resource/effect/lazerCharge.efk", 10.0f, pos);
+			m_effCnt = 1.6f;
+		}
+		m_eff->SetPos(pos);
+		//m_eff->SetScale({});
+	}
+	else {
+		if (m_eff) { delete m_eff; m_eff = nullptr; }
+		m_effCnt = 0.0f;
+		m_charge = 0.0f;
+	}
+	m_isOnEFF = false;
+}
+
+void Lazer::PreShot() {
+	if (bulletCount == 0) { return; }
+	m_isOnEFF = true;
+	m_charge += GetDeltaTimeSec();
+	if (m_charge < 1.0f) {
+		shotCool = 1.5f;
+	}
+	else {
+		shotCool = 0.0f;
+	}
 }
 
 void Lazer::PostRender(){
@@ -131,7 +180,3 @@ void Lazer::PostRender(){
 		m_sprite.Draw(vec, { 0.75f,0.75f }, { 0.5f,0.5f }, 0.0f, {0.0f,1.0f,0.0f,1.0f});
 	}
 }
-//チャージ
-//発射
-//スタン
-//クールダウンで発射制限
