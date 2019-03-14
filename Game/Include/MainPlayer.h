@@ -21,5 +21,6 @@ private:
 	Flybar flybar;
 
 	WeaponHolder wepHolder;
+	bool m_isCanShortPushY = true; float m_pushYButtonTime = 0.0f;
 };
 
