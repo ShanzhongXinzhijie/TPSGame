@@ -16,11 +16,21 @@ bool Ground::Start() {
 	m_phyStaticObject.CreateMesh(m_model);
 
 	m_dirlight.SetDirection({ 0.5f, -1.0f, 0.5f });
-	m_dirlight.SetColor({ 0.8f, 0.8f ,0.8f });
+	m_dirlight.SetColor({ 0.4f, 0.4f ,0.8f });
 
-	shadowMap.Init(2048, 2048, m_dirlight.GetDirection());
+	/*shadowMap.Init(2048, 2048, m_dirlight.GetDirection());
 	shadowMap.SetArea({ 10000.0f,10000.0f,50000.0f });
-	shadowMap.SetTarget({0, 2500.0f, 0});
+	shadowMap.SetTarget({0, 2500.0f, 0});*/
+
+	//èâä˙âª
+	float split[3] = { 0.0f,0.048f,0.8f };
+	CVector2 kaizoudo[2]; kaizoudo[0] = { 2048,2048 }; kaizoudo[1] = { 1024,1024 };
+	CascadeShadowmap.Init(2,//ï™äÑêî
+		split, kaizoudo
+	);
+	CascadeShadowmap.SetDirection(m_dirlight.GetDirection());
+	CascadeShadowmap.SetNear(50.0f);
+	CascadeShadowmap.SetFar(50000.0f);
 
 	return true;
 }
