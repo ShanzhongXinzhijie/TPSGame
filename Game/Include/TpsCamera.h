@@ -36,6 +36,8 @@ public:
 		isRight = true;
 	}
 
+	bool getLeft()const { return !isRight; }
+
 	void setSlow(bool slow) {
 		this->slow = slow;
 	}

@@ -49,7 +49,8 @@
     <ClInclude Include="Include\WeaponHolder.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\DeckType.h" />
-    <ClInclude Include="Include\Lazer.h" />
+    <ClInclude Include="Include\CConfig.h" />
+	<ClInclude Include="Include\Lazer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -97,7 +98,8 @@
     <ClCompile Include="Player\Bullet\NormalBullet.cpp" />
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
-    <ClCompile Include="Player\Weapon\Lazer.cpp" />
+    <ClCompile Include="CConfig.cpp" />
+	<ClCompile Include="Player\Weapon\Lazer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

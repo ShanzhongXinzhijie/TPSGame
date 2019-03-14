@@ -10,3 +10,4 @@ x64/
 *.tlog
 *.pdb
 *.ini
+/Game/Save/Config.dat

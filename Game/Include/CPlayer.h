@@ -60,6 +60,9 @@ public:
 	Weapon** GetWeapons() {
 		return weapon;
 	}
+	unsigned char GetActiveWeapon()const {
+		return activeWeapon;
+	}
 	//通信受信で使用
 	void SetPosition(const CVector3& pos) {
 		mover.SetPosition(pos);
@@ -75,6 +78,7 @@ public:
 	void flyStop() {
 		mover.flyStop();
 	}
+	void changeWeapon(unsigned char useWeapon);
 
 	//死亡処理
 	void Death();
