@@ -14,7 +14,7 @@ CVector3 toCV(btVector3 v) {
 	return CVector3(v.x(), v.y(), v.z());
 }
 
-TpsCamera::TpsCamera(int pad, const CVector3& tar): padNum(pad), m_target(tar){
+TpsCamera::TpsCamera(int pad, const CVector3& tar) : padNum(pad), m_target(tar) {
 	SetTarget(tar);
 	SetOffset(CVector3::AxisZ()*distance);
 	SetUp(CVector3::Up());
@@ -53,7 +53,7 @@ void TpsCamera::RotationCamera(const CVector2& rot) {
 	if (m_rot.x < -CMath::PI2) { m_rot.x += CMath::PI2; }
 	if (m_rot.x > CMath::PI2) { m_rot.x -= CMath::PI2; }
 	if (m_rot.y < -CMath::PI / 2.1f) { m_rot.y = -CMath::PI / 2.1f; }
-	if (m_rot.y > CMath::PI/2.1f) { m_rot.y = CMath::PI/2.1f; }
+	if (m_rot.y > CMath::PI / 2.1f) { m_rot.y = CMath::PI / 2.1f; }
 }
 
 void TpsCamera::moveLR() {
@@ -95,9 +95,10 @@ void TpsCamera::PreUpdate() {
 			}
 		}
 		RotationCamera(backMove);
+		springRot = m_rot;
 	}
 	//カメラ回転
-	CVector2 stickMove = Lstick/*Pad(padNum).GetStick(enLR::R)*/;
+	CVector2 stickMove = Rstick;
 	float len = stickMove.Length();
 	len = pow(len, 2) * 0.04f;//二次関数的な入力にする
 	stickMove.Normalize();
@@ -106,24 +107,20 @@ void TpsCamera::PreUpdate() {
 		stickMove *= 0.3f;
 	}
 	RotationCamera(stickMove);
-	UpdateVector(m_rot);
+	springRot += (m_rot - springRot) * 20 * GetDeltaTimeSec();
+	UpdateVector(springRot);
 
-	//カメラ更新
-	CVector3 upCamera = {0,0,0};
-	if (!upIsTarget) {
-		/*upCamera = GetUp()*up*0.5;*/
-		upCamera = GetUp()*0*0.5;
-	}
-
+//カメラ更新
 	//バネカメラ
 	CVector3 springPower = (m_target - m_springTarget);
-	m_springTarget += springPower*0.3f;
+	m_springTarget += springPower * 0.3f;
 
-	CVector3 target = m_springTarget + GetRight()*side + upCamera;
+	CVector3 target = m_springTarget + GetRight()*side;
 	CVector3 pos = target + m_ar_offsetPos;
 
 	//障害物判定
 	btCollisionWorld::ClosestRayResultCallback callback(toBtV(m_target), toBtV(pos));
+	callback.m_collisionFilterMask = 2;
 	GetPhysicsWorld().RayTest(toBtV(m_target), toBtV(pos), callback);
 	if (callback.hasHit()) {
 		CVector3 p = toCV(callback.m_hitPointWorld);
@@ -138,7 +135,6 @@ void TpsCamera::PreUpdate() {
 	m_camera.SetTarget(target);
 	m_camera.SetUp(m_ar_up);
 	m_camera.UpdateMatrix();
-	up = 100.0f;
 }
 
 void TpsCamera::PostRender() {
@@ -147,9 +143,9 @@ void TpsCamera::PostRender() {
 		sprite.Draw({ 0.75f, 0.5f }, CVector2::One(), { 0.5,0.5 });
 	} else {
 		sprite.Draw({ 0.25f, 0.5f }, CVector2::One(), { 0.5,0.5 });
-    }
+	}
 #else
-	sprite.Draw({0.5f, 0.5f}, CVector2::One(), { 0.5,0.5 });
+	sprite.Draw({ 0.5f, 0.5f }, CVector2::One(), { 0.5,0.5 });
 #endif
 }
 
@@ -172,7 +168,7 @@ CVector3 TpsCamera::getLook() const {
 	return v;
 }
 
-CVector3 TpsCamera::getLook(const CVector3& myPos) const{
+CVector3 TpsCamera::getLook(const CVector3& myPos) const {
 	using bw = btCollisionWorld;
 	CVector3 lookVec = getLook();
 	btVector3 startPos = toBtV(m_camera.GetPos() + lookVec * 100);

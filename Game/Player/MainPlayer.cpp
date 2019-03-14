@@ -19,8 +19,8 @@ MainPlayer::~MainPlayer() {
 void MainPlayer::PreUpdate() {
 	CVector2 stick = Pad(playerNum).GetStick(enLR::R);
 	if (isFlying()) {
+		stick.x = 0.0f;
 		CVector2 stick2 = Pad(playerNum).GetStick(enLR::L);
-		m_camera.setHeight(stick2.y*250.0f);
 		stick2.y = 0;
 		stick += stick2;
 	}
@@ -113,7 +113,7 @@ void MainPlayer::Update() {
 			m_camera.setLeft();
 		}
 		else {
-			m_camera.setRigth();
+			m_camera.setRight();
 		}
 	}
 	if (Pad(playerNum).GetButton(enButtonDown)) {
@@ -121,9 +121,9 @@ void MainPlayer::Update() {
 	}
 	m_camera.setZoomScale(weapon[activeWeapon]->getZoomScale());
 	m_camera.setSlow(shot);
-	CVector3 targHeight = { 0.0f ,60.0f, 0.0f };
+	CVector3 targHeight = { 0.0f ,80.0f, 0.0f };
 	CPlayer::getRotation().Multiply(targHeight);
-	m_camera.SetTarget(CPlayer::getPosition()+targHeight, !CPlayer::isFlying());
+	m_camera.SetTarget(CPlayer::getPosition()+targHeight);
 }
 
 void MainPlayer::PostRender() {

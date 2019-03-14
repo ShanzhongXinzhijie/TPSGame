@@ -5,70 +5,61 @@ public:
 	TpsCamera(int pad, const CVector3& tar);
 	~TpsCamera();
 
-	void PreUpdate() override;
-
-	void PostRender() override;
-
-	//カメラ位置設定
-	void SetTarget(const CVector3& vec, bool upIsTarget = true) {
-		m_target = vec;
-		if (upIsTarget) {
-			m_target.y += up;
-			this->upIsTarget = true;
-		} else {
-			this->upIsTarget = false;
-		}
-	}
-
-	void setHeight(float height) {
-		up = height + 100.0f;
-	}
-
-	void SetToMainCamera() {
-		SetMainCamera(&m_camera);
-	}
-
-	void setZoomScale(float zoomScale) {
-		zoom = 1.0f / zoomScale;
-	}
-
-	void setLeft() {
-		isRight = false;
-	}
-
-	void setRigth() {
-		isRight = true;
-	}
-
-	bool getLeft()const { return !isRight; }
-
-	void setRot(const CVector2& rot) {
-		Lstick = rot;
-	}
-
-	void setSlow(bool slow) {
-		this->slow = slow;
-	}
-
-	CVector3 GetFront() const {
-		return m_ar_offsetPos.GetNorm() * -1.0f;
-	}
-	CVector3 GetUp() const {
-		return m_ar_up.GetNorm();
-	}
-	CVector3 GetRight()const {
-		return CVector3::GetCross(GetFront(), GetUp()) * -1;
-	}
-
 	void BackTurn() {
 		if (backTurnRad <= 0.0f) {
 			backTurnRad = CMath::PI;
 		}
 	}
 
+	CVector3 GetFront() const {
+		return m_ar_offsetPos.GetNorm() * -1.0f;
+	}
+	CVector3 GetRight()const {
+		return CVector3::GetCross(GetFront(), GetUp()) * -1;
+	}
+	CVector3 GetUp() const {
+		return m_ar_up.GetNorm();
+	}
+
 	CVector3 getLook() const;
 
 	CVector3 getLook(const CVector3& myPos) const;
+
+
+	void PostRender() override;
+
+	void PreUpdate() override;
+
+	//カメラ位置設定
+	void SetTarget(const CVector3& vec) {
+		m_target = vec;
+	}
+
+	void SetToMainCamera() {
+		SetMainCamera(&m_camera);
+	}
+
+	void setLeft() {
+		isRight = false;
+	}
+
+	void setRight() {
+		isRight = true;
+	}
+
+	bool getLeft()const { return !isRight; }
+
+	void setRot(const CVector2& rot) {
+		Rstick = rot;
+	}
+
+	void setSlow(bool slow) {
+		this->slow = slow;
+	}
+
+	void setZoomScale(float zoomScale) {
+		zoom = 1.0f / zoomScale;
+	}
 
 private:
 	//カメラ回転
@@ -90,9 +81,10 @@ private:
 	CVector3 m_offsetPos, m_target, m_up;
 	CVector3 m_ar_offsetPos, m_ar_up;
 	CVector2 m_rot = {0.0f, 0.0f};
+	CVector2 springRot = m_rot;
 	GameObj::PerspectiveCamera m_camera;
 
-	CVector2 Lstick = {};
+	CVector2 Rstick = {};
 
 	static constexpr float viewAngle = 3.14f*0.5f; //視野角
 	float zoom = 1.0f; //視野角の縮小率
@@ -106,8 +98,6 @@ private:
 #else
 		= 80.0f;
 #endif
-	float up = 100.0f;    //カメラ位置　上下
-	bool upIsTarget = false; //カメラの位置を上げるか、ターゲットの位置を上げるか
 
 	const float distance = 100.0f; //カメラの距離
 	float side = rightSide; //カメラの左右
