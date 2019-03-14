@@ -119,7 +119,7 @@ void ConfirmPlayers::Update() {
 #endif
 		//ƒ^ƒCƒgƒ‹‚É–ß‚é
 		fade->fadeIn([&]() {
-			new Title(fade, bgm);
+			Title* T = new Title(fade, bgm); T->SetName(L"TitleClass");
 			delete this; return;
 		});
 	}

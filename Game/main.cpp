@@ -2,6 +2,7 @@
 #include "Title.h"
 #include "Network/Network.h"
 #include "Fade.h"
+#include "CConfig.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -16,6 +17,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	initparam.isSplitScreen = enNoSplit;
 #endif
 
+	{
+		CConfig configLoad;
+		configLoad.Load();
+		if (configLoad.GetConfigData().lowGraphics) {
+			//ローグラフィックス設定
+			initparam.SetLowSpecSetting();
+		}
+	}
+
 	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
 	//SetIsDebugDraw(true);//fpsとか表示
@@ -28,8 +38,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	Fade fade;
 
-	new Title(&fade);
+	Title* T = new Title(&fade); T->SetName(L"TitleClass");
 
 	//ゲームループ。
 	GetEngine().RunGameLoop();
+
+	//コンフィグセーブ
+	T = FindGO<Title>(L"TitleClass");
+	if (T) { T->ConfigSave(); }
 }

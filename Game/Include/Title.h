@@ -1,4 +1,5 @@
 #pragma once
+#include "CConfig.h"
 using namespace GameObj;
 
 class Fade;
@@ -12,6 +13,7 @@ public:
 	void Update() override;
 	void PostRender() override;
 
+	void ConfigSave();
 private:
 	OrthoCamera camera;
 	CFont m_font;
@@ -20,5 +22,7 @@ private:
 	SuicideObj::CBGM* bgm;
 
 	Fade* fade;
+
+	CConfig::ConfigData m_configData;
 };
 

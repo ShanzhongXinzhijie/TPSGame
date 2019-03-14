@@ -246,6 +246,7 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
@@ -297,6 +298,7 @@
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\CConfig.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\DeckType.h" />
