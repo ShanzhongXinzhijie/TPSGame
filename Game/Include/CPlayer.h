@@ -20,8 +20,6 @@ public:
 	bool Start() override;
 	virtual void Update() override;
 
-	CVector3 getPosition() const;
-
 	void sendAction(const ActionSender& action);
 
 	bool BatHit(Bullet* bullet);
@@ -39,8 +37,16 @@ public:
 		return mover.GetFlyPower();
 	}
 
-	CVector3 getVelocity() {
+	CVector3 getPosition() const {
+		return mover.GetPosition();
+	}
+
+	CVector3 getVelocity() const{
 		return mover.getVelocity();
+	}
+
+	CQuaternion getRotation() const{
+		return mover.getRotation();
 	}
 
 	Team* team;
@@ -74,7 +80,7 @@ public:
 	void SetIsFly(bool f) { mover.SetIsFly(f); }
 	void SetFlyTimer(float p) { mover.SetFlyTimer(p); }
 	void fly() {
-		mover.fly(true, action.getLookVec(), flyPower);
+		mover.fly(true, action.getLookVec(),{0,0}, flyPower);
 	}
 	void flyStop() {
 		mover.flyStop();

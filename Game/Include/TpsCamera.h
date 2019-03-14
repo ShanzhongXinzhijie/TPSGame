@@ -20,6 +20,10 @@ public:
 		}
 	}
 
+	void setHeight(float height) {
+		up = height + 100.0f;
+	}
+
 	void SetToMainCamera() {
 		SetMainCamera(&m_camera);
 	}
@@ -37,6 +41,10 @@ public:
 	}
 
 	bool getLeft()const { return !isRight; }
+
+	void setRot(const CVector2& rot) {
+		Lstick = rot;
+	}
 
 	void setSlow(bool slow) {
 		this->slow = slow;
@@ -84,6 +92,8 @@ private:
 	CVector2 m_rot = {0.0f, 0.0f};
 	GameObj::PerspectiveCamera m_camera;
 
+	CVector2 Lstick = {};
+
 	static constexpr float viewAngle = 3.14f*0.5f; //視野角
 	float zoom = 1.0f; //視野角の縮小率
 
@@ -96,7 +106,7 @@ private:
 #else
 		= 80.0f;
 #endif
-	static constexpr float up = 100.0f;    //カメラ位置　上下
+	float up = 100.0f;    //カメラ位置　上下
 	bool upIsTarget = false; //カメラの位置を上げるか、ターゲットの位置を上げるか
 
 	const float distance = 100.0f; //カメラの距離

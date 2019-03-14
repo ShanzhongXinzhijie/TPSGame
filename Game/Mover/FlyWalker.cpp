@@ -12,7 +12,7 @@ FlyWalker::~FlyWalker() {
 	}
 }
 
-void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
+void FlyWalker::fly(bool isFly ,const CVector3 & v,const CVector2& move ,float power) {
 	if (isFly) {
 		if (flyTimer > 0.0f) {
 			playSE(L"Resource/sound/SE_fly.wav");
@@ -21,15 +21,28 @@ void FlyWalker::fly(bool isFly ,const CVector3 & v, float power) {
 			se->SetDistance(500.0f);
 			se->Play(true, true);
 			flyPower = power;
-			velocity = v * flyPower;
+			CVector3 v2 = v;
+			v2.y = 0;
+			velocity = v2 * flyPower;
 			flying = true;
 		}
-	} else if(flying) {
+	} else if (flying) {
 		if (se != nullptr) {
 			se->SetPos(GetPosition());
 		}
+		CVector3 v2 = v;
+		v2.y = 0;
+		v2.Normalize();
+		CVector3 axis = CVector3::AxisY();
 
-		velocity = v * flyPower * GetDeltaTimeSec();
+		upDown += (0 - upDown) * 0.3f;
+		upDown += move.y * 0.5f;
+
+		v2.y = upDown;
+		v2.Normalize();
+		velocity = v2 * flyPower * GetDeltaTimeSec();
+
+
 		if (flyPower <= 0) {
 			flyStop();
 		}
@@ -45,7 +58,7 @@ void FlyWalker::flyStop() {
 	}
 }
 
-CQuaternion FlyWalker::getRotation() {
+CQuaternion FlyWalker::getRotation() const{
 	if (flying) {
 		CQuaternion rot;
 		rot.SetRotation(CVector3::AxisY(), atan2f(velocity.x, velocity.z));

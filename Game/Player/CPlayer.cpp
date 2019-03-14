@@ -77,10 +77,6 @@ void CPlayer::Update() {
 	}
 }
 
-CVector3 CPlayer::getPosition() const{
-	return mover.GetPosition();
-}
-
 void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
@@ -156,15 +152,17 @@ void CPlayer::Move() {
 			if (mover.isFlying()) {
 				mover.flyStop();
 			} else {
-				mover.fly(true, action.getLookVec(), flyPower);
+				mover.fly(true, action.getLookVec(), {0, 0}, flyPower);
 			}
 		}
 	}
+
+	//îÚçs
 	if (mover.isFlying()) {
 		if (wing == nullptr) {
 			wing = new Wing(mover);
 		}
-		mover.fly(false, action.getLookVec());
+		mover.fly(false, action.getLookVec(), movement);
 		mover.turn(action.getLookVec().x, action.getLookVec().z);
 		m_model.GetAnimCon().Play(anim_fly, animInterpolateSec);
 		return;

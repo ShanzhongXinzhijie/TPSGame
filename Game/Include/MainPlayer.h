@@ -9,6 +9,8 @@ class MainPlayer :public CPlayer {
 public:
 	MainPlayer(int pad, Team* team, const CVector3& position);
 	~MainPlayer();
+
+	void PreUpdate() override;
 	void Update() override;
 
 	void PostRender() override;

@@ -5,11 +5,11 @@ public:
 	FlyWalker();
 	~FlyWalker();
 
-	void fly(bool isFly, const CVector3& velocity = {}, float power = 0.0f);
+	void fly(bool isFly, const CVector3& velocity = {}, const CVector2& move = {}, float power = 0.0f);
 
 	void flyStop();
 
-	CQuaternion getRotation();
+	CQuaternion getRotation() const;
 
 	float getFlyTimer() const{
 		return flyTimer;
@@ -18,7 +18,7 @@ public:
 		return c_flyTimer;
 	}
 
-	bool isFlying() {
+	bool isFlying() const{
 		return flying;
 	}
 	float GetFlyPower()const {
@@ -37,6 +37,7 @@ public:
 	static constexpr float c_flyTimer = 5.0f;
 private:
 	float flyTimer = c_flyTimer; //îÚçsâ¬î\Ç»écÇËéûä‘
+	float upDown = 0.0f;
 
 	float flyPower = 0.0f;
 	bool flying = false;

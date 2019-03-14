@@ -16,10 +16,24 @@ MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 MainPlayer::~MainPlayer() {
 }
 
+void MainPlayer::PreUpdate() {
+	CVector2 stick = Pad(playerNum).GetStick(enLR::R);
+	if (isFlying()) {
+		CVector2 stick2 = Pad(playerNum).GetStick(enLR::L);
+		m_camera.setHeight(stick2.y*250.0f);
+		stick2.y = 0;
+		stick += stick2;
+	}
+	m_camera.setRot(stick);
+}
 void MainPlayer::Update() {
 
 	CVector3 moveVec;
-	{
+	if (isFlying()) {
+		CVector2 stickInput = Pad(playerNum).GetStick(enLR::L);
+		moveVec.x = stickInput.x;
+		moveVec.z = stickInput.y;
+	}else {
 		CVector2 stickInput = Pad(playerNum).GetStick(enLR::L);
 		//ƒJƒƒ‰‰¡•ûŒü‚ÌˆÚ“®—Ê
 		moveVec += m_camera.GetRight() * stickInput.x;
@@ -107,7 +121,9 @@ void MainPlayer::Update() {
 	}
 	m_camera.setZoomScale(weapon[activeWeapon]->getZoomScale());
 	m_camera.setSlow(shot);
-	m_camera.SetTarget(CPlayer::getPosition(), !CPlayer::isFlying());
+	CVector3 targHeight = { 0.0f ,60.0f, 0.0f };
+	CPlayer::getRotation().Multiply(targHeight);
+	m_camera.SetTarget(CPlayer::getPosition()+targHeight, !CPlayer::isFlying());
 }
 
 void MainPlayer::PostRender() {

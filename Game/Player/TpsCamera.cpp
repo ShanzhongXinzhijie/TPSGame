@@ -97,7 +97,7 @@ void TpsCamera::PreUpdate() {
 		RotationCamera(backMove);
 	}
 	//カメラ回転
-	CVector2 stickMove = Pad(padNum).GetStick(enLR::R);
+	CVector2 stickMove = Lstick/*Pad(padNum).GetStick(enLR::R)*/;
 	float len = stickMove.Length();
 	len = pow(len, 2) * 0.04f;//二次関数的な入力にする
 	stickMove.Normalize();
@@ -111,7 +111,8 @@ void TpsCamera::PreUpdate() {
 	//カメラ更新
 	CVector3 upCamera = {0,0,0};
 	if (!upIsTarget) {
-		upCamera = GetUp()*up*0.5;
+		/*upCamera = GetUp()*up*0.5;*/
+		upCamera = GetUp()*0*0.5;
 	}
 
 	//バネカメラ
@@ -137,6 +138,7 @@ void TpsCamera::PreUpdate() {
 	m_camera.SetTarget(target);
 	m_camera.SetUp(m_ar_up);
 	m_camera.UpdateMatrix();
+	up = 100.0f;
 }
 
 void TpsCamera::PostRender() {
