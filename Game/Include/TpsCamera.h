@@ -57,6 +57,10 @@ public:
 		this->slow = slow;
 	}
 
+	void setSpring(float spring) {
+		this->spring = spring;
+	}
+
 	void setZoomScale(float zoomScale) {
 		zoom = 1.0f / zoomScale;
 	}
@@ -82,9 +86,11 @@ private:
 	CVector3 m_ar_offsetPos, m_ar_up;
 	CVector2 m_rot = {0.0f, 0.0f};
 	CVector2 springRot = m_rot;
+	float spring = 0.2f;
 	GameObj::PerspectiveCamera m_camera;
 
-	CVector2 Rstick = {};
+
+	CVector2 Rstick = {}; //スティック入力
 
 	static constexpr float viewAngle = 3.14f*0.5f; //視野角
 	float zoom = 1.0f; //視野角の縮小率

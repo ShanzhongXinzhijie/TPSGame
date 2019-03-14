@@ -19,10 +19,8 @@ MainPlayer::~MainPlayer() {
 void MainPlayer::PreUpdate() {
 	CVector2 stick = Pad(playerNum).GetStick(enLR::R);
 	if (isFlying()) {
-		stick.x = 0.0f;
-		CVector2 stick2 = Pad(playerNum).GetStick(enLR::L);
-		stick2.y = 0;
-		stick += stick2;
+		float lx = Pad(playerNum).GetStick(enLR::L).x;
+		stick.x = lx;
 	}
 	m_camera.setRot(stick);
 }
@@ -122,6 +120,12 @@ void MainPlayer::Update() {
 	m_camera.setZoomScale(weapon[activeWeapon]->getZoomScale());
 	m_camera.setSlow(shot);
 	CVector3 targHeight = { 0.0f ,80.0f, 0.0f };
+	if (CPlayer::isFlying()) {
+		targHeight.y = 40.0f;
+		m_camera.setSpring(0.9f);
+	} else {
+		m_camera.setSpring(0.5f);
+	}
 	CPlayer::getRotation().Multiply(targHeight);
 	m_camera.SetTarget(CPlayer::getPosition()+targHeight);
 }

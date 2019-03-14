@@ -16,6 +16,8 @@ public:
 
 	void removePlayer(int playerNum);
 
+	CVector3 getHome(const Team* team) const;
+
 	CPlayer* getPlayer(int playerNum) {
 		return playersMap[playerNum];
 	}

@@ -113,7 +113,7 @@ void TpsCamera::PreUpdate() {
 //カメラ更新
 	//バネカメラ
 	CVector3 springPower = (m_target - m_springTarget);
-	m_springTarget += springPower * 0.3f;
+	m_springTarget += springPower * spring;
 
 	CVector3 target = m_springTarget + GetRight()*side;
 	CVector3 pos = target + m_ar_offsetPos;

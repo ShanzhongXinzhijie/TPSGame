@@ -21,6 +21,11 @@ public:
 	bool isFlying() const{
 		return flying;
 	}
+
+	bool isHitWall() const {
+		return hitWall;
+	}
+
 	float GetFlyPower()const {
 		return flyPower;
 	}
@@ -38,6 +43,8 @@ public:
 private:
 	float flyTimer = c_flyTimer; //”òs‰Â”\‚Èc‚èŠÔ
 	float upDown = 0.0f;
+
+	bool hitWall = false;
 
 	float flyPower = 0.0f;
 	bool flying = false;

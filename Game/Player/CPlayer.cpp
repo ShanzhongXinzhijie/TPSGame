@@ -69,6 +69,11 @@ void CPlayer::Update() {
 		CVector3 pos = getPosition();
 		pos.y += mover.GetCollider()->GetHeight()/2 + mover.GetCollider()->GetRadius();
 		m_collision.SetPosition(pos);
+
+		if (getPosition().y < -100.0f) {
+			Hit({ 0,0,0 }, maxHp / 5);
+			mover.SetPosition(team->getHome());
+		}
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
@@ -129,17 +134,17 @@ void CPlayer::Move() {
 
 	//壁ジャンプ
 	bool isWalljump = false;
-	if (mover.IsContactWall()) {
-		//空中に壁に当たりながらジャンプ or 飛行で壁に突っ込む
-		if (!mover.IsOnGround() && action.isJump() || mover.isFlying()) {
-			if (mover.isFlying()) {
-				mover.flyStop();
-				mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
-			}
-			playSE(L"Resource/sound/SE_jump.wav");
-			mover.walljump(jumpPower, movement);
-			isWalljump = true;
-		}
+	//空中に壁に当たりながらジャンプ
+	if (mover.IsContactWall() && !mover.IsOnGround() && action.isJump()) {
+		playSE(L"Resource/sound/SE_jump.wav");
+		mover.walljump(jumpPower, movement);
+		isWalljump = true;
+	}
+	//飛行で壁に突っ込む
+	if (mover.isHitWall()) {
+		mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
+		playSE(L"Resource/sound/SE_jump.wav");
+		isWalljump = true;
 	}
 
 	//ジャンプと飛行
@@ -178,9 +183,7 @@ void CPlayer::Move() {
 	bool dash = false;
 
 	//移動速度
-	if (action.isShot()) {
-		speed = moveSpeed * 0.5f;
-	}else if(action.isDash()) {
+	if(action.isDash() && !action.isShot()) {
 		speed = moveSpeed * dashMul;
 		dash = true;
 	}

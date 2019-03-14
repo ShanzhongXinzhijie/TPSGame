@@ -136,9 +136,9 @@ private:
 	CQuaternion m_rot;
 	float radian = 0.0f; //回転量
 
-	static constexpr float flyPower = 180000.0f; //飛行力
+	static constexpr float flyPower = 60000.0f; //飛行力
 	static constexpr float jumpPower = 600.0f; //ジャンプ力
-	static constexpr float moveSpeed = 80.0f; //移動速度
+	static constexpr float moveSpeed = 40.0f; //移動速度
 	static constexpr float dashMul = 2.0f; //ダッシュ倍率
 
 	ActionSender action;     //プレイヤーの操作が入っている

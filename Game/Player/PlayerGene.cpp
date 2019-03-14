@@ -7,8 +7,8 @@
 
 
 PlayerGene::PlayerGene() {
-	teamArray.push_back(new Team({ 1,0.0f,0.0f,1 }, L"赤チーム"));
-	teamArray.push_back(new Team({ 0.0f,0.0f,1,1 }, L"青チーム"));
+	teamArray.push_back(new Team({ 1,0.0f,0.0f,1 }, L"赤チーム", this));
+	teamArray.push_back(new Team({ 0.0f,0.0f,1,1 }, L"青チーム", this));
 }
 
 
@@ -53,4 +53,16 @@ void PlayerGene::createPlayer(bool isMe, int playerNum) {
 void PlayerGene::removePlayer(int playerNum) {
 	delete playersMap[playerNum];
 	playersMap.erase(playerNum);
+}
+
+CVector3 PlayerGene::getHome(const Team * team) const {
+	size_t teamNum = 0;
+	for (; teamNum < teamArray.size(); teamNum++) {
+		if (teamArray[teamNum] != team) {
+			teamNum++;
+		} else {
+			break;
+		}
+	}
+	return spawnerArray[teamNum%spawnerArray.size()]->getPos();
 }
