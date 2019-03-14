@@ -9,6 +9,7 @@ bool Ground::Start() {
 	m_skyModel.Init(L"Resource/modelData/sky.cmo");
 	m_skyModel.SetIsMostDepth(true);
 	m_skyModel.SetIsShadowCaster(false);
+	m_skyModel.SetDrawPriority(DRAW_PRIORITY_MAX);
 
 	m_model.Init(L"Resource/modelData/Ground.cmo");
 	m_model.SetPos(m_pos);
