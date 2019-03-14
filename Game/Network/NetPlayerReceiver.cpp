@@ -76,11 +76,17 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				},
 				(buttons & 0b100) != 0,
 				(buttons & 0b1000) != 0,
-				(buttons & 0b100000) != 0,
-				(buttons & 0b1000000) != 0
+				false,//(buttons & 0b100000) != 0,
+				false//(buttons & 0b1000000) != 0
 			);
 			//飛行中のフラグ
 			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;
+		}
+
+		//装備武器
+		if (eventContent.getValue((nByte)enActiveWepon)) {
+			m_status[playerNr].m_isUpd8ActiveWeapon = true;
+			m_status[playerNr].m_activeWeapon = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enActiveWepon)))->getDataCopy();
 		}
 
 		//フライ情報
@@ -258,6 +264,11 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 		if (playerNr != GetPhoton()->GetLocalPlayerNumber()) {//自分は除く
 			//アクション
 			m_pCPlayer[playerNr]->sendAction(m_status[playerNr].m_actionSender);
+			//装備武器
+			if (m_status[playerNr].m_isUpd8ActiveWeapon) {
+				m_pCPlayer[playerNr]->changeWeapon(m_status[playerNr].m_activeWeapon);
+				m_status[playerNr].m_isUpd8ActiveWeapon = false;
+			}
 			//フライ情報
 			if (m_status[playerNr].m_isUpd8FlyTimer) {
 				m_pCPlayer[playerNr]->SetFlyTimer(m_status[playerNr].m_flyTimer);

@@ -237,6 +237,16 @@ void CPlayer::changeWeapon(bool left, bool right) {
 	weapon[nextWeapon]->Activate();
 	activeWeapon = nextWeapon;
 }
+void CPlayer::changeWeapon(unsigned char useWeapon) {
+	short nextWeapon = useWeapon;
+	if (nextWeapon < 0) { nextWeapon = WEAPON_NUM - 1; }
+	if (nextWeapon >= WEAPON_NUM) { nextWeapon = 0; }
+
+	weapon[activeWeapon]->Inactivate();
+	weapon[nextWeapon]->Activate();
+	activeWeapon = nextWeapon;
+}
+
 
 void CPlayer::playSE(const wchar_t* path) {
 	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);

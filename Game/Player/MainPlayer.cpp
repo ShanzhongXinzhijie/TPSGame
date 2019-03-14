@@ -65,7 +65,7 @@ void MainPlayer::Update() {
 		m_pushYButtonTime = 0.0f; m_isCanShortPushY = true;
 	}
 	//\šƒL[‚Å‚Ì•ŠíØ‚è‘Ö‚¦
-	if (!weaponLeft && !weaponRight) {
+	if (!GameWaiter::GetIsWait() && !weaponLeft && !weaponRight) {
 		if (Pad(playerNum).GetDown(enButtonLeft)) { weaponLeft = true; }
 		if (Pad(playerNum).GetDown(enButtonRight)) { weaponRight = true; }
 		wepHolder.changeWeapon(weaponLeft, weaponRight);
