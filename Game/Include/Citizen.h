@@ -2,6 +2,7 @@
 #include "DemolisherWeapon/physics/character/CCharacterController.h"
 #include "CPlayer.h"
 #include "InstancingCitizenColorManager.h"
+#include "../Network/NetPlayerCaster.h"
 
 class ICitizenBrain;
 class Bullet;

@@ -56,6 +56,7 @@ bool CPlayer::Start() {
 	activeWeapon = HUND_GUN;
 	weapon[HUND_GUN]->Activate();
 
+	m_Init = true;
 	return true;
 };
 
