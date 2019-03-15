@@ -15,6 +15,10 @@ public:
 
 	void PostRender() override;
 
+	const TpsCamera& getCamera() const{
+		return m_camera;
+	}
+
 private:
 	const int playerNum = 0;
 	HPbar hpbar;

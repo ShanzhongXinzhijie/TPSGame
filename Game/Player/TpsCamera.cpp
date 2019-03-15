@@ -77,8 +77,7 @@ void TpsCamera::moveLR() {
 
 void TpsCamera::PreUpdate() {
 	//視野角
-	float angleBias = 1.0f;
-	angleBias = 1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom);
+	float angleBias = (1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom));
 	m_camera.SetViewAngle(viewAngle * angleBias);
 
 	moveLR();
@@ -97,21 +96,29 @@ void TpsCamera::PreUpdate() {
 		RotationCamera(backMove);
 		springRot = m_rot;
 	}
-	//カメラ回転
-	CVector2 stickMove = Rstick;
-	float len = stickMove.Length();
-	len = pow(len, 2) * 0.04f;//二次関数的な入力にする
-	stickMove.Normalize();
-	stickMove *= len * angleBias;
-	if (slow) {
-		stickMove *= 0.3f;
+	{//カメラ回転
+		CVector2 stickMove = Rstick;
+		float len = stickMove.Length();
+		len = pow(len, 2) * 0.04f;//二次関数的な入力にする
+		stickMove.Normalize();
+		stickMove *= len * angleBias;
+		if (slow) {
+			stickMove *= 0.3f;
+		}
+		RotationCamera(stickMove);
+		//視点回転のバネ
+		CVector2 springVec = (m_rot - springRot);
+		if (springVec.x > CMath::PI) {
+			springVec.x -= CMath::PI2;
+		} else if (springVec.x < -CMath::PI) {
+			springVec.x += CMath::PI2;
+		}
+		springRot += springVec * 20 * GetDeltaTimeSec();
+		UpdateVector(springRot);
 	}
-	RotationCamera(stickMove);
-	springRot += (m_rot - springRot) * 20 * GetDeltaTimeSec();
-	UpdateVector(springRot);
 
 //カメラ更新
-	//バネカメラ
+	//視点移動のバネ
 	CVector3 springPower = (m_target - m_springTarget);
 	m_springTarget += springPower * spring;
 

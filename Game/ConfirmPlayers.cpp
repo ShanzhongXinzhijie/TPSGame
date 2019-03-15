@@ -103,7 +103,7 @@ void ConfirmPlayers::Update() {
 			NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
 			fade->fadeIn([&]() {
 				bgm->Stop();
-				new Game(fade,m_timeLimit,m_citizenCnt, seed, -1);
+				Game::createGame(fade,m_timeLimit,m_citizenCnt, seed, -1);
 				delete this; return;
 			});
 #else
@@ -156,7 +156,7 @@ void ConfirmPlayers::Update() {
 			//ゲーム開始
 			fade->fadeIn([&]() {
 				bgm->Stop();
-				new Game(fade, m_timeLimit, m_citizenCnt, m_seed, m_startTime);
+				Game::createGame(fade, m_timeLimit, m_citizenCnt, m_seed, m_startTime);
 				delete this; return;
 			});
 		}
@@ -175,7 +175,7 @@ void ConfirmPlayers::Update() {
 		//ゲーム開始
 		fade->fadeIn([&]() {
 			bgm->Stop();
-			new Game(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
+			Game::createGame(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
 			delete this; return;
 		});
 	}

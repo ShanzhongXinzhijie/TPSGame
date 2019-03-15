@@ -10,6 +10,8 @@
 #include "GameWaiter.h"
 #include "Ginger/Ginger.h"
 
+Game* Game::static_game = nullptr;
+
 Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) : citizenGene(this), timer(timeLimit){
 	this->fade = fade;
 	fade->fadeOut();
@@ -78,6 +80,7 @@ Game::~Game() {
 #ifndef SpritScreen
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(nullptr);
 #endif
+	static_game = nullptr;
 }
 
 void Game::Update() {

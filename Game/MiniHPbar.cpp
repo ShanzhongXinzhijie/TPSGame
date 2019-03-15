@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MiniHPbar.h"
-
+#include "Game.h"
 
 MiniHPbar::MiniHPbar(float maxHp): c_maxHp(maxHp) {
 	outImg.Init(L"Resource/spriteData/MiniHpOut.dds");
@@ -20,18 +20,30 @@ void MiniHPbar::Update() {
 
 void MiniHPbar::PostRender() {
 	if (drawTime > 0.0f) {
-		float alpha = 1.0f;
-		if (drawTime < 0.5f) {
-			alpha = drawTime;
+		CVector3 vec1 = GetMainCamera()->GetTarget() - GetMainCamera()->GetPos();
+		CVector3 vec2 = m_pos - GetMainCamera()->GetPos();
+
+		if (vec1.Dot(vec2) < 0) {
+			return;
 		}
 
-		float hpScale = m_hp / c_maxHp;
+		CVector2 pos2D = GetMainCamera()->CalcScreenPosFromWorldPosScreenPos(m_pos);
 
-		CVector2 pos = m_pos;
-		pos.x -= 44 * m_scale;
+		const float cameraAngle = Game::getGame()->getMainPlayer()->getCamera().getAngle();
+		const float tan = tanf(cameraAngle*0.5f) * 2;
+		const float scale = 400.0f / (vec2.Length()*tan);
 
-		backImg.DrawScreenPos(pos, { m_scale, m_scale }, { 0.0f,0.5f }, 0.0f, {1, 1, 1, alpha});
-		inImg.DrawScreenPos(pos, { m_scale*hpScale, m_scale }, { 2.0f/88,0.5f }, 0.0f, { 1, 1, 1, alpha });
-		outImg.DrawScreenPos(pos, { m_scale, m_scale }, { 0.0f,0.5f }, 0.0f, { 1, 1, 1, alpha });
+		float a = 1.0f;
+		if (drawTime < 0.5f) {
+			a = drawTime/0.5f;
+		}
+
+		const float hpScale = m_hp / c_maxHp;
+
+		pos2D.x -= 88 * scale;
+
+		backImg.DrawScreenPos(pos2D, { scale, scale }, { 0.0f,0.5f }, 0.0f, {a, a, a, a}, DirectX::SpriteEffects_None, 0.7f);
+		inImg.DrawScreenPos(pos2D, { scale*hpScale, scale }, { 2.0f/176,0.5f }, 0.0f, { a, a, a, a }, DirectX::SpriteEffects_None, 0.7f);
+		outImg.DrawScreenPos(pos2D, { scale, scale }, { 0.0f,0.5f }, 0.0f, { a, a, a, a }, DirectX::SpriteEffects_None, 0.7f);
 	}
 }

@@ -108,11 +108,11 @@ void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 		mover.addVelocity(dir);
 		if (m_hp > damage) {
 			m_hp -= damage;
-			miniHpbar.display(m_hp);
 		} else {
 			m_hp = 0;
 			Death();
 		}
+		miniHpbar.display(m_hp);
 	}
 }
 
@@ -121,11 +121,13 @@ void CPlayer::Death() {
 	m_hp = 0;
 	deathCool = constDeathCool;
 	m_model.SetIsDraw(false);
+	weapon[activeWeapon]->Inactivate();
 }
 //‘h¶ˆ—
 void CPlayer::Revive() {
 	m_hp = maxHp;
 	m_model.SetIsDraw(true);
+	weapon[activeWeapon]->Activate();
 }
 
 void CPlayer::Move() {

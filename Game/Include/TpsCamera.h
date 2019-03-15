@@ -11,6 +11,10 @@ public:
 		}
 	}
 
+	float getAngle() const{
+		return viewAngle * (1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom));
+	}
+
 	CVector3 GetFront() const {
 		return m_ar_offsetPos.GetNorm() * -1.0f;
 	}

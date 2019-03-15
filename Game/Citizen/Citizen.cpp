@@ -132,7 +132,9 @@ bool Citizen::BatHit(Bullet* bullet) {
 
 		if (m_hp > bullet->getDamage()) {
 			m_hp -= bullet->getDamage();
+			miniHpbar.display(m_hp);
 		} else {
+			miniHpbar.display(0);
 			m_hp = maxHp;
 
 			bool canKenzokuing = false;
@@ -149,7 +151,6 @@ bool Citizen::BatHit(Bullet* bullet) {
 				ChangeToKenzoku(bullet->getShooter());
 			}
 		}
-		miniHpbar.display(m_hp);
 	}
 	return true;
 }

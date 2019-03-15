@@ -18,14 +18,10 @@ public:
 		}
 	}
 
-	void setPos(CVector3 pos) {
+	void setPos(const CVector3& pos) {
 		if (enable) {
-			pos.y += 130.0f;
-			m_pos = GetMainCamera()->CalcScreenPosFromWorldPosScreenPos(pos);
-			m_scale = (3000.0f - (GetMainCamera()->GetPos() - pos).Length())/2000.0f;
-			if (m_scale < 0.0f) {
-				m_scale = 0.0f;
-			}
+			m_pos = pos;
+			m_pos.y += 130.0f;
 		}
 	}
 
@@ -36,8 +32,7 @@ private:
 
 	bool enable = true;
 
-	CVector2 m_pos = {};
-	float m_scale;
+	CVector3 m_pos = {};
 
 	const float c_maxHp;
 	unsigned int m_hp = (unsigned int)c_maxHp;
