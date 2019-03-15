@@ -19,9 +19,7 @@ public:
 
 	bool Start() override;
 	virtual void Update() override;
-
-	const CVector3& getPosition() const;
-
+	
 	void sendAction(const ActionSender& action);
 
 	bool BatHit(Bullet* bullet);
@@ -39,7 +37,7 @@ public:
 		return mover.GetFlyPower();
 	}
 
-	CVector3 getPosition() const {
+	const CVector3& getPosition() const {
 		return mover.GetPosition();
 	}
 

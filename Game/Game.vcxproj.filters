@@ -51,7 +51,7 @@
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\DeckType.h" />
     <ClInclude Include="Include\CConfig.h" />
-	<ClInclude Include="Include\Lazer.h" />
+    <ClInclude Include="Include\Lazer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -100,7 +100,8 @@
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="CConfig.cpp" />
-	<ClCompile Include="Player\Weapon\Lazer.cpp" />
+    <ClCompile Include="Player\Weapon\Lazer.cpp" />
+    <ClCompile Include="MiniHPbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -139,13 +140,14 @@
     <ImageContentTask Include="Asset\spriteData\Target.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Asset\spriteData\HundGun.png" />
-    <Image Include="Asset\spriteData\LButton.png" />
-    <Image Include="Asset\spriteData\RButton.png" />
-    <Image Include="Asset\spriteData\Rifle.png" />
-    <Image Include="Asset\spriteData\YButton.png" />
+    <ImageContentTask Include="Asset\spriteData\HundGun.png" />
+    <ImageContentTask Include="Asset\spriteData\LButton.png" />
+    <ImageContentTask Include="Asset\spriteData\RButton.png" />
+    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
+    <ImageContentTask Include="Asset\spriteData\YButton.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Asset\spriteData\Lazer.png" />

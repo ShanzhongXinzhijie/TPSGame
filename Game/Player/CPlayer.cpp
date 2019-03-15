@@ -91,10 +91,6 @@ void CPlayer::Update() {
 	}
 }
 
-const CVector3& CPlayer::getPosition() const{
-	return mover.GetPosition();
-}
-
 void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }

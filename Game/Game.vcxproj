@@ -249,7 +249,7 @@
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
-	<ClCompile Include="Player\Weapon\Lazer.cpp" />
+    <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
@@ -333,7 +333,7 @@
     <ClInclude Include="Include\ziguzagu.h" />
     <ClInclude Include="Include\Walker.h" />
     <ClInclude Include="Include\MiniHPbar.h" />
-	<ClInclude Include="Include\Lazer.h" />
+    <ClInclude Include="Include\Lazer.h" />
     <ClInclude Include="Network\NetGameEventReceiver.h" />
     <ClInclude Include="Network\NetGameEventCaster.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
@@ -399,6 +399,12 @@
     <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\Lazer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\lockon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
