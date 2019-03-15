@@ -55,7 +55,7 @@ void MainPlayer::Update() {
 			wepHolder.pushY();
 		}
 
-		if (!GameWaiter::GetIsWait()) {
+		if (!GameWaiter::GetIsWait() && m_hp != 0) {
 			weaponLeft = Pad(playerNum).GetDown(enButtonLB1);
 			weaponRight = Pad(playerNum).GetDown(enButtonRB1);
 			wepHolder.changeWeapon(weaponLeft, weaponRight);
@@ -70,7 +70,7 @@ void MainPlayer::Update() {
 		shot = Pad(playerNum).GetButton(enButtonRB1);
 
 		//ボタンを短く押すことで武器切り替え
-		if (!GameWaiter::GetIsWait() && m_isCanShortPushY && m_pushYButtonTime > FLT_EPSILON && m_pushYButtonTime < pushYTimeThreshold) {
+		if (!GameWaiter::GetIsWait()&& m_hp != 0 && m_isCanShortPushY && m_pushYButtonTime > FLT_EPSILON && m_pushYButtonTime < pushYTimeThreshold) {
 			weaponLeft = false;
 			weaponRight = true;
 			wepHolder.changeWeapon(weaponLeft, weaponRight);
@@ -78,7 +78,7 @@ void MainPlayer::Update() {
 		m_pushYButtonTime = 0.0f; m_isCanShortPushY = true;
 	}
 	//十字キーでの武器切り替え
-	if (!GameWaiter::GetIsWait() && !weaponLeft && !weaponRight) {
+	if (!GameWaiter::GetIsWait()&& m_hp != 0 && !weaponLeft && !weaponRight) {
 		if (Pad(playerNum).GetDown(enButtonLeft)) { weaponLeft = true; }
 		if (Pad(playerNum).GetDown(enButtonRight)) { weaponRight = true; }
 		wepHolder.changeWeapon(weaponLeft, weaponRight);
