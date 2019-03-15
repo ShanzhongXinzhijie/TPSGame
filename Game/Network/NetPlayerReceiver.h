@@ -65,6 +65,7 @@ public:
 			m_citizensStatus.clear();
 			m_citizenPosListAvg.clear();
 			m_citizenPosListSync.clear();
+			m_citizenMoverSyncList.clear();
 		}
 	}
 

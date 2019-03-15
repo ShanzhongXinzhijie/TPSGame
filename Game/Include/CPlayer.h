@@ -79,6 +79,7 @@ public:
 		mover.flyStop();
 	}
 	void changeWeapon(unsigned char useWeapon);
+	bool GetIsInit()const { return m_Init; }
 
 	//死亡処理
 	void Death();
@@ -136,6 +137,8 @@ private:
 
 	SuicideObj::CCollisionObj m_collision; //コリジョン
 
+	//通信
+	bool m_Init = false;
 	//通信キャスター
 	NetPlayerCaster* m_netCaster = nullptr;
 public:

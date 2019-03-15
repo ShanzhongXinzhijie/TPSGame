@@ -260,7 +260,7 @@ void NetPlayerReceiver::PostLoopUpdate() {
 
 //プレイヤーに情報渡す
 void NetPlayerReceiver::UpdatePlayer(int playerNr) {
-	if (m_pCPlayer[playerNr]) {
+	if (m_pCPlayer[playerNr] && m_pCPlayer[playerNr]->GetIsInit()) {
 		
 		if (playerNr != GetPhoton()->GetLocalPlayerNumber()) {//自分は除く
 			//アクション
