@@ -16,8 +16,9 @@ Lazer::~Lazer() {
 }
 
 Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
-	if (m_num < 0) { return nullptr; }//ノーロック
+	if (player->GetLockOnNum() < 0) { return nullptr; }//ノーロック
 
+	//エフェクト
 	CVector3 Dir, axis;
 	CQuaternion bias, rot, rot2;
 	bias.SetRotationDeg(CVector3::AxisX(), 90.0f); 
@@ -45,7 +46,16 @@ Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_end.efk"  , 50.0f, m_lockPos);
 	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_start.efk", 1.0f, pos, CQuaternion::Identity(), {50.0f,450.0f,50.0f});
 
-	return nullptr;// new NormalBullet(player, pos, Dir*5000.0f, L"Resource/modelData/RifleBullet.cmo", 250);
+	//透明な玉を出す
+	NormalBullet* B = new NormalBullet(player, m_lockPos, CVector3::AxisY()*0.1f, nullptr, 100);
+	B->SetLifeTime(0.0f);
+
+	//プレイヤー撃墜
+	if (player->GetLockOnIsPly()) {
+		m_pPly->SetFlyTimer(0.0f);
+	}
+
+	return B;
 }
 
 WeaponInfo Lazer::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
@@ -81,79 +91,43 @@ namespace{
 
 void Lazer::WeaponUpdate(){
 
-	m_num = -1;
 	if (!isActive) {
+		player->SetLockOn(player->GetLockOnIsPly(), -1);
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
 		m_effCnt = 0.0f;
 		m_charge = 0.0f;
+		m_isOnEFF = false;
 		return;
 	}
-
-	bool isFirst = true;	
-	float distance = -1.0f;
-	const float CAM_FAR = 4000.0f;
-	CVector3 rayStart = player->getPosition(); if (!player->isFlying()) { rayStart.y += 60.0f; }
-
-	//プレイヤーロックオン
-	for (auto& C : m_game->getPlayers()) {		
-		if (player->playerNum == C.second->playerNum) { continue; }
-		if (player->GetActionSender().getLookVec().Dot(C.second->getPosition() - player->getPosition()) > 0.0f) {
-			float d = Distance_DotAndLine(C.second->getPosition(), rayStart, rayStart + player->GetActionSender().getLookVec()*CAM_FAR);
-			if (isFirst || d < distance) {
-
-				CVector3 targetPos = C.second->getPosition(); if (!C.second->isFlying()) { targetPos.y += 60.0f; }
-				//障害物判定
-				btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
-				GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
-				if (callback.hasHit()){
-					int i;
-					for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
-						const btCollisionObject* col = callback.m_collisionObjects[i];
-						if (col->getUserIndex() != enCollisionAttr_Character
-						 && col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
-						) {
-							break;
-						}
-					}
-					if (i != callback.m_collisionObjects.size()) { continue; }
+		
+	//ロック継続判定
+	if (player->GetLockOnNum() >= 0) {
+		CVector3 rayStart = player->getPosition(); if (!player->isFlying()) { rayStart.y += 60.0f; }
+		CVector3 targetPos;
+		if (player->GetLockOnIsPly()) {
+			targetPos = m_pPly->getPosition(); if (!m_pPly->isFlying()) { targetPos.y += 60.0f; }
+		}
+		else {
+			targetPos = m_pCiti->getPos(); targetPos.y += 60.0f;
+		}
+		//障害物判定
+		btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
+		GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
+		if (callback.hasHit()) {
+			int i;
+			for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
+				const btCollisionObject* col = callback.m_collisionObjects[i];
+				if (col->getUserIndex() != enCollisionAttr_Character
+					&& col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
+				) {
+					player->SetLockOn(player->GetLockOnIsPly(), -1);
+					break;
 				}
-
-				isFirst = false;
-				distance = d;
-				m_isPly = true; m_num = C.second->playerNum; m_lockPos = targetPos;
 			}
 		}
-	}
-	//市民ロックオン
-	for (int i = 0; i < m_game->GetCitizenGene().GetCitizenNum(); i++) {
-		const Citizen* C = m_game->GetCitizenGene().GetCitizen(i);
-		if (player->GetActionSender().getLookVec().Dot(C->getPos() - player->getPosition()) > 0.0f) {
-			float d = Distance_DotAndLine(C->getPos(), rayStart, rayStart + player->GetActionSender().getLookVec()*CAM_FAR);
-			if (isFirst || d < distance) {
-
-				CVector3 targetPos = C->getPos(); targetPos.y += 60.0f;
-				//障害物判定
-				btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
-				GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
-				if (callback.hasHit()) {
-					int i;
-					for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
-						const btCollisionObject* col = callback.m_collisionObjects[i];
-						if (col->getUserIndex() != enCollisionAttr_Character
-							&& col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
-							) {
-							break;
-						}
-					}
-					if (i != callback.m_collisionObjects.size()) { continue; }
-				}
-
-				isFirst = false;
-				distance = d;
-				m_isPly = false; m_num = i; m_lockPos = targetPos;
-			}
-		}
-	}
+		//座標更新
+		m_lockPos = targetPos;
+	}	
 	
 	//チャージエフェクト
 	if (m_isOnEFF) {
@@ -181,6 +155,7 @@ void Lazer::WeaponUpdate(){
 		m_eff->SetScale(CVector3::One()*(m_charge+1.0f));
 	}
 	else {
+		player->SetLockOn(player->GetLockOnIsPly(), -1);
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
 		m_effCnt = 0.0f;
 		m_charge = 0.0f;
@@ -190,21 +165,117 @@ void Lazer::WeaponUpdate(){
 
 void Lazer::PreShot() {
 	if (bulletCount == 0) { return; }
-	m_isOnEFF = true;
-	m_charge += GetDeltaTimeSec();
-	if (m_charge < 1.0f) {
-		shotCool = 1.5f;
+
+	if (player->GetLockOnNum() < 0 && m_charge < FLT_EPSILON) {
+		LockOn();
 	}
-	else {
-		shotCool = 0.0f;
+	//if (player->GetLockOnNum() >= 0) {
+		m_isOnEFF = true;
+		m_charge += GetDeltaTimeSec();
+		if (m_charge < 1.0f) {
+			shotCool = 1.5f;
+		}
+		else {
+			shotCool = 0.0f;
+		}
+	//}
+}
+
+void Lazer::LockOn() {
+#ifndef SpritScreen
+	if (player->playerNum != GetPhoton()->GetLocalPlayerNumber()) {
+		return;
+	}
+#endif
+
+	bool isFirst = true;
+	float distance = -1.0f;
+	const float CAM_FAR = 4000.0f;
+	CVector3 rayStart = player->getPosition(); if (!player->isFlying()) { rayStart.y += 60.0f; }
+
+	//プレイヤーロックオン
+	for (auto& C : m_game->getPlayers()) {
+		if (player->playerNum == C.second->playerNum) { continue; }
+
+		CVector3 dist = C.second->getPosition() - player->getPosition();
+		if (player->GetActionSender().getLookVec().Dot(dist) > 0.0f && dist.LengthSq() > 230.0f*230.0f) {
+			
+			float d = Distance_DotAndLine(C.second->getPosition(), rayStart, rayStart + player->GetActionSender().getLookVec()*CAM_FAR);
+			if (isFirst || d < distance) {
+
+				CVector3 targetPos = C.second->getPosition(); if (!C.second->isFlying()) { targetPos.y += 60.0f; }
+				//障害物判定
+				btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
+				GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
+				if (callback.hasHit()) {
+					int i;
+					for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
+						const btCollisionObject* col = callback.m_collisionObjects[i];
+						if (col->getUserIndex() != enCollisionAttr_Character
+							&& col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
+							) {
+							break;
+						}
+					}
+					if (i != callback.m_collisionObjects.size()) { continue; }
+				}
+
+				isFirst = false;
+				distance = d;
+				m_lockPos = targetPos;
+				player->SetLockOn(true, C.second->playerNum);
+				m_pPly = C.second;
+			}
+		}
+	}
+	//市民ロックオン
+	for (int i = 0; i < m_game->GetCitizenGene().GetCitizenNum(); i++) {
+		const Citizen* C = m_game->GetCitizenGene().GetCitizen(i);
+
+		CVector3 dist = C->getPos() - player->getPosition();
+		if (player->GetActionSender().getLookVec().Dot(dist) > 0.0f && dist.LengthSq() > 230.0f*230.0f) {
+			
+			float d = Distance_DotAndLine(C->getPos(), rayStart, rayStart + player->GetActionSender().getLookVec()*CAM_FAR);
+			if (isFirst || d < distance) {
+
+				CVector3 targetPos = C->getPos(); targetPos.y += 60.0f;
+				//障害物判定
+				btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
+				GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
+				if (callback.hasHit()) {
+					int i;
+					for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
+						const btCollisionObject* col = callback.m_collisionObjects[i];
+						if (col->getUserIndex() != enCollisionAttr_Character
+							&& col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
+							) {
+							break;
+						}
+					}
+					if (i != callback.m_collisionObjects.size()) { continue; }
+				}
+
+				isFirst = false;
+				distance = d;
+				m_lockPos = targetPos;
+				player->SetLockOn(false, i);
+				m_pCiti = C;
+			}
+		}
 	}
 }
 
 void Lazer::PostRender(){
-	if (m_num < 0) { return; }//ノーロック
+#ifndef SpritScreen
+	if (player->playerNum != GetPhoton()->GetLocalPlayerNumber()) {
+		return;
+	}
+#endif
+
+	if (player->GetLockOnNum() < 0) { return; }//ノーロック
 
 	CVector3 vec = GetMainCamera()->CalcScreenPosFromWorldPos(m_lockPos);
-	if (vec.z > 0.0f) {
+	if (vec.z > 0.0f && vec.z < 1.0f) {
 		m_sprite.Draw(vec, { 0.75f,0.75f }, { 0.5f,0.5f }, 0.0f, {0.0f,1.0f,0.0f,1.0f});
 	}
 }

@@ -2,6 +2,7 @@
 #include "Weapon.h"
 
 class Game;
+class CPlayer; class Citizen;
 
 class Lazer :
 	public Weapon
@@ -19,7 +20,10 @@ private:
 	void WeaponUpdate()override;
 	void PreShot()override;
 
-	int m_isPly = true, m_num = -1;
+	void LockOn();
+
+	//int m_isPly = true, m_num = -1; 
+	CPlayer* m_pPly = nullptr; const Citizen* m_pCiti = nullptr;
 	CVector3 m_lockPos;
 
 	float m_charge = 0.0f;
