@@ -80,6 +80,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				false//(buttons & 0b1000000) != 0
 			);
 			//飛行中のフラグ
+			m_status[playerNr].m_isUpd8Fly = true;
 			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;
 		}
 
@@ -275,11 +276,14 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 				m_status[playerNr].m_isUpd8FlyTimer = false;
 			}
 			//飛行フラグ
-			if (m_status[playerNr].m_isFly) {
-				if (!m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->fly(); }
-			}
-			else {
-				if ( m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->flyStop(); }
+			if (m_status[playerNr].m_isUpd8Fly) {
+				if (m_status[playerNr].m_isFly) {
+					if (!m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->fly(); }
+				}
+				else {
+					if (m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->flyStop(); }
+				}
+				m_status[playerNr].m_isUpd8Fly = false;
 			}
 			//弾数
 			if (m_status[playerNr].m_isUpd8BulletCnt) {

@@ -4,7 +4,7 @@
 #include "ActionSender.h"
 #include "Team.h"
 
-#include "../NetWork/NetPlayerCaster.h"
+class NetPlayerCaster;
 
 class Weapon;
 class Bullet;

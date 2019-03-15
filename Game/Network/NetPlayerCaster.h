@@ -1,6 +1,6 @@
 #pragma once
 
-class CPlayer;
+#include"CPlayer.h"
 class Citizen;
 class CitizenGene;
 
@@ -24,6 +24,8 @@ private:
 	int m_cnt = INT_MIN;
 
 	bool m_isReload = false;
+	bool m_isShot   = false;
+	int m_bullet[CPlayer::WEAPON_NUM] = {};
 
 	int m_coolDowmSendFlyTimer = 0;
 	int m_coolDowmSendBulletCnt = 0;
