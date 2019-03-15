@@ -21,10 +21,11 @@ private:
 	void PreShot()override;
 
 	void LockOn();
+	CVector3 GetLockPos()const;
 
 	//int m_isPly = true, m_num = -1; 
-	CPlayer* m_pPly = nullptr; const Citizen* m_pCiti = nullptr;
-	CVector3 m_lockPos;
+	//CPlayer* m_pPly = nullptr; const Citizen* m_pCiti = nullptr;
+	//CVector3 m_lockPos;
 
 	float m_charge = 0.0f;
 

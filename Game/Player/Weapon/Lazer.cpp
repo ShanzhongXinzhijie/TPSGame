@@ -15,15 +15,31 @@ Lazer::Lazer(CPlayer* player, GameObj::CSkinModelRender* playerModel,
 Lazer::~Lazer() {
 }
 
+CVector3 Lazer::GetLockPos()const {
+	CVector3 vec;
+	if (player->GetLockOnIsPly()) {
+		const CPlayer* P = m_game->getPlayer(player->GetLockOnNum());
+		vec = P->getPosition();
+		if (!P->isFlying()) { vec.y += 60.0f; }
+	}
+	else {
+		vec = m_game->GetCitizenGene().GetCitizen(player->GetLockOnNum())->getPos();
+		vec.y += 60.0f;
+	}
+	return vec;
+}
+
 Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	if (player->GetLockOnNum() < 0) { return nullptr; }//ノーロック
+
+	CVector3 lockPos = GetLockPos();
 
 	//エフェクト
 	CVector3 Dir, axis;
 	CQuaternion bias, rot, rot2;
 	bias.SetRotationDeg(CVector3::AxisX(), 90.0f); 
 
-	Dir = m_lockPos - pos; axis = Dir; axis.y = 0.0f;
+	Dir = lockPos - pos; axis = Dir; axis.y = 0.0f;
 	if (axis.LengthSq() > FLT_EPSILON) {
 		axis.Normalize();
 		Dir.Normalize();
@@ -31,7 +47,7 @@ Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 		if (CVector2(-1.0f, 0.0f).Cross({ 0.0f,Dir.y }) < 0.0f) { sign = -1.0f; }
 		rot2.SetRotation(CVector3::AxisX(), sign*CVector3::AngleOf2NormalizeVector(axis, Dir));
 	}
-	Dir = m_lockPos - pos; Dir.y = 0.0f;
+	Dir = lockPos - pos; Dir.y = 0.0f;
 	if (Dir.LengthSq() > FLT_EPSILON) {
 		Dir.Normalize();
 		float sign = 1.0f;
@@ -42,17 +58,17 @@ Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	rot.Multiply(bias, rot);
 	rot.Multiply(rot, rot2);
 
-	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_lazer.efk", 1.0f, pos, rot, { 50.0f,(m_lockPos - pos).Length() / 10.0f,50.0f });
-	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_end.efk"  , 50.0f, m_lockPos);
+	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_lazer.efk", 1.0f, pos, rot, { 50.0f,(lockPos - pos).Length() / 10.0f,50.0f });
+	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_end.efk"  , 50.0f, lockPos);
 	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_start.efk", 1.0f, pos, CQuaternion::Identity(), {50.0f,450.0f,50.0f});
 
 	//透明な玉を出す
-	NormalBullet* B = new NormalBullet(player, m_lockPos, CVector3::AxisY()*0.1f, nullptr, 100);
+	NormalBullet* B = new NormalBullet(player, lockPos, CVector3::AxisY()*0.1f, nullptr, 100);
 	B->SetLifeTime(0.0f);
 
 	//プレイヤー撃墜
 	if (player->GetLockOnIsPly()) {
-		m_pPly->SetFlyTimer(0.0f);
+		m_game->getPlayer(player->GetLockOnNum())->SetFlyTimer(0.0f);
 	}
 
 	return B;
@@ -101,14 +117,15 @@ void Lazer::WeaponUpdate(){
 	}
 		
 	//ロック継続判定
-	if (player->GetLockOnNum() >= 0) {
+	if (player->GetLockOnNum() >= 0 && m_isOnEFF) {
 		CVector3 rayStart = player->getPosition(); if (!player->isFlying()) { rayStart.y += 60.0f; }
 		CVector3 targetPos;
 		if (player->GetLockOnIsPly()) {
-			targetPos = m_pPly->getPosition(); if (!m_pPly->isFlying()) { targetPos.y += 60.0f; }
+			const CPlayer* P = m_game->getPlayer(player->GetLockOnNum());
+			targetPos = P->getPosition(); if (!P->isFlying()) { targetPos.y += 60.0f; }
 		}
 		else {
-			targetPos = m_pCiti->getPos(); targetPos.y += 60.0f;
+			targetPos = m_game->GetCitizenGene().GetCitizen(player->GetLockOnNum())->getPos(); targetPos.y += 60.0f;
 		}
 		//障害物判定
 		btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
@@ -125,8 +142,6 @@ void Lazer::WeaponUpdate(){
 				}
 			}
 		}
-		//座標更新
-		m_lockPos = targetPos;
 	}	
 	
 	//チャージエフェクト
@@ -155,7 +170,7 @@ void Lazer::WeaponUpdate(){
 		m_eff->SetScale(CVector3::One()*(m_charge+1.0f));
 	}
 	else {
-		player->SetLockOn(player->GetLockOnIsPly(), -1);
+		//player->SetLockOn(player->GetLockOnIsPly(), -1);
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
 		m_effCnt = 0.0f;
 		m_charge = 0.0f;
@@ -166,7 +181,7 @@ void Lazer::WeaponUpdate(){
 void Lazer::PreShot() {
 	if (bulletCount == 0) { return; }
 
-	if (player->GetLockOnNum() < 0 && m_charge < FLT_EPSILON) {
+	if (m_charge < FLT_EPSILON) {// player->GetLockOnNum() < 0 && 
 		LockOn();
 	}
 	//if (player->GetLockOnNum() >= 0) {
@@ -222,9 +237,7 @@ void Lazer::LockOn() {
 
 				isFirst = false;
 				distance = d;
-				m_lockPos = targetPos;
 				player->SetLockOn(true, C.second->playerNum);
-				m_pPly = C.second;
 			}
 		}
 	}
@@ -257,9 +270,7 @@ void Lazer::LockOn() {
 
 				isFirst = false;
 				distance = d;
-				m_lockPos = targetPos;
 				player->SetLockOn(false, i);
-				m_pCiti = C;
 			}
 		}
 	}
@@ -272,9 +283,9 @@ void Lazer::PostRender(){
 	}
 #endif
 
-	if (player->GetLockOnNum() < 0) { return; }//ノーロック
+	if (player->GetLockOnNum() < 0 || m_charge < FLT_EPSILON) { return; }//ノーロック
 
-	CVector3 vec = GetMainCamera()->CalcScreenPosFromWorldPos(m_lockPos);
+	CVector3 vec = GetMainCamera()->CalcScreenPosFromWorldPos(GetLockPos());
 	if (vec.z > 0.0f && vec.z < 1.0f) {
 		m_sprite.Draw(vec, { 0.75f,0.75f }, { 0.5f,0.5f }, 0.0f, {0.0f,1.0f,0.0f,1.0f});
 	}

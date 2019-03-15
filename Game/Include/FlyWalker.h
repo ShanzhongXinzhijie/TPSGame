@@ -18,7 +18,7 @@ public:
 		return c_flyTimer;
 	}
 
-	bool isFlying() {
+	bool isFlying()const {
 		return flying;
 	}
 	float GetFlyPower()const {

@@ -31,7 +31,7 @@ public:
 		return &m_collision.GetCollisionObject();
 	}
 
-	bool isFlying() {
+	bool isFlying()const {
 		return mover.isFlying();
 	}
 	float getFlyPower()const {
