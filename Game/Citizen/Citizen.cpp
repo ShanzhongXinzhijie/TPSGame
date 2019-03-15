@@ -228,6 +228,12 @@ void Citizen::Kansenzyoutai()
 	CVector3 pos = charaCon.GetPosition();
 	pos.y += charaCon.GetCollider()->GetHeight() / 2 + charaCon.GetCollider()->GetRadius();
 	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 70.0f);
+	//マスクとグループの設定
+	m_collision.All_Off_Group();
+	m_collision.On_OneGroup(CollisionMaskConst::encolKurai);
+	m_collision.Off_OneMask(CollisionMaskConst::encolKurai);
+	//これは喰らい判定
+	m_collision.SetIsHurtCollision(true);
 
 	delete mover;
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);

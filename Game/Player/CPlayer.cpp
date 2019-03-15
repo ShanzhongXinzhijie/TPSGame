@@ -4,7 +4,9 @@
 #include "Wing.h"
 #include "HandGun.h"
 #include "Rifle.h"
+#include "Lazer.h"
 #include "Bullet.h"
+#include "CollisionMaskConst.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem), miniHpbar(maxHp){
@@ -41,9 +43,16 @@ bool CPlayer::Start() {
 	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 40.0f);
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
+	//マスクとグループの設定
+	m_collision.All_Off_Group();
+	m_collision.On_OneGroup(CollisionMaskConst::encolKurai);
+	m_collision.Off_OneMask(CollisionMaskConst::encolKurai);
+	//これは喰らい判定
+	m_collision.SetIsHurtCollision(true);
 
 	weapon[HUND_GUN] = new HandGun(this, &m_model, anim_shot, anim_reload);
 	weapon[RIFLE] = new Rifle(this, &m_model, anim_shot, anim_reload);
+	weapon[LAZER] = new Lazer(this, &m_model, anim_shot, anim_reload);
 	activeWeapon = HUND_GUN;
 	weapon[HUND_GUN]->Activate();
 
@@ -82,6 +91,10 @@ void CPlayer::Update() {
 	}
 }
 
+const CVector3& CPlayer::getPosition() const{
+	return mover.GetPosition();
+}
+
 void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
@@ -101,7 +114,7 @@ bool CPlayer::BatHit(Bullet* bullet) {
 
 void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 	if (m_hp != 0) {
-		CVector3&& pos = getPosition();
+		CVector3 pos = getPosition();
 		pos.y += 60.0f;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 		playSE(L"Resource/sound/SE_damage.wav");

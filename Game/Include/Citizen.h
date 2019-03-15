@@ -20,7 +20,7 @@ public:
 		charaCon.SetPosition(pos);
 	}
 
-	CVector3 getPos() const{
+	const CVector3& getPos() const{
 		return charaCon.GetPosition();
 	}
 

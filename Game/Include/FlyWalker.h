@@ -18,7 +18,7 @@ public:
 		return c_flyTimer;
 	}
 
-	bool isFlying() const{
+	bool isFlying()const {
 		return flying;
 	}
 

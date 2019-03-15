@@ -55,6 +55,10 @@ public:
 		return playerGene.getMainPlayer2();
 	}
 
+	const CitizenGene& GetCitizenGene()const {
+		return citizenGene;
+	}
+
 private:
 	static Game* static_game;
 

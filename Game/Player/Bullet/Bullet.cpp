@@ -8,7 +8,7 @@ using SuicideObj::CCollisionObj;
 Bullet::Bullet(CPlayer* player, CVector3 position, CVector3 direction,
 			   const wchar_t* modelPath, unsigned int damage)
 	: m_pos(position), m_dir(direction), shotPlayer(player), damage(damage){
-	m_model.Init(modelPath);
+	if (modelPath) { m_model.Init(modelPath); }
 	m_model.SetPos(m_pos);
 
 	//ƒ‚ƒfƒ‹‰ñ“]

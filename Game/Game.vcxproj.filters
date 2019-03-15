@@ -51,6 +51,7 @@
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\DeckType.h" />
     <ClInclude Include="Include\CConfig.h" />
+	<ClInclude Include="Include\Lazer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="CConfig.cpp" />
+	<ClCompile Include="Player\Weapon\Lazer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -115,6 +117,7 @@
     <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
     <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
     <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
+    <MeshContentTask Include="Asset\modelData\Lazer.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -143,5 +146,9 @@
     <Image Include="Asset\spriteData\RButton.png" />
     <Image Include="Asset\spriteData\Rifle.png" />
     <Image Include="Asset\spriteData\YButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\Lazer.png" />
+    <Image Include="Asset\spriteData\lockon.png" />
   </ItemGroup>
 </Project>

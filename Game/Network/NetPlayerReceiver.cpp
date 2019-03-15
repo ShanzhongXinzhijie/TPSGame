@@ -81,7 +81,13 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 			);
 			//飛行中のフラグ
 			m_status[playerNr].m_isUpd8Fly = true;
-			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;
+			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;			
+		}
+
+		//ロックオン
+		if (eventContent.getValue((nByte)enLockOn)) {
+			m_status[playerNr].m_isUpd8Lock = true;
+			m_status[playerNr].m_lock = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enLockOn)))->getDataCopy();
 		}
 
 		//装備武器
@@ -265,6 +271,33 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 		if (playerNr != GetPhoton()->GetLocalPlayerNumber()) {//自分は除く
 			//アクション
 			m_pCPlayer[playerNr]->sendAction(m_status[playerNr].m_actionSender);
+			
+			//ロックオン
+			if (m_status[playerNr].m_isUpd8Lock) {
+				bool isPly = m_pCPlayer[playerNr]->GetLockOnIsPly();
+				int lock = m_status[playerNr].m_lock;
+				
+				if (lock == 0) {
+					//ノーロック
+					lock = -1;
+				}
+				else {
+					if (lock < 0) { 
+						//プレイヤー
+						isPly = true;
+						lock *= -1;
+					}
+					else {
+						//市民
+						isPly = false;
+					}
+					lock--;
+				}
+
+				m_pCPlayer[playerNr]->SetLockOn(isPly, lock);
+				m_status[playerNr].m_isUpd8Lock = false;
+			}	
+
 			//装備武器
 			if (m_status[playerNr].m_isUpd8ActiveWeapon) {
 				m_pCPlayer[playerNr]->changeWeapon(m_status[playerNr].m_activeWeapon);

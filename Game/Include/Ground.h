@@ -17,6 +17,7 @@ private:
 	const CVector3* cameraPos;
 
 	GameObj::CDirectionLight m_dirlight;
-	ShadowMapHandler shadowMap;
+	//ShadowMapHandler shadowMap;
+	CascadeShadowHandler CascadeShadowmap;
 };
 
