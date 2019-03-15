@@ -17,7 +17,35 @@ Lazer::~Lazer() {
 
 Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	if (m_num < 0) { return nullptr; }//ƒm[ƒƒbƒN
-	return new NormalBullet(player, pos, dir*5000.0f, L"Resource/modelData/RifleBullet.cmo", 250);
+
+	CVector3 Dir, axis;
+	CQuaternion bias, rot, rot2;
+	bias.SetRotationDeg(CVector3::AxisX(), 90.0f); 
+
+	Dir = m_lockPos - pos; axis = Dir; axis.y = 0.0f;
+	if (axis.LengthSq() > FLT_EPSILON) {
+		axis.Normalize();
+		Dir.Normalize();
+		float sign = 1.0f;
+		if (CVector2(-1.0f, 0.0f).Cross({ 0.0f,Dir.y }) < 0.0f) { sign = -1.0f; }
+		rot2.SetRotation(CVector3::AxisX(), sign*CVector3::AngleOf2NormalizeVector(axis, Dir));
+	}
+	Dir = m_lockPos - pos; Dir.y = 0.0f;
+	if (Dir.LengthSq() > FLT_EPSILON) {
+		Dir.Normalize();
+		float sign = 1.0f;
+		if (CVector2(0.0f, 1.0f).Cross({ Dir.x,Dir.z }) < 0.0f) { sign = -1.0f; }
+		rot.SetRotation(CVector3::AxisZ(), sign*CVector3::AngleOf2NormalizeVector(CVector3::AxisZ(), Dir));
+	}
+
+	rot.Multiply(bias, rot);
+	rot.Multiply(rot, rot2);
+
+	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_lazer.efk", 1.0f, pos, rot, { 50.0f,(m_lockPos - pos).Length() / 10.0f,50.0f });
+	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_end.efk"  , 50.0f, m_lockPos);
+	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_start.efk", 1.0f, pos, CQuaternion::Identity(), {50.0f,450.0f,50.0f});
+
+	return nullptr;// new NormalBullet(player, pos, Dir*5000.0f, L"Resource/modelData/RifleBullet.cmo", 250);
 }
 
 WeaponInfo Lazer::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
@@ -150,7 +178,7 @@ void Lazer::WeaponUpdate(){
 			m_effCnt = 1.6f;
 		}
 		m_eff->SetPos(pos);
-		//m_eff->SetScale({});
+		m_eff->SetScale(CVector3::One()*(m_charge+1.0f));
 	}
 	else {
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
