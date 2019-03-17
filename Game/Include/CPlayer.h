@@ -67,6 +67,9 @@ public:
 	Weapon** GetWeapons() {
 		return weapon;
 	}
+	int GetWeaponNum()const {
+		return WEAPON_NUM;
+	}
 	unsigned char GetActiveWeapon()const {
 		return activeWeapon;
 	}

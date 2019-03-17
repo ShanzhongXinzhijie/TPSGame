@@ -52,6 +52,8 @@
     <ClInclude Include="Include\DeckType.h" />
     <ClInclude Include="Include\CConfig.h" />
     <ClInclude Include="Include\Lazer.h" />
+    <ClInclude Include="Ginger\Wosiris.h" />
+    <ClInclude Include="Ginger\Syouraidan.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -102,6 +104,8 @@
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
+    <ClCompile Include="Ginger\Wosiris.cpp" />
+    <ClCompile Include="Ginger\Syouraidan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -119,6 +123,8 @@
     <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
     <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
     <MeshContentTask Include="Asset\modelData\Lazer.fbx" />
+    <MeshContentTask Include="Asset\modelData\Ginger\wosiris.fbx" />
+    <MeshContentTask Include="Asset\modelData\Ginger\wosirisAtari.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -148,9 +154,10 @@
     <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
+    <ImageContentTask Include="Asset\spriteData\Lazer.png" />
+    <ImageContentTask Include="Asset\spriteData\lockon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Asset\spriteData\Lazer.png" />
-    <Image Include="Asset\spriteData\lockon.png" />
+    <Image Include="Asset\spriteData\osirisWindow.png" />
   </ItemGroup>
 </Project>
