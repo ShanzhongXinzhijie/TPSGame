@@ -54,6 +54,7 @@
     <ClInclude Include="Include\Lazer.h" />
     <ClInclude Include="Ginger\Wosiris.h" />
     <ClInclude Include="Ginger\Syouraidan.h" />
+    <ClInclude Include="Ginger\GingerGene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="MiniHPbar.cpp" />
     <ClCompile Include="Ginger\Wosiris.cpp" />
     <ClCompile Include="Ginger\Syouraidan.cpp" />
+    <ClCompile Include="Ginger\GingerGene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">

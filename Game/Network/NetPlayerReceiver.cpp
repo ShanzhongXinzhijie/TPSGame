@@ -184,30 +184,32 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	}
 	break;
 
-	case enKenzoku:
+	case enReliable:
 	{
 		//眷属化
-		int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy();
-		int i2 = 2;
-		for (int i = 0; i < num; i++) {
-			int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
-			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
-			//座標
-			CVector3 pos;
-			pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			
-			auto C = m_citizensStatus.find(id);
-			if (C == m_citizensStatus.end()) {
-				//新規作成
-				m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr, pos });
-			}
-			else {
-				//時間が新しい or 時間が同じでプレイヤー番号が大きい
-				if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
-					//上書き
-					C->second = { time, playerNr, pos };
+		if (eventContent.getValue((nByte)enKenzoku)) {
+			int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enKenzoku)))->getDataCopy();
+			int i2 = enKenzoku + 1;
+			for (int i = 0; i < num; i++) {
+				int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
+				int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
+				//座標
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+
+				auto C = m_citizensStatus.find(id);
+				if (C == m_citizensStatus.end()) {
+					//新規作成
+					m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr, pos });
+				}
+				else {
+					//時間が新しい or 時間が同じでプレイヤー番号が大きい
+					if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
+						//上書き
+						C->second = { time, playerNr, pos };
+					}
 				}
 			}
 		}

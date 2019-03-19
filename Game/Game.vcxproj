@@ -247,6 +247,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CConfig.cpp" />
+    <ClCompile Include="Ginger\GingerGene.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
     <ClCompile Include="Player\Weapon\Lazer.cpp" />
@@ -302,6 +303,7 @@
     <ClCompile Include="Ginger\Wosiris.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ginger\GingerGene.h" />
     <ClInclude Include="Include\CConfig.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\Bullet.h" />

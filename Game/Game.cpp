@@ -45,10 +45,8 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	citizenGene.createCitizen(citizenCnt);
 
 	//_Ğì¬
-	/*for (int i = 0; i < 4; i++) {
-		new Ginger(timeLimit);
-	}
-	new Wosiris(nullptr,-125.0f);*/
+	gingerGene.Create(timeLimit);
+	new Wosiris(nullptr,-125.0f);
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });

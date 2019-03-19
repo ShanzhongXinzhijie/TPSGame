@@ -107,10 +107,12 @@ void Wosiris::Update(){
 
 	//ポイント計算
 	int cnt = 0;
-	Weapon** Weapons = m_owner->GetWeapons();
-	for(int i = 0; i < m_owner->GetWeaponNum(); i++){
-		if(Weapons[i]->getBulletCount() > 0){
-			cnt++;
+	if (!m_owner->GetIsDead()) {
+		Weapon** Weapons = m_owner->GetWeapons();
+		for (int i = 0; i < m_owner->GetWeaponNum(); i++) {
+			if (Weapons[i]->getBulletCount() > 0) {
+				cnt++;
+			}
 		}
 	}
 	m_point = 1000 * cnt;	
