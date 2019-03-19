@@ -62,12 +62,14 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	m_netWork = FindGO<NetWorkManager>(L"NetWorkManager");
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(&citizenGene);
 
-	//ゲーム開始タイマー設定
-	int t = GetPhoton()->GetSeverTime_ms(); 
-	if (t < 0 && startTime_ms >= 0) { startTime_ms = INT_MIN; }
-	m_waitGameStartTimer_sec = CMath::Clamp(15.0f - (t - startTime_ms)*0.001f, 0.0f, 15.0f);
-	//ゲームをウェイト状態にする
-	if (m_waitGameStartTimer_sec > 0.0f) { GameWaiter::SetIsWait(true); }
+	if (GetPhoton()->GetPlayers().getSize() > 1) {
+		//ゲーム開始タイマー設定
+		int t = GetPhoton()->GetSeverTime_ms();
+		if (t < 0 && startTime_ms >= 0) { startTime_ms = INT_MIN; }
+		m_waitGameStartTimer_sec = CMath::Clamp(15.0f - (t - startTime_ms)*0.001f, 0.0f, 15.0f);
+		//ゲームをウェイト状態にする
+		if (m_waitGameStartTimer_sec > 0.0f) { GameWaiter::SetIsWait(true); }
+	}
 #endif
 
 	//次のフレームの可変フレーム無効

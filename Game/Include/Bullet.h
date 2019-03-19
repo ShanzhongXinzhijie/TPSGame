@@ -24,6 +24,8 @@ public:
 		m_dir += velocity;
 	}
 
+	void SetLifeTime(float sec) { lifeTime = sec; }
+
 private:
 	GameObj::CSkinModelRender m_model;
 	CVector3 m_pos;

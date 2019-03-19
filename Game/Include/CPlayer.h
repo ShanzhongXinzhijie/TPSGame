@@ -19,7 +19,7 @@ public:
 
 	bool Start() override;
 	virtual void Update() override;
-
+	
 	void sendAction(const ActionSender& action);
 
 	bool BatHit(Bullet* bullet);
@@ -30,14 +30,14 @@ public:
 		return &m_collision.GetCollisionObject();
 	}
 
-	bool isFlying() {
+	bool isFlying()const {
 		return mover.isFlying();
 	}
 	float getFlyPower()const {
 		return mover.GetFlyPower();
 	}
 
-	CVector3 getPosition() const {
+	const CVector3& getPosition() const {
 		return mover.GetPosition();
 	}
 
@@ -88,6 +88,11 @@ public:
 	void changeWeapon(unsigned char useWeapon);
 	bool GetIsInit()const { return m_Init; }
 
+	//ロックオン
+	void SetLockOn(bool isply, int num) { m_lockIsPly = isply; m_lockonNum = num; }
+	bool GetLockOnIsPly() const { return m_lockIsPly; }
+	int  GetLockOnNum() const{ return m_lockonNum; }
+
 	//死亡処理
 	void Death();
 	//蘇生処理
@@ -97,6 +102,7 @@ public:
 	enum {//武器の列挙
 		HUND_GUN,
 		RIFLE,
+		LAZER,
 		WEAPON_NUM
 	};
 private:
@@ -127,6 +133,7 @@ protected:
 	FlyWalker mover;    //動きの管理
 	unsigned char activeWeapon = -1;
 	Weapon* weapon[WEAPON_NUM]; //武器
+	bool m_lockIsPly = true; int m_lockonNum = -1; //ロックオン対象
 private:
 	Wing* wing = nullptr; //翼
 

@@ -106,7 +106,18 @@ void NetPlayerCaster::PostUpdate() {
 				if (m_pCPlayer->isFlying()) { bottuns = bottuns | 0b10000; }
 				//if (AS.isWeaponLeft()) { bottuns = bottuns | 0b100000; }
 				//if (AS.isWeaponRight()) { bottuns = bottuns | 0b1000000; }
-				_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
+				_event.put((nByte)(enActionSender + 5), (nByte)bottuns);			
+				
+				//ロックオン
+				int lock = m_pCPlayer->GetLockOnNum();
+				if (lock < 0) { 
+					lock = 0;//ノーロック
+				}
+				else {
+					lock++;
+					if (m_pCPlayer->GetLockOnIsPly()) { lock *= -1; }
+				}
+				_event.put((nByte)enLockOn, lock);
 
 				//装備武器
 				_event.put((nByte)enActiveWepon, (nByte)m_pCPlayer->GetActiveWeapon());

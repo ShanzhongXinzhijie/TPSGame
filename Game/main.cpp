@@ -9,7 +9,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームの初期化。
 	InitEngineParameter initparam;
 
-	initparam.variableFpsMaxSec = 10.0f;
+	initparam.variableFpsMaxSec = -10.0f;
 
 #ifdef SpritScreen
 	initparam.isSplitScreen = enSide_TwoSplit;
@@ -28,7 +28,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GetEngine().InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, "Game", initparam);
 
-	//SetIsDebugDraw(true);//fpsとか表示
+	SetIsDebugDraw(true);//fpsとか表示
 	//SetPhysicsDebugDrawMode(btIDebugDraw::DBG_DrawWireframe);//判定の表示
 
 	NetWorkManager networkManager;

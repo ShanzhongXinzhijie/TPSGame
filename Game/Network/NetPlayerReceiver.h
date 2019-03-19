@@ -11,6 +11,7 @@ struct OnlinePlayerStatus {
 
 	ActionSender m_actionSender;
 	bool m_isUpd8Fly = false;			bool m_isFly = false;
+	bool m_isUpd8Lock = false;			int m_lock = 0;
 	bool m_isUpd8ActiveWeapon = false;	nByte m_activeWeapon = 0;
 	bool m_isUpd8FlyTimer = false;		float m_flyTimer = 0.0f;
 	bool m_isUpd8BulletCnt = false;		int m_bulletCnt[CPlayer::WEAPON_NUM] = {};

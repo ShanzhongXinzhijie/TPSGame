@@ -21,7 +21,9 @@ class Game : public IGameObject{
 public:
 	static Game* createGame(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) {
 		if (static_game == nullptr) {
-			return static_game = new Game(fade, timeLimit, citizenCnt, seed, startTime_ms);
+			static_game = new Game(fade, timeLimit, citizenCnt, seed, startTime_ms);
+			static_game->SetName(L"GameClass");
+			return static_game;
 		}
 		return nullptr;
 	}
@@ -53,6 +55,10 @@ public:
 
 	const MainPlayer* getMainPlayer2() const {
 		return playerGene.getMainPlayer2();
+	}
+
+	const CitizenGene& GetCitizenGene()const {
+		return citizenGene;
 	}
 
 private:

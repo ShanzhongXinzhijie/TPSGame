@@ -31,7 +31,7 @@ public:
 		return reload;
 	}
 
-	CVector3 getLookVec() const {
+	const CVector3& getLookVec() const {
 		return lookVec;
 	}
 
