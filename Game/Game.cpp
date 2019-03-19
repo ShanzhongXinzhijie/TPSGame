@@ -29,6 +29,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	ground = new Ground(CVector3::Zero());
 
 	bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_battle.wav");
+	bgm->SetVolume(0.4f);
 	bgm->Play(false, true);
 
 #ifdef SpritScreen
@@ -156,13 +157,15 @@ void Game::PostRender() {
 	if (m_waitGameStartTimer_sec > 0.0f) {
 		wchar_t countDisp[24];
 		swprintf_s(countDisp, L"Ready... %.1f sec", m_waitGameStartTimer_sec);
-		font.Draw(countDisp, { 0.5f, 0.5f }, CVector4::White(), CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None,0.0f);
+		font.Draw(countDisp, { 0.503f, 0.703f }, {0,0,0,1}, CVector2::One(), { 0.5f,0.5f }, 0.0f, DirectX::SpriteEffects_None, 0.0f);
+		font.Draw(countDisp, { 0.5f, 0.7f }, CVector4::White(), CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None,0.0f);
 		return;
 	}
 
 	wchar_t countDisp[20];
 	swprintf_s(countDisp, L"Time: %.1f sec", timer);
-	font.Draw(countDisp, { 0.1f, 0.05f });
+	font.Draw(countDisp, { 0.013f, 0.013f }, { 0,0,0,1 }, {1.2f,1.2f});
+	font.Draw(countDisp, { 0.01f, 0.01f }, { 1,1,1,1 }, { 1.2f,1.2f });
 }
 
 void Game::createPlayer(bool isMe, int playerNum) {

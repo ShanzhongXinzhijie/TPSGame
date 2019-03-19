@@ -257,7 +257,6 @@
     <ClCompile Include="Player\Weapon\HandGun.cpp" />
     <ClCompile Include="Network\NetGameEventReceiver.cpp" />
     <ClCompile Include="Network\NetGameEventCaster.cpp" />
-    <ClCompile Include="Player\Flybar.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Mover\Walker.cpp" />
     <ClCompile Include="Player\PlayerGene.cpp" />
@@ -307,7 +306,6 @@
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
     <ClInclude Include="Include\GameWaiter.h" />
-    <ClInclude Include="Include\Flybar.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\CitizenGene.h" />
@@ -369,33 +367,20 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\Black.png" />
-    <ImageContentTask Include="Asset\spriteData\Title.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ImageContentTask Include="Asset\spriteData\waku.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\Fly_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_out.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ImageContentTask Include="Asset\spriteData\Target.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-    <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\HundGun.png" />
     <ImageContentTask Include="Asset\spriteData\LButton.png" />
-    <ImageContentTask Include="Asset\spriteData\RButton.png" />
-    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
-    <ImageContentTask Include="Asset\spriteData\YButton.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
+    <ImageContentTask Include="Asset\spriteData\RButton.png" />
+    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
+    <ImageContentTask Include="Asset\spriteData\Target.png" />
+    <ImageContentTask Include="Asset\spriteData\Title.png" />
+    <ImageContentTask Include="Asset\spriteData\waku.png" />
+    <ImageContentTask Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

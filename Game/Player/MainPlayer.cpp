@@ -9,7 +9,8 @@ MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 #ifdef SpritScreen
 	playerNum(p),
 #endif
-	m_camera(playerNum, position), CPlayer(p,team, position), wepHolder(CPlayer::weapon, CPlayer::WEAPON_NUM){
+	m_camera(playerNum, position), CPlayer(p,team, position), wepHolder(CPlayer::weapon, CPlayer::WEAPON_NUM),
+	hpbar(maxHp, mover.getFlyTimerMax()) {
 	miniHpbar.setIsEnable(false);
 }
 
@@ -133,19 +134,18 @@ void MainPlayer::Update() {
 
 void MainPlayer::PostRender() {
 	//HP表示
-	hpbar.Draw(CPlayer::m_hp, CPlayer::maxHp);
+	hpbar.Draw(CPlayer::m_hp, mover.getFlyTimer(), mover.isRest());
 
 	//弾数表示
 	weapon[activeWeapon]->drawBulletCount(font);
 
-	//飛行ゲージ表示
-	flybar.Draw(mover.getFlyTimer(), mover.c_flyTimer);
-	flybar.setPosition({ 1270.0f,120.0f });
-
-	//自チームの眷族数の表示
-	wchar_t countDisp[12];
-	swprintf_s(countDisp, L"Zombie:%d", team->getZombieCount());
-	font.Draw(countDisp, { 0.1f, 0.1f });
+	if (!GameWaiter::GetIsWait()) {
+		//自チームの眷族数の表示
+		wchar_t countDisp[12];
+		swprintf_s(countDisp, L"Zombie:%d", team->getZombieCount());
+		font.Draw(countDisp, { 0.014f, 0.086f }, { 0,0,0,1 }, {1.2f, 1.2f});
+		font.Draw(countDisp, { 0.011f, 0.083f },{ 1,1,1,1 }, { 1.2f, 1.2f });
+	}
 
 	wepHolder.draw();
 }

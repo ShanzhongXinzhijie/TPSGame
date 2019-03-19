@@ -289,7 +289,7 @@ void ConfirmPlayers::PostRender() {
 #endif
 		wchar_t str[128];
 		swprintf_s(str, L"Time:%.1f\nCitizen:%d", m_timeLimit, m_citizenCnt);
-		m_font.Draw(str, { 1.0f,0.0f }, CVector4::White(), CVector2::One(), { 1.0f,0.0f });
+		m_font.Draw(str, { 0.86f,0.0f }, CVector4::White(), CVector2::One(), { 0.0f,0.0f });
 	}
 }
 

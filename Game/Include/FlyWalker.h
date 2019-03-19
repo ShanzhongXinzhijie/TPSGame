@@ -26,6 +26,10 @@ public:
 		return hitWall;
 	}
 
+	bool isRest() const {
+		return m_isRest;
+	}
+
 	float GetFlyPower()const {
 		return flyPower;
 	}
@@ -42,9 +46,16 @@ public:
 	static constexpr float c_flyTimer = 5.0f;
 private:
 	float flyTimer = c_flyTimer; //飛行可能な残り時間
+	bool m_isRest = 0.0f; //飛行不可
+
+	static constexpr float c_coolTimer = 1.0f;
+	float coolTimer = 0.0f; //断続飛び防止のクールタイム
+
 	float upDown = 0.0f;
 
 	bool hitWall = false;
+
+	CQuaternion springRot;
 
 	float flyPower = 0.0f;
 	bool flying = false;

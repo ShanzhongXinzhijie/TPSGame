@@ -100,5 +100,6 @@ void Weapon::Update() {
 void Weapon::drawBulletCount(CFont & font) {
 	wchar_t countbullet[20];
 	swprintf_s(countbullet, L"Bullet: %d / %d", bulletCount, maxBullet);
-	font.Draw(countbullet, { 0.7f, 0.9f });
+	font.Draw(countbullet, { 0.723f, 0.883f }, { 0,0,0,1 }, { 1.5f, 1.5f });
+	font.Draw(countbullet, { 0.72f, 0.88f }, { 1,1,1,1 }, {1.5f, 1.5f});
 }
