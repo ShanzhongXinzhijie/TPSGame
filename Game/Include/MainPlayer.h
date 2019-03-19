@@ -4,6 +4,7 @@
 #include "HPbar.h"
 #include "Flybar.h"
 #include "WeaponHolder.h"
+#include "../Ginger/GodPowerStarter.h"
 
 class MainPlayer :public CPlayer {
 public:
@@ -19,6 +20,12 @@ public:
 		return m_camera;
 	}
 
+	int GetUsePadNum()const { return playerNum; }
+
+	void SetGodPower(GodPowerType type)override{
+		godPowerStarter.SetPowertype(type);
+	}
+
 private:
 	const int playerNum = 0;
 	HPbar hpbar;
@@ -28,5 +35,7 @@ private:
 
 	WeaponHolder wepHolder;
 	bool m_isCanShortPushY = true; float m_pushYButtonTime = 0.0f;
+
+	GodPowerStarter godPowerStarter;
 };
 

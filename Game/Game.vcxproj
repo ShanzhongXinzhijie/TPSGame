@@ -249,6 +249,7 @@
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="Ginger\GingerGene.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
+    <ClCompile Include="Ginger\GodPowerStarter.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
     <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
@@ -304,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ginger\GingerGene.h" />
+    <ClInclude Include="Ginger\GodPowerStarter.h" />
     <ClInclude Include="Include\CConfig.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\Bullet.h" />
@@ -362,6 +364,7 @@
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
+    <MeshContentTask Include="Asset\modelData\Ginger\ring.fbx" />
     <MeshContentTask Include="Asset\modelData\Ginger\wosiris.fbx" />
     <MeshContentTask Include="Asset\modelData\Ginger\wosirisAtari.fbx" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />

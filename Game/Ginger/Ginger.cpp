@@ -2,10 +2,12 @@
 #include "Ginger.h"
 #include "CollisionMaskConst.h"
 #include "Bullet.h"
+#include "CPlayer.h"
 
-Ginger::Ginger(int timeSec)
+Ginger::Ginger(int timeSec, GodPowerType powerType)
 {
 	m_kensetuLeftTime = timeSec * GetStandardFrameRate();
+	m_powerType = powerType;
 }
 Ginger::~Ginger()
 {
@@ -68,12 +70,20 @@ void Ginger::Konryu(){
 				Bullet* bullet = callback.GetClass<Bullet>();
 				m_hp -= bullet->getDamage();
 				if(m_hp <= 0){//破壊
+					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
+					//TUSINN
 #ifdef SpritScreen
 					//神のパワー獲得
 
 #else
 					//マスターが上げるやつ決める
 #endif
+					//破壊
+					SetEnable(false);
+					m_model.SetEnable(false);
+					m_phyStaticObject.Release();
+					m_collision[0].SetEnable(false);
+					m_collision[1].SetEnable(false);
 				}
 			}
 		});

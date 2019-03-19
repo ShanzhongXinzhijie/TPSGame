@@ -4,6 +4,7 @@
 #include "ActionSender.h"
 #include "Team.h"
 #include "MiniHPbar.h"
+#include "../Ginger/Ginger.h"
 
 class NetPlayerCaster;
 
@@ -53,6 +54,7 @@ public:
 
 	const int playerNum;
 
+	virtual void SetGodPower(GodPowerType type) {}
 
 	//通信送信で使用
 	const ActionSender& GetActionSender()const {

@@ -61,6 +61,13 @@ public:
 	const CitizenGene& GetCitizenGene()const {
 		return citizenGene;
 	}
+	CitizenGene& GetCitizenGene(){
+		return citizenGene;
+	}
+
+	GingerGene& GetGingerGene(){
+		return gingerGene;
+	}
 
 private:
 	static Game* static_game;

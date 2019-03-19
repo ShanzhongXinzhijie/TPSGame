@@ -7,8 +7,9 @@
 #include "Weapon.h"
 #include "Syouraidan.h"
 
-Wosiris::Wosiris(CPlayer* owner, float rot)
+Wosiris::Wosiris(Game* pGame, CPlayer* owner, float rot)
 {
+	m_game = pGame;
 	m_owner = owner;
 	m_rot = rot;
 }
@@ -17,13 +18,13 @@ Wosiris::~Wosiris()
 }
 
 bool Wosiris::Start(){
-	m_game = FindGO<Game>(L"GameClass");
+	//m_game = FindGO<Game>(L"GameClass");
 
 	m_model.Init(L"Resource\\modelData\\wosiris.cmo", enFbxUpAxisY);
 	m_model.SetPos(CVector3::AxisY()*4000.0f);
 	CQuaternion rot[2]; 
 	rot[0].SetRotationDeg(CVector3::AxisX(), 20.0f);
-	rot[1].SetRotationDeg(CVector3::AxisY(), m_rot);
+	rot[1].SetRotation(CVector3::AxisY(), m_rot);
 	rot[1].Multiply(rot[0]);
 	m_model.SetRot(rot[1]);
 	m_model.SetScale(CVector3::One()*4.0f);
@@ -56,6 +57,7 @@ bool Wosiris::Start(){
 					}
 				});
 
+				//TUSINN
 				//Ž©•ª‚ÌáÅ‘®‚É‚È‚Á‚½‚±‚Æ‚ð‘—M
 				//if (player->playerNum == GetPhoton()->GetLocalPlayerNumber() && player->GetNetCaster()) {
 				//	player->GetNetCaster()->SendNewKenzoku(this);
