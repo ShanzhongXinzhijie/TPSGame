@@ -84,6 +84,7 @@ Game::~Game() {
 
 #ifndef SpritScreen
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(nullptr);
+	m_netWork->GetNetPlayerReceiver().SetGingerGene(nullptr);
 #endif
 	static_game = nullptr;
 }

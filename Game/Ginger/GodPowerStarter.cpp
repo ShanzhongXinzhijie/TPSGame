@@ -108,9 +108,24 @@ void GodPowerStarter::Update(){
 					if (CVector2(0.0f, 1.0f).Cross({ Dir.x,Dir.z }) < 0.0f) { sign = -1.0f; }
 					rot = (int)CMath::RadToDeg(sign * -CVector3::AngleOf2NormalizeVector(CVector3::AxisZ(), Dir));
 				}
-				//TUSINN
+				
 				//¢Š«
-				pGO = new Wosiris(m_pGame, m_pPlayer, CMath::DegToRad((float)rot));
+				pGO = new Wosiris(m_pPlayer, CMath::DegToRad((float)rot));
+				
+#ifndef SpritScreen
+				//¢Š«‚ð’ÊM
+				int citi[3];
+				for (int i = 0; i < 3;i++) {
+					if (!C_sacrifice[i]) {
+						citi[i] = -1;
+					}
+					else {
+						citi[i] = C_sacrifice[i]->GetUniqueID();
+					}
+				}
+				m_pPlayer->GetNetCaster()->SendSummonWosiris(rot, citi[0], citi[1], citi[2]);
+#endif
+
 			}else{
 				m_mesageTime = 60;
 			}

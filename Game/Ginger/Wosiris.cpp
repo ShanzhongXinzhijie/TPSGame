@@ -7,9 +7,8 @@
 #include "Weapon.h"
 #include "Syouraidan.h"
 
-Wosiris::Wosiris(Game* pGame, CPlayer* owner, float rot)
-{
-	m_game = pGame;
+Wosiris::Wosiris(CPlayer* owner, float rot)
+{	
 	m_owner = owner;
 	m_rot = rot;
 }
@@ -18,7 +17,7 @@ Wosiris::~Wosiris()
 }
 
 bool Wosiris::Start(){
-	//m_game = FindGO<Game>(L"GameClass");
+	m_game = FindGO<Game>(L"GameClass"); if (!m_game) { return false; }
 
 	m_model.Init(L"Resource\\modelData\\wosiris.cmo", enFbxUpAxisY);
 	m_model.SetPos(CVector3::AxisY()*4000.0f);

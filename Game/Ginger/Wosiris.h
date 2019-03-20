@@ -6,7 +6,7 @@ class Game;
 class Wosiris : public IGameObject
 {
 public:
-	Wosiris(Game* pGame, CPlayer* owner, float rot);
+	Wosiris(CPlayer* owner, float rot);
 	~Wosiris();
 
 	bool Start()override;

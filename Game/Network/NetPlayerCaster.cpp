@@ -80,8 +80,8 @@ void NetPlayerCaster::PostUpdate() {
 				int cnt=0;
 				for (auto& P : m_sendGetGodPowerList) {
 					if (P.first >= 0) {
-						_event.put((nByte)enGetGodpower, (nByte)P.first);
-						_event.put((nByte)enGetGodpower + 1, (nByte)P.second);
+						_event.put((nByte)(enGetGodpower + 0), (nByte)P.first);
+						_event.put((nByte)(enGetGodpower + 1), (nByte)P.second);
 						isSend = true;
 						P.first = -1;
 						break;
@@ -89,6 +89,16 @@ void NetPlayerCaster::PostUpdate() {
 					cnt++;
 				}
 				if (cnt >= m_sendGetGodPowerList.size()) { m_sendGetGodPowerList.clear(); }
+			}
+
+			//ヲシリスの召喚
+			if (m_isSendSummonWosiris) {
+				_event.put((nByte)(enSummonWosiris+0), std::get<0>(m_sendSummonWosiris));//角度
+				_event.put((nByte)(enSummonWosiris+1), std::get<1>(m_sendSummonWosiris));//生贄市民
+				_event.put((nByte)(enSummonWosiris+2), std::get<2>(m_sendSummonWosiris));
+				_event.put((nByte)(enSummonWosiris+3), std::get<3>(m_sendSummonWosiris));
+				m_isSendSummonWosiris = false;
+				isSend = true;
 			}
 
 			//確実な送信
@@ -364,4 +374,8 @@ void NetPlayerCaster::SendDestroyGinger(int num) {
 }
 void NetPlayerCaster::SendGetGodPower(int jinjyaNum, int plyNum) {
 	m_sendGetGodPowerList.emplace_back(jinjyaNum, plyNum);
+}
+void NetPlayerCaster::SendSummonWosiris(int rot, int Citizen1, int Citizen2, int Citizen3) {
+	m_sendSummonWosiris = std::make_tuple(rot, Citizen1, Citizen2, Citizen3);
+	m_isSendSummonWosiris = true;
 }

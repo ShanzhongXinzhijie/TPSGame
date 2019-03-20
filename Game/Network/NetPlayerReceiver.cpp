@@ -213,11 +213,32 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				}
 			}
 		}
+
 		//ê_ÇÃóÕälìæ
 		if (eventContent.getValue((nByte)enGetGodpower)) {
-			int gingerN = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enGetGodpower)))->getDataCopy();
-			int plyN = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enGetGodpower+1)))->getDataCopy();
+			int gingerN = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enGetGodpower+0))))->getDataCopy();
+			int plyN = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enGetGodpower+1))))->getDataCopy();
 			GetGodPower(gingerN, plyN);
+		}
+		//ÉíÉVÉäÉXÇÃè¢ä´
+		if (eventContent.getValue((nByte)enSummonWosiris)) {
+			//è¢ä´
+			if (m_gingerGene) {
+				int rot = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 0))))->getDataCopy();
+				m_gingerGene->Register(new Wosiris(m_pCPlayer[playerNr], CMath::DegToRad((float)rot)));
+			}
+			//ê∂Ê—
+			if (m_citizenGene) {
+				int citizen[3];
+				citizen[0] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 1))))->getDataCopy();
+				citizen[1] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 2))))->getDataCopy();
+				citizen[2] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 3))))->getDataCopy();
+				for (int i = 0; i < 3; i++) {
+					if (citizen[i] >= 0) {
+						m_citizenGene->GetCitizen(citizen[i])->Death();
+					}
+				}
+			}
 		}
 	}
 	break;
@@ -242,7 +263,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	{
 		//ê_é–îjâÛ
 		int offset = 1;
-		int num = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+		int num = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
 		for (int i = 0; i < num; i++) {
 			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
 			int id = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
@@ -487,8 +508,8 @@ void NetPlayerReceiver::AddGodPowerLottery(int id, int time, int plyNum) {
 void NetPlayerReceiver::GetGodPower(int jinjyaNum,int plyNum) {
 	if (!m_gingerGene) { return; }
 	//älìæ
-	if (GetPhoton()->GetLocalPlayerNumber() == plyNum && m_pCPlayer[GetPhoton()->GetLocalPlayerNumber()]) {
-		m_pCPlayer[GetPhoton()->GetLocalPlayerNumber()]->SetGodPower(m_gingerGene->GetGinger(jinjyaNum)->GetPowerType());
+	if (m_pCPlayer[plyNum]) {
+		m_pCPlayer[plyNum]->SetGodPower(m_gingerGene->GetGinger(jinjyaNum)->GetPowerType());
 	}
 	//ê_é–îjâÛ
 	m_gingerGene->GetGinger(jinjyaNum)->Destory();

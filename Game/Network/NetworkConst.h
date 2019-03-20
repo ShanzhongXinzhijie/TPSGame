@@ -36,7 +36,7 @@ enum ReliableDataCode {
 	enUseGodPower = 4,
 	enSummonWosiris,
 	enGetControlWosiris,
-	enKenzoku,
+	enKenzoku = enGetControlWosiris+4,
 };
 
 //プレイヤープロパティのキー

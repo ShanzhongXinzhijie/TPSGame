@@ -22,10 +22,8 @@ public:
 	int GetUsePadNum()const { return playerNum; }
 
 	void SetGodPower(GodPowerType type)override{
-		godPowerStarter.SetPowertype(type);
-		//エフェクト
-		SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/aura.efk", 1.0f, getPosition());
-		effe->SetScale({ 50.0f,50.0f ,50.0f });
+		godPowerStarter.SetPowertype(type);		
+		CPlayer::SetGodPower(type);
 	}
 
 private:

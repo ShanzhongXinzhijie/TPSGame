@@ -110,11 +110,13 @@ void Ginger::Konryu(){
 					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
 #else
 					//マスターが上げるやつ決める
-					if (GetPhoton()->GetIsMasterClient()) {
-						m_receiver->AddGodPowerLottery(m_index, bullet->getShooter()->GetNetCaster()->GetTime(), bullet->getShooter()->playerNum);
-					}
-					else {
-						bullet->getShooter()->GetNetCaster()->SendDestroyGinger(m_index);
+					if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+						if (GetPhoton()->GetIsMasterClient()) {
+							m_receiver->AddGodPowerLottery(m_index, bullet->getShooter()->GetNetCaster()->GetTime(), bullet->getShooter()->playerNum);
+						}
+						else {
+							bullet->getShooter()->GetNetCaster()->SendDestroyGinger(m_index);
+						}
 					}
 #endif
 					//破壊
