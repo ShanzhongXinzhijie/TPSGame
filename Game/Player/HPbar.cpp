@@ -21,7 +21,15 @@ void HPbar::Draw(float hp, float fly, bool flyRest) {
 		if (bright <= 0.0f || 1.0f <= bright) {
 			brightMove *= -1;
 		}
+		recoverWhite = 0.3f;
 	} else {
-		m_inFly.DrawScreenPos(m_pos, { fly / maxFly ,1.0f }, { 0.992f,0.0f });
+		const float c = recoverWhite*10+1;
+		m_inFly.DrawScreenPos(m_pos, { fly / maxFly ,1.0f }, { 0.992f,0.0f }, 0.0f, {c,c,c,1});
+		if (recoverWhite > 0.0f) {
+			recoverWhite -= GetDeltaTimeSec();
+			if (recoverWhite < 0.0f) {
+				recoverWhite = 0.0f;
+			}
+		}
 	}
 }
