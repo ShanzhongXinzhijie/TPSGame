@@ -68,6 +68,10 @@ bool ConfirmPlayers::Start() {
 
 void ConfirmPlayers::Update() {
 
+	if (m_isGameStart) {
+		return;
+	}
+
 #ifndef SpritScreen
 	//エラー出たら切断
 	if (m_netWork->GetIsError()) {
@@ -101,6 +105,7 @@ void ConfirmPlayers::Update() {
 			int seed = CMath::RandomInt();
 			//ゲーム開始
 			NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
+			m_isGameStart = true;
 			fade->fadeIn([&]() {
 				bgm->Stop();
 				Game::createGame(fade,m_timeLimit,m_citizenCnt, seed, -1);
@@ -154,6 +159,7 @@ void ConfirmPlayers::Update() {
 			m_startTime = GetPhoton()->GetSeverTime_ms();
 
 			//ゲーム開始
+			m_isGameStart = true;
 			fade->fadeIn([&]() {
 				bgm->Stop();
 				Game::createGame(fade, m_timeLimit, m_citizenCnt, m_seed, m_startTime);
@@ -173,6 +179,7 @@ void ConfirmPlayers::Update() {
 		m_citizenCnt = ((ExitGames::Common::ValueObject<int>*)(properties.getValue(CITIZEN_COUNT)))->getDataCopy();
 
 		//ゲーム開始
+		m_isGameStart = true;
 		fade->fadeIn([&]() {
 			bgm->Stop();
 			Game::createGame(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
