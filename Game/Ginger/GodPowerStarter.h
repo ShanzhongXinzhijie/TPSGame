@@ -26,6 +26,7 @@ private:
 	int m_ringTime = 0; int m_mesageTime = 0;
 	CFont m_font, m_fontDefo;
 	wchar_t m_text[256] = L"";
+	CSprite m_bButton;
 
 	GingerGene* m_pGinGene = nullptr;
 	Game* m_pGame = nullptr;

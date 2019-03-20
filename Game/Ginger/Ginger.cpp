@@ -8,16 +8,22 @@ Ginger::Ginger(int timeSec, GodPowerType powerType)
 {
 	m_kensetuLeftTime = timeSec * GetStandardFrameRate();
 	m_powerType = powerType;
+
+	m_pos = { 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f), -100.0f, 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f) };
+	if (rand() % 100 <= 12) {
+		m_pos.y = 3000.0f;
+	}
+
+	m_rot.SetRotationDeg(CVector3::AxisY(), 360.0f*(rand() % 101 * 0.01f));
 }
 Ginger::~Ginger()
 {
 }
 
 bool Ginger::Start() {
-	m_model.Init(L"Resource\\modelData\\Ginger.cmo", enFbxUpAxisY);
-	m_pos = { 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f), -100.0f, 2863.38f - 2863.38f*2.0f*(rand() % 101 * 0.01f) };
-	
-	if (rand() % 100 > 12) {
+	m_model.Init(L"Resource\\modelData\\Ginger.cmo", enFbxUpAxisY);	
+
+	if (m_pos.y < 0.0f) {
 		//レイで判定
 		btVector3 rayStart = btVector3(m_pos.x, 3000.0f, m_pos.z);
 		btVector3 rayEnd = btVector3(m_pos.x, -50.0f, m_pos.z);
@@ -37,12 +43,8 @@ bool Ginger::Start() {
 			}
 		}
 	}
-	else {
-		m_pos.y = 3000.0f;
-	}
 
 	m_model.SetPos(m_pos);
-	m_rot.SetRotationDeg(CVector3::AxisY(), 360.0f*(rand() % 101 * 0.01f));
 	m_model.SetRot(m_rot);
 	m_model.SetScale({ 1.0f,0.0f,1.0f });
 	
@@ -93,6 +95,12 @@ void Ginger::Konryu(){
 			if (callback.EqualName(L"Bullet")) {
 				Bullet* bullet = callback.GetClass<Bullet>();
 				m_hp -= bullet->getDamage();
+				if (bullet->getDamage() > 0) {
+					//エフェクト
+					CVector3 pos = CVector3::AxisZ()*(-400.0f*0.21f); m_rot.Multiply(pos);
+					SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/hakai.efk", 1.0f, m_pos + pos);
+					effe->SetScale({ 60.0f, 60.0f ,60.0f });
+				}
 				if(m_hp <= 0){//破壊
 					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
 					//TUSINN
@@ -112,6 +120,11 @@ void Ginger::Konryu(){
 			}
 		});
 	}
+
+	//エフェクト
+	CVector3 pos = CVector3::AxisZ()*(-400.0f*0.21f); m_rot.Multiply(pos);
+	SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/aura.efk", 1.0f, m_pos + pos);
+	effe->SetScale({ 100.0f, 100.0f ,100.0f });
 
 	m_isKensetued = true;
 }

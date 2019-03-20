@@ -29,6 +29,7 @@ bool GodPowerStarter::Start(){
 	});
 
 	m_fontDefo.UseSystemFont();	
+	m_bButton.Init(L"Resource/spriteData/BButton.dds");
 
 	return true;
 }
@@ -38,8 +39,7 @@ void GodPowerStarter::SetPowertype(GodPowerType type) {
 
 	switch (m_type) {
 	case enWosiris:
-		//TUSINN !?
-		wcscpy_s(m_text, L"ヲシリスの天空龍\n\n召喚には3体の生贄が必要。\n敵がフィールドに出た時、\nそれに2000ダメージを与える。\n\nX000/X000");
+		wcscpy_s(m_text, L"GIANT DRAGON\n　－THE GOD OF WOSIRIS");
 		break;
 	case enNone:
 	default:
@@ -99,18 +99,18 @@ void GodPowerStarter::Update(){
 				for (auto& S : P_sacrifice) { if (S) { S->Death(); } }
 
 				//角度求める
-				float rot = 0.0f;
+				int rot = 0;
 				CVector3 Dir;
 				Dir = m_pPlayer->getPosition(); Dir.y = 0.0f;
 				if (Dir.LengthSq() > FLT_EPSILON) {
 					Dir.Normalize();
 					float sign = 1.0f;
 					if (CVector2(0.0f, 1.0f).Cross({ Dir.x,Dir.z }) < 0.0f) { sign = -1.0f; }
-					rot = (int)CMath::RadToDeg((sign * -CVector3::AngleOf2NormalizeVector(CVector3::AxisZ(), Dir)));
+					rot = (int)CMath::RadToDeg(sign * -CVector3::AngleOf2NormalizeVector(CVector3::AxisZ(), Dir));
 				}
 				//TUSINN
 				//召喚
-				pGO = new Wosiris(m_pGame, m_pPlayer, CMath::DegToRad(rot));
+				pGO = new Wosiris(m_pGame, m_pPlayer, CMath::DegToRad((float)rot));
 			}else{
 				m_mesageTime = 60;
 			}
@@ -134,7 +134,9 @@ void GodPowerStarter::PostRender(){
 
 	if (m_type == enNone) { return; }
 
-	m_fontDefo.Draw(m_text, { 0.88f,0.6f + 0.025f }, { 1.0f,1.0f,1.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
+	m_bButton.Draw({ 0.88f,0.7f}, { 0.6f, 0.6f }, { 0.5f,0.5f });
+	m_font.Draw(m_text, { 0.88f + 0.003f*0.5f,0.7f + 0.05f + 0.003f*0.5f }, { 0.0f,0.0f,0.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
+	m_font.Draw(m_text, { 0.88f,0.7f + 0.05f }, { 1.0f,1.0f,1.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
 	
 	if(m_mesageTime > 0){
 		m_fontDefo.Draw(L"3体の生贄が必要", { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None, 0.0f);
