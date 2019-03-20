@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "GingerGene.h"
-#include "Ginger.h"
 
 GingerGene::GingerGene()
 {
@@ -19,7 +18,7 @@ void GingerGene::Release(){
 	}
 }
 
-void GingerGene::Create(float gameTimelimit){
+void GingerGene::Create(float gameTimelimit, NetPlayerReceiver* receiver){
 	bool typelist[GodPowerType::enNum] = {};
 
 	for (int i = 0; i < floor(gameTimelimit / 60.0f); i++)
@@ -36,11 +35,11 @@ void GingerGene::Create(float gameTimelimit){
 
 		Ginger* pGinger = nullptr;
 		if(i == 0){
-			pGinger = new Ginger(30 + 10 * CMath::RandomZeroToOne(), (GodPowerType)type);
+			pGinger = new Ginger(i, receiver, 30 + 10 * (rand() % 101 * 0.01f), (GodPowerType)type);
 		}
 		else {
-			pGinger = new Ginger(60 * i + 40 * CMath::RandomZeroToOne(), (GodPowerType)type);
+			pGinger = new Ginger(i, receiver, 60 * i + 40 * (rand() % 101 * 0.01f), (GodPowerType)type);
 		}
-		Register(pGinger);
+		m_gingerList.emplace_back(pGinger);
 	}
 }

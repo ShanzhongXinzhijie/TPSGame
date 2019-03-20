@@ -8,6 +8,7 @@ enum NetworkEventCode {
 	enKillPlayer,
 	enPlayerDeadOrAlive,
 	enReliable,
+	enDestroyGinger,
 	enPlayerEventEnd,
 
 	enMasterClientEventStart,
@@ -30,9 +31,10 @@ enum PlayerStatusCode {
 	enZombiePos = 123,
 };
 enum ReliableDataCode {
-	enDestroyGinger,
-	enGetGodpower,
-	enUseGodPower,
+	//enDestroyGinger,
+	enGetGodpower = 2,
+	enUseGodPower = 4,
+	enSummonWosiris,
 	enGetControlWosiris,
 	enKenzoku,
 };

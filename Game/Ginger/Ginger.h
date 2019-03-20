@@ -1,6 +1,8 @@
 #pragma once
 #include "Wosiris.h"
 
+class NetPlayerReceiver;
+
 enum GodPowerType {
 	enWosiris,
 	//enIndra,
@@ -14,14 +16,23 @@ class Ginger :
 	public IGameObject
 {
 public:
-	Ginger(int timeSec, GodPowerType powerType);
+	Ginger(int index, NetPlayerReceiver* receiver, int timeSec, GodPowerType powerType);
 	~Ginger();
 
 	bool Start()override;
 	void Update()override;
 
+	void Destory();
+
+	GodPowerType GetPowerType()const {
+		return m_powerType;
+	}
+
 private:
 	void Konryu();
+
+	int m_index = -1;
+	NetPlayerReceiver* m_receiver;
 
 	int m_isKensetued = false;
 	int m_kensetuLeftTime = 0, m_kensetuLeftTimeMax = 0;

@@ -3,8 +3,11 @@
 #include "CollisionMaskConst.h"
 #include "Bullet.h"
 #include "CPlayer.h"
+#include "../Network/NetPlayerCaster.h"
+#include "../Network/NetPlayerReceiver.h"
+#include "GameWaiter.h"
 
-Ginger::Ginger(int timeSec, GodPowerType powerType)
+Ginger::Ginger(int index, NetPlayerReceiver* receiver, int timeSec, GodPowerType powerType) : m_index(index),m_receiver(receiver)
 {
 	m_kensetuLeftTime = timeSec * GetStandardFrameRate();
 	m_powerType = powerType;
@@ -102,20 +105,20 @@ void Ginger::Konryu(){
 					effe->SetScale({ 60.0f, 60.0f ,60.0f });
 				}
 				if(m_hp <= 0){//破壊
-					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
-					//TUSINN
 #ifdef SpritScreen
 					//神のパワー獲得
-
+					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
 #else
 					//マスターが上げるやつ決める
+					if (GetPhoton()->GetIsMasterClient()) {
+						m_receiver->AddGodPowerLottery(m_index, bullet->getShooter()->GetNetCaster()->GetTime(), bullet->getShooter()->playerNum);
+					}
+					else {
+						bullet->getShooter()->GetNetCaster()->SendDestroyGinger(m_index);
+					}
 #endif
 					//破壊
-					SetEnable(false);
-					m_model.SetEnable(false);
-					m_phyStaticObject.Release();
-					m_collision[0].SetEnable(false);
-					m_collision[1].SetEnable(false);
+					Destory();
 				}
 			}
 		});
@@ -130,6 +133,9 @@ void Ginger::Konryu(){
 }
 
 void Ginger::Update() {
+	//ゲームがウェイト状態なら終わる
+	if (GameWaiter::GetIsWait()) { return; }
+
 	//建設
 	m_kensetuLeftTime--;
 	if(!m_isKensetued && m_kensetuLeftTime <= 0){
@@ -147,4 +153,12 @@ void Ginger::Update() {
 			mat->SetUVOffset({ m_uvScroll,m_uvScroll });
 		});
 	}
+}
+
+void Ginger::Destory() {
+	SetEnable(false);
+	m_model.SetEnable(false);
+	m_phyStaticObject.Release();
+	m_collision[0].SetEnable(false);
+	m_collision[1].SetEnable(false);
 }

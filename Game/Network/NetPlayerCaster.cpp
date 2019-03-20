@@ -75,6 +75,22 @@ void NetPlayerCaster::PostUpdate() {
 				}
 			}
 
+			//神の力を入手
+			if (m_sendGetGodPowerList.size() > 0) {
+				int cnt=0;
+				for (auto& P : m_sendGetGodPowerList) {
+					if (P.first >= 0) {
+						_event.put((nByte)enGetGodpower, (nByte)P.first);
+						_event.put((nByte)enGetGodpower + 1, (nByte)P.second);
+						isSend = true;
+						P.first = -1;
+						break;
+					}
+					cnt++;
+				}
+				if (cnt >= m_sendGetGodPowerList.size()) { m_sendGetGodPowerList.clear(); }
+			}
+
 			//確実な送信
 			if (isSend) {
 				GetPhoton()->Send(enReliable, _event, true);
@@ -280,6 +296,31 @@ void NetPlayerCaster::PostUpdate() {
 		}
 	}
 
+	//神社破壊(ホストに伝える)
+	if (m_sendDestroyGingerList.size() > 0) {
+		ExitGames::Common::Hashtable _event;
+		int offset = 0;
+		
+		_event.put((nByte)enFrameCount, m_cnt); offset++;//フレーム番号
+		
+		_event.put((nByte)offset, (nByte)m_sendDestroyGingerList.size()); offset++;//数
+		for (auto& S : m_sendDestroyGingerList) {
+			_event.put((nByte)offset, S.first); offset++;
+			_event.put((nByte)offset, (nByte)S.second); offset++;
+		}
+		m_sendDestroyGingerList.clear();
+
+		int masterNum = -1;
+		const ExitGames::Common::JVector<ExitGames::LoadBalancing::Player*>& players = GetPhoton()->GetPlayers();
+		for (unsigned int i = 0; i < players.getSize(); i++) {
+			if (players[i]->getIsMasterClient()) {
+				masterNum = i;
+				break;
+			}
+		}
+		GetPhoton()->Send(enDestroyGinger, _event, true, ExitGames::LoadBalancing::RaiseEventOptions().setTargetPlayers(&masterNum, 1));
+	}
+
 	m_cnt++;
 }
 
@@ -315,4 +356,12 @@ void NetPlayerCaster::SendSyncCitizen(::Citizen* pcitizen) {
 	pcitizen->SetIsAvg(false);
 	pcitizen->SetTargetPly(m_pCPlayer->playerNum);
 	pcitizen->SetTargetCnt(pcitizen->GetNetCnt());
+}
+
+
+void NetPlayerCaster::SendDestroyGinger(int num) {
+	m_sendDestroyGingerList.emplace_back(m_cnt, num);
+}
+void NetPlayerCaster::SendGetGodPower(int jinjyaNum, int plyNum) {
+	m_sendGetGodPowerList.emplace_back(jinjyaNum, plyNum);
 }

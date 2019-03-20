@@ -213,6 +213,12 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				}
 			}
 		}
+		//ê_ÇÃóÕälìæ
+		if (eventContent.getValue((nByte)enGetGodpower)) {
+			int gingerN = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enGetGodpower)))->getDataCopy();
+			int plyN = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enGetGodpower+1)))->getDataCopy();
+			GetGodPower(gingerN, plyN);
+		}
 	}
 	break;
 
@@ -229,6 +235,19 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 		//ê∂Ç´éÄÇ…
 		m_status[playerNr].m_isDead = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)1)))->getDataCopy();
 		m_status[playerNr].m_isUpdateDead = true;
+	}
+	break;
+
+	case enDestroyGinger:
+	{
+		//ê_é–îjâÛ
+		int offset = 1;
+		int num = ((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+		for (int i = 0; i < num; i++) {
+			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+			int id = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+			AddGodPowerLottery(id, time, playerNr);
+		}
 	}
 	break;
 
@@ -249,6 +268,8 @@ void NetPlayerReceiver::PreUpdate() {
 		//ésñØÇ…èÓïÒìnÇ∑
 		UpdateCitizen();
 
+		UpdateGodPower();
+
 		//ÉJÉEÉìÉ^Å[êiÇﬂÇÈ
 		if (!m_status[i].m_isNoReceive) { m_status[i].m_cnt++; }
 	}
@@ -263,6 +284,8 @@ void NetPlayerReceiver::PostLoopUpdate() {
 		UpdatePlayer(i);
 		//ésñØÇ…èÓïÒìnÇ∑
 		UpdateCitizen();
+
+		UpdateGodPower();
 	}
 }
 
@@ -420,4 +443,53 @@ void NetPlayerReceiver::UpdateCitizen() {
 		}
 		m_citizenMoverSyncList.clear();		
 	}
+}
+
+void NetPlayerReceiver::UpdateGodPower() {
+	//ê_ÇÃóÕÇ†Ç∞ÇÈ
+	for (auto& T : m_godPowerLotteryTimer) {
+		if (T.second > 0) {
+			T.second--;
+			if (T.second <= 0) {
+				//älìæ
+				GetGodPower(T.first, m_godPowerLotteryList[T.first].second);
+
+				if (m_pCaster[GetPhoton()->GetLocalPlayerNumber()]) {
+					//Ç›ÇÒÇ»Ç…ì`Ç¶ÇÈ
+					m_pCaster[GetPhoton()->GetLocalPlayerNumber()]->SendGetGodPower(T.first, m_godPowerLotteryList[T.first].second);
+				}
+				m_godPowerLotteryTimer.erase(T.first);
+			}
+		}
+	}
+}
+void NetPlayerReceiver::AddGodPowerLottery(int id, int time, int plyNum) {
+
+	if (!GetPhoton()->GetIsMasterClient()) { return; }
+
+	if (m_godPowerLotteryList.count(id) == 0) {
+		//êVãK
+		m_godPowerLotteryList.emplace(id, std::make_pair(time, plyNum));
+		
+		if (m_godPowerLotteryTimer.count(id) == 0) {
+			//É^ÉCÉ}Å[äJén
+			m_godPowerLotteryTimer.emplace(id, 30);
+		}
+	}
+	else {
+		//éûä‘Ç™å√Ç¢Ç∆óDêÊ
+		if (m_godPowerLotteryList[id].first > time) {
+			m_godPowerLotteryList.insert_or_assign(id, std::make_pair(time, plyNum));
+		}
+	}
+}
+
+void NetPlayerReceiver::GetGodPower(int jinjyaNum,int plyNum) {
+	if (!m_gingerGene) { return; }
+	//älìæ
+	if (GetPhoton()->GetLocalPlayerNumber() == plyNum && m_pCPlayer[GetPhoton()->GetLocalPlayerNumber()]) {
+		m_pCPlayer[GetPhoton()->GetLocalPlayerNumber()]->SetGodPower(m_gingerGene->GetGinger(jinjyaNum)->GetPowerType());
+	}
+	//ê_é–îjâÛ
+	m_gingerGene->GetGinger(jinjyaNum)->Destory();
 }

@@ -100,7 +100,7 @@ void NetPlayerManager::PostRender() {
 	if (GetPhoton()->GetState() == PhotonNetworkLogic::JOINED) {
 		list.color = CVector4::White();
 		wchar_t str[128];
-		swprintf_s(str, L"Ping: %dms", GetPhoton()->GetPing_ms());
+		swprintf_s(str, L"Ping: %dms  Seed:%d", GetPhoton()->GetPing_ms(), m_viewSeed);
 		list.values.emplace_back(str);
 	}
 	else {

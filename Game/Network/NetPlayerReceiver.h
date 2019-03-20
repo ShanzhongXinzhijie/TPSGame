@@ -3,6 +3,7 @@
 #include "NetPlayerCaster.h"
 #include "CPlayer.h"
 #include "CitizenGene.h"
+#include "../Ginger/GingerGene.h"
 #include <queue>
 
 struct OnlinePlayerStatus {
@@ -37,6 +38,9 @@ public:
 	void UpdatePlayer(int playerNr);
 	//市民に情報渡す
 	void UpdateCitizen();
+	//神の力系
+	void UpdateGodPower();
+	void AddGodPowerLottery(int id, int time, int plyer);
 
 	//プレイヤー設定
 	void SetPlayer(CPlayer* pCPlayer, NetPlayerCaster* pCaster) {
@@ -70,7 +74,19 @@ public:
 		}
 	}
 
+	//神社設定
+	void SetGingerGene(GingerGene* ptr) {
+		m_gingerGene = ptr;
+		if (!m_gingerGene) {
+			//リセット
+			m_godPowerLotteryTimer.clear();
+			m_godPowerLotteryList.clear();
+		}
+	}
+
 private:
+	void GetGodPower(int jinjyaNum, int plyNum);
+
 	CPlayer* m_pCPlayer[NET_MAX_PLAYER + 1] = { nullptr };
 	NetPlayerCaster* m_pCaster[NET_MAX_PLAYER + 1] = { nullptr };
 	OnlinePlayerStatus m_status[NET_MAX_PLAYER + 1];
@@ -85,6 +101,10 @@ private:
 	std::list<std::pair<int, CVector3>> m_citizenPosListAvg;
 	std::list<std::tuple<int, CVector3, int, int>> m_citizenPosListSync;
 	std::list<std::tuple<int, CVector3, int, int, CVector3>> m_citizenMoverSyncList;
+
+	GingerGene* m_gingerGene = nullptr;
+	std::unordered_map<int, int>				 m_godPowerLotteryTimer;//神社ID,時間
+	std::unordered_map<int, std::pair<int, int>> m_godPowerLotteryList; //神社ID,<時間,プレイヤーID>
 
 	std::queue<std::tuple<NetworkEventCode, int, ExitGames::Common::Hashtable>> m_eventContentQueue[NET_MAX_PLAYER + 1];
 };

@@ -18,6 +18,8 @@ public:
 	void Update()override;
 	void PostRender()override;
 
+	void SetViewSeed(int s) { m_viewSeed = s; }
+
 private:
 	void JoinEventAction(int playerNr, const ExitGames::Common::JVector<int>& playernrs, const ExitGames::LoadBalancing::Player& player);
 	void LeaveEventAction(int playerNr, bool isInactive);
@@ -32,5 +34,7 @@ private:
 	bool m_isView = false;
 	GuiList list;
 	CFont m_font;
+
+	int m_viewSeed = -1;
 };
 
