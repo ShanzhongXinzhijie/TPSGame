@@ -287,6 +287,20 @@ void Citizen::PostLoopUpdate() {
 	}
 }
 
+void  Citizen::Death(){
+	m_isDead = true;
+	SetEnable(false);
+	charaCon.RemoveRigidBoby();
+	m_collision.SetEnable(false);
+	m_model.SetEnable(false);
+	m_modelAttack.SetEnable(false);
+	ownerTeam->removeZombie();
+	ownerTeam = nullptr;
+}
+bool  Citizen::GetIsDead()const{
+	return m_isDead;
+}
+
 const CVector3& Citizen::GetMoverNetVec()const {
 	return mover->GetNetVec();
 }

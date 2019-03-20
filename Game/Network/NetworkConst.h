@@ -7,7 +7,7 @@ enum NetworkEventCode {
 	enNormal = 1,
 	enKillPlayer,
 	enPlayerDeadOrAlive,
-	enKenzoku,
+	enReliable,
 	enPlayerEventEnd,
 
 	enMasterClientEventStart,
@@ -28,6 +28,13 @@ enum PlayerStatusCode {
 	enZombiePosSync = 121,
 	enZombieMover = 122,
 	enZombiePos = 123,
+};
+enum ReliableDataCode {
+	enDestroyGinger,
+	enGetGodpower,
+	enUseGodPower,
+	enGetControlWosiris,
+	enKenzoku,
 };
 
 //プレイヤープロパティのキー

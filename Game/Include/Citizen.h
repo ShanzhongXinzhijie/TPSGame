@@ -36,12 +36,20 @@ public:
 	}
 
 	unsigned int GetUniqueID()const { return m_uniqueID; }
+
+	const Team* GetOwnerTeam()const{
+		return ownerTeam;
+	}
+
+	void Death();
+	bool GetIsDead()const;
 	
 private:
 	void playSE(const wchar_t * path);
 	void Attack();
 
 	unsigned int m_uniqueID = 0;
+	bool m_isDead = false;
 
 	//インスタンシング用モデル
 	GameObj::CInstancingModelRender m_model;

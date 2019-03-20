@@ -153,7 +153,7 @@ void CPlayer::Move() {
 	}
 	//飛行で壁に突っ込む
 	if (mover.isHitWall()) {
-		mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
+		//mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
 		playSE(L"Resource/sound/SE_jump.wav");
 		isWalljump = true;
 	}

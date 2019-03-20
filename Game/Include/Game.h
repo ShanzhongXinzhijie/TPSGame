@@ -9,6 +9,7 @@
 #include "Team.h"
 #include "PlayerGene.h"
 #include "CitizenGene.h"
+#include "../Ginger/GingerGene.h"
 #include "DemolisherWeapon/Graphic/Light/Lights.h"
 
 #include "../Network/NetPlayerManager.h"
@@ -60,6 +61,13 @@ public:
 	const CitizenGene& GetCitizenGene()const {
 		return citizenGene;
 	}
+	CitizenGene& GetCitizenGene(){
+		return citizenGene;
+	}
+
+	GingerGene& GetGingerGene(){
+		return gingerGene;
+	}
 
 private:
 	static Game* static_game;
@@ -73,6 +81,7 @@ private:
 
 	PlayerGene playerGene;
 	CitizenGene citizenGene;
+	GingerGene gingerGene;
 
 #ifdef SpritScreen
 	GameObj::PerspectiveCamera karicamera;

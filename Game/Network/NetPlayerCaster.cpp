@@ -56,8 +56,8 @@ void NetPlayerCaster::PostUpdate() {
 			if (m_cnt % 12 == 0) {
 				//áÅ‘®‰»‚ğ‘—M
 				if (m_sendKenzokuList.size() > 0) {
-					_event.put((nByte)1, (int)m_sendKenzokuList.size());//‘”
-					int i = 2;
+					_event.put((nByte)enKenzoku, (int)m_sendKenzokuList.size());//‘”
+					int i = enKenzoku+1;
 					for (auto& K : m_sendKenzokuList) {
 						_event.put(i, (int)std::get<0>(K)->GetUniqueID()); i++;//ID
 						_event.put(i, std::get<1>(K)); i++;//ŠÔ
@@ -77,7 +77,7 @@ void NetPlayerCaster::PostUpdate() {
 
 			//ŠmÀ‚È‘—M
 			if (isSend) {
-				GetPhoton()->Send(enKenzoku, _event, true);
+				GetPhoton()->Send(enReliable, _event, true);
 			}
 		}
 

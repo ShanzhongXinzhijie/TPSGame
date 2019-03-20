@@ -12,6 +12,8 @@ MainPlayer::MainPlayer(int p, Team* team, const CVector3& position)
 	m_camera(playerNum, position), CPlayer(p,team, position), wepHolder(CPlayer::weapon, CPlayer::WEAPON_NUM),
 	hpbar(maxHp, mover.getFlyTimerMax()) {
 	miniHpbar.setIsEnable(false);
+
+	godPowerStarter.Init(this);
 }
 
 
