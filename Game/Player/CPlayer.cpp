@@ -4,10 +4,12 @@
 #include "Wing.h"
 #include "HandGun.h"
 #include "Rifle.h"
+#include "Lazer.h"
 #include "Bullet.h"
+#include "CollisionMaskConst.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
-	: playerNum(pNum), team(tem){
+	: playerNum(pNum), team(tem), miniHpbar(maxHp){
 	team->addPlayer(this);
 	mover.SetPosition(position);
 }
@@ -41,12 +43,20 @@ bool CPlayer::Start() {
 	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 40.0f);
 	m_collision.SetName(L"CPlayer");
 	m_collision.SetClass(this);
+	//マスクとグループの設定
+	m_collision.All_Off_Group();
+	m_collision.On_OneGroup(CollisionMaskConst::encolKurai);
+	m_collision.Off_OneMask(CollisionMaskConst::encolKurai);
+	//これは喰らい判定
+	m_collision.SetIsHurtCollision(true);
 
 	weapon[HUND_GUN] = new HandGun(this, &m_model, anim_shot, anim_reload);
 	weapon[RIFLE] = new Rifle(this, &m_model, anim_shot, anim_reload);
+	weapon[LAZER] = new Lazer(this, &m_model, anim_shot, anim_reload);
 	activeWeapon = HUND_GUN;
 	weapon[HUND_GUN]->Activate();
 
+	m_Init = true;
 	return true;
 };
 
@@ -64,19 +74,21 @@ void CPlayer::Update() {
 		mover.Update();
 		m_model.SetPos(getPosition());
 		m_model.SetRot(mover.getRotation());
+		miniHpbar.setPos(getPosition());
 		CVector3 pos = getPosition();
 		pos.y += mover.GetCollider()->GetHeight()/2 + mover.GetCollider()->GetRadius();
 		m_collision.SetPosition(pos);
+
+		if (getPosition().y < -100.0f) {
+			Hit({ 0,0,0 }, maxHp / 5);
+			mover.SetPosition(team->getHome());
+		}
 	} else {
 		deathCool -= GetDeltaTimeSec();
 		if (deathCool <= 0.0f) {
 			Revive();
 		}
 	}
-}
-
-CVector3 CPlayer::getPosition() const{
-	return mover.GetPosition();
 }
 
 void CPlayer::sendAction(const ActionSender& actionPal) {
@@ -98,7 +110,7 @@ bool CPlayer::BatHit(Bullet* bullet) {
 
 void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 	if (m_hp != 0) {
-		CVector3&& pos = getPosition();
+		CVector3 pos = getPosition();
 		pos.y += 60.0f;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 		playSE(L"Resource/sound/SE_damage.wav");
@@ -109,6 +121,7 @@ void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 			m_hp = 0;
 			Death();
 		}
+		miniHpbar.display(m_hp);
 	}
 }
 
@@ -117,11 +130,13 @@ void CPlayer::Death() {
 	m_hp = 0;
 	deathCool = constDeathCool;
 	m_model.SetIsDraw(false);
+	weapon[activeWeapon]->Inactivate();
 }
 //蘇生処理
 void CPlayer::Revive() {
 	m_hp = maxHp;
 	m_model.SetIsDraw(true);
+	weapon[activeWeapon]->Activate();
 }
 
 void CPlayer::Move() {
@@ -130,17 +145,17 @@ void CPlayer::Move() {
 
 	//壁ジャンプ
 	bool isWalljump = false;
-	if (mover.IsContactWall()) {
-		//空中に壁に当たりながらジャンプ or 飛行で壁に突っ込む
-		if (!mover.IsOnGround() && action.isJump() || mover.isFlying()) {
-			if (mover.isFlying()) {
-				mover.flyStop();
-				mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
-			}
-			playSE(L"Resource/sound/SE_jump.wav");
-			mover.walljump(jumpPower, movement);
-			isWalljump = true;
-		}
+	//空中に壁に当たりながらジャンプ
+	if (mover.IsContactWall() && !mover.IsOnGround() && action.isJump()) {
+		playSE(L"Resource/sound/SE_jump.wav");
+		mover.walljump(jumpPower, movement);
+		isWalljump = true;
+	}
+	//飛行で壁に突っ込む
+	if (mover.isHitWall()) {
+		mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
+		playSE(L"Resource/sound/SE_jump.wav");
+		isWalljump = true;
 	}
 
 	//ジャンプと飛行
@@ -153,15 +168,17 @@ void CPlayer::Move() {
 			if (mover.isFlying()) {
 				mover.flyStop();
 			} else {
-				mover.fly(true, action.getLookVec(), flyPower);
+				mover.fly(true, action.getLookVec(), {0, 0}, flyPower);
 			}
 		}
 	}
+
+	//飛行
 	if (mover.isFlying()) {
 		if (wing == nullptr) {
 			wing = new Wing(mover);
 		}
-		mover.fly(false, action.getLookVec());
+		mover.fly(false, action.getLookVec(), movement);
 		mover.turn(action.getLookVec().x, action.getLookVec().z);
 		m_model.GetAnimCon().Play(anim_fly, animInterpolateSec);
 		return;
@@ -177,9 +194,7 @@ void CPlayer::Move() {
 	bool dash = false;
 
 	//移動速度
-	if (action.isShot()) {
-		speed = moveSpeed * 0.5f;
-	}else if(action.isDash()) {
+	if(action.isDash() && !action.isShot()) {
 		speed = moveSpeed * dashMul;
 		dash = true;
 	}
@@ -237,6 +252,16 @@ void CPlayer::changeWeapon(bool left, bool right) {
 	weapon[nextWeapon]->Activate();
 	activeWeapon = nextWeapon;
 }
+void CPlayer::changeWeapon(unsigned char useWeapon) {
+	short nextWeapon = useWeapon;
+	if (nextWeapon < 0) { nextWeapon = WEAPON_NUM - 1; }
+	if (nextWeapon >= WEAPON_NUM) { nextWeapon = 0; }
+
+	weapon[activeWeapon]->Inactivate();
+	weapon[nextWeapon]->Activate();
+	activeWeapon = nextWeapon;
+}
+
 
 void CPlayer::playSE(const wchar_t* path) {
 	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);

@@ -2,6 +2,8 @@
 #include "DemolisherWeapon/physics/character/CCharacterController.h"
 #include "CPlayer.h"
 #include "InstancingCitizenColorManager.h"
+#include "../Network/NetPlayerCaster.h"
+#include "MiniHPbar.h"
 
 class ICitizenBrain;
 class Bullet;
@@ -18,7 +20,7 @@ public:
 		charaCon.SetPosition(pos);
 	}
 
-	CVector3 getPos() const{
+	const CVector3& getPos() const{
 		return charaCon.GetPosition();
 	}
 
@@ -62,6 +64,7 @@ private:
 
 	const unsigned int maxHp = 250;
 	unsigned int m_hp = maxHp;
+	MiniHPbar miniHpbar;
 
 	CCharacterController charaCon;
 	ICitizenBrain* mover;
@@ -93,7 +96,7 @@ private:
 public:
 	int GetNetCnt()const { return m_netCnt; }
 	
-	//ˆê“¯ŠïŒ`
+	//ˆê“¯ŠúŒ`
 	void SetIsSend(bool issend) { m_isSend = issend; }
 	bool GetIsSend()const { return m_isSend; }
 	void SetIsAvg(bool is) { m_sendType_Avg = is; }

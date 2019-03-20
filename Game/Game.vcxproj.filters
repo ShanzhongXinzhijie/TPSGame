@@ -34,7 +34,6 @@
     <ClInclude Include="Include\Walker.h" />
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
-    <ClInclude Include="Include\Flybar.h" />
     <ClInclude Include="Network\NetGameEventCaster.h" />
     <ClInclude Include="Network\NetGameEventReceiver.h" />
     <ClInclude Include="Include\GameWaiter.h" />
@@ -47,7 +46,11 @@
     <ClInclude Include="Include\Bullet.h" />
     <ClInclude Include="Include\NormalBullet.h" />
     <ClInclude Include="Include\WeaponHolder.h" />
+    <ClInclude Include="Include\MiniHPbar.h" />
     <ClInclude Include="Ginger\Ginger.h" />
+    <ClInclude Include="Include\DeckType.h" />
+    <ClInclude Include="Include\CConfig.h" />
+    <ClInclude Include="Include\Lazer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -82,7 +85,6 @@
     <ClCompile Include="Mover\Walker.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
-    <ClCompile Include="Player\Flybar.cpp" />
     <ClCompile Include="Network\NetGameEventCaster.cpp" />
     <ClCompile Include="Network\NetGameEventReceiver.cpp" />
     <ClCompile Include="GameWaiter.cpp" />
@@ -95,6 +97,9 @@
     <ClCompile Include="Player\Bullet\NormalBullet.cpp" />
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
+    <ClCompile Include="CConfig.cpp" />
+    <ClCompile Include="Player\Weapon\Lazer.cpp" />
+    <ClCompile Include="MiniHPbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\unityChan.fbx">
@@ -111,6 +116,7 @@
     <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
     <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
     <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
+    <MeshContentTask Include="Asset\modelData\Lazer.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -132,10 +138,12 @@
     <ImageContentTask Include="Asset\spriteData\Target.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
     <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-    <ImageContentTask Include="Asset\spriteData\HundGun.png" />
-    <ImageContentTask Include="Asset\spriteData\LButton.png" />
-    <ImageContentTask Include="Asset\spriteData\RButton.png" />
-    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
-    <ImageContentTask Include="Asset\spriteData\YButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\HundGun.png" />
+    <Image Include="Asset\spriteData\LButton.png" />
+    <Image Include="Asset\spriteData\RButton.png" />
+    <Image Include="Asset\spriteData\Rifle.png" />
+    <Image Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
 </Project>

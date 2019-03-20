@@ -7,7 +7,8 @@
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 #include "CollisionMaskConst.h"
 
-Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType, unsigned int id): playersMap(pm), m_uniqueID(id){
+Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType, unsigned int id)
+	:playersMap(pm), m_uniqueID(id),miniHpbar(maxHp){
 	//インスタンシングモデル
 	AnimationClip animationClips[anim_num];
 	animationClips[anim_walk0].Load(L"Resource/animData/CitizenWalk.tka", true);
@@ -104,6 +105,8 @@ void Citizen::Update() {
 		//回転
 		m_model.SetRot(mover->getTurn());
 		m_modelAttack.SetRot(mover->getTurn());
+
+		miniHpbar.setPos(charaCon.GetPosition());
 	}
 
 	if (0 < nowFlame) {
@@ -129,7 +132,9 @@ bool Citizen::BatHit(Bullet* bullet) {
 
 		if (m_hp > bullet->getDamage()) {
 			m_hp -= bullet->getDamage();
+			miniHpbar.display(m_hp);
 		} else {
+			miniHpbar.display(0);
 			m_hp = maxHp;
 
 			bool canKenzokuing = false;
@@ -223,6 +228,12 @@ void Citizen::Kansenzyoutai()
 	CVector3 pos = charaCon.GetPosition();
 	pos.y += charaCon.GetCollider()->GetHeight() / 2 + charaCon.GetCollider()->GetRadius();
 	m_collision.CreateCapsule(pos, CQuaternion::Identity(), 30.0f, 70.0f);
+	//マスクとグループの設定
+	m_collision.All_Off_Group();
+	m_collision.On_OneGroup(CollisionMaskConst::encolKurai);
+	m_collision.Off_OneMask(CollisionMaskConst::encolKurai);
+	//これは喰らい判定
+	m_collision.SetIsHurtCollision(true);
 
 	delete mover;
 	mover = new kansen(playersMap,charaCon.GetPosition(), ownerTeam);

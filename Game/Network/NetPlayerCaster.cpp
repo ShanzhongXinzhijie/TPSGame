@@ -34,6 +34,11 @@ void NetPlayerCaster::PostUpdate() {
 
 		//リロードの入力を記録(入力が1fしかtrueにならないため、4fに一回の送信タイミングでの取得では抜けができる)
 		if (!m_isReload) { m_isReload = AS.isReload(); }
+		if (!m_isShot  ) { m_isShot   = AS.isShot(); }
+		const Weapon* const * weapons = m_pCPlayer->GetWeapons();
+		for (int i = 0; i < CPlayer::WEAPON_NUM; i++) {
+			m_bullet[i] = max(m_bullet[i], weapons[i]->getBulletCount());
+		}
 
 		//クールダウン時間進める
 		m_coolDowmSendFlyTimer = max(m_coolDowmSendFlyTimer - 1, 0);
@@ -96,12 +101,26 @@ void NetPlayerCaster::PostUpdate() {
 				nByte bottuns = 0;
 				if (AS.isJump()) { bottuns = bottuns | 0b1; }
 				if (AS.isDash()) { bottuns = bottuns | 0b10; }
-				if (AS.isShot()) { bottuns = bottuns | 0b100; }
+				if (m_isShot) { bottuns = bottuns | 0b100; }
 				if (m_isReload) { bottuns = bottuns | 0b1000; } m_isReload = false;
 				if (m_pCPlayer->isFlying()) { bottuns = bottuns | 0b10000; }
-				if (AS.isWeaponLeft()) { bottuns = bottuns | 0b100000; }
-				if (AS.isWeaponRight()) { bottuns = bottuns | 0b1000000; }
-				_event.put((nByte)(enActionSender + 5), (nByte)bottuns);
+				//if (AS.isWeaponLeft()) { bottuns = bottuns | 0b100000; }
+				//if (AS.isWeaponRight()) { bottuns = bottuns | 0b1000000; }
+				_event.put((nByte)(enActionSender + 5), (nByte)bottuns);			
+				
+				//ロックオン
+				int lock = m_pCPlayer->GetLockOnNum();
+				if (lock < 0) { 
+					lock = 0;//ノーロック
+				}
+				else {
+					lock++;
+					if (m_pCPlayer->GetLockOnIsPly()) { lock *= -1; }
+				}
+				_event.put((nByte)enLockOn, lock);
+
+				//装備武器
+				_event.put((nByte)enActiveWepon, (nByte)m_pCPlayer->GetActiveWeapon());
 
 				//フライ情報
 				if (m_pCPlayer->isFlying() && m_coolDowmSendFlyTimer <= 0) {
@@ -110,14 +129,15 @@ void NetPlayerCaster::PostUpdate() {
 				}
 
 				//弾数
-				if (AS.isShot() && m_coolDowmSendBulletCnt <= 0) {//射撃するなら送る
-					const Weapon* const * weapons = m_pCPlayer->GetWeapons();
+				if (m_isShot && m_coolDowmSendBulletCnt <= 0) {//射撃するなら送る
 					for (int i = 0; i < CPlayer::WEAPON_NUM; i++)
 					{
-						_event.put((nByte)(enBulletCnt + i), weapons[i]->getBulletCount());
+						_event.put((nByte)(enBulletCnt + i), m_bullet[i]);
 					}
 					m_coolDowmSendBulletCnt = 60;
 				}
+				m_isShot = false;
+				for (int i = 0; i < CPlayer::WEAPON_NUM; i++) { m_bullet[i] = 0; }
 
 				//座標
 				_event.put((nByte)(enPosition + 0), (int)std::round(m_pCPlayer->getPosition().x));

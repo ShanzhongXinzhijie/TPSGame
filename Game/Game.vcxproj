@@ -246,7 +246,10 @@
     </MeshContentTask>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
+    <ClCompile Include="MiniHPbar.cpp" />
+    <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
     <ClCompile Include="Citizen\Citizennigeru.cpp" />
@@ -255,7 +258,6 @@
     <ClCompile Include="Player\Weapon\HandGun.cpp" />
     <ClCompile Include="Network\NetGameEventReceiver.cpp" />
     <ClCompile Include="Network\NetGameEventCaster.cpp" />
-    <ClCompile Include="Player\Flybar.cpp" />
     <ClCompile Include="Mover\FlyWalker.cpp" />
     <ClCompile Include="Mover\Walker.cpp" />
     <ClCompile Include="Player\PlayerGene.cpp" />
@@ -297,13 +299,14 @@
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\CConfig.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\Bullet.h" />
+    <ClInclude Include="Include\DeckType.h" />
     <ClInclude Include="Include\HandGun.h" />
     <ClInclude Include="Include\InstancingCitizenColorManager.h" />
     <ClInclude Include="Include\CollisionMaskConst.h" />
     <ClInclude Include="Include\GameWaiter.h" />
-    <ClInclude Include="Include\Flybar.h" />
     <ClInclude Include="Include\Citizennigeru.h" />
     <ClInclude Include="Include\FlyWalker.h" />
     <ClInclude Include="Include\CitizenGene.h" />
@@ -327,6 +330,8 @@
     <ClInclude Include="Include\SqSpawner.h" />
     <ClInclude Include="Include\ziguzagu.h" />
     <ClInclude Include="Include\Walker.h" />
+    <ClInclude Include="Include\MiniHPbar.h" />
+    <ClInclude Include="Include\Lazer.h" />
     <ClInclude Include="Network\NetGameEventReceiver.h" />
     <ClInclude Include="Network\NetGameEventCaster.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
@@ -351,6 +356,7 @@
     <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
+    <MeshContentTask Include="Asset\modelData\Lazer.fbx" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
     <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
@@ -364,28 +370,26 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\Black.png" />
-    <ImageContentTask Include="Asset\spriteData\Title.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ImageContentTask Include="Asset\spriteData\waku.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\Fly_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_out.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ImageContentTask Include="Asset\spriteData\Target.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-    <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\HundGun.png" />
     <ImageContentTask Include="Asset\spriteData\LButton.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
     <ImageContentTask Include="Asset\spriteData\RButton.png" />
     <ImageContentTask Include="Asset\spriteData\Rifle.png" />
+    <ImageContentTask Include="Asset\spriteData\Target.png" />
+    <ImageContentTask Include="Asset\spriteData\Title.png" />
+    <ImageContentTask Include="Asset\spriteData\waku.png" />
     <ImageContentTask Include="Asset\spriteData\YButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\Lazer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\lockon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

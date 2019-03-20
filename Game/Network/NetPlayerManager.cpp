@@ -87,6 +87,13 @@ void NetPlayerManager::Update() {
 	}
 }
 void NetPlayerManager::PostRender() {
+
+	if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) {
+		m_font.Draw(L"Disconnect\n\"サイキドウ\"シテクダサイ...", { 0.5f - 0.001f,0.5f - 0.001f }, { 1.0f, 1.0f ,1.0f,1.0f }, CVector2::One(), { 0.5f,0.5f }, 0.0f, DirectX::SpriteEffects_None, 0.0f);
+		m_font.Draw(L"Disconnect\n\"サイキドウ\"シテクダサイ...", { 0.5f + 0.001f,0.5f + 0.001f }, { 0.0f, 0.0f ,0.0f,1.0f }, CVector2::One(), { 0.5f,0.5f }, 0.0f, DirectX::SpriteEffects_None, 0.0f);
+		m_font.Draw(L"Disconnect\n\"サイキドウ\"シテクダサイ...", { 0.5f,0.5f }, { 1.0f, 0.0f ,0.0f,1.0f }, CVector2::One(), {0.5f,0.5f}, 0.0f, DirectX::SpriteEffects_None, 0.0f);
+	}
+
 	if (!m_isView) { return; }
 
 	//Ping表示
@@ -115,6 +122,7 @@ void NetPlayerManager::PostRender() {
 		}
 	}
 
+	list.fontscale = { 0.62f,0.62f };
 	list.Draw();
 
 	list.values.clear();

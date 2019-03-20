@@ -19,7 +19,22 @@ class Fade;
 
 class Game : public IGameObject{
 public:
+	static Game* createGame(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) {
+		if (static_game == nullptr) {
+			static_game = new Game(fade, timeLimit, citizenCnt, seed, startTime_ms);
+			static_game->SetName(L"GameClass");
+			return static_game;
+		}
+		return nullptr;
+	}
+
+	static const Game* getGame() {
+		return static_game;
+	}
+
+private:
 	Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms);
+public:
 	~Game();
 
 	void Update() override;
@@ -34,15 +49,21 @@ public:
 		return playerGene.getPlayers();
 	}
 
-	const CPlayer* getMainPlayer() const{
+	const MainPlayer* getMainPlayer() const{
 		return playerGene.getMainPlayer();
 	}
 
-	const CPlayer* getMainPlayer2() const {
+	const MainPlayer* getMainPlayer2() const {
 		return playerGene.getMainPlayer2();
 	}
 
+	const CitizenGene& GetCitizenGene()const {
+		return citizenGene;
+	}
+
 private:
+	static Game* static_game;
+
 	GameObj::CDirectionLight light;
 	Ground* ground = nullptr;
 	Level level;

@@ -4,7 +4,7 @@
 #include "Title.h"
 #include "Game.h"
 #include "Fade.h"
-
+#include "DeckType.h"
 #include "Network/Network.h"
 
 ConfirmPlayers::ConfirmPlayers(Fade* fade, SuicideObj::CBGM* bgm)
@@ -48,42 +48,17 @@ bool ConfirmPlayers::Start() {
 	std::wstring wstr;
 	float randam = CMath::RandomZeroToOne();
 	float min = 0.0f;
-	for (int i = 0; i < 8; i++) {
-		if (randam < min + 1.0f / 8.0f) {
-			switch (i)
-			{
-			case 0:
-				wstr = L"エルフ";
-				break;
-			case 1:
-				wstr = L"ロイヤル";
-				break;
-			case 2:
-				wstr = L"ウィッチ";
-				break;
-			case 3:
-				wstr = L"ドラゴン";
-				break;
-			case 4:
-				wstr = L"ネクロ";
-				break;
-			case 5:
-				wstr = L"ヴァンパイア";
-				break;
-			case 6:
-				wstr = L"ビショップ";
-				break;
-			case 7:
-				wstr = L"ネメシス";
-				break;
-			default:
-				break;
-			}
-			wstr += L"NAKAMURA";
-			break;
-		}
-		min += 1.0f / 8.0f;
-	}
+
+	//名前作成
+	int r = 0;
+	r = CMath::RandomInt() % DECK_TYPE_MAX;
+	wstr += DECK_TYPE[r];
+	wstr += L" ";
+	r = CMath::RandomInt() % CHARA_TYPE_MAX;
+	wstr += CHARA_TYPE[r];
+	wstr += L" ";
+	wstr += L"NAKAMURA";
+
 	//サーバーに接続(その後勝手にルームに入る)
 	m_netWork->Connect(wstr.c_str());
 #endif
@@ -128,7 +103,7 @@ void ConfirmPlayers::Update() {
 			NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
 			fade->fadeIn([&]() {
 				bgm->Stop();
-				new Game(fade,m_timeLimit,m_citizenCnt, seed, -1);
+				Game::createGame(fade,m_timeLimit,m_citizenCnt, seed, -1);
 				delete this; return;
 			});
 #else
@@ -144,7 +119,7 @@ void ConfirmPlayers::Update() {
 #endif
 		//タイトルに戻る
 		fade->fadeIn([&]() {
-			new Title(fade, bgm);
+			Title* T = new Title(fade, bgm); T->SetName(L"TitleClass");
 			delete this; return;
 		});
 	}
@@ -181,7 +156,7 @@ void ConfirmPlayers::Update() {
 			//ゲーム開始
 			fade->fadeIn([&]() {
 				bgm->Stop();
-				new Game(fade, m_timeLimit, m_citizenCnt, m_seed, m_startTime);
+				Game::createGame(fade, m_timeLimit, m_citizenCnt, m_seed, m_startTime);
 				delete this; return;
 			});
 		}
@@ -200,7 +175,7 @@ void ConfirmPlayers::Update() {
 		//ゲーム開始
 		fade->fadeIn([&]() {
 			bgm->Stop();
-			new Game(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
+			Game::createGame(fade, m_timeLimit, m_citizenCnt, m_netWork->GetNetEventReceiver().GetGameStartData().m_seed, m_netWork->GetNetEventReceiver().GetGameStartData().m_startTime);
 			delete this; return;
 		});
 	}
@@ -264,7 +239,7 @@ void ConfirmPlayers::PostRender() {
 				list.values.back() += L" <<It's me";
 			}
 			if (players[i]->getIsMasterClient()) {
-				list.values.back() += L" <<マスクラ";
+				list.values.back() += L" <<Master";
 			}
 
 			const ExitGames::Common::Hashtable& eventContent = players[i]->getCustomProperties();
@@ -288,6 +263,7 @@ void ConfirmPlayers::PostRender() {
 	else if (GetPhoton()->GetState() == PhotonNetworkLogic::DISCONNECTED) {
 		list.values.emplace_back(L"disconnect\n");
 		list.values.back() += m_netWork->GetErrorMessage();
+		list.values.back() += L"\n\n(BACK)ボタンでモドル";
 	}
 	else {
 #ifdef SpritScreen
@@ -298,6 +274,7 @@ void ConfirmPlayers::PostRender() {
 #endif
 	}
 
+	list.fontscale = { 0.62f,0.62f };
 	list.Draw();
 
 	list.values.clear();
@@ -312,7 +289,7 @@ void ConfirmPlayers::PostRender() {
 #endif
 		wchar_t str[128];
 		swprintf_s(str, L"Time:%.1f\nCitizen:%d", m_timeLimit, m_citizenCnt);
-		m_font.Draw(str, { 1.0f,0.0f }, CVector4::White(), CVector2::One(), { 1.0f,0.0f });
+		m_font.Draw(str, { 0.86f,0.0f }, CVector4::White(), CVector2::One(), { 0.0f,0.0f });
 	}
 }
 

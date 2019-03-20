@@ -10,6 +10,8 @@
 #include "GameWaiter.h"
 #include "Ginger/Ginger.h"
 
+Game* Game::static_game = nullptr;
+
 Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) : citizenGene(this), timer(timeLimit){
 	this->fade = fade;
 	fade->fadeOut();
@@ -27,6 +29,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	ground = new Ground(CVector3::Zero());
 
 	bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_battle.wav");
+	bgm->SetVolume(0.4f);
 	bgm->Play(false, true);
 
 #ifdef SpritScreen
@@ -59,12 +62,14 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	m_netWork = FindGO<NetWorkManager>(L"NetWorkManager");
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(&citizenGene);
 
-	//ゲーム開始タイマー設定
-	int t = GetPhoton()->GetSeverTime_ms(); 
-	if (t < 0 && startTime_ms >= 0) { startTime_ms = INT_MIN; }
-	m_waitGameStartTimer_sec = CMath::Clamp(15.0f - (t - startTime_ms)*0.001f, 0.0f, 15.0f);
-	//ゲームをウェイト状態にする
-	if (m_waitGameStartTimer_sec > 0.0f) { GameWaiter::SetIsWait(true); }
+	if (GetPhoton()->GetPlayers().getSize() > 1) {
+		//ゲーム開始タイマー設定
+		int t = GetPhoton()->GetSeverTime_ms();
+		if (t < 0 && startTime_ms >= 0) { startTime_ms = INT_MIN; }
+		m_waitGameStartTimer_sec = CMath::Clamp(15.0f - (t - startTime_ms)*0.001f, 0.0f, 15.0f);
+		//ゲームをウェイト状態にする
+		if (m_waitGameStartTimer_sec > 0.0f) { GameWaiter::SetIsWait(true); }
+	}
 #endif
 
 	//次のフレームの可変フレーム無効
@@ -78,6 +83,7 @@ Game::~Game() {
 #ifndef SpritScreen
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(nullptr);
 #endif
+	static_game = nullptr;
 }
 
 void Game::Update() {
@@ -153,13 +159,15 @@ void Game::PostRender() {
 	if (m_waitGameStartTimer_sec > 0.0f) {
 		wchar_t countDisp[24];
 		swprintf_s(countDisp, L"Ready... %.1f sec", m_waitGameStartTimer_sec);
-		font.Draw(countDisp, { 0.5f, 0.5f }, CVector4::White(), CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None,0.0f);
+		font.Draw(countDisp, { 0.503f, 0.703f }, {0,0,0,1}, CVector2::One(), { 0.5f,0.5f }, 0.0f, DirectX::SpriteEffects_None, 0.0f);
+		font.Draw(countDisp, { 0.5f, 0.7f }, CVector4::White(), CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None,0.0f);
 		return;
 	}
 
 	wchar_t countDisp[20];
 	swprintf_s(countDisp, L"Time: %.1f sec", timer);
-	font.Draw(countDisp, { 0.1f, 0.05f });
+	font.Draw(countDisp, { 0.013f, 0.013f }, { 0,0,0,1 }, {1.2f,1.2f});
+	font.Draw(countDisp, { 0.01f, 0.01f }, { 1,1,1,1 }, { 1.2f,1.2f });
 }
 
 void Game::createPlayer(bool isMe, int playerNum) {

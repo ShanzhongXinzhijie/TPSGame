@@ -1,10 +1,10 @@
 #pragma once
 class HPbar {
 public:
-	HPbar();
+	HPbar(float maxHp, float maxFly);
 	~HPbar();
 
-	void Draw(float hp, float maxHP);
+	void Draw(float hp, float fly, bool flyRest);
 
 	void setPosition(const CVector2& pos) {
 		m_pos = pos;
@@ -12,8 +12,15 @@ public:
 
 private:
 	CSprite m_inSpr;
+	CSprite m_inFly;
 	CSprite m_outSpr;
 
+	const float maxHp;
+	const float maxFly;
+
 	CVector2 m_pos = {1270.0f,10.0f};
+
+	float bright = 0.0f;
+	char brightMove = 2;
 };
 

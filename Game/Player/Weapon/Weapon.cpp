@@ -25,6 +25,8 @@ Weapon::~Weapon() {
 }
 
 void Weapon::shot() {
+	PreShot();
+
 	playerModel->GetAnimCon().Play(shotAnimNum, CPlayer::animInterpolateSec);
 
 	if (shotCool <= 0) {
@@ -55,7 +57,7 @@ void Weapon::shot() {
 
 	Bullet* bullet = createBullet(player, pos, vec);
 
-	if (player->isFlying()) {
+	if (player->isFlying() && bullet) {
 		bullet->addVelocity(player->getVelocity());
 	}
 
@@ -88,6 +90,8 @@ void Weapon::PreUpdate() {
 }
 
 void Weapon::Update() {
+	WeaponUpdate();
+
 	Bone* arm = playerModel->FindBone(L"Bone022");
 	CQuaternion rot = arm->GetRotation();
 	rot.Multiply(CQuaternion::GetRotationDeg(CVector3::AxisX(), 90.0f));
@@ -100,5 +104,6 @@ void Weapon::Update() {
 void Weapon::drawBulletCount(CFont & font) {
 	wchar_t countbullet[20];
 	swprintf_s(countbullet, L"Bullet: %d / %d", bulletCount, maxBullet);
-	font.Draw(countbullet, { 0.7f, 0.9f });
+	font.Draw(countbullet, { 0.723f, 0.883f }, { 0,0,0,1 }, { 1.5f, 1.5f });
+	font.Draw(countbullet, { 0.72f, 0.88f }, { 1,1,1,1 }, {1.5f, 1.5f});
 }

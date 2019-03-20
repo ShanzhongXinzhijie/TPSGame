@@ -2,6 +2,7 @@
 #include <unordered_map>
 
 class CPlayer;
+class MainPlayer;
 class SqSpawner;
 class Team;
 
@@ -16,6 +17,8 @@ public:
 
 	void removePlayer(int playerNum);
 
+	CVector3 getHome(const Team* team) const;
+
 	CPlayer* getPlayer(int playerNum) {
 		return playersMap[playerNum];
 	}
@@ -28,17 +31,17 @@ public:
 		return teamArray;
 	}
 
-	const CPlayer* getMainPlayer() const{
+	const MainPlayer* getMainPlayer() const{
 		return mainPlayer;
 	}
 
-	const CPlayer* getMainPlayer2() const{
+	const MainPlayer* getMainPlayer2() const{
 		return mainPlayer2;
 	}
 
 private:
-	CPlayer* mainPlayer = nullptr;
-	CPlayer* mainPlayer2 = nullptr;
+	MainPlayer* mainPlayer = nullptr;
+	MainPlayer* mainPlayer2 = nullptr;
 	std::unordered_map<int, CPlayer*> playersMap;
 	std::vector<SqSpawner*> spawnerArray;
 	std::vector<Team*> teamArray;

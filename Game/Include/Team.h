@@ -1,16 +1,19 @@
 #pragma once
 #include <unordered_set>
 
+class PlayerGene;
 class CPlayer;
 
 class Team {
 public:
-	Team(CVector4 color, const wchar_t* name);
+	Team(CVector4 color, const wchar_t* name, PlayerGene* generator);
 	~Team();
 
 	CVector4 getColor() const{
 		return color;
 	}
+
+	CVector3 getHome() const;
 
 	const wchar_t* getName() const {
 		return name;
@@ -45,5 +48,6 @@ private:
 	CVector4 color;
 	const wchar_t* name;
 	std::unordered_set<CPlayer*> players;
+	PlayerGene* generator;
 };
 

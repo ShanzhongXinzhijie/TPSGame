@@ -32,7 +32,7 @@ private:
 	//ƒQ[ƒ€İ’è
 	bool m_isInitRoomSetting = false;
 	float m_timeLimit = 160.0f;
-	int m_citizenCnt = 1;
+	int m_citizenCnt = 401;
 	
 	GuiList list;
 	CSprite m_sprite;

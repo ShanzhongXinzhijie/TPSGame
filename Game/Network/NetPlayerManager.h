@@ -31,6 +31,6 @@ private:
 
 	bool m_isView = false;
 	GuiList list;
-	//CFont m_font;
+	CFont m_font;
 };
 

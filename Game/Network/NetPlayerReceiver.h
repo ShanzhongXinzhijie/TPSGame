@@ -10,12 +10,14 @@ struct OnlinePlayerStatus {
 	int m_cnt = INT_MIN;
 
 	ActionSender m_actionSender;
-	bool m_isFly = false;
-	bool m_isUpd8FlyTimer = false;  float m_flyTimer = 0.0f;
-	bool m_isUpd8BulletCnt = false; int m_bulletCnt[CPlayer::WEAPON_NUM] = {};
-	bool m_isUpdatePos = false;		CVector3 m_pos; 
-	bool m_isUpd8Velocity = false;  CVector3 m_velocity;
-	bool m_isUpdateDead = false;	bool m_isDead = false;
+	bool m_isUpd8Fly = false;			bool m_isFly = false;
+	bool m_isUpd8Lock = false;			int m_lock = 0;
+	bool m_isUpd8ActiveWeapon = false;	nByte m_activeWeapon = 0;
+	bool m_isUpd8FlyTimer = false;		float m_flyTimer = 0.0f;
+	bool m_isUpd8BulletCnt = false;		int m_bulletCnt[CPlayer::WEAPON_NUM] = {};
+	bool m_isUpdatePos = false;			CVector3 m_pos; 
+	bool m_isUpd8Velocity = false;		CVector3 m_velocity;
+	bool m_isUpdateDead = false;		bool m_isDead = false;
 };
 
 class NetPlayerReceiver : public IQSGameObject
@@ -64,6 +66,7 @@ public:
 			m_citizensStatus.clear();
 			m_citizenPosListAvg.clear();
 			m_citizenPosListSync.clear();
+			m_citizenMoverSyncList.clear();
 		}
 	}
 
