@@ -79,11 +79,11 @@ void Ginger::Konryu(){
 	for (int i = 0; i < 2; i++) {
 		if (i == 0) {
 			CVector3 offset = CVector3(0.0f, 376.115f, -815.025f)*0.21f; m_rot.Multiply(offset);
-			m_collision[i].CreateBox(m_pos + offset, m_rot, CVector3(376.115f*1.2f, 376.115f, 376.115f*1.2f)*0.21f*2.0f);
+			m_collision[i].CreateBox(m_pos + offset, m_rot, CVector3(376.115f*1.2f + 10.0f, 376.115f + 10.0f, 376.115f*1.2f)*0.21f*2.0f);
 		}
 		else {
 			CVector3 offset = CVector3(0.0f, 671.355f, -0.0f)*0.21f; m_rot.Multiply(offset);
-			m_collision[i].CreateBox(m_pos + offset, m_rot, CVector3(479.25f*1.2f, 671.355f, 73.04f)*0.21f*2.0f);
+			m_collision[i].CreateBox(m_pos + offset, m_rot, CVector3(479.25f*1.2f + 10.0f, 671.355f + 10.0f, 73.04f)*0.21f*2.0f);
 		}
 		m_collision[i].SetName(L"Ginger");
 		m_collision[i].SetClass(this);
@@ -104,10 +104,13 @@ void Ginger::Konryu(){
 					SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/hakai.efk", 1.0f, m_pos + pos);
 					effe->SetScale({ 60.0f, 60.0f ,60.0f });
 				}
-				if(m_hp <= 0){//”j‰ó
+				if(m_hp <= 0 && !m_isWillDestroy){//”j‰ó
+					m_isWillDestroy = true;
 #ifdef SpritScreen
 					//_‚Ìƒpƒ[Šl“¾
 					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
+					//”j‰ó
+					Destory();
 #else
 					//ƒ}ƒXƒ^[‚ªã‚°‚é‚â‚ÂŒˆ‚ß‚é
 					if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
@@ -119,8 +122,6 @@ void Ginger::Konryu(){
 						}
 					}
 #endif
-					//”j‰ó
-					Destory();
 				}
 			}
 		});

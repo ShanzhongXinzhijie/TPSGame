@@ -25,9 +25,8 @@ void GingerGene::Create(float gameTimelimit, NetPlayerReceiver* receiver){
 	{
 		int type = rand() % GodPowerType::enNum;
 		if (typelist[type]) {
-			for (int i2 = 0; i2 < GodPowerType::enNum; i2++) {
-				type = i2;
-				if (!typelist[i2]) { break; }
+			for (type = 0; type < GodPowerType::enNum; type++) {
+				if (!typelist[type]) { break; }
 			}
 			if (type == GodPowerType::enNum) { return; }
 		}

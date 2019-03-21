@@ -40,6 +40,7 @@ private:
 	
 	int m_hp = 3000;
 	GodPowerType m_powerType = enNone;
+	bool m_isWillDestroy = false;
 
 	CVector3 m_pos;
 	CQuaternion m_rot;
