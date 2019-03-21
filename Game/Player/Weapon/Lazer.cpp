@@ -9,7 +9,8 @@ Lazer::Lazer(CPlayer* player, GameObj::CSkinModelRender* playerModel,
 	:Weapon(player, playerModel, getInfo(shotAnim, reloadAnim)) {
 
 	m_game = FindGO<Game>(L"GameClass");
-	m_sprite.Init(L"Resource/spriteData/lockon.dds");
+	m_sprite[0].Init(L"Resource/spriteData/lockon.dds");
+	m_sprite[1].Init(L"Resource/spriteData/lockon2.dds");
 }
 
 Lazer::~Lazer() {
@@ -119,26 +120,36 @@ void Lazer::WeaponUpdate(){
 	//ÉçÉbÉNåpë±îªíË
 	if (player->GetLockOnNum() >= 0 && m_isOnEFF) {
 		CVector3 rayStart = player->getPosition(); if (!player->isFlying()) { rayStart.y += 60.0f; }
-		CVector3 targetPos;
+		CVector3 targetPos, targetPos_dot;
 		if (player->GetLockOnIsPly()) {
 			const CPlayer* P = m_game->getPlayer(player->GetLockOnNum());
-			targetPos = P->getPosition(); if (!P->isFlying()) { targetPos.y += 60.0f; }
+			targetPos = P->getPosition();
+			targetPos_dot = targetPos;
+			if (!P->isFlying()) { targetPos.y += 60.0f; }
 		}
 		else {
-			targetPos = m_game->GetCitizenGene().GetCitizen(player->GetLockOnNum())->getPos(); targetPos.y += 60.0f;
+			targetPos = m_game->GetCitizenGene().GetCitizen(player->GetLockOnNum())->getPos(); 
+			targetPos_dot = targetPos;
+			targetPos.y += 60.0f;
 		}
-		//è·äQï®îªíË
-		btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
-		GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
-		if (callback.hasHit()) {
-			int i;
-			for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
-				const btCollisionObject* col = callback.m_collisionObjects[i];
-				if (col->getUserIndex() != enCollisionAttr_Character
-					&& col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
-				) {
-					player->SetLockOn(player->GetLockOnIsPly(), -1);
-					break;
+		//ëOå„îªíË
+		if (player->GetActionSender().getLookVec().Dot(targetPos_dot - player->getPosition()) <= 0.0f) {
+			player->SetLockOn(player->GetLockOnIsPly(), -1);
+		}
+		else {
+			//è·äQï®îªíË
+			btCollisionWorld::AllHitsRayResultCallback callback(rayStart, targetPos);
+			GetPhysicsWorld().RayTest(rayStart, targetPos, callback);
+			if (callback.hasHit()) {
+				int i;
+				for (i = 0; i < callback.m_collisionObjects.size(); ++i) {
+					const btCollisionObject* col = callback.m_collisionObjects[i];
+					if (col->getUserIndex() != enCollisionAttr_Character
+					 && col->getInternalType() != btCollisionObject::CO_GHOST_OBJECT
+					) {
+						player->SetLockOn(player->GetLockOnIsPly(), -1);
+						break;
+					}
 				}
 			}
 		}
@@ -277,16 +288,20 @@ void Lazer::LockOn() {
 }
 
 void Lazer::PostRender(){
-#ifndef SpritScreen
-	if (player->playerNum != GetPhoton()->GetLocalPlayerNumber()) {
-		return;
-	}
-#endif
 
 	if (player->GetLockOnNum() < 0 || m_charge < FLT_EPSILON) { return; }//ÉmÅ[ÉçÉbÉN
 
 	CVector3 vec = GetMainCamera()->CalcScreenPosFromWorldPos(GetLockPos());
 	if (vec.z > 0.0f && vec.z < 1.0f) {
-		m_sprite.Draw(vec, { 0.75f,0.75f }, { 0.5f,0.5f }, 0.0f, {0.0f,1.0f,0.0f,1.0f});
+#ifndef SpritScreen
+		if (player->playerNum != GetPhoton()->GetLocalPlayerNumber()) {
+			//é©ï™Ç™ë_ÇÌÇÍÇƒÇ¢ÇÈ
+			if (player->GetLockOnIsPly() && player->GetLockOnNum() == GetPhoton()->GetLocalPlayerNumber()) {
+				m_sprite[1].Draw(vec, { 1.0f,1.0f }, { 0.5f,0.5f }, CMath::RandomZeroToOne()*CMath::PI2, { 1.0f,0.0f,0.0f,1.0f });
+			}
+			return;
+		}
+#endif
+		m_sprite[0].Draw(vec, { 0.75f,0.75f }, { 0.5f,0.5f }, 0.0f, {0.0f,1.0f,0.0f,1.0f});
 	}
 }

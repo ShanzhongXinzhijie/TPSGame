@@ -19,6 +19,7 @@
     <ImageContentTask Include="Asset\spriteData\Lazer.png" />
     <ImageContentTask Include="Asset\spriteData\lockon.png" />
     <ImageContentTask Include="Asset\spriteData\osirisWindow.png" />
+    <ImageContentTask Include="Asset\spriteData\BButton.png" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CConfig.cpp" />
@@ -151,6 +152,6 @@
     <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Asset\spriteData\BButton.png" />
+    <Image Include="Asset\spriteData\lockon2.png" />
   </ItemGroup>
 </Project>

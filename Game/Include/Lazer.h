@@ -29,8 +29,9 @@ private:
 
 	float m_charge = 0.0f;
 
-	CSprite m_sprite;
-	SuicideObj::CEffekseer* m_eff = nullptr; bool m_isOnEFF = false; float m_effCnt = 0.0f;
+	CSprite m_sprite[2]; 
+	SuicideObj::CEffekseer* m_eff = nullptr;
+	bool m_isOnEFF = false; float m_effCnt = 0.0f;
 
 	Game* m_game = nullptr;
 };
