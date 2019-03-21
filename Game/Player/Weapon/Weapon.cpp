@@ -17,6 +17,10 @@ Weapon::Weapon(CPlayer* player,GameObj::CSkinModelRender* playerModel,const Weap
 		if (isActive && std::wcscmp(eventName, L"Reload") == 0) {
 			reloading = false;
 			bulletCount = maxBullet;
+			SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_reload2.wav");
+			se->SetPos(this->player->getPosition());//‰¹‚ÌˆÊ’u
+			se->SetDistance(500.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
+			se->Play(true); //‘æˆêˆø”‚ğtrue
 		}
 	});
 }

@@ -83,7 +83,13 @@ void FlyWalker::Update() {
 		flyTimer -= GetDeltaTimeSec();
 		if (flyTimer <= 0.0f) {
 			flyTimer = 0.0f;
+			m_restEfkTimer = c_restEfkTimer;
 			m_isRest = true;
+			CVector3 pos = GetPosition();
+			pos.y += 50.0f;
+			restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyStop.efk", 1.0f, pos);
+			restEffect->SetIsSuicide(false);
+			playSE(L"Resource/sound/SE_flyStop.wav");
 		}
 
 		if (IsOnGround() || flyTimer == 0.0f) {
@@ -116,6 +122,36 @@ void FlyWalker::Update() {
 	} else {
 		springRot.Slerp(0.1f, springRot, Walker::getRotation());
 
+		CVector3 pos = GetPosition();
+		pos.y += 50.0f;
+
+		if (isRest()) {
+			m_restEfkTimer -= GetDeltaTimeSec();
+			if (m_restEfkTimer <= 0.0f) {
+				m_restEfkTimer = c_restEfkTimer;
+				restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRest.efk", 1.0f, pos);
+				restEffect->SetIsSuicide(false);
+				playSE(L"Resource/sound/SE_flyRest.wav");
+			}
+		}
+
+		if (restEffect) {
+			if (restEffect->IsPlay()) {
+				restEffect->SetPos(pos);
+			} else {
+				delete restEffect;
+				restEffect = nullptr;
+			}
+		}
+		if (recoverEffect) {
+			if (recoverEffect->IsPlay()) {
+				recoverEffect->SetPos(pos);
+			} else {
+				delete recoverEffect;
+				recoverEffect = nullptr;
+			}
+		}
+
 		//”òs‰Â”\ŽžŠÔ‚Ì‰ñ•œ
 		if (coolTimer > 0.0f) {
 			coolTimer -= GetDeltaTimeSec();
@@ -127,6 +163,10 @@ void FlyWalker::Update() {
 					coolTimer = 0.0f;
 				}
 				m_isRest = false;
+			} else if (isRest() && !recoverEffect &&(c_flyTimer-flyTimer) < c_recoverEfkTime) {
+				recoverEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRecover.efk", 1.0f, pos);
+				recoverEffect->SetIsSuicide(false);
+				playSE(L"Resource/sound/SE_flyRecover.wav");
 			}
 		}
 	}

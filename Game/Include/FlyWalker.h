@@ -51,6 +51,12 @@ private:
 	static constexpr float c_coolTimer = 1.0f;
 	float coolTimer = 0.0f; //ífë±îÚÇ—ñhé~ÇÃÉNÅ[ÉãÉ^ÉCÉÄ
 
+	GameObj::Suicider::CEffekseer* restEffect = nullptr;
+	GameObj::Suicider::CEffekseer* recoverEffect = nullptr;
+	static constexpr float c_restEfkTimer = 1.0f;
+	float m_restEfkTimer = c_restEfkTimer;
+	static constexpr float c_recoverEfkTime = 1.0f;
+
 	float upDown = 0.0f;
 
 	bool hitWall = false;

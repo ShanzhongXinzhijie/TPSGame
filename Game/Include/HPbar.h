@@ -21,6 +21,7 @@ private:
 	CVector2 m_pos = {1270.0f,10.0f};
 
 	float bright = 0.0f;
+	float recoverWhite = 0.0f;
 	char brightMove = 2;
 };
 
