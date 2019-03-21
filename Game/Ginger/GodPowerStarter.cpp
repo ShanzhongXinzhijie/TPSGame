@@ -110,7 +110,7 @@ void GodPowerStarter::Update(){
 				}
 				
 				//¢Š«
-				pGO = new Wosiris(m_pPlayer, CMath::DegToRad((float)rot));
+				pGO = new Wosiris(m_pPlayer, CMath::DegToRad((float)rot), m_pGinGene);
 				
 #ifndef SpritScreen
 				//¢Š«‚ð’ÊM
@@ -137,7 +137,7 @@ void GodPowerStarter::Update(){
 		}
 
 		if (pGO) {
-			m_pGinGene->Register(pGO);
+			//m_pGinGene->Register(pGO);
 			m_type = enNone;
 		}
 	}

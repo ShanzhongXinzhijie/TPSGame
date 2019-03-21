@@ -6,14 +6,21 @@
 #include "Game.h"
 #include "Weapon.h"
 #include "Syouraidan.h"
+#include "GingerGene.h"
 
-Wosiris::Wosiris(CPlayer* owner, float rot)
+Wosiris::Wosiris(CPlayer* owner, float rot, GingerGene* gg)
 {	
 	m_owner = owner;
 	m_rot = rot;
+
+	m_gingergene = gg;
+	m_gingergene->SetWosiris(this);
+	m_gingergene->Register(this);
 }
 Wosiris::~Wosiris()
 {
+	m_gingergene->SetWosiris(nullptr);
+	m_gingergene->Unregister(this);
 }
 
 bool Wosiris::Start(){
@@ -46,21 +53,19 @@ bool Wosiris::Start(){
 	m_collision.SetCallback([&](SuicideObj::CCollisionObj::SCallbackParam& callback) {
 		if (callback.EqualName(L"Bullet")) {
 			Bullet* bullet = callback.GetClass<Bullet>();
-			if (bullet->getDamage() >= m_point && m_owner != bullet->getShooter()) {
-				//playSE(L"Resource/sound/SE_zombie.wav");
-
-				m_owner = bullet->getShooter();					
-				m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
-					if (mat->EqualMaterialName(L"wing")) {
-						mat->SetAlbedoScale(m_owner->team->getColor());
-					}
-				});
-
-				//TUSINN
-				//自分の眷属になったことを送信
-				//if (player->playerNum == GetPhoton()->GetLocalPlayerNumber() && player->GetNetCaster()) {
-				//	player->GetNetCaster()->SendNewKenzoku(this);
-				//}
+			if (bullet->getDamage() >= m_point && m_owner != bullet->getShooter()) {				
+				bool canKenzokuing = false;
+#ifndef SpritScreen
+				//通信時は自分の眷属化だけ実行
+				if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+					canKenzokuing = true;
+				}
+#else
+				canKenzokuing = true;
+#endif
+				if (canKenzokuing) {
+					ChangeControl(bullet->getShooter());
+				}
 			}
 		}
 	});
@@ -101,7 +106,7 @@ void Wosiris::Update(){
 			CQuaternion rot = m_model.GetRot();
 			rot.Multiply(fromPos);
 			fromPos += m_model.GetPos();
-			new Syouraidan(fromPos, P.first);
+			new Syouraidan(fromPos, P.first, &m_game->GetGingerGene());
 		}
 		P.second = P.first->GetIsDead();
 	}
@@ -131,4 +136,20 @@ void Wosiris::PostRender() {
 	wchar_t atk[64];
 	swprintf_s(atk, L"ヲシリスの天空龍\n\n攻撃力\n%d", m_point);
 	m_font.Draw(atk, { 0.9f,0.4f+0.025f }, { 1.0f,0.82f,0.26f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
+}
+
+void Wosiris::ChangeControl(CPlayer* P) {
+	//playSE(L"Resource/sound/SE_zombie.wav");
+
+	m_owner = P;
+	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
+		if (mat->EqualMaterialName(L"wing")) {
+			mat->SetAlbedoScale(m_owner->team->getColor());
+		}
+	});
+
+	//自分の眷属になったことを送信
+	if (P->playerNum == GetPhoton()->GetLocalPlayerNumber() && P->GetNetCaster()) {
+		P->GetNetCaster()->SendControlWosiris();
+	}
 }

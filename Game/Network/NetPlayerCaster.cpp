@@ -101,6 +101,13 @@ void NetPlayerCaster::PostUpdate() {
 				isSend = true;
 			}
 
+			//ヲシリスのコントロール奪取
+			if (m_isSendWosirisControl) {
+				_event.put((nByte)enGetControlWosiris, m_sendWosirisControlTime);
+				m_isSendWosirisControl = false;
+				isSend = true;
+			}
+
 			//確実な送信
 			if (isSend) {
 				GetPhoton()->Send(enReliable, _event, true);
@@ -378,4 +385,8 @@ void NetPlayerCaster::SendGetGodPower(int jinjyaNum, int plyNum) {
 void NetPlayerCaster::SendSummonWosiris(int rot, int Citizen1, int Citizen2, int Citizen3) {
 	m_sendSummonWosiris = std::make_tuple(rot, Citizen1, Citizen2, Citizen3);
 	m_isSendSummonWosiris = true;
+}
+void NetPlayerCaster::SendControlWosiris() {
+	m_isSendWosirisControl = true; 
+	m_sendWosirisControlTime = m_cnt;
 }

@@ -1,14 +1,19 @@
 #include "stdafx.h"
 #include "Syouraidan.h"
 #include "CPlayer.h"
+#include "GingerGene.h"
 
-Syouraidan::Syouraidan(const CVector3& pos, CPlayer* target)
+Syouraidan::Syouraidan(const CVector3& pos, CPlayer* target, GingerGene* gg)
 {
 	m_pos = pos;
 	m_target = target;
+
+	m_gingerGene = gg;
+	m_gingerGene->Register(this);
 }
 Syouraidan::~Syouraidan()
 {
+	m_gingerGene->Unregister(this);
 }
 
 void Syouraidan::Update(){

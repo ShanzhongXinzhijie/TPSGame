@@ -225,7 +225,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 			//召喚
 			if (m_gingerGene) {
 				int rot = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 0))))->getDataCopy();
-				m_gingerGene->Register(new Wosiris(m_pCPlayer[playerNr], CMath::DegToRad((float)rot)));
+				new Wosiris(m_pCPlayer[playerNr], CMath::DegToRad((float)rot), m_gingerGene);
 			}
 			//生贄
 			if (m_citizenGene) {
@@ -236,6 +236,21 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 				for (int i = 0; i < 3; i++) {
 					if (citizen[i] >= 0) {
 						m_citizenGene->GetCitizen(citizen[i])->Death();
+					}
+				}
+			}
+		}
+		//ヲシリスのコントロール奪取
+		if (eventContent.getValue((nByte)enGetControlWosiris)) {
+			if (m_gingerGene && m_gingerGene->GetWosiris()) {
+				Wosiris* pWosiris = m_gingerGene->GetWosiris();
+				int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enGetControlWosiris)))->getDataCopy();
+				//時間が新しい or 時間が同じでプレイヤー番号が大きい
+				if (pWosiris->GetLastControlTime() < time || pWosiris->GetLastControlTime() == time && playerNr > pWosiris->GetLastControlPly()) {
+					//更新
+					if (m_pCPlayer[playerNr]) {
+						pWosiris->SetLastControl(playerNr, time);
+						pWosiris->ChangeControl(m_pCPlayer[playerNr]);
 					}
 				}
 			}
