@@ -12,7 +12,9 @@ Rifle::~Rifle() {
 }
 
 Bullet* Rifle::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
-	return new NormalBullet(player, pos, dir*5000.0f, L"Resource/modelData/RifleBullet.cmo",250);
+	NormalBullet* bul = new NormalBullet(player, pos, dir*3000.0f, L"Resource/modelData/RifleBullet.cmo", 200);
+	bul->setIsThrough(true);
+	return bul;
 }
 
 WeaponInfo Rifle::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {

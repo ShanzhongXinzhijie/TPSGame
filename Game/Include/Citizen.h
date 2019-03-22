@@ -4,11 +4,12 @@
 #include "InstancingCitizenColorManager.h"
 #include "../Network/NetPlayerCaster.h"
 #include "MiniHPbar.h"
+#include "IDamagable.h"
 
 class ICitizenBrain;
 class Bullet;
 
-class Citizen : public IGameObject{
+class Citizen : public IGameObject, public IDamagable{
 public:
 	Citizen(const std::unordered_map<int, CPlayer*>& players, ICitizenBrain* moveType, unsigned int id);
 	~Citizen();
@@ -24,9 +25,10 @@ public:
 		return charaCon.GetPosition();
 	}
 
-	bool BatHit(Bullet* bullet);
+	bool damage(const CVector3& vec, unsigned int damage,
+				const Team* team = nullptr, const CPlayer* = nullptr) override;
 	
-	void ChangeToKenzoku(CPlayer* player);//แล‘ฎป
+	void ChangeToKenzoku(const CPlayer* player);//แล‘ฎป
 
 	void Kansenzyoutai();
 

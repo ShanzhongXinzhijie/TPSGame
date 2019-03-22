@@ -21,7 +21,7 @@ private:
 
 	const float screenX = GetEngine().GetGraphicsEngine().GetFrameBuffer_W();
 	const float screenY = GetEngine().GetGraphicsEngine().GetFrameBuffer_H();
-	const CVector2 m_pos = { screenX * 0.15f, screenY * 0.78f };
+	const CVector2 m_pos = { screenX * 0.15f, screenY * 0.82f };
 
 	CSprite LButton;
 	CSprite RButton;

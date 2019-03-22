@@ -303,6 +303,7 @@
     <ClCompile Include="Ginger\Wosiris.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\IDamagable.h" />
     <ClInclude Include="Ginger\GingerGene.h" />
     <ClInclude Include="Ginger\GodPowerStarter.h" />
     <ClInclude Include="Include\CConfig.h" />
