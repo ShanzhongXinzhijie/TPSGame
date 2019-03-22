@@ -1,5 +1,6 @@
 #pragma once
 #include "Wosiris.h"
+#include "IDamagable.h"
 
 class NetPlayerReceiver;
 
@@ -13,7 +14,7 @@ enum GodPowerType {
 };
 
 class Ginger :
-	public IGameObject
+	public IGameObject, public IDamagable
 {
 public:
 	Ginger(int index, NetPlayerReceiver* receiver, int timeSec, GodPowerType powerType);
@@ -27,6 +28,9 @@ public:
 	GodPowerType GetPowerType()const {
 		return m_powerType;
 	}
+
+	bool damage(const CVector3& dir, unsigned int damage,
+		const Team* team = nullptr, const CPlayer* = nullptr) override { return true; };
 
 private:
 	void Konryu();

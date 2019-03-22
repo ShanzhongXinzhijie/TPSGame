@@ -54,7 +54,7 @@ void MainPlayer::Update() {
 
 	bool weaponLeft = false;
 	bool weaponRight = false;
-	if (!GameWaiter::GetIsWait() && m_hp != 0) {
+	if (!GameWaiter::GetIsWait() && m_hp != 0 && !weapon[activeWeapon]->isReloading()) {
 		if (Pad(playerNum).GetTrigger(enLR::L) > 0.2f) {
 			if (!LT) {
 				weaponLeft = true;

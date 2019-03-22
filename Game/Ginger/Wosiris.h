@@ -1,10 +1,11 @@
 #pragma once
+#include "IDamagable.h"
 
 class CPlayer;
 class Game;
 class GingerGene;
 
-class Wosiris : public IGameObject
+class Wosiris : public IGameObject, public IDamagable
 {
 public:
 	Wosiris(CPlayer* owner, float rot, GingerGene* gg);
@@ -15,6 +16,9 @@ public:
 	void PostRender()override;
 
 	void ChangeControl(CPlayer* P);
+
+	bool damage(const CVector3& dir, unsigned int damage,
+		const Team* team = nullptr, const CPlayer* = nullptr) override { return true; };
 
 private:
 	GameObj::CSkinModelRender m_model;
