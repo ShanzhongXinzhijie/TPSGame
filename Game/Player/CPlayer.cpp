@@ -46,7 +46,8 @@ bool CPlayer::Start() {
 	//マスクとグループの設定
 	m_collision.All_Off_Group();
 	m_collision.On_OneGroup(CollisionMaskConst::encolKurai);
-	m_collision.Off_OneMask(CollisionMaskConst::encolKurai);
+	m_collision.All_Off_Mask();
+	m_collision.On_OneMask(CollisionMaskConst::encolAttack);
 	//これは喰らい判定
 	m_collision.SetIsHurtCollision(true);
 
@@ -67,7 +68,9 @@ void CPlayer::Update() {
 	if (m_hp != 0) {
 		if (!weapon[activeWeapon]->isReloading()) {
 			Move();
-			Shot();
+			if (!isFlying()) {
+				Shot();
+			}
 			Reload();
 			changeWeapon(action.isWeaponLeft(), action.isWeaponRight());
 		}
@@ -80,7 +83,7 @@ void CPlayer::Update() {
 		m_collision.SetPosition(pos);
 
 		if (getPosition().y < -100.0f) {
-			Hit({ 0,0,0 }, maxHp / 5);
+			damage({ 0,0,0 }, maxHp / 5);
 			mover.SetPosition(team->getHome());
 		}
 	} else {
@@ -95,21 +98,11 @@ void CPlayer::sendAction(const ActionSender& actionPal) {
 	action = actionPal;
 }
 
-bool CPlayer::BatHit(Bullet* bullet) {
-	CPlayer* shooter = bullet->getShooter();
-	if (shooter == this) {
-		return false;
-	}
-	unsigned int damage = 0;
-	if (shooter->team != this->team) {
-		damage = bullet->getDamage();
-	}
-	Hit(bullet->getHitVec(), damage);
-	return true;
-}
-
-void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
+bool CPlayer::damage(const CVector3 & dir, unsigned int damage, const Team* atkTeam, const CPlayer*) {
 	if (m_hp != 0) {
+		if (atkTeam == team) {
+			damage = 0;
+		}
 		CVector3 pos = getPosition();
 		pos.y += 60.0f;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
@@ -123,6 +116,7 @@ void CPlayer::Hit(const CVector3 & dir, unsigned int damage) {
 		}
 		miniHpbar.display(m_hp);
 	}
+	return false;
 }
 
 //死亡処理
@@ -242,7 +236,7 @@ void CPlayer::Reload() {
 
 void CPlayer::changeWeapon(bool left, bool right) {
 	if (left == right) { return; }
-	short nextWeapon = activeWeapon;
+	int nextWeapon = (int)activeWeapon;
 	if (left) { nextWeapon -= 1;}
 	if (right) { nextWeapon += 1;}
 	if (nextWeapon < 0) { nextWeapon = WEAPON_NUM - 1;}
@@ -250,7 +244,7 @@ void CPlayer::changeWeapon(bool left, bool right) {
 	
 	weapon[activeWeapon]->Inactivate();
 	weapon[nextWeapon]->Activate();
-	activeWeapon = nextWeapon;
+	activeWeapon = (unsigned int)nextWeapon;
 }
 void CPlayer::changeWeapon(unsigned char useWeapon) {
 	short nextWeapon = useWeapon;

@@ -49,43 +49,30 @@ void MainPlayer::Update() {
 	bool shot = false;
 	bool dash = false;
 
+	shot = Pad(0).GetButton(enButtonRB1);
+	dash = Pad(0).GetButton(enButtonLB1);
+
 	bool weaponLeft = false;
 	bool weaponRight = false;
-	const float pushYTimeThreshold = 0.2f;
-	if (Pad(playerNum).GetButton(enButtonY)) {
-		//一定時間長押しで武器ホイール拡大
-		if (m_pushYButtonTime > pushYTimeThreshold) { 
-			wepHolder.pushY();
+	if (!GameWaiter::GetIsWait() && m_hp != 0) {
+		if (Pad(playerNum).GetTrigger(enLR::L) > 0.2f) {
+			if (!LT) {
+				weaponLeft = true;
+				LT = true;
+			}
+		} else {
+			LT = false;
 		}
-
-		if (!GameWaiter::GetIsWait() && m_hp != 0) {
-			weaponLeft = Pad(playerNum).GetDown(enButtonLB1);
-			weaponRight = Pad(playerNum).GetDown(enButtonRB1);
-			wepHolder.changeWeapon(weaponLeft, weaponRight);
+		if (Pad(playerNum).GetTrigger(enLR::R) > 0.2f) {
+			if (!RT) {
+				weaponRight = true;
+				RT = true;
+			}
+		} else {
+			RT = false;
 		}
-		
-		m_pushYButtonTime += GetDeltaTimeSec();
-		if (weaponLeft || weaponRight) { //LRでの切り替えしたら,短く押す切り替え無効
-			m_isCanShortPushY = false;
-		}
-	} else {
-		dash = Pad(playerNum).GetButton(enButtonLB1);
-		shot = Pad(playerNum).GetButton(enButtonRB1);
-
-		//ボタンを短く押すことで武器切り替え
-		if (!GameWaiter::GetIsWait()&& m_hp != 0 && m_isCanShortPushY && m_pushYButtonTime > FLT_EPSILON && m_pushYButtonTime < pushYTimeThreshold) {
-			weaponLeft = false;
-			weaponRight = true;
-			wepHolder.changeWeapon(weaponLeft, weaponRight);
-		}
-		m_pushYButtonTime = 0.0f; m_isCanShortPushY = true;
 	}
-	//十字キーでの武器切り替え
-	if (!GameWaiter::GetIsWait()&& m_hp != 0 && !weaponLeft && !weaponRight) {
-		if (Pad(playerNum).GetDown(enButtonLeft)) { weaponLeft = true; }
-		if (Pad(playerNum).GetDown(enButtonRight)) { weaponRight = true; }
-		wepHolder.changeWeapon(weaponLeft, weaponRight);
-	}
+	wepHolder.changeWeapon(weaponLeft, weaponRight);
 
 	CVector3 look = { 0, 0, 0 };
 
@@ -121,7 +108,6 @@ void MainPlayer::Update() {
 	if (Pad(playerNum).GetButton(enButtonDown)) {
 		m_camera.BackTurn();
 	}
-	m_camera.setZoomScale(weapon[activeWeapon]->getZoomScale());
 	m_camera.setSlow(shot);
 	CVector3 targHeight = { 0.0f ,80.0f, 0.0f };
 	if (CPlayer::isFlying()) {

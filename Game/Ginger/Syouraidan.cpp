@@ -21,7 +21,7 @@ void Syouraidan::Update(){
 	const float finTime = 0.5f;
 
 	if (m_time >= finTime) {
-		m_target->Hit(CVector3::Zero(),2000);
+		m_target->damage(CVector3::Zero(),2000);
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
 		delete this;
 		return;

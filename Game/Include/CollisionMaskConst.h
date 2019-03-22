@@ -3,4 +3,5 @@
 enum CollisionMaskConst {
 	encolDefault = 1,
 	encolKurai,
+	encolAttack,
 };

@@ -2,12 +2,13 @@
 #include "Bullet.h"
 #include "CPlayer.h"
 #include "Citizen.h"
+#include "CollisionMaskConst.h"
 
 using SuicideObj::CCollisionObj;
 
 Bullet::Bullet(CPlayer* player, CVector3 position, CVector3 direction,
 			   const wchar_t* modelPath, unsigned int damage)
-	: m_pos(position), m_dir(direction), shotPlayer(player), damage(damage){
+	: m_pos(position), m_dir(direction), shotPlayer(player), m_damage(damage) {
 	if (modelPath) { m_model.Init(modelPath); }
 	m_model.SetPos(m_pos);
 
@@ -26,17 +27,21 @@ Bullet::Bullet(CPlayer* player, CVector3 position, CVector3 direction,
 	m_collision.CreateSphere(m_pos, CQuaternion::Identity(), 20.0f);
 	m_collision.SetName(L"Bullet");
 	m_collision.SetClass(this);
+	m_collision.All_Off_Group();
+	m_collision.On_OneGroup(CollisionMaskConst::encolAttack);
+	m_collision.All_Off_Mask();
+	m_collision.On_OneMask(CollisionMaskConst::encolKurai);
 
 	//íeÇ™ÉqÉbÉgÇµÇΩéûÇÃèàóù
 	m_collision.SetCallback([&](CCollisionObj::SCallbackParam& callback) {
-		if (callback.EqualName(L"CPlayer")) {
-			if (callback.GetClass<CPlayer>()->BatHit(this)) {
-				DeleteGO(this, false);
-			}
-
-		} else if (callback.EqualName(L"Citizen")) {
-			if (callback.GetClass<Citizen>()->BatHit(this)) {
-				DeleteGO(this, false);
+		IDamagable* hitted = callback.GetClass<IDamagable>();
+		if ((IDamagable*)shotPlayer != hitted && lastHit != hitted) {
+			if (hitted->damage(m_dir, m_damage, shotPlayer->team, shotPlayer)) {
+				if (isThrough) {
+					lastHit = hitted;
+				} else {
+					DeleteGO(this, false);
+				}
 			}
 		}
 	});

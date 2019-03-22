@@ -5,6 +5,7 @@
 #include "Team.h"
 #include "MiniHPbar.h"
 #include "../Ginger/Ginger.h"
+#include "IDamagable.h"
 
 class NetPlayerCaster;
 
@@ -13,7 +14,7 @@ class Bullet;
 class CPlayerCamera;
 class Wing;
 
-class CPlayer : public IGameObject {
+class CPlayer : public IGameObject , public IDamagable{
 public:
 	CPlayer(int playerNum, Team* team, const CVector3& positon);
 	virtual ~CPlayer();
@@ -23,9 +24,8 @@ public:
 	
 	void sendAction(const ActionSender& action);
 
-	bool BatHit(Bullet* bullet);
-
-	void Hit(const CVector3& dir, unsigned int damage);
+	bool damage(const CVector3& dir, unsigned int damage,
+				const Team* team = nullptr, const CPlayer* = nullptr) override;
 
 	const btCollisionObject* getCollisionObj() {
 		return &m_collision.GetCollisionObject();
@@ -167,5 +167,5 @@ private:
 	NetPlayerCaster* m_netCaster = nullptr;
 public:
 	void SetNetCaster(NetPlayerCaster* netcaster) { m_netCaster = netcaster; }
-	NetPlayerCaster* GetNetCaster() { return m_netCaster; }
+	NetPlayerCaster* GetNetCaster() const { return m_netCaster; }
 };

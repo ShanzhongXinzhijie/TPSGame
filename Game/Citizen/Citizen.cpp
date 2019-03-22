@@ -43,7 +43,8 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 	//マスクとグループの設定
 	m_collision.All_Off_Group();
 	m_collision.On_OneGroup(CollisionMaskConst::encolKurai);
-	m_collision.Off_OneMask(CollisionMaskConst::encolKurai);
+	m_collision.All_Off_Mask();
+	m_collision.On_OneMask(CollisionMaskConst::encolAttack);
 
 	//これは喰らい判定
 	m_collision.SetIsHurtCollision(true);
@@ -121,17 +122,17 @@ void Citizen::Update() {
 #endif
 }
 
-bool Citizen::BatHit(Bullet* bullet) {
+bool Citizen::damage(const CVector3& vec, unsigned int damage, const Team* team, const CPlayer* shotPlayer) {
 	playSE(L"Resource/sound/SE_damage.wav");
 	CVector3 pos = getPos();
 	pos.y += 60.0f;
 	new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
 
 	//自チームの攻撃はダメージを受けない
-	if (ownerTeam != bullet->getShooter()->team) {
+	if (ownerTeam != team) {
 
-		if (m_hp > bullet->getDamage()) {
-			m_hp -= bullet->getDamage();
+		if (m_hp > damage) {
+			m_hp -= damage;
 			miniHpbar.display(m_hp);
 		} else {
 			miniHpbar.display(0);
@@ -140,7 +141,7 @@ bool Citizen::BatHit(Bullet* bullet) {
 			bool canKenzokuing = false;
 #ifndef SpritScreen
 			//通信時は自分の眷属化だけ実行
-			if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
+			if (shotPlayer->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
 				canKenzokuing = true;
 			}
 #else
@@ -148,14 +149,14 @@ bool Citizen::BatHit(Bullet* bullet) {
 #endif
 			if (canKenzokuing) {
 				//眷属化
-				ChangeToKenzoku(bullet->getShooter());
+				ChangeToKenzoku(shotPlayer);
 			}
 		}
 	}
 	return true;
 }
 
-void Citizen::ChangeToKenzoku(CPlayer* player) {
+void Citizen::ChangeToKenzoku(const CPlayer* player) {
 	if (ownerTeam != player->team) {
 		if (!isKenzoku) {
 			Kansenzyoutai();
@@ -258,18 +259,19 @@ void Citizen::Attack() {
 	pos += vec;
 	CCollisionObj* atkCol = new CCollisionObj();
 	atkCol->CreateSphere(pos, CQuaternion::Identity(), 40.0f);
+	atkCol->All_Off_Group();
+	atkCol->On_OneGroup(CollisionMaskConst::encolAttack);
+	atkCol->All_Off_Mask();
+	atkCol->On_OneMask(CollisionMaskConst::encolKurai);
 	atkCol->SetName(L"ZombieAtk");
 	atkCol->SetTimer(2);
 	atkCol->SetCallback([&, vec, atkCol](CCollisionObj::SCallbackParam& callback) {
 		if (callback.EqualName(L"CPlayer")) {
 			CPlayer* p = callback.GetClass<CPlayer>();
-
-			if (!ownerTeam->hasPlayer(p)) {
-				CVector3 v = vec * 20;
-				v.y += 200;
-				p->Hit(v, attackPower);
-				atkCol->Delete();
-			}
+			CVector3 v = vec * 20;
+			v.y += 200;
+			p->damage(v, attackPower, ownerTeam);
+			atkCol->Delete();
 		}
 	});
 }

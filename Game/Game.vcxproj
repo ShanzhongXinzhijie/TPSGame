@@ -303,6 +303,7 @@
     <ClCompile Include="Ginger\Wosiris.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\IDamagable.h" />
     <ClInclude Include="Ginger\GingerGene.h" />
     <ClInclude Include="Ginger\GodPowerStarter.h" />
     <ClInclude Include="Include\CConfig.h" />
@@ -385,16 +386,15 @@
     <ImageContentTask Include="Asset\spriteData\HP_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_out.png" />
     <ImageContentTask Include="Asset\spriteData\HundGun.png" />
-    <ImageContentTask Include="Asset\spriteData\LButton.png" />
+    <ImageContentTask Include="Asset\spriteData\LTrigger.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
     <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
-    <ImageContentTask Include="Asset\spriteData\RButton.png" />
+    <ImageContentTask Include="Asset\spriteData\RTrigger.png" />
     <ImageContentTask Include="Asset\spriteData\Rifle.png" />
     <ImageContentTask Include="Asset\spriteData\Target.png" />
     <ImageContentTask Include="Asset\spriteData\Title.png" />
     <ImageContentTask Include="Asset\spriteData\waku.png" />
-    <ImageContentTask Include="Asset\spriteData\YButton.png" />
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\Lazer.png" />
