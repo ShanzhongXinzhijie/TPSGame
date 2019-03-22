@@ -64,7 +64,7 @@ Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_start.efk", 1.0f, pos, CQuaternion::Identity(), {50.0f,450.0f,50.0f});
 
 	//透明な玉を出す
-	NormalBullet* B = new NormalBullet(player, lockPos, CVector3::AxisY()*0.1f, nullptr, 100);
+	NormalBullet* B = new NormalBullet(player, lockPos, CVector3::AxisY()*0.1f, nullptr, 150);
 	B->SetLifeTime(0.0f);
 
 	//プレイヤー撃墜

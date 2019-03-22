@@ -33,9 +33,12 @@ public:
 	}
 
 private:
+	virtual void BulletUpdate() {};
 
 	GameObj::CSkinModelRender m_model;
+protected:
 	CVector3 m_pos;
+private:
 	CVector3 m_dir;
 	float lifeTime = 5;
 	CPlayer* const shotPlayer;

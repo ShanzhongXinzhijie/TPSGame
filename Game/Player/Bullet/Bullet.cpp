@@ -35,7 +35,7 @@ Bullet::Bullet(CPlayer* player, CVector3 position, CVector3 direction,
 	//’e‚ªƒqƒbƒg‚µ‚½‚Ìˆ—
 	m_collision.SetCallback([&](CCollisionObj::SCallbackParam& callback) {
 		IDamagable* hitted = callback.GetClass<IDamagable>();
-		if ((IDamagable*)shotPlayer != hitted && lastHit != hitted) {
+		if (hitted && (IDamagable*)shotPlayer != hitted && lastHit != hitted) {
 			if (hitted->damage(m_dir, m_damage, shotPlayer->team, shotPlayer)) {
 				if (isThrough) {
 					lastHit = hitted;
@@ -70,6 +70,8 @@ void Bullet::Update() {
 	end.setIdentity();
 	start.setOrigin(startVec);
 	end.setOrigin(endVec);
+
+	BulletUpdate();
 
 	CW::ClosestConvexResultCallback callback(startVec, endVec);
 	callback.m_collisionFilterMask = 2;
