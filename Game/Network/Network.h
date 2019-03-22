@@ -48,7 +48,15 @@ public:
 	void Update()override {
 		//Server‚ÉÚ‘±‚µ‚½Œã‚Éƒ‹[ƒ€‚É“ü‚é
 		if (GetPhoton()->GetState() == PhotonNetworkLogic::CONNECTED) {
-			GetPhoton()->JoinRoom(L"‚ ‚ ‚ ‚ ", NET_MAX_PLAYER);
+			auto& L = GetPhoton()->GetClient().getRoomList();
+			if (L.getSize()) {
+				//Ú‘±
+				GetPhoton()->JoinRandomRoom();
+			}
+			else {
+				//•”‰®—§‚Ä‚é
+				GetPhoton()->CreateRoom(L"", NET_MAX_PLAYER);
+			}			
 		}
 	}
 	//Server‚©‚çØ’f
