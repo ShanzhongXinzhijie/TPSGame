@@ -38,6 +38,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 #else
 	//プレイヤーマネージャーの初期化(プレイヤーの作成)
 	m_netPlayerManager.Init(this, &citizenGene);
+	m_netPlayerManager.SetViewSeed(seed);
 #endif
 
 	//乱数同期
@@ -45,10 +46,14 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	//市民作成
 	citizenGene.createCitizen(citizenCnt);
 
+#ifndef SpritScreen
+	m_netWork = FindGO<NetWorkManager>(L"NetWorkManager");
+	m_netWork->GetNetPlayerReceiver().SetCitizenGene(&citizenGene);
+	m_netWork->GetNetPlayerReceiver().SetGingerGene(&gingerGene);
+#endif
+
 	//神社作成
-	/*for (int i = 0; i < 64; i++) {
-		new Ginger(timeLimit);
-	}*/
+	gingerGene.Create(timeLimit, &m_netWork->GetNetPlayerReceiver());
 
 #ifdef SpritScreen
 	karicamera.SetPos({ 600,600,600 });
@@ -59,9 +64,6 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 #endif
 
 #ifndef SpritScreen
-	m_netWork = FindGO<NetWorkManager>(L"NetWorkManager");
-	m_netWork->GetNetPlayerReceiver().SetCitizenGene(&citizenGene);
-
 	if (GetPhoton()->GetPlayers().getSize() > 1) {
 		//ゲーム開始タイマー設定
 		int t = GetPhoton()->GetSeverTime_ms();
@@ -82,6 +84,7 @@ Game::~Game() {
 
 #ifndef SpritScreen
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(nullptr);
+	m_netWork->GetNetPlayerReceiver().SetGingerGene(nullptr);
 #endif
 	static_game = nullptr;
 }

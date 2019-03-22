@@ -247,7 +247,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CConfig.cpp" />
+    <ClCompile Include="Ginger\GingerGene.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
+    <ClCompile Include="Ginger\GodPowerStarter.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
     <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
@@ -291,14 +293,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player\Team.cpp" />
+    <ClCompile Include="Ginger\Syouraidan.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Player\TpsCamera.cpp" />
     <ClCompile Include="Citizen\ziguzagu.cpp" />
     <ClCompile Include="Player\Wing.cpp" />
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
+    <ClCompile Include="Ginger\Wosiris.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ginger\GingerGene.h" />
+    <ClInclude Include="Ginger\GodPowerStarter.h" />
     <ClInclude Include="Include\CConfig.h" />
     <ClInclude Include="Ginger\Ginger.h" />
     <ClInclude Include="Include\Bullet.h" />
@@ -349,11 +355,16 @@
     <ClInclude Include="Include\Weapon.h" />
     <ClInclude Include="Include\Rifle.h" />
     <ClInclude Include="Include\WeaponHolder.h" />
+    <ClInclude Include="Ginger\Wosiris.h" />
+    <ClInclude Include="Ginger\Syouraidan.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
     <MeshContentTask Include="Asset\modelData\Citizen.FBX" />
     <MeshContentTask Include="Asset\modelData\Ginger\Ginger.fbx" />
+    <MeshContentTask Include="Asset\modelData\Ginger\ring.fbx" />
+    <MeshContentTask Include="Asset\modelData\Ginger\wosiris.fbx" />
+    <MeshContentTask Include="Asset\modelData\Ginger\wosirisAtari.fbx" />
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\Lazer.fbx" />
@@ -389,6 +400,15 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Asset\spriteData\lockon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\osirisWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\BButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Asset\spriteData\lockon2.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

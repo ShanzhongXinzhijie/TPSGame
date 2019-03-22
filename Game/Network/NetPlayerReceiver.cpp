@@ -184,30 +184,74 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	}
 	break;
 
-	case enKenzoku:
+	case enReliable:
 	{
 		//眷属化
-		int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)1)))->getDataCopy();
-		int i2 = 2;
-		for (int i = 0; i < num; i++) {
-			int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
-			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
-			//座標
-			CVector3 pos;
-			pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
-			
-			auto C = m_citizensStatus.find(id);
-			if (C == m_citizensStatus.end()) {
-				//新規作成
-				m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr, pos });
+		if (eventContent.getValue((nByte)enKenzoku)) {
+			int num = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enKenzoku)))->getDataCopy();
+			int i2 = enKenzoku + 1;
+			for (int i = 0; i < num; i++) {
+				int id = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//ID
+				int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;//時間
+				//座標
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue(i2)))->getDataCopy(); i2++;
+
+				auto C = m_citizensStatus.find(id);
+				if (C == m_citizensStatus.end()) {
+					//新規作成
+					m_citizensStatus.emplace(id, CitizensStatus() = { time, playerNr, pos });
+				}
+				else {
+					//時間が新しい or 時間が同じでプレイヤー番号が大きい
+					if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
+						//上書き
+						C->second = { time, playerNr, pos };
+					}
+				}
 			}
-			else {
+		}
+
+		//神の力獲得
+		if (eventContent.getValue((nByte)enGetGodpower)) {
+			int gingerN = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enGetGodpower+0))))->getDataCopy();
+			int plyN = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enGetGodpower+1))))->getDataCopy();
+			GetGodPower(gingerN, plyN);
+		}
+		//ヲシリスの召喚
+		if (eventContent.getValue((nByte)enSummonWosiris)) {
+			//召喚
+			if (m_gingerGene) {
+				int rot = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 0))))->getDataCopy();
+				new Wosiris(m_pCPlayer[playerNr], CMath::DegToRad((float)rot), m_gingerGene);
+			}
+			//生贄
+			if (m_citizenGene) {
+				int citizen[3];
+				citizen[0] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 1))))->getDataCopy();
+				citizen[1] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 2))))->getDataCopy();
+				citizen[2] = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enSummonWosiris + 3))))->getDataCopy();
+				for (int i = 0; i < 3; i++) {
+					if (citizen[i] >= 0) {
+						m_citizenGene->GetCitizen(citizen[i])->Death();
+					}
+				}
+			}
+		}
+		//ヲシリスのコントロール奪取
+		if (eventContent.getValue((nByte)enGetControlWosiris)) {
+			if (m_gingerGene && m_gingerGene->GetWosiris()) {
+				Wosiris* pWosiris = m_gingerGene->GetWosiris();
+				int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enGetControlWosiris)))->getDataCopy();
 				//時間が新しい or 時間が同じでプレイヤー番号が大きい
-				if (C->second.timeCnt < time || C->second.timeCnt == time && C->second.plyNum < playerNr) {
-					//上書き
-					C->second = { time, playerNr, pos };
+				if (pWosiris->GetLastControlTime() < time || pWosiris->GetLastControlTime() == time && playerNr > pWosiris->GetLastControlPly()) {
+					//更新
+					if (m_pCPlayer[playerNr]) {
+						pWosiris->SetLastControl(playerNr, time);
+						pWosiris->ChangeControl(m_pCPlayer[playerNr]);
+					}
 				}
 			}
 		}
@@ -230,6 +274,19 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 	}
 	break;
 
+	case enDestroyGinger:
+	{
+		//神社破壊
+		int offset = 1;
+		int num = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+		for (int i = 0; i < num; i++) {
+			int time = ((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+			int id = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)offset)))->getDataCopy(); offset++;
+			AddGodPowerLottery(id, time, playerNr);
+		}
+	}
+	break;
+
 	default:
 		break;
 	}
@@ -247,6 +304,8 @@ void NetPlayerReceiver::PreUpdate() {
 		//市民に情報渡す
 		UpdateCitizen();
 
+		UpdateGodPower();
+
 		//カウンター進める
 		if (!m_status[i].m_isNoReceive) { m_status[i].m_cnt++; }
 	}
@@ -261,6 +320,8 @@ void NetPlayerReceiver::PostLoopUpdate() {
 		UpdatePlayer(i);
 		//市民に情報渡す
 		UpdateCitizen();
+
+		UpdateGodPower();
 	}
 }
 
@@ -418,4 +479,53 @@ void NetPlayerReceiver::UpdateCitizen() {
 		}
 		m_citizenMoverSyncList.clear();		
 	}
+}
+
+void NetPlayerReceiver::UpdateGodPower() {
+	//神の力あげる
+	for (auto& T : m_godPowerLotteryTimer) {
+		if (T.second > 0) {
+			T.second--;
+			if (T.second <= 0) {
+				//獲得
+				GetGodPower(T.first, m_godPowerLotteryList[T.first].second);
+
+				if (m_pCaster[GetPhoton()->GetLocalPlayerNumber()]) {
+					//みんなに伝える
+					m_pCaster[GetPhoton()->GetLocalPlayerNumber()]->SendGetGodPower(T.first, m_godPowerLotteryList[T.first].second);
+				}
+				m_godPowerLotteryTimer.erase(T.first);
+			}
+		}
+	}
+}
+void NetPlayerReceiver::AddGodPowerLottery(int id, int time, int plyNum) {
+
+	if (!GetPhoton()->GetIsMasterClient()) { return; }
+
+	if (m_godPowerLotteryList.count(id) == 0) {
+		//新規
+		m_godPowerLotteryList.emplace(id, std::make_pair(time, plyNum));
+		
+		if (m_godPowerLotteryTimer.count(id) == 0) {
+			//タイマー開始
+			m_godPowerLotteryTimer.emplace(id, 30);
+		}
+	}
+	else {
+		//時間が古いと優先
+		if (m_godPowerLotteryList[id].first > time) {
+			m_godPowerLotteryList.insert_or_assign(id, std::make_pair(time, plyNum));
+		}
+	}
+}
+
+void NetPlayerReceiver::GetGodPower(int jinjyaNum,int plyNum) {
+	if (!m_gingerGene) { return; }
+	//獲得
+	if (m_pCPlayer[plyNum]) {
+		m_pCPlayer[plyNum]->SetGodPower(m_gingerGene->GetGinger(jinjyaNum)->GetPowerType());
+	}
+	//神社破壊
+	m_gingerGene->GetGinger(jinjyaNum)->Destory();
 }

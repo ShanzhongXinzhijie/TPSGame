@@ -4,6 +4,7 @@
 #include "ActionSender.h"
 #include "Team.h"
 #include "MiniHPbar.h"
+#include "../Ginger/Ginger.h"
 
 class NetPlayerCaster;
 
@@ -53,6 +54,11 @@ public:
 
 	const int playerNum;
 
+	virtual void SetGodPower(GodPowerType type) {
+		//エフェクト
+		SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/aura.efk", 1.0f, getPosition());
+		effe->SetScale({ 50.0f,50.0f ,50.0f });
+	}
 
 	//通信送信で使用
 	const ActionSender& GetActionSender()const {
@@ -66,6 +72,9 @@ public:
 	}
 	Weapon** GetWeapons() {
 		return weapon;
+	}
+	int GetWeaponNum()const {
+		return WEAPON_NUM;
 	}
 	unsigned char GetActiveWeapon()const {
 		return activeWeapon;
