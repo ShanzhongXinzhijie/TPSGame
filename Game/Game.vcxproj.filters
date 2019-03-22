@@ -136,14 +136,15 @@
     <ImageContentTask Include="Asset\spriteData\HP_in.png" />
     <ImageContentTask Include="Asset\spriteData\HP_out.png" />
     <ImageContentTask Include="Asset\spriteData\Target.png" />
-    <ImageContentTask Include="Asset\spriteData\FlyBar_Out.png" />
-    <ImageContentTask Include="Asset\spriteData\FlyBar_In.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Asset\spriteData\HundGun.png" />
-    <Image Include="Asset\spriteData\LButton.png" />
-    <Image Include="Asset\spriteData\RButton.png" />
-    <Image Include="Asset\spriteData\Rifle.png" />
-    <Image Include="Asset\spriteData\YButton.png" />
+    <ImageContentTask Include="Asset\spriteData\Fly_in.png" />
+    <ImageContentTask Include="Asset\spriteData\HundGun.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpBack.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpIn.png" />
+    <ImageContentTask Include="Asset\spriteData\MiniHpOut.png" />
+    <ImageContentTask Include="Asset\spriteData\Rifle.png" />
+    <ImageContentTask Include="Asset\spriteData\Lazer.png" />
+    <ImageContentTask Include="Asset\spriteData\lockon.png" />
+    <ImageContentTask Include="Asset\spriteData\LTrigger.png" />
+    <ImageContentTask Include="Asset\spriteData\RTrigger.png" />
   </ItemGroup>
 </Project>

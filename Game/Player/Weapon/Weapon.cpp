@@ -6,7 +6,7 @@
 Weapon::Weapon(CPlayer* player,GameObj::CSkinModelRender* playerModel,const WeaponInfo& info)
 	: player(player), playerModel(playerModel),
 	shotAnimNum(info.shotAnimNum), reloadAnimNum(info.reloadAnimNum),
-	c_ShotCool(info.shotCool), maxBullet(info.maxBullet), zoomScale(info.zoomScale){
+	c_ShotCool(info.shotCool), maxBullet(info.maxBullet){
 
 	weaponModel.Init(info.modelPath);
 	weaponSprite.Init(info.spritePath);

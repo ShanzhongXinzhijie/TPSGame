@@ -10,7 +10,6 @@ struct WeaponInfo{
 	unsigned int reloadAnimNum;
 	unsigned int maxBullet;
 	float shotCool;
-	float zoomScale = 1.0f;
 };
 
 class Weapon : public IGameObject{
@@ -47,10 +46,6 @@ public:
 		return reloading;
 	}
 
-	float getZoomScale() const {
-		return zoomScale;
-	}
-
 	CSprite& getSpriteRef() {
 		return weaponSprite;
 	}
@@ -68,8 +63,6 @@ protected:
 	GameObj::CSkinModelRender* playerModel;
 	GameObj::CSkinModelRender weaponModel;
 	CSprite weaponSprite;
-
-	const float zoomScale;
 
 	const unsigned int shotAnimNum;
 	const unsigned int reloadAnimNum;

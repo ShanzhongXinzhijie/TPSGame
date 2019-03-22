@@ -80,7 +80,6 @@ WeaponInfo Lazer::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
 	info.spritePath = L"Resource/spriteData/Lazer.dds";
 	info.maxBullet = 1;
 	info.shotCool = 1.5f;
-	info.zoomScale = 5.0f;
 	info.shotAnimNum = shotAnim;
 	info.reloadAnimNum = reloadAnim;
 	return info;

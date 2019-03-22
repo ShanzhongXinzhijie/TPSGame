@@ -12,7 +12,7 @@ public:
 	}
 
 	float getAngle() const{
-		return viewAngle * (1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom));
+		return viewAngle;
 	}
 
 	CVector3 GetFront() const {
@@ -65,10 +65,6 @@ public:
 		this->spring = spring;
 	}
 
-	void setZoomScale(float zoomScale) {
-		zoom = 1.0f / zoomScale;
-	}
-
 private:
 	//カメラ回転
 	void RotationCamera(const CVector2& rot);
@@ -97,7 +93,6 @@ private:
 	CVector2 Rstick = {}; //スティック入力
 
 	static constexpr float viewAngle = 3.14f*0.5f; //視野角
-	float zoom = 1.0f; //視野角の縮小率
 
 	CVector3 m_springTarget = m_target; //ばねカメラの位置
 

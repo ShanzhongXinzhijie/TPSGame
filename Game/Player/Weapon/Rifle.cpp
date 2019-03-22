@@ -21,7 +21,6 @@ WeaponInfo Rifle::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {
 	info.spritePath = L"Resource/spriteData/Rifle.dds";
 	info.maxBullet = 20;
 	info.shotCool = 1.5f;
-	info.zoomScale = 5.0f;
 	info.shotAnimNum = shotAnim;
 	info.reloadAnimNum = reloadAnim;
 	return info;

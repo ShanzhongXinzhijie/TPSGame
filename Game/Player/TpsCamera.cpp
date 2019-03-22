@@ -76,10 +76,6 @@ void TpsCamera::moveLR() {
 }
 
 void TpsCamera::PreUpdate() {
-	//‹–ìŠp
-	float angleBias = (1.00f - Pad(padNum).GetTrigger(enLR::L) * (1.0f - zoom));
-	m_camera.SetViewAngle(viewAngle * angleBias);
-
 	moveLR();
 	{//Œã•û“]‰ñ
 		CVector2 backMove;
@@ -101,7 +97,7 @@ void TpsCamera::PreUpdate() {
 		float len = stickMove.Length();
 		len = pow(len, 2) * 0.04f;//“ñŸŠÖ”“I‚È“ü—Í‚É‚·‚é
 		stickMove.Normalize();
-		stickMove *= len * angleBias;
+		stickMove *= len;
 		if (slow) {
 			stickMove *= 0.3f;
 		}

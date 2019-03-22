@@ -24,6 +24,9 @@ private:
 	CFont font;
 	TpsCamera m_camera;
 
+	bool LT = false;
+	bool RT = false;
+
 	WeaponHolder wepHolder;
 	bool m_isCanShortPushY = true; float m_pushYButtonTime = 0.0f;
 };
