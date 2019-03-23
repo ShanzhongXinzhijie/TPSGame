@@ -238,7 +238,7 @@ void Lazer::LockOn() {
 
 	//プレイヤーロックオン
 	for (auto& C : m_game->getPlayers()) {
-		if (player->playerNum == C.second->playerNum) { continue; }
+		if (player->playerNum == C.second->playerNum || C.second->GetIsDead()) { continue; }
 
 		CVector3 dist = C.second->getPosition() - player->getPosition();
 		if (player->GetActionSender().getLookVec().Dot(dist) > 0.0f && dist.LengthSq() > 230.0f*230.0f) {
@@ -272,6 +272,8 @@ void Lazer::LockOn() {
 	//市民ロックオン
 	for (int i = 0; i < m_game->GetCitizenGene().GetCitizenNum(); i++) {
 		const Citizen* C = m_game->GetCitizenGene().GetCitizen(i);
+
+		if (C->GetIsDead()) { continue; }
 
 		CVector3 dist = C->getPos() - player->getPosition();
 		if (player->GetActionSender().getLookVec().Dot(dist) > 0.0f && dist.LengthSq() > 230.0f*230.0f) {
