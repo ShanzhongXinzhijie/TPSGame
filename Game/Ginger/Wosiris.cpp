@@ -87,6 +87,10 @@ bool Wosiris::Start(){
 		m_players.emplace_back(P.second, P.second->GetIsDead());
 	}
 
+	//SE
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_wosiris.wav");
+	se->Play();
+
 	return true;
 }
 
@@ -139,7 +143,9 @@ void Wosiris::PostRender() {
 }
 
 void Wosiris::ChangeControl(CPlayer* P) {
-	//playSE(L"Resource/sound/SE_zombie.wav");
+	//SE
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_wosiris.wav");
+	se->Play();
 
 	m_owner = P;
 	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {

@@ -58,6 +58,11 @@ public:
 		//エフェクト
 		SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/aura.efk", 1.0f, getPosition());
 		effe->SetScale({ 50.0f,50.0f ,50.0f });
+		//SE
+		SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_getPower.wav");
+		se->SetPos(getPosition());//音の位置
+		se->SetDistance(500.0f);//音が聞こえる範囲
+		se->Play(true);
 	}
 
 	//通信送信で使用

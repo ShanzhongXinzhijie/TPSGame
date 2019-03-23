@@ -33,6 +33,8 @@ private:
 	SuicideObj::CEffekseer* m_eff = nullptr;
 	bool m_isOnEFF = false; float m_effCnt = 0.0f;
 
+	SuicideObj::CSE* m_se = nullptr;
+
 	Game* m_game = nullptr;
 };
 

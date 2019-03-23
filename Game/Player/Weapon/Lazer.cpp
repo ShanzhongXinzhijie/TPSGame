@@ -63,6 +63,12 @@ Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_end.efk"  , 50.0f, lockPos);
 	new SuicideObj::CEffekseer(L"Resource/effect/lazerShot_start.efk", 1.0f, pos, CQuaternion::Identity(), {50.0f,450.0f,50.0f});
 
+	//SE
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_lazerShot.wav");
+	se->SetPos(pos);//音の位置
+	se->SetDistance(500.0f);//音が聞こえる範囲
+	se->Play(true);
+
 	//透明な玉を出す
 	NormalBullet* B = new NormalBullet(player, lockPos, CVector3::AxisY()*0.1f, nullptr, 150);
 	B->SetLifeTime(0.0f);
@@ -110,6 +116,7 @@ void Lazer::WeaponUpdate(){
 	if (!isActive) {
 		player->SetLockOn(player->GetLockOnIsPly(), -1);
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
+		if (m_se) { delete m_se; m_se = nullptr; }
 		m_effCnt = 0.0f;
 		m_charge = 0.0f;
 		m_isOnEFF = false;
@@ -157,12 +164,8 @@ void Lazer::WeaponUpdate(){
 	//チャージエフェクト
 	if (m_isOnEFF) {
 		m_effCnt -= GetDeltaTimeSec();
-		CVector3 pos = player->getPosition();
-		//SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_shot.wav");
-		//se->SetPos(pos);//音の位置
-		//se->SetDistance(500.0f);//音が聞こえる範囲
-		//se->Play(true); //第一引数をtrue
-
+		CVector3 pos = player->getPosition();		
+		
 		//弾を向き(方向)と場所を指定して発射
 		if (player->isFlying()) {
 			pos += player->GetActionSender().getLookVec() * (100.0f + 50.0f);
@@ -171,6 +174,12 @@ void Lazer::WeaponUpdate(){
 			pos += player->GetActionSender().getLookVec() * (50.0f + 50.0f);
 			pos.y += 60.0f;
 		}
+
+		//音位置更新
+		if (m_se) {
+			m_se->SetPos(pos);
+		}
+
 		if (m_effCnt <= 0.0f) {
 			if (m_eff) { delete m_eff; m_eff = nullptr;}
 			m_eff = new SuicideObj::CEffekseer(L"Resource/effect/lazerCharge.efk", 10.0f, pos);
@@ -182,6 +191,7 @@ void Lazer::WeaponUpdate(){
 	else {
 		//player->SetLockOn(player->GetLockOnIsPly(), -1);
 		if (m_eff) { delete m_eff; m_eff = nullptr; }
+		if (m_se) { delete m_se; m_se = nullptr; }
 		m_effCnt = 0.0f;
 		m_charge = 0.0f;
 	}
@@ -202,6 +212,14 @@ void Lazer::PreShot() {
 		}
 		else {
 			shotCool = 0.0f;
+		}
+		//SE
+		if (!m_se) {
+			m_se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_lazerCharge.wav");
+			m_se->SetPos(player->getPosition());//音の位置
+			m_se->SetDistance(500.0f);//音が聞こえる範囲
+			m_se->SetIsAutoDelete(false);//自動で削除しない
+			m_se->Play(true);
 		}
 	//}
 }

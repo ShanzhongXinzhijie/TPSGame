@@ -103,6 +103,11 @@ void Ginger::Konryu(){
 					CVector3 pos = CVector3::AxisZ()*(-400.0f*0.21f); m_rot.Multiply(pos);
 					SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/hakai.efk", 1.0f, m_pos + pos);
 					effe->SetScale({ 60.0f, 60.0f ,60.0f });
+					//SE
+					SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_gingerDamege.wav");
+					se->SetPos(m_pos);//‰¹‚ÌˆÊ’u
+					se->SetDistance(500.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
+					se->Play(true);
 				}
 				if(m_hp <= 0 && !m_isWillDestroy){//”j‰ó
 					m_isWillDestroy = true;
@@ -131,6 +136,12 @@ void Ginger::Konryu(){
 	CVector3 pos = CVector3::AxisZ()*(-400.0f*0.21f); m_rot.Multiply(pos);
 	SuicideObj::CEffekseer* effe = new SuicideObj::CEffekseer(L"Resource/effect/aura.efk", 1.0f, m_pos + pos);
 	effe->SetScale({ 100.0f, 100.0f ,100.0f });
+
+	//SE
+	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_ginger.wav");
+	se->SetPos(m_pos);//‰¹‚ÌˆÊ’u
+	se->SetDistance(500.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
+	se->Play(true);
 
 	m_isKensetued = true;
 }
