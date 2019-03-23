@@ -3,6 +3,8 @@
 #include "Citizen.h"
 #include "Weapon.h"
 #include "../Ginger/Hades.h"
+#include "../Ginger/Indra.h"
+#include "../Ginger/Odin.h"
 
 NetPlayerReceiver::NetPlayerReceiver()
 {
@@ -225,6 +227,28 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 		if (eventContent.getValue((nByte)enUseGodPower)) {
 			GodPowerType type = (GodPowerType)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enUseGodPower)))->getDataCopy();
 			UseGodPower(type, playerNr);
+		}
+
+		//インドラ
+		if (eventContent.getValue((nByte)enIndraArrow)) {
+			Indra* pIndra = m_gingerGene->GetIndra();
+			if (pIndra) {
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enIndraArrow + 0))))->getDataCopy();
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enIndraArrow + 1))))->getDataCopy();
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enIndraArrow + 2))))->getDataCopy();
+				pIndra->Thunder(pos);
+			}
+		}
+		//オーディン
+		if (eventContent.getValue((nByte)enUseOdin)) {
+			if (m_gingerGene && m_pCPlayer[playerNr]) {			
+				CVector3 pos;
+				pos.x = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enUseOdin + 0))))->getDataCopy();
+				pos.y = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enUseOdin + 1))))->getDataCopy();
+				pos.z = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enUseOdin + 2))))->getDataCopy();
+				new Odin(m_pCPlayer[playerNr], m_gingerGene, pos);
+			}
 		}
 
 		//ヲシリスの召喚
@@ -541,6 +565,9 @@ void NetPlayerReceiver::UseGodPower(GodPowerType type, int plyNum) {
 	if (!m_gingerGene || !m_pCPlayer[plyNum]) { return; }
 	
 	switch (type) {
+	case enIndra:
+		new Indra(m_pCPlayer[plyNum], m_gingerGene);
+		break;
 	case enHades:
 		new Hades(m_pCPlayer[plyNum], m_gingerGene);
 		break;

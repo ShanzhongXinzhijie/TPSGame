@@ -251,7 +251,9 @@
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="Ginger\GodPowerStarter.cpp" />
     <ClCompile Include="Ginger\Hades.cpp" />
+    <ClCompile Include="Ginger\Indra.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
+    <ClCompile Include="Ginger\Odin.cpp" />
     <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
     <ClCompile Include="Citizen\InstancingCitizenColorManager.cpp" />
@@ -341,6 +343,7 @@
     <ClInclude Include="Include\Walker.h" />
     <ClInclude Include="Include\MiniHPbar.h" />
     <ClInclude Include="Include\Lazer.h" />
+    <ClInclude Include="Ginger\Indra.h" />
     <ClInclude Include="Network\NetGameEventReceiver.h" />
     <ClInclude Include="Network\NetGameEventCaster.h" />
     <ClInclude Include="Network\NetPlayerCaster.h" />
@@ -348,6 +351,7 @@
     <ClInclude Include="Network\NetPlayerReceiver.h" />
     <ClInclude Include="Network\Network.h" />
     <ClInclude Include="Network\NetworkConst.h" />
+    <ClInclude Include="Ginger\Odin.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Include\sikakukuidou.h" />
     <ClInclude Include="Include\stdafx.h" />

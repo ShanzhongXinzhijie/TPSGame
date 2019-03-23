@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "Wosiris.h"
 #include "Hades.h"
+#include "Indra.h"
+#include "Odin.h"
 
 GodPowerStarter::GodPowerStarter()
 {
@@ -45,6 +47,12 @@ void GodPowerStarter::SetPowertype(GodPowerType type) {
 	case enHades:
 		wcscpy_s(m_text, L"ハデスのかぶと\nすがたがきえる。");
 		break;
+	case enIndra:
+		wcscpy_s(m_text, L"インドラの や\nいかずち がゾンビをふやす。");
+		break;
+	case enOdin:
+		wcscpy_s(m_text, L"オーディンの ぎょくざ\nすわったものに いっていじかん\nせかいを みとおす\nちからを さずける。");
+		break;
 	case enNone:
 	default:
 		break;
@@ -68,6 +76,28 @@ void GodPowerStarter::Update(){
 		IGameObject* pGO = nullptr;
 
 		switch (m_type) {
+		case enOdin:
+		{
+			//設置
+			pGO = new Odin(m_pPlayer, m_pGinGene, m_pPlayer->getPosition());
+
+#ifndef SpritScreen
+			//設置を通信
+			m_pPlayer->GetNetCaster()->SendOdin(m_pPlayer->getPosition());
+#endif
+		}
+		break;
+		case enIndra:
+		{
+			//使用
+			pGO = new Indra(m_pPlayer, m_pGinGene);
+
+#ifndef SpritScreen
+			//使用を通信
+			m_pPlayer->GetNetCaster()->SendUseGodPower(enIndra);
+#endif
+		}
+		break;
 		case enHades:
 		{
 			//使用

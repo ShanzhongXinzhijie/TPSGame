@@ -34,7 +34,9 @@ enum ReliableDataCode {
 	//enDestroyGinger,
 	enGetGodpower = 2,
 	enUseGodPower = 4,
-	enSummonWosiris,
+	enIndraArrow,
+	enUseOdin = enIndraArrow + 3,
+	enSummonWosiris = enUseOdin + 3,
 	enGetControlWosiris = enSummonWosiris + 4,
 	enKenzoku = enGetControlWosiris + 4,
 };

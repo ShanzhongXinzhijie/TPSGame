@@ -73,6 +73,14 @@ void NetPlayerCaster::PostUpdate() {
 
 					isSend = true;
 				}
+				//インドラ
+				if (m_isSendIndra) {
+					_event.put((nByte)(enIndraArrow + 0), (int)m_sendIndraPos.x);
+					_event.put((nByte)(enIndraArrow + 1), (int)m_sendIndraPos.y);
+					_event.put((nByte)(enIndraArrow + 2), (int)m_sendIndraPos.z);
+					m_isSendIndra = false;
+					isSend = true;
+				}
 			}
 
 			//神の力を入手
@@ -103,6 +111,15 @@ void NetPlayerCaster::PostUpdate() {
 					cnt++;
 				}
 				if (cnt >= m_sendUseGodPowerList.size()) { m_sendUseGodPowerList.clear(); }
+			}
+
+			//オーディン
+			if (m_isSendOdin) {
+				_event.put((nByte)(enUseOdin + 0), (int)m_sendOdinPos.x);
+				_event.put((nByte)(enUseOdin + 1), (int)m_sendOdinPos.y);
+				_event.put((nByte)(enUseOdin + 2), (int)m_sendOdinPos.z);
+				m_isSendOdin = false;
+				isSend = true;
 			}
 
 			//ヲシリスの召喚
@@ -398,6 +415,14 @@ void NetPlayerCaster::SendGetGodPower(int jinjyaNum, int plyNum) {
 }
 void NetPlayerCaster::SendUseGodPower(GodPowerType type){
 	m_sendUseGodPowerList.emplace_back(type);
+}
+void NetPlayerCaster::SendIndra(const CVector3& pos){
+	m_isSendIndra = true;
+	m_sendIndraPos = pos;
+}
+void NetPlayerCaster::SendOdin(const CVector3& pos){
+	m_isSendOdin = true;
+	m_sendOdinPos = pos;
 }
 void NetPlayerCaster::SendSummonWosiris(int rot, int Citizen1, int Citizen2, int Citizen3) {
 	m_sendSummonWosiris = std::make_tuple(rot, Citizen1, Citizen2, Citizen3);

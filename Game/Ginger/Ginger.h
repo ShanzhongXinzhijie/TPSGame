@@ -1,14 +1,15 @@
 #pragma once
 #include "Wosiris.h"
+#include "Indra.h"
 #include "IDamagable.h"
 
 class NetPlayerReceiver;
 
 enum GodPowerType {
 	enWosiris,
-	//enIndra,
+	enIndra,
 	enHades,
-	//enOdin,
+	enOdin,
 	enNum,
 	enNone,
 };
