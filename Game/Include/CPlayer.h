@@ -107,6 +107,9 @@ public:
 	bool GetLockOnIsPly() const { return m_lockIsPly; }
 	int  GetLockOnNum() const{ return m_lockonNum; }
 
+	//モデルを取得
+	GameObj::CSkinModelRender& GetModel() { return m_model; }
+
 	//死亡処理
 	void Death();
 	//蘇生処理
@@ -166,7 +169,7 @@ private:
 
 	SuicideObj::CCollisionObj m_collision; //コリジョン
 
-	//通信
+//////通信
 	bool m_Init = false;
 	//通信キャスター
 	NetPlayerCaster* m_netCaster = nullptr;

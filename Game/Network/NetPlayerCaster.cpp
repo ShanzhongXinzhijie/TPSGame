@@ -90,6 +90,20 @@ void NetPlayerCaster::PostUpdate() {
 				}
 				if (cnt >= m_sendGetGodPowerList.size()) { m_sendGetGodPowerList.clear(); }
 			}
+			//神の力を使用
+			if (m_sendUseGodPowerList.size() > 0) {
+				int cnt = 0;
+				for (auto& P : m_sendUseGodPowerList) {
+					if (P != GodPowerType::enNone) {
+						_event.put((nByte)enUseGodPower, (nByte)P);
+						isSend = true;
+						P = GodPowerType::enNone;
+						break;
+					}
+					cnt++;
+				}
+				if (cnt >= m_sendUseGodPowerList.size()) { m_sendUseGodPowerList.clear(); }
+			}
 
 			//ヲシリスの召喚
 			if (m_isSendSummonWosiris) {
@@ -381,6 +395,9 @@ void NetPlayerCaster::SendDestroyGinger(int num) {
 }
 void NetPlayerCaster::SendGetGodPower(int jinjyaNum, int plyNum) {
 	m_sendGetGodPowerList.emplace_back(jinjyaNum, plyNum);
+}
+void NetPlayerCaster::SendUseGodPower(GodPowerType type){
+	m_sendUseGodPowerList.emplace_back(type);
 }
 void NetPlayerCaster::SendSummonWosiris(int rot, int Citizen1, int Citizen2, int Citizen3) {
 	m_sendSummonWosiris = std::make_tuple(rot, Citizen1, Citizen2, Citizen3);

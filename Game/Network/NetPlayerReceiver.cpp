@@ -2,6 +2,7 @@
 #include "NetPlayerReceiver.h"
 #include "Citizen.h"
 #include "Weapon.h"
+#include "../Ginger/Hades.h"
 
 NetPlayerReceiver::NetPlayerReceiver()
 {
@@ -220,6 +221,12 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 			int plyN = (int)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enGetGodpower+1))))->getDataCopy();
 			GetGodPower(gingerN, plyN);
 		}
+		//神の力使用
+		if (eventContent.getValue((nByte)enUseGodPower)) {
+			GodPowerType type = (GodPowerType)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)enUseGodPower)))->getDataCopy();
+			UseGodPower(type, playerNr);
+		}
+
 		//ヲシリスの召喚
 		if (eventContent.getValue((nByte)enSummonWosiris)) {
 			//召喚
@@ -522,10 +529,22 @@ void NetPlayerReceiver::AddGodPowerLottery(int id, int time, int plyNum) {
 
 void NetPlayerReceiver::GetGodPower(int jinjyaNum,int plyNum) {
 	if (!m_gingerGene) { return; }
+	
 	//獲得
 	if (m_pCPlayer[plyNum]) {
 		m_pCPlayer[plyNum]->SetGodPower(m_gingerGene->GetGinger(jinjyaNum)->GetPowerType());
 	}
 	//神社破壊
 	m_gingerGene->GetGinger(jinjyaNum)->Destory();
+}
+void NetPlayerReceiver::UseGodPower(GodPowerType type, int plyNum) {
+	if (!m_gingerGene || !m_pCPlayer[plyNum]) { return; }
+	
+	switch (type) {
+	case enHades:
+		new Hades(m_pCPlayer[plyNum], m_gingerGene);
+		break;
+	default:
+		break;
+	}
 }

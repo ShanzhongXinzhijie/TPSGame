@@ -2,6 +2,7 @@
 #include "GodPowerStarter.h"
 #include "Game.h"
 #include "Wosiris.h"
+#include "Hades.h"
 
 GodPowerStarter::GodPowerStarter()
 {
@@ -39,7 +40,10 @@ void GodPowerStarter::SetPowertype(GodPowerType type) {
 
 	switch (m_type) {
 	case enWosiris:
-		wcscpy_s(m_text, L"GIANT DRAGON\n　－THE GOD OF WOSIRIS");
+		wcscpy_s(m_text, L"GIANT DRAGON\n　－THE GOD OF WOSIRIS\nATTACK    DEFENCE\n X000         X000");
+		break;
+	case enHades:
+		wcscpy_s(m_text, L"ハデスのかぶと\nすがたがきえる。");
 		break;
 	case enNone:
 	default:
@@ -64,6 +68,17 @@ void GodPowerStarter::Update(){
 		IGameObject* pGO = nullptr;
 
 		switch (m_type) {
+		case enHades:
+		{
+			//使用
+			pGO = new Hades(m_pPlayer, m_pGinGene);
+
+#ifndef SpritScreen
+			//使用を通信
+			m_pPlayer->GetNetCaster()->SendUseGodPower(enHades);
+#endif
+		}
+		break;
 		case enWosiris:
 		{
 			//生贄範囲表示

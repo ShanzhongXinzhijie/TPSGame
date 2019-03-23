@@ -73,6 +73,7 @@
     <ClCompile Include="Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Player\Weapon\WeaponHolder.cpp" />
     <ClCompile Include="Ginger\Wosiris.cpp" />
+    <ClCompile Include="Ginger\Hades.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Ginger\Wosiris.h" />
     <ClInclude Include="Ginger\Syouraidan.h" />
     <ClInclude Include="Include\IDamagable.h" />
+    <ClInclude Include="Ginger\Hades.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

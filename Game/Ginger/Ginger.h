@@ -7,7 +7,7 @@ class NetPlayerReceiver;
 enum GodPowerType {
 	enWosiris,
 	//enIndra,
-	//enHades,
+	enHades,
 	//enOdin,
 	enNum,
 	enNone,

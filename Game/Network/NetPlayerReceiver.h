@@ -86,6 +86,7 @@ public:
 
 private:
 	void GetGodPower(int jinjyaNum, int plyNum);
+	void UseGodPower(GodPowerType type, int plyNum);
 
 	CPlayer* m_pCPlayer[NET_MAX_PLAYER + 1] = { nullptr };
 	NetPlayerCaster* m_pCaster[NET_MAX_PLAYER + 1] = { nullptr };

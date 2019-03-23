@@ -250,6 +250,7 @@
     <ClCompile Include="Ginger\GingerGene.cpp" />
     <ClCompile Include="Ginger\Ginger.cpp" />
     <ClCompile Include="Ginger\GodPowerStarter.cpp" />
+    <ClCompile Include="Ginger\Hades.cpp" />
     <ClCompile Include="MiniHPbar.cpp" />
     <ClCompile Include="Player\Weapon\Lazer.cpp" />
     <ClCompile Include="Player\Bullet\Bullet.cpp" />
@@ -303,6 +304,7 @@
     <ClCompile Include="Ginger\Wosiris.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ginger\Hades.h" />
     <ClInclude Include="Include\IDamagable.h" />
     <ClInclude Include="Ginger\GingerGene.h" />
     <ClInclude Include="Ginger\GodPowerStarter.h" />
