@@ -164,9 +164,9 @@ void GodPowerStarter::PostRender(){
 
 	if (m_type == enNone) { return; }
 
-	m_bButton.Draw({ 0.88f,0.7f}, { 0.6f, 0.6f }, { 0.5f,0.5f });
-	m_font.Draw(m_text, { 0.88f + 0.003f*0.5f,0.7f + 0.05f + 0.003f*0.5f }, { 0.0f,0.0f,0.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
-	m_font.Draw(m_text, { 0.88f,0.7f + 0.05f }, { 1.0f,1.0f,1.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
+	m_bButton.Draw({ 0.88f,0.65f}, { 0.6f, 0.6f }, { 0.5f,0.5f });
+	m_font.Draw(m_text, { 0.88f + 0.003f*0.5f,0.65f + 0.05f + 0.003f*0.5f }, { 0.0f,0.0f,0.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
+	m_font.Draw(m_text, { 0.88f,0.65f + 0.05f }, { 1.0f,1.0f,1.0f,1.0f }, CVector2::One()*0.5f, { 0.5f,0.0f });
 	
 	if(m_mesageTime > 0){
 		m_fontDefo.Draw(L"3‘Ì‚Ì¶æÑ‚ª•K—v", { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, CVector2::One(), { 0.5f,0.5f },0.0f,DirectX::SpriteEffects_None, 0.0f);
