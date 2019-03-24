@@ -158,4 +158,8 @@
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\spriteData\Odinin.png" />
+    <Image Include="Asset\spriteData\Odinout.png" />
+  </ItemGroup>
 </Project>

@@ -111,6 +111,11 @@ void Wosiris::Update(){
 			rot.Multiply(fromPos);
 			fromPos += m_model.GetPos();
 			new Syouraidan(fromPos, P.first, &m_game->GetGingerGene());
+			//SE
+			SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_syouraidan.wav");
+			se->SetPos(fromPos);//‰¹‚ÌˆÊ’u
+			se->SetDistance(50000.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
+			se->Play(true);
 		}
 		P.second = P.first->GetIsDead();
 	}
