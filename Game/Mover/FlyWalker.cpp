@@ -65,7 +65,7 @@ void FlyWalker::rest() {
 	pos.y += 50.0f;
 	restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyStop.efk", 1.0f, pos);
 	restEffect->SetIsSuicide(false);
-	playSE(L"Resource/sound/SE_flyStop.wav");
+	playSE(L"Resource/sound/SE_flyStop.wav", GetPosition());
 }
 void FlyWalker::restStop() {
 	flyTimer = c_flyTimer;
