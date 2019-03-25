@@ -12,6 +12,11 @@ CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem), miniHpbar(maxHp){
 	team->addPlayer(this);
 	mover.SetPosition(position);
+#ifndef SpritScreen
+	if (playerNum != GetPhoton()->GetLocalPlayerNumber()) {
+		mover.SetIsLocalUser(false);
+	}
+#endif	
 }
 
 CPlayer::~CPlayer() {
@@ -141,7 +146,7 @@ void CPlayer::Move() {
 	bool isWalljump = false;
 	//空中に壁に当たりながらジャンプ
 	if (mover.IsContactWall() && !mover.IsOnGround() && action.isJump()) {
-		playSE(L"Resource/sound/SE_jump.wav");
+		playSE(L"Resource/sound/SE_jump.wav"); m_isSendJumpSE = true;
 		mover.walljump(jumpPower, movement);
 		isWalljump = true;
 	}
@@ -155,7 +160,7 @@ void CPlayer::Move() {
 	//ジャンプと飛行
 	if (action.isJump() && !isWalljump) {
 		if (mover.IsOnGround()) {
-			playSE(L"Resource/sound/SE_jump.wav");
+			playSE(L"Resource/sound/SE_jump.wav"); m_isSendJumpSE = true;
 			mover.jump(jumpPower);
 		}
 		else{

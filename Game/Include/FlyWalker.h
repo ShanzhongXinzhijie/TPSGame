@@ -6,8 +6,10 @@ public:
 	~FlyWalker();
 
 	void fly(bool isFly, const CVector3& velocity = {}, const CVector2& move = {}, float power = 0.0f);
-
 	void flyStop();
+
+	void rest();
+	void restStop();
 
 	CQuaternion getRotation() const;
 
@@ -16,6 +18,10 @@ public:
 	}
 	float getFlyTimerMax() const{
 		return c_flyTimer;
+	}
+
+	float getCoolTimer() const {
+		return coolTimer;
 	}
 
 	bool isFlying()const {
@@ -40,11 +46,16 @@ public:
 
 	//飛行可能時間をセットする
 	void SetFlyTimer(float timer) { flyTimer = timer; }
+	void SetCoolTimer(float timer) { coolTimer = timer; }
+
+	void SetIsLocalUser(bool is) { m_isLocalUser = is; }
 
 	void Update();
 
 	static constexpr float c_flyTimer = 5.0f;
 private:
+	bool m_isLocalUser = true;
+
 	float flyTimer = c_flyTimer; //飛行可能な残り時間
 	bool m_isRest = 0.0f; //飛行不可
 
