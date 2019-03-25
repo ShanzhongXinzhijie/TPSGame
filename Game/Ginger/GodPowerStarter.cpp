@@ -78,12 +78,22 @@ void GodPowerStarter::Update(){
 		switch (m_type) {
 		case enOdin:
 		{
+			CVector3 setPos = m_pPlayer->GetActionSender().getLookVec();
+			setPos.y = 0.0f; 
+			if (setPos.LengthSq() > FLT_EPSILON) {
+				setPos.Normalize();
+			}
+			else {
+				setPos = CVector3::AxisY();
+			}
+			setPos = m_pPlayer->getPosition() + setPos * 100.0f;
+
 			//Ý’u
-			pGO = new Odin(m_pPlayer, m_pGinGene, m_pPlayer->getPosition());
+			pGO = new Odin(m_pPlayer, m_pGinGene, setPos);
 
 #ifndef SpritScreen
 			//Ý’u‚ð’ÊM
-			m_pPlayer->GetNetCaster()->SendOdin(m_pPlayer->getPosition());
+			m_pPlayer->GetNetCaster()->SendOdin(setPos);
 #endif
 		}
 		break;

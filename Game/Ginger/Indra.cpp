@@ -21,10 +21,13 @@ Indra::~Indra()
 bool Indra::Start() {
 	m_game = FindGO<Game>(L"GameClass"); if (!m_game) { return false; }
 
-	//m_model.Init(L"Resource\\modelData\\indraSky.cmo", enFbxUpAxisY);
-	//m_model.SetIsMostDepth(true);
-	//m_model.SetIsShadowCaster(false);
-	//m_model.SetDrawPriority(DRAW_PRIORITY_MAX-1);
+	m_model.Init(L"Resource\\modelData\\ThunderSky.cmo", enFbxUpAxisY);
+	m_model.SetIsMostDepth(true);
+	m_model.SetIsShadowCaster(false);
+	m_model.SetDrawPriority(DRAW_PRIORITY_MAX-1);
+	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
+		mat->SetLightingEnable(false);
+	});
 
 	m_flash.Init(L"Resource/spriteData/osirisWindow.dds");
 
@@ -40,7 +43,7 @@ void Indra::Update() {
 		m_flashTimer -= GetDeltaTimeSec();
 	}
 
-	//m_model.SetPos(GetMainCamera()->GetPos());
+	m_model.SetPos(GetMainCamera()->GetPos());
 
 	bool isRun = true;
 #ifndef SpritScreen

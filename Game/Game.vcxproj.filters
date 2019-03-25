@@ -20,6 +20,8 @@
     <ImageContentTask Include="Asset\spriteData\osirisWindow.png" />
     <ImageContentTask Include="Asset\spriteData\BButton.png" />
     <ImageContentTask Include="Asset\spriteData\lockon2.png" />
+    <ImageContentTask Include="Asset\spriteData\Odinin.png" />
+    <ImageContentTask Include="Asset\spriteData\Odinout.png" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CConfig.cpp" />
@@ -94,6 +96,8 @@
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Wing.FBX" />
+    <MeshContentTask Include="Asset\modelData\Odin.fbx" />
+    <MeshContentTask Include="Asset\modelData\ThunderSky.fbx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ginger\GingerGene.h" />
@@ -157,9 +161,5 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Asset\spriteData\Odinin.png" />
-    <Image Include="Asset\spriteData\Odinout.png" />
   </ItemGroup>
 </Project>

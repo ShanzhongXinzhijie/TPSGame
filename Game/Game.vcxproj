@@ -375,10 +375,12 @@
     <MeshContentTask Include="Asset\modelData\Ground.FBX" />
     <MeshContentTask Include="Asset\modelData\HundGun.FBX" />
     <MeshContentTask Include="Asset\modelData\Lazer.fbx" />
+    <MeshContentTask Include="Asset\modelData\Odin.fbx" />
     <MeshContentTask Include="Asset\modelData\PlayerVanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Rifle.FBX" />
     <MeshContentTask Include="Asset\modelData\RifleBullet.FBX" />
     <MeshContentTask Include="Asset\modelData\sky.FBX" />
+    <MeshContentTask Include="Asset\modelData\ThunderSky.fbx" />
     <MeshContentTask Include="Asset\modelData\unityChan.fbx" />
     <MeshContentTask Include="Asset\modelData\Vanp.FBX" />
     <MeshContentTask Include="Asset\modelData\Wing.FBX" />

@@ -26,7 +26,8 @@ public:
 	}
 	~OdinPower(){
 		if (m_depthStencilState) { m_depthStencilState->Release(); }
-		//if (m_srv) { m_srv->Release(); }
+		//if (m_RSCw) { m_RSCw->Release(); }if (m_RSCCw) { m_RSCCw->Release(); }
+		if (m_blendState) { m_blendState->Release(); }
 		GetGraphicsEngine().GetRenderManager().DeleteRender(m_priority);
 	}
 
@@ -50,7 +51,8 @@ private:
 	int m_priority = -1;
 
 	ID3D11DepthStencilState* m_depthStencilState = nullptr;	
-	//ID3D11ShaderResourceView* m_srv = nullptr;
+	//ID3D11RasterizerState* m_RSCw = nullptr, *m_RSCCw = nullptr;
+	ID3D11BlendState* m_blendState = nullptr;
 	Shader m_ps;
 
 	OdinPowerHUD m_hud;
@@ -67,6 +69,7 @@ public:
 
 private:
 	GameObj::CSkinModelRender m_model;
+	PhysicsStaticObject m_phyStaticObject;
 
 	CVector3 m_pos;
 	OdinPower m_odinPower;
