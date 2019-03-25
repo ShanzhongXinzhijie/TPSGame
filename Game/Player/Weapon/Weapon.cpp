@@ -2,9 +2,10 @@
 #include "Weapon.h"
 #include "CPlayer.h"
 #include "Bullet.h"
+#include "SE_Util.h"
 
 Weapon::Weapon(CPlayer* player,GameObj::CSkinModelRender* playerModel,const WeaponInfo& info)
-	: player(player), playerModel(playerModel),
+	: player(player), playerModel(playerModel), shotSE(info.shotSEPath),
 	shotAnimNum(info.shotAnimNum), reloadAnimNum(info.reloadAnimNum),
 	c_ShotCool(info.shotCool), maxBullet(info.maxBullet){
 
@@ -17,10 +18,7 @@ Weapon::Weapon(CPlayer* player,GameObj::CSkinModelRender* playerModel,const Weap
 		if (isActive && std::wcscmp(eventName, L"Reload") == 0) {
 			reloading = false;
 			bulletCount = maxBullet;
-			SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_reload2.wav");
-			se->SetPos(this->player->getPosition());//音の位置
-			se->SetDistance(500.0f);//音が聞こえる範囲
-			se->Play(true); //第一引数をtrue
+			playSE(L"Resource/sound/SE_reload2.wav", this->player->getPosition());
 		}
 	});
 }
@@ -45,10 +43,7 @@ void Weapon::shot() {
 
 	const ActionSender& action = player->GetActionSender();
 	CVector3 pos = player->getPosition();
-	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_shot.wav");
-	se->SetPos(pos);//音の位置
-	se->SetDistance(500.0f);//音が聞こえる範囲
-	se->Play(true); //第一引数をtrue
+	playSE(shotSE, player->getPosition());
 
 	//弾を向き(方向)と場所を指定して発射
 	CVector3 vec = action.getLookVec();
@@ -59,13 +54,9 @@ void Weapon::shot() {
 		pos.y += 60;
 	}
 
-	Bullet* bullet = createBullet(player, pos, vec);
+	createBullet(player, pos, vec);
 
-	if (player->isFlying() && bullet) {
-		bullet->addVelocity(player->getVelocity());
-	}
-
-	//弾の向き(回転)を設定
+	//エフェクトの向き(回転)を設定
 	CQuaternion rot;
 	rot.SetRotation(CVector3::AxisY(), atan2f(vec.x, vec.z));
 	float xz = sqrt(vec.x*vec.x + vec.z*vec.z);
@@ -79,10 +70,7 @@ void Weapon::reload() {
 	if (bulletCount < maxBullet) {
 		reloading = true;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/reload.efk", 1.0f, player->getPosition());
-		SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_reload.wav");
-		se->SetPos(player->getPosition());//音の位置
-		se->SetDistance(500.0f);//音が聞こえる範囲
-		se->Play(true); //第一引数をtrue
+		playSE(L"Resource/sound/SE_reload.wav", player->getPosition());
 		playerModel->GetAnimCon().Play(reloadAnimNum, CPlayer::animInterpolateSec);
 	}
 }

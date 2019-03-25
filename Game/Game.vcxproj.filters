@@ -78,6 +78,7 @@
     <ClCompile Include="Ginger\Hades.cpp" />
     <ClCompile Include="Ginger\Indra.cpp" />
     <ClCompile Include="Ginger\Odin.cpp" />
+    <ClCompile Include="SE_Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Ginger\Hades.h" />
     <ClInclude Include="Ginger\Indra.h" />
     <ClInclude Include="Ginger\Odin.h" />
+    <ClInclude Include="Include\SE_Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

@@ -78,6 +78,8 @@ private:
 
 	float m_waitGameStartTimer_sec = 0.0f;
 	float timer = 160.0f;
+	static constexpr float fadeInDelay = -2.0f;
+	bool gameIsEnd = false;
 
 	PlayerGene playerGene;
 	CitizenGene citizenGene;

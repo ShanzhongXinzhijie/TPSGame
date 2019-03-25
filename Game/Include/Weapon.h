@@ -6,6 +6,7 @@ class Bullet;
 struct WeaponInfo{
 	const wchar_t* modelPath;
 	const wchar_t* spritePath;
+	const wchar_t* shotSEPath = L"Resource/sound/SE_shot.wav";
 	unsigned int shotAnimNum;
 	unsigned int reloadAnimNum;
 	unsigned int maxBullet;
@@ -55,7 +56,7 @@ public:
 	void Update() override;
 
 protected:
-	virtual Bullet* createBullet(CPlayer* player, CVector3 pos, CVector3 dir) = 0;
+	virtual void createBullet(CPlayer* player, CVector3 pos, CVector3 dir) = 0;
 	virtual void WeaponUpdate() {};
 	virtual void PreShot() {};
 
@@ -63,6 +64,8 @@ protected:
 	GameObj::CSkinModelRender* playerModel;
 	GameObj::CSkinModelRender weaponModel;
 	CSprite weaponSprite;
+
+	const wchar_t* shotSE;
 
 	const unsigned int shotAnimNum;
 	const unsigned int reloadAnimNum;

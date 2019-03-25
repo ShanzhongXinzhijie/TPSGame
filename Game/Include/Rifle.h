@@ -8,7 +8,7 @@ public:
 	~Rifle();
 
 private:
-	Bullet* createBullet(CPlayer* player, CVector3 pos, CVector3 dir);
+	void createBullet(CPlayer* player, CVector3 pos, CVector3 dir);
 	static WeaponInfo getInfo(unsigned int shotAnim, unsigned int reloadAnim);
 };
 

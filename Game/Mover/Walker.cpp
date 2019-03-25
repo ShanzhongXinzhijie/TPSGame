@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Walker.h"
-
+#include "SE_Util.h"
 
 Walker::Walker() {
 }
@@ -71,7 +71,7 @@ void Walker::Update() {
 	}
 
 	if (!beforeGround && IsOnGround()) {
-		playSE(L"Resource/sound/SE_fall.wav");
+		playSE(L"Resource/sound/SE_fall.wav", GetPosition());
 	}
 	beforeGround = IsOnGround();
 
@@ -82,7 +82,7 @@ void Walker::Update() {
 	if (IsOnGround() && velocity.LengthSq() > 10.0f*10.0f) {
 		footTime += GetDeltaTimeSec() * velocity.Length();
 		if (footTime > c_footTime) {
-			playSE(L"Resource/sound/SE_foot.wav");
+			playSE(L"Resource/sound/SE_foot.wav", GetPosition());
 			footTime = 0.0f;
 		}
 	}
@@ -118,13 +118,6 @@ void Walker::turn(float x, float z) {
 
 void Walker::addVelocity(const CVector3& v) {
 	velocity += v;
-}
-
-void Walker::playSE(const wchar_t * path) {
-	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);
-	se->SetPos(GetPosition());//‰¹‚ÌˆÊ’u
-	se->SetDistance(500.0f);//‰¹‚ª•·‚±‚¦‚é”ÍˆÍ
-	se->Play(true); //‘æˆêˆø”‚ğtrue
 }
 
 

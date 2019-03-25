@@ -127,7 +127,6 @@ private:
 	void Shot();
 	void Reload();
 	void changeWeapon(bool left, bool Right);
-	void playSE(const wchar_t* path);
 
 	GameObj::CSkinModelRender m_model;
 	enum {

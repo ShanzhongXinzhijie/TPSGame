@@ -289,6 +289,7 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Citizen\sikakukuidou.cpp" />
     <ClCompile Include="Player\Weapon\Rifle.cpp" />
+    <ClCompile Include="SE_Util.cpp" />
     <ClCompile Include="SqSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -364,6 +365,7 @@
     <ClInclude Include="Include\WeaponHolder.h" />
     <ClInclude Include="Ginger\Wosiris.h" />
     <ClInclude Include="Ginger\Syouraidan.h" />
+    <ClInclude Include="Include\SE_Util.h" />
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Asset\modelData\Bat.FBX" />

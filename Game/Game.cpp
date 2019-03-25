@@ -13,9 +13,6 @@
 Game* Game::static_game = nullptr;
 
 Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) : citizenGene(this), timer(timeLimit){
-	this->fade = fade;
-	fade->fadeOut();
-
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
 		if (objData.EqualObjectName(L"player700")) {
 			playerGene.addSpawner(objData.position, 780.0f);
@@ -74,6 +71,8 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 	}
 #endif
 
+	this->fade = fade;
+	fade->fadeOut();
 	//次のフレームの可変フレーム無効
 	//GetEngine().UnableVariableFramerateOnce();
 }
@@ -86,6 +85,7 @@ Game::~Game() {
 	m_netWork->GetNetPlayerReceiver().SetCitizenGene(nullptr);
 	m_netWork->GetNetPlayerReceiver().SetGingerGene(nullptr);
 #endif
+	GameWaiter::SetIsWait(false);
 	static_game = nullptr;
 }
 
@@ -101,11 +101,17 @@ void Game::Update() {
 			return;
 		}
 	}
-	if (timer > 0) {
+
+	if (timer > fadeInDelay) {
 		timer -= GetDeltaTimeSec();
 	}
-	if (timer <= 0) {
-		timer = 0;
+	if (timer < 0 && !GameWaiter::GetIsWait()) {
+		GameWaiter::SetIsWait(true);
+		NewGO<SuicideObj::CSE>(L"Resource/sound/SE_timeUp.wav")->Play(false);
+	}
+	if (timer <= fadeInDelay && !gameIsEnd) {
+		timer = fadeInDelay;
+		gameIsEnd = true;
 #ifdef SpritScreen
 		fade->fadeIn([&]() {
 			new Result(playerGene, fade);
@@ -123,6 +129,7 @@ void Game::Update() {
 			}
 			//終了命令送信
 			m_netEventCaster.SendGameEnd(zombieCnt);
+			GameWaiter::SetIsWait(true);
 
 			//リザルトへ
 			fade->fadeIn([&]() {
@@ -144,7 +151,9 @@ void Game::Update() {
 			std::vector<Team*> teamPtrs = playerGene.getTeams();
 			for (int i = 0; i < min(teamPtrs.size(), NET_MAX_PLAYER + 1); i++) {
 				teamPtrs[i]->setZombie(m_netWork->GetNetEventReceiver().GetGameEndData().m_zombieCnt[i]);
-			}			
+			}
+
+			GameWaiter::SetIsWait(true);
 
 			//リザルトへ
 			fade->fadeIn([&]() {
@@ -168,9 +177,26 @@ void Game::PostRender() {
 	}
 
 	wchar_t countDisp[20];
-	swprintf_s(countDisp, L"Time: %.1f sec", timer);
+	float l_timer = timer;
+	if (l_timer < 0) {
+		l_timer = 0;
+	}
+	swprintf_s(countDisp, L"Time: %.1f sec", l_timer);
 	font.Draw(countDisp, { 0.013f, 0.013f }, { 0,0,0,1 }, {1.2f,1.2f});
 	font.Draw(countDisp, { 0.01f, 0.01f }, { 1,1,1,1 }, { 1.2f,1.2f });
+
+	if (timer < 0) {
+		float scale = timer / -0.5f;
+		if (scale > 1.0f) {
+			scale = 1.0f;
+		}
+		scale *= 5;
+		const wchar_t* timeUp = L"TimeUp!!";
+		font.Draw(timeUp, { 0.503f, 0.503f }, { 0,0,0,1 }, { scale,scale }, { 0.55f,0.6f },
+				  0.0f, DirectX::SpriteEffects_None, 0.4f);
+		font.Draw(timeUp, { 0.5f, 0.5f }, { 0.2f,0.6f,1,1 }, { scale,scale }, {0.55f,0.6f},
+0.0f, DirectX::SpriteEffects_None, 0.4f);
+	}
 }
 
 void Game::createPlayer(bool isMe, int playerNum) {

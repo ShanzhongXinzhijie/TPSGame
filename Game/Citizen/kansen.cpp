@@ -25,13 +25,13 @@ void kansen::Update(bool isOnGround, float deltaTime)
 			kyori = player->getPosition() - citizen_pos;
 			float kaiten = atan2f(kyori.x, kyori.z);
 
-			if (kyori.Length() < 100.0f) {
+			if (kyori.Length() < 100.0f && !player->GetIsDead()) {
 				Atk = true;
 			}
 			else {
 				Atk = false;
 			}
-			if (kyori.Length() < 800.0f) {
+			if (kyori.Length() < 800.0f && !player->GetIsDead()) {
 				walk = kyori;
 				rot.SetRotation(CVector3::AxisY(), kaiten);
 

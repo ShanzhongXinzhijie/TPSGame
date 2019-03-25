@@ -7,6 +7,7 @@
 #include "Lazer.h"
 #include "Bullet.h"
 #include "CollisionMaskConst.h"
+#include "SE_Util.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem), miniHpbar(maxHp){
@@ -106,7 +107,7 @@ bool CPlayer::damage(const CVector3 & dir, unsigned int damage, const Team* atkT
 		CVector3 pos = getPosition();
 		pos.y += 60.0f;
 		new GameObj::Suicider::CEffekseer(L"Resource/effect/damage.efk", 1.0f, pos);
-		playSE(L"Resource/sound/SE_damage.wav");
+		playSE(L"Resource/sound/SE_damage.wav", getPosition());
 		mover.addVelocity(dir);
 		if (m_hp > damage) {
 			m_hp -= damage;
@@ -115,6 +116,7 @@ bool CPlayer::damage(const CVector3 & dir, unsigned int damage, const Team* atkT
 			Death();
 		}
 		miniHpbar.display(m_hp);
+		return true;
 	}
 	return false;
 }
@@ -141,21 +143,21 @@ void CPlayer::Move() {
 	bool isWalljump = false;
 	//空中に壁に当たりながらジャンプ
 	if (mover.IsContactWall() && !mover.IsOnGround() && action.isJump()) {
-		playSE(L"Resource/sound/SE_jump.wav");
+		playSE(L"Resource/sound/SE_jump.wav", getPosition());
 		mover.walljump(jumpPower, movement);
 		isWalljump = true;
 	}
 	//飛行で壁に突っ込む
 	if (mover.isHitWall()) {
 		//mover.SetFlyTimer(max(0.0f, mover.getFlyTimer() - mover.getFlyTimerMax()*0.1f));//飛行可能時間を消費
-		playSE(L"Resource/sound/SE_jump.wav");
+		playSE(L"Resource/sound/SE_jump.wav", getPosition());
 		isWalljump = true;
 	}
 
 	//ジャンプと飛行
 	if (action.isJump() && !isWalljump) {
 		if (mover.IsOnGround()) {
-			playSE(L"Resource/sound/SE_jump.wav");
+			playSE(L"Resource/sound/SE_jump.wav", getPosition());
 			mover.jump(jumpPower);
 		}
 		else{
@@ -254,12 +256,4 @@ void CPlayer::changeWeapon(unsigned char useWeapon) {
 	weapon[activeWeapon]->Inactivate();
 	weapon[nextWeapon]->Activate();
 	activeWeapon = nextWeapon;
-}
-
-
-void CPlayer::playSE(const wchar_t* path) {
-	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(path);
-	se->SetPos(mover.GetPosition());//音の位置
-	se->SetDistance(500.0f);//音が聞こえる範囲
-	se->Play(true); //第一引数をtrue
 }

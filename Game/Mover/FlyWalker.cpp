@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "FlyWalker.h"
-
+#include "SE_Util.h"
 
 FlyWalker::FlyWalker() {
 }
@@ -15,11 +15,8 @@ FlyWalker::~FlyWalker() {
 void FlyWalker::fly(bool isFly, const CVector3 & v, const CVector2& move, float power) {
 	if (isFly) {
 		if (flyTimer > 0.0f && !m_isRest) {
-			playSE(L"Resource/sound/SE_fly.wav");
-			se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_flying.wav");
-			se->SetPos(GetPosition());
-			se->SetDistance(500.0f);
-			se->Play(true, true);
+			playSE(L"Resource/sound/SE_fly.wav", GetPosition());
+			se = playSE(L"Resource/sound/SE_flying.wav", GetPosition(), 500.0f, true);
 			flyPower = power;
 			CVector3 v2 = v;
 			v2.y = upDown = 0;
@@ -89,7 +86,7 @@ void FlyWalker::Update() {
 			pos.y += 50.0f;
 			restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyStop.efk", 1.0f, pos);
 			restEffect->SetIsSuicide(false);
-			playSE(L"Resource/sound/SE_flyStop.wav");
+			playSE(L"Resource/sound/SE_flyStop.wav", GetPosition());
 		}
 
 		if (IsOnGround() || flyTimer == 0.0f) {
@@ -131,7 +128,7 @@ void FlyWalker::Update() {
 				m_restEfkTimer = c_restEfkTimer;
 				restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRest.efk", 1.0f, pos);
 				restEffect->SetIsSuicide(false);
-				playSE(L"Resource/sound/SE_flyRest.wav");
+				playSE(L"Resource/sound/SE_flyRest.wav", GetPosition());
 			}
 		}
 
@@ -166,7 +163,7 @@ void FlyWalker::Update() {
 			} else if (isRest() && !recoverEffect &&(c_flyTimer-flyTimer) < c_recoverEfkTime) {
 				recoverEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRecover.efk", 1.0f, pos);
 				recoverEffect->SetIsSuicide(false);
-				playSE(L"Resource/sound/SE_flyRecover.wav");
+				playSE(L"Resource/sound/SE_flyRecover.wav", GetPosition());
 			}
 		}
 	}

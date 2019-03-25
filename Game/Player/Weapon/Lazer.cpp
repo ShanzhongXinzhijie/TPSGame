@@ -30,8 +30,8 @@ CVector3 Lazer::GetLockPos()const {
 	return vec;
 }
 
-Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
-	if (player->GetLockOnNum() < 0) { return nullptr; }//ノーロック
+void Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
+	if (player->GetLockOnNum() < 0) { return; }//ノーロック
 
 	CVector3 lockPos = GetLockPos();
 
@@ -77,8 +77,6 @@ Bullet* Lazer::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	if (player->GetLockOnIsPly()) {
 		m_game->getPlayer(player->GetLockOnNum())->SetFlyTimer(0.0f);
 	}
-
-	return B;
 }
 
 WeaponInfo Lazer::getInfo(unsigned int shotAnim, unsigned int reloadAnim) {

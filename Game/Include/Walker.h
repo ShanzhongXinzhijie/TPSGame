@@ -27,8 +27,6 @@ public:
 	}
 
 protected:
-	void playSE(const wchar_t* path);
-
 	CVector3 velocity = { 0.0f, 0.0f, 0.0f };	 //‘¬“x
 
 	CQuaternion m_rot;
