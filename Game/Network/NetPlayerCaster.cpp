@@ -163,13 +163,13 @@ void NetPlayerCaster::PostUpdate() {
 				_event.put((nByte)(enActionSender + 4), (nByte)(std::round(AS.getLookVec().z*100.0f) + 100));
 				//ボタン入力・フラグ
 				nByte bottuns = 0;
-				if (AS.isJump()) { bottuns = bottuns | 0b1; }
+				//if (AS.isJump()) { bottuns = bottuns | 0b1; }
 				if (AS.isDash()) { bottuns = bottuns | 0b10; }
 				if (m_isShot) { bottuns = bottuns | 0b100; }
 				if (m_isReload) { bottuns = bottuns | 0b1000; } m_isReload = false;
 				if (m_pCPlayer->isFlying()) { bottuns = bottuns | 0b10000; }
-				//if (AS.isWeaponLeft()) { bottuns = bottuns | 0b100000; }
-				//if (AS.isWeaponRight()) { bottuns = bottuns | 0b1000000; }
+				if (m_pCPlayer->GetIsSendJumpSE()) { bottuns = bottuns | 0b100000; } m_pCPlayer->OffIsSendJumpSE();
+				if (m_pCPlayer->isRest()) { bottuns = bottuns | 0b1000000; }
 				_event.put((nByte)(enActionSender + 5), (nByte)bottuns);			
 				
 				//ロックオン
@@ -188,7 +188,8 @@ void NetPlayerCaster::PostUpdate() {
 
 				//フライ情報
 				if (m_pCPlayer->isFlying() && m_coolDowmSendFlyTimer <= 0) {
-					_event.put((nByte)enFlyTimer, (int)m_pCPlayer->getFlyTimer());
+					_event.put((nByte)enFlyTimer, (int)(m_pCPlayer->getFlyTimer()*100.0f));
+					_event.put((nByte)(enFlyTimer+1), (int)(m_pCPlayer->getCoolTimer()*100.0f));
 					m_coolDowmSendFlyTimer = 60;
 				}
 

@@ -37,6 +37,9 @@ public:
 	float getFlyPower()const {
 		return mover.GetFlyPower();
 	}
+	bool isRest()const {
+		return mover.isRest();
+	}
 
 	const CVector3& getPosition() const {
 		return mover.GetPosition();
@@ -72,6 +75,9 @@ public:
 	float getFlyTimer()const {
 		return mover.getFlyTimer();
 	}
+	float getCoolTimer()const {
+		return mover.getCoolTimer();
+	}
 	bool GetIsDead()const {
 		return m_hp == 0 ? true : false;
 	}
@@ -93,11 +99,18 @@ public:
 	}
 	void SetIsFly(bool f) { mover.SetIsFly(f); }
 	void SetFlyTimer(float p) { mover.SetFlyTimer(p); }
+	void SetCoolTimer(float p) { mover.SetCoolTimer(p); }
 	void fly() {
 		mover.fly(true, action.getLookVec(),{0,0}, flyPower);
 	}
 	void flyStop() {
 		mover.flyStop();
+	}
+	void rest() {
+		mover.rest();
+	}
+	void restStop() {
+		mover.restStop();
 	}
 	void changeWeapon(unsigned char useWeapon);
 	bool GetIsInit()const { return m_Init; }
@@ -172,7 +185,15 @@ private:
 	bool m_Init = false;
 	//通信キャスター
 	NetPlayerCaster* m_netCaster = nullptr;
+	//送信ジャンプSE
+	bool m_isSendJumpSE = false;
 public:
 	void SetNetCaster(NetPlayerCaster* netcaster) { m_netCaster = netcaster; }
 	NetPlayerCaster* GetNetCaster() const { return m_netCaster; }
+
+	void OffIsSendJumpSE() { m_isSendJumpSE = false; }
+	bool GetIsSendJumpSE()const { return m_isSendJumpSE; }
+	void PlayJumpSE() {
+		playSE(L"Resource/sound/SE_jump.wav");
+	}
 };

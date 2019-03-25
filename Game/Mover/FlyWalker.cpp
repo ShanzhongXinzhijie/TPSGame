@@ -57,6 +57,24 @@ void FlyWalker::flyStop() {
 	}
 }
 
+void FlyWalker::rest() {
+	flyTimer = 0.0f;
+	m_restEfkTimer = c_restEfkTimer;
+	m_isRest = true;
+	CVector3 pos = GetPosition();
+	pos.y += 50.0f;
+	restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyStop.efk", 1.0f, pos);
+	restEffect->SetIsSuicide(false);
+	playSE(L"Resource/sound/SE_flyStop.wav");
+}
+void FlyWalker::restStop() {
+	flyTimer = c_flyTimer;
+	if (isRest()) {
+		coolTimer = 0.0f;
+	}
+	m_isRest = false;
+}
+
 CQuaternion FlyWalker::getRotation() const {
 	return springRot;
 }
@@ -79,14 +97,9 @@ void FlyWalker::Update() {
 		//îÚçsâ¬î\éûä‘å∏è≠
 		flyTimer -= GetDeltaTimeSec();
 		if (flyTimer <= 0.0f) {
-			flyTimer = 0.0f;
-			m_restEfkTimer = c_restEfkTimer;
-			m_isRest = true;
-			CVector3 pos = GetPosition();
-			pos.y += 50.0f;
-			restEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyStop.efk", 1.0f, pos);
-			restEffect->SetIsSuicide(false);
-			playSE(L"Resource/sound/SE_flyStop.wav", GetPosition());
+			if (m_isLocalUser) {
+				rest();
+			}
 		}
 
 		if (IsOnGround() || flyTimer == 0.0f) {
@@ -155,11 +168,7 @@ void FlyWalker::Update() {
 		}else if (flyTimer < c_flyTimer) {
 			flyTimer += GetDeltaTimeSec();
 			if (flyTimer >= c_flyTimer) {
-				flyTimer = c_flyTimer;
-				if (isRest()) {
-					coolTimer = 0.0f;
-				}
-				m_isRest = false;
+				restStop();
 			} else if (isRest() && !recoverEffect &&(c_flyTimer-flyTimer) < c_recoverEfkTime) {
 				recoverEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRecover.efk", 1.0f, pos);
 				recoverEffect->SetIsSuicide(false);

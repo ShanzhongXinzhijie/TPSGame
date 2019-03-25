@@ -70,7 +70,7 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 0))))->getDataCopy() / 100.0f - 1.0f,
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 1))))->getDataCopy() / 100.0f - 1.0f
 				},
-				(buttons & 0b1) != 0,
+				false,//(buttons & 0b1) != 0,
 				(buttons & 0b10) != 0,
 				{
 					(float)((ExitGames::Common::ValueObject<nByte>*)(eventContent.getValue((nByte)(enActionSender + 2))))->getDataCopy() / 100.0f - 1.0f,
@@ -85,6 +85,11 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 			//飛行中のフラグ
 			m_status[playerNr].m_isUpd8Fly = true;
 			m_status[playerNr].m_isFly = (buttons & 0b10000) != 0;			
+			//ジャンプSE
+			m_status[playerNr].m_isJumpSE = (buttons & 0b100000) != 0;
+			//
+			m_status[playerNr].m_isUpd8Rest = true;
+			m_status[playerNr].m_isRest = (buttons & 0b1000000) != 0;			
 		}
 
 		//ロックオン
@@ -102,7 +107,8 @@ void NetPlayerReceiver::RunEvent(int playerNr, bool frameSkip){
 		//フライ情報
 		if (eventContent.getValue((nByte)enFlyTimer)) {
 			m_status[playerNr].m_isUpd8FlyTimer = true;
-			m_status[playerNr].m_flyTimer = (float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enFlyTimer)))->getDataCopy();
+			m_status[playerNr].m_flyTimer = ((float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)enFlyTimer)))->getDataCopy())/100.0f;
+			m_status[playerNr].m_coolTimer = ((float)((ExitGames::Common::ValueObject<int>*)(eventContent.getValue((nByte)(enFlyTimer+1))))->getDataCopy()) / 100.0f;
 		}
 
 		//弾数
@@ -395,9 +401,20 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 				m_pCPlayer[playerNr]->changeWeapon(m_status[playerNr].m_activeWeapon);
 				m_status[playerNr].m_isUpd8ActiveWeapon = false;
 			}
+			//
+			if (m_status[playerNr].m_isUpd8Rest) {
+				if (m_status[playerNr].m_isRest) {
+					if (!m_pCPlayer[playerNr]->isRest()) { m_pCPlayer[playerNr]->rest(); }
+				}
+				else {
+					if (m_pCPlayer[playerNr]->isRest()) { m_pCPlayer[playerNr]->restStop(); }
+				}
+				m_status[playerNr].m_isUpd8Rest = false;
+			}
 			//フライ情報
 			if (m_status[playerNr].m_isUpd8FlyTimer) {
 				m_pCPlayer[playerNr]->SetFlyTimer(m_status[playerNr].m_flyTimer);
+				m_pCPlayer[playerNr]->SetCoolTimer(m_status[playerNr].m_coolTimer);
 				m_status[playerNr].m_isUpd8FlyTimer = false;
 			}
 			//飛行フラグ
@@ -409,6 +426,11 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 					if (m_pCPlayer[playerNr]->isFlying()) { m_pCPlayer[playerNr]->flyStop(); }
 				}
 				m_status[playerNr].m_isUpd8Fly = false;
+			}
+			//ジャンプSE
+			if (m_status[playerNr].m_isJumpSE) {
+				m_pCPlayer[playerNr]->PlayJumpSE();
+				m_status[playerNr].m_isJumpSE = false;
 			}
 			//弾数
 			if (m_status[playerNr].m_isUpd8BulletCnt) {
