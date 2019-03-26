@@ -69,8 +69,12 @@ void Result::PostRender() {
 	//É\Å[Ég
 	std::sort(teamResults.begin(), teamResults.end(), std::greater<teamResult>());
 	wchar_t disp[20];
+	unsigned int rank = 1;
 	for (size_t i = 0; i < teamResults.size(); i++) {
-		swprintf_s(disp, L"%dà  %ls %d ëÃ",i+1 , teamResults[i].name, teamResults[i].count);
+		if (i != 0 && teamResults[i - 1].count != teamResults[i].count) {
+			rank++;
+		}
+		swprintf_s(disp, L"%dà  %ls %d ëÃ",rank , teamResults[i].name, teamResults[i].count);
 		m_font.Draw(disp, { 0.47f,0.3f + (i*0.1f) }, CVector4::White(), { 1.5f,1.5f }, { 0.5f, 0.5f });
 	}
 }
