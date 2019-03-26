@@ -123,6 +123,7 @@ void Lazer::WeaponUpdate(){
 		
 	//ロック継続判定
 	if (player->GetLockOnNum() >= 0 && m_isOnEFF) {
+		bool nolock = false;
 		CVector3 rayStart = player->getPosition(); if (!player->isFlying()) { rayStart.y += 60.0f; }
 		CVector3 targetPos, targetPos_dot;
 		if (player->GetLockOnIsPly()) {
@@ -130,14 +131,20 @@ void Lazer::WeaponUpdate(){
 			targetPos = P->getPosition();
 			targetPos_dot = targetPos;
 			if (!P->isFlying()) { targetPos.y += 60.0f; }
+
+			if (P->GetIsDead()) { nolock = true; }
 		}
 		else {
-			targetPos = m_game->GetCitizenGene().GetCitizen(player->GetLockOnNum())->getPos(); 
+			const Citizen* C = m_game->GetCitizenGene().GetCitizen(player->GetLockOnNum());
+			targetPos = C->getPos(); 
 			targetPos_dot = targetPos;
 			targetPos.y += 60.0f;
+
+			if (C->GetIsDead()) { nolock = true; }
 		}
-		//前後判定
-		if (player->GetActionSender().getLookVec().Dot(targetPos_dot - player->getPosition()) <= 0.0f) {
+		//フラグor前後判定
+		if (nolock || player->GetActionSender().getLookVec().Dot(targetPos_dot - player->getPosition()) <= 0.0f) {
+			//ロック解除
 			player->SetLockOn(player->GetLockOnIsPly(), -1);
 		}
 		else {

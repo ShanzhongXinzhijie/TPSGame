@@ -262,3 +262,7 @@ void CPlayer::changeWeapon(unsigned char useWeapon) {
 	weapon[nextWeapon]->Activate();
 	activeWeapon = nextWeapon;
 }
+
+void CPlayer::PlayJumpSE() {
+	playSE(L"Resource/sound/SE_jump.wav", getPosition());
+}

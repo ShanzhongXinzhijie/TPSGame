@@ -104,7 +104,8 @@ void Wosiris::Update(){
 
 	//¢—‹’e
 	for(auto& P : m_players){
-		if(m_owner != P.first && P.second && !P.first->GetIsDead()){//‘h¶‚µ‚½
+		//‘h¶‚µ‚½&ƒCƒ“ƒrƒWƒuƒ‹ó‘Ô‚Å‚È‚¢
+		if(m_owner != P.first && P.second && !P.first->GetIsDead() && !P.first->GetInvisible()){
 			CVector3 fromPos = {18.85f,166.42f,196.43f };
 			fromPos *= m_model.GetScale();
 			CQuaternion rot = m_model.GetRot();
