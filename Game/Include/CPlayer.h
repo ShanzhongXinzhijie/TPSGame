@@ -121,6 +121,10 @@ public:
 	bool GetLockOnIsPly() const { return m_lockIsPly; }
 	int  GetLockOnNum() const{ return m_lockonNum; }
 
+	//インビジブルフラグ
+	void SetInvisible(bool flag) { m_invisible = flag; }
+	bool GetInvisible() const{ return m_invisible; }
+
 	//モデルを取得
 	GameObj::CSkinModelRender& GetModel() { return m_model; }
 
@@ -164,6 +168,7 @@ protected:
 	unsigned char activeWeapon = -1;
 	Weapon* weapon[WEAPON_NUM]; //武器
 	bool m_lockIsPly = true; int m_lockonNum = -1; //ロックオン対象
+	bool m_invisible = false;//インビジブルフラグ
 private:
 	Wing* wing = nullptr; //翼
 
@@ -194,7 +199,5 @@ public:
 
 	void OffIsSendJumpSE() { m_isSendJumpSE = false; }
 	bool GetIsSendJumpSE()const { return m_isSendJumpSE; }
-	void PlayJumpSE() {
-		playSE(L"Resource/sound/SE_jump.wav");
-	}
+	void PlayJumpSE();
 };

@@ -25,6 +25,7 @@ bool Hades::Start(){
 
 void Hades::Update(){
 	m_owner->GetModel().SetIsDraw(false);
+	m_owner->SetInvisible(true);
 
 	/*if(m_textCnt == 0 && m_owner->GetIsDead()){
 		m_textCnt = 45;
