@@ -7,7 +7,6 @@
 #include "Lazer.h"
 #include "Bullet.h"
 #include "CollisionMaskConst.h"
-#include "SE_Util.h"
 
 CPlayer::CPlayer(int pNum,Team* tem, const CVector3& position)
 	: playerNum(pNum), team(tem), miniHpbar(maxHp){

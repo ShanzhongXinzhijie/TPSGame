@@ -6,6 +6,7 @@
 #include "MiniHPbar.h"
 #include "../Ginger/Ginger.h"
 #include "IDamagable.h"
+#include "SE_Util.h"
 
 class NetPlayerCaster;
 
