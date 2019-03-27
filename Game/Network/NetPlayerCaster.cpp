@@ -21,6 +21,9 @@ NetPlayerCaster::~NetPlayerCaster()
 
 void NetPlayerCaster::PostUpdate() {
 	if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { return; }
+
+	//送信頻度をセット
+	const int sendRate = NET_SEND_RATE[GetPhoton()->GetCountLocalPlayer() - 1];
 	
 	//自分自身か?
 	bool isMe = false;
@@ -53,7 +56,7 @@ void NetPlayerCaster::PostUpdate() {
 			bool isSend = false;
 
 			//12Fに一回送信
-			if (m_cnt % 12 == 0) {
+			if (m_cnt % max(12, sendRate) == 0) {
 				//眷属化を送信
 				if (m_sendKenzokuList.size() > 0) {
 					_event.put((nByte)enKenzoku, (int)m_sendKenzokuList.size());//総数
@@ -154,7 +157,7 @@ void NetPlayerCaster::PostUpdate() {
 			bool isSend = false;
 
 			//4Fに一回送信
-			if (m_cnt % 4 == 0) {
+			if (m_cnt % sendRate == 0) {
 				//アナログ入力
 				_event.put((nByte)(enActionSender + 0), (nByte)(std::round(AS.getMovement().x*100.0f) + 100));
 				_event.put((nByte)(enActionSender + 1), (nByte)(std::round(AS.getMovement().y*100.0f) + 100));
@@ -218,7 +221,7 @@ void NetPlayerCaster::PostUpdate() {
 			}
 
 			//36Fに一回送信
-			if (m_cnt % 36 == 0) {
+			if (m_cnt % max(36, sendRate) == 0) {
 				//市民・ゾンビの位置
 				int citiNum = (int)m_citizenGene->GetCitizenNum();
 				int offset = 0;
