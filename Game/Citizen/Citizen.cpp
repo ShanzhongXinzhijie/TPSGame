@@ -157,7 +157,7 @@ bool Citizen::damage(const CVector3& vec, unsigned int damage, const Team* team,
 }
 
 void Citizen::ChangeToKenzoku(const CPlayer* player) {
-	if (ownerTeam != player->team) {
+	if (ownerTeam != player->getTeam()) {
 		if (!isKenzoku) {
 			Kansenzyoutai();
 		}
@@ -167,7 +167,7 @@ void Citizen::ChangeToKenzoku(const CPlayer* player) {
 		if (ownerTeam != nullptr) {
 			ownerTeam->removeZombie();
 		}
-		ownerTeam = player->team;
+		ownerTeam = player->getTeam();
 		ownerTeam->addZombie();
 
 		m_modelAttack.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {

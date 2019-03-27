@@ -15,33 +15,35 @@ FlyWalker::~FlyWalker() {
 void FlyWalker::fly(bool isFly, const CVector3 & v, const CVector2& move, float power) {
 	if (isFly) {
 		if (flyTimer > 0.0f && !m_isRest) {
-			playSE(L"Resource/sound/SE_fly.wav", GetPosition());
-			se = playSE(L"Resource/sound/SE_flying.wav", GetPosition(), 500.0f, true);
+			playSE(L"Resource/sound/SE_fly.wav", GetPosition());//飛び立つ音
+			se = playSE(L"Resource/sound/SE_flying.wav", GetPosition(), 500.0f, true);//飛行中の風の音
+
+			//視線方向にパワー分だけ加速
 			flyPower = power;
 			CVector3 v2 = v;
-			v2.y = upDown = 0;
+			v2.y = upDown = 0;//水平方向にする
 			velocity = v2 * flyPower;
-			velocity.y += gravity * GetDeltaTimeSec();
 			flying = true;
 
-			springRot = Walker::getRotation();
+			springRot = Walker::getRotation();//追従すべき回転を設定。
 		}
 	} else if (flying) {
 		if (se != nullptr) {
-			se->SetPos(GetPosition());
+			se->SetPos(GetPosition());//風切り音の発生位置を自分の位置に更新
 		}
+		//視線単位ベクトルからy成分を除去
 		CVector3 v2 = v;
 		v2.y = 0;
 		v2.Normalize();
 
+		//上下の方向を滑らかに変更
 		upDown += (move.y*2.4f - upDown) * GetDeltaTimeSec() * 2;
 
 		v2.y = upDown;
 		v2.Normalize();
 		velocity = v2 * flyPower * GetDeltaTimeSec();
-		velocity.y += gravity * GetDeltaTimeSec();
 
-		if (flyPower <= 0) {
+		if (flyPower <= 0) {//時間切れなら飛行停止
 			flyStop();
 		}
 	}
@@ -51,7 +53,7 @@ void FlyWalker::flyStop() {
 	velocity *= 0.5f;
 	flying = false;
 	coolTimer = c_coolTimer;
-	if (se) {
+	if (se) {//風切り音を停止
 		se->Stop();
 		se = nullptr;
 	}
@@ -69,7 +71,7 @@ void FlyWalker::rest() {
 }
 void FlyWalker::restStop() {
 	flyTimer = c_flyTimer;
-	if (isRest()) {
+	if (isFlyRest()) {
 		coolTimer = 0.0f;
 	}
 	m_isRest = false;
@@ -102,6 +104,7 @@ void FlyWalker::Update() {
 			}
 		}
 
+		//地面に立つか時間切れでストップ
 		if (IsOnGround() || flyTimer == 0.0f) {
 			flyStop();
 		}
@@ -120,6 +123,7 @@ void FlyWalker::Update() {
 			float x = sqrt(normal.getX()*normal.getX() + normal.getZ()*normal.getZ());
 			float tan = fabsf(normal.getY() / x + 0.00001f);
 			if (tan < 0.5f) {
+				//壁に衝突した場合跳ね返りがある
 				hitWall = true;
 				CVector3 dir;
 				dir.Set(normal);
@@ -130,12 +134,13 @@ void FlyWalker::Update() {
 		}
 
 	} else {
+		//回転をspringRotに追従させる
 		springRot.Slerp(0.1f, springRot, Walker::getRotation());
 
 		CVector3 pos = GetPosition();
 		pos.y += 50.0f;
 
-		if (isRest()) {
+		if (isFlyRest()) {//rest中のエフェクト
 			m_restEfkTimer -= GetDeltaTimeSec();
 			if (m_restEfkTimer <= 0.0f) {
 				m_restEfkTimer = c_restEfkTimer;
@@ -145,7 +150,7 @@ void FlyWalker::Update() {
 			}
 		}
 
-		if (restEffect) {
+		if (restEffect) {//restEffectの位置を更新する。
 			if (restEffect->IsPlay()) {
 				restEffect->SetPos(pos);
 			} else {
@@ -153,7 +158,7 @@ void FlyWalker::Update() {
 				restEffect = nullptr;
 			}
 		}
-		if (recoverEffect) {
+		if (recoverEffect) {//recoverEffectの位置を更新する
 			if (recoverEffect->IsPlay()) {
 				recoverEffect->SetPos(pos);
 			} else {
@@ -164,12 +169,14 @@ void FlyWalker::Update() {
 
 		//飛行可能時間の回復
 		if (coolTimer > 0.0f) {
+			//まずはクールタイムを減らす
 			coolTimer -= GetDeltaTimeSec();
 		}else if (flyTimer < c_flyTimer) {
+			//それが終わってから飛行タイマーが回復する。
 			flyTimer += GetDeltaTimeSec();
 			if (flyTimer >= c_flyTimer) {
 				restStop();
-			} else if (isRest() && !recoverEffect &&(c_flyTimer-flyTimer) < c_recoverEfkTime) {
+			} else if (isFlyRest() && !recoverEffect &&(c_flyTimer-flyTimer) < c_recoverEfkTime) {
 				recoverEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRecover.efk", 1.0f, pos);
 				recoverEffect->SetIsSuicide(false);
 				playSE(L"Resource/sound/SE_flyRecover.wav", GetPosition());

@@ -73,7 +73,7 @@ bool Wosiris::Start(){
 	if (m_owner) {
 		m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 			if (mat->EqualMaterialName(L"wing")) {
-				mat->SetAlbedoScale(m_owner->team->getColor());
+				mat->SetAlbedoScale(m_owner->getTeam()->getColor());
 			}
 		});
 	}
@@ -156,7 +156,7 @@ void Wosiris::ChangeControl(CPlayer* P) {
 	m_owner = P;
 	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 		if (mat->EqualMaterialName(L"wing")) {
-			mat->SetAlbedoScale(m_owner->team->getColor());
+			mat->SetAlbedoScale(m_owner->getTeam()->getColor());
 		}
 	});
 

@@ -23,8 +23,24 @@ public:
 	bool Start() override;
 	virtual void Update() override;
 	
+	/// <summary>
+	/// プレイヤーに対する様々な操作を伝える。
+	/// </summary>
+	/// <param name="action">操作が格納されたActionSender</param>
 	void sendAction(const ActionSender& action);
 
+	/// <summary>
+	/// ダメージを与える処理。
+	/// </summary>
+	/// <remarks>
+	/// ダメージ分HPから引き、反動として被ダメ者にベクトルを与えることもします。
+	/// 戻り値にfalseが返った場合、攻撃は当たっていません。(すでにプレイヤーが死亡している場合など)
+	/// </remarks>
+	/// <param name="dir">反動ベクトル</param>
+	/// <param name="damage">ダメージ</param>
+	/// <param name="team">攻撃者のチーム</param>
+	/// <param name="">攻撃したプレイヤー</param>
+	/// <returns>攻撃が成功した場合はtrue</returns>
 	bool damage(const CVector3& dir, unsigned int damage,
 				const Team* team = nullptr, const CPlayer* = nullptr) override;
 
@@ -35,26 +51,56 @@ public:
 	bool isFlying()const {
 		return mover.isFlying();
 	}
+
+	/// <summary>
+	/// 飛行速度を取得する。
+	/// </summary>
+	/// <returns>飛行速度(秒速)</returns>
 	float getFlyPower()const {
 		return mover.GetFlyPower();
 	}
-	bool isRest()const {
-		return mover.isRest();
+
+	/// <summary>
+	/// 飛行不可時間中ならtrueを返す
+	/// </summary>
+	/// <returns></returns>
+	bool isFlyRest()const {
+		return mover.isFlyRest();
 	}
 
 	const CVector3& getPosition() const {
 		return mover.GetPosition();
 	}
-
+	/// <summary>
+	/// 重力を取得
+	/// </summary>
 	CVector3 getVelocity() const{
 		return mover.getVelocity();
 	}
 
+	/// <summary>
+	/// 回転を取得
+	/// </summary>
+	/// <returns></returns>
 	CQuaternion getRotation() const{
 		return mover.getRotation();
 	}
 
-	Team* team;
+	/// <summary>
+	/// チームを取得
+	/// </summary>
+	/// <returns></returns>
+	Team* getTeam() const{
+		return team;
+	}
+
+	/// <summary>
+	/// チームを設定
+	/// </summary>
+	/// <param name="team"></param>
+	void setTeam(Team* team) {
+		this->team = team;
+	}
 
 	const int playerNum;
 
@@ -73,21 +119,48 @@ public:
 	const ActionSender& GetActionSender()const {
 		return action;
 	}
+	/// <summary>
+	/// 飛行可能時間を取得
+	/// </summary>
+	/// <returns></returns>
 	float getFlyTimer()const {
 		return mover.getFlyTimer();
 	}
+	/// <summary>
+	/// 飛行中止後に飛行可能時間が回復し始めるまでのクールタイムを取得
+	/// </summary>
+	/// <returns></returns>
 	float getCoolTimer()const {
 		return mover.getCoolTimer();
 	}
+
+	/// <summary>
+	/// 死んでいるならtrueを返す
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsDead()const {
 		return m_hp == 0 ? true : false;
 	}
+
+	/// <summary>
+	/// 武器配列を取得
+	/// </summary>
+	/// <returns></returns>
 	Weapon** GetWeapons() {
 		return weapon;
 	}
+	/// <summary>
+	/// 武器配列の要素数を取得
+	/// </summary>
+	/// <returns></returns>
 	int GetWeaponNum()const {
 		return WEAPON_NUM;
 	}
+
+	/// <summary>
+	/// 手に持っている武器の要素番号を取得
+	/// </summary>
+	/// <returns></returns>
 	unsigned char GetActiveWeapon()const {
 		return activeWeapon;
 	}
@@ -113,7 +186,12 @@ public:
 	void restStop() {
 		mover.restStop();
 	}
+	/// <summary>
+	/// 武器を変更します。
+	/// </summary>
+	/// <param name="useWeapon">変更する武器の要素番号</param>
 	void changeWeapon(unsigned char useWeapon);
+
 	bool GetIsInit()const { return m_Init; }
 
 	//ロックオン
@@ -144,7 +222,15 @@ private:
 	void Move();
 	void Shot();
 	void Reload();
-	void changeWeapon(bool left, bool Right);
+	/// <summary>
+	/// 武器を変更する。
+	/// </summary>
+	/// <remarks>
+	/// leftならマイナス、rightならプラス方向に武器配列を移動します。
+	/// 両方押された場合、なにもしません。</remarks>
+	/// <param name="left">trueならマイナス方向に移動</param>
+	/// <param name="Right">trueならプラス方向に移動</param>
+	void changeWeapon(bool left, bool right);
 
 	GameObj::CSkinModelRender m_model;
 	enum {
@@ -160,25 +246,26 @@ private:
 	};
 	AnimationClip m_animationClips[anim_num];
 
+	Team* team;
+
 protected:
 	static constexpr unsigned short maxHp = 1000;
 	unsigned short m_hp = maxHp;
-	MiniHPbar miniHpbar;
+	MiniHPbar miniHpbar;//頭上に表示されるHPバー
 	FlyWalker mover;    //動きの管理
-	unsigned char activeWeapon = -1;
+	unsigned char activeWeapon = -1;//アクティブな武器の要素番号
 	Weapon* weapon[WEAPON_NUM]; //武器
 	bool m_lockIsPly = true; int m_lockonNum = -1; //ロックオン対象
 	bool m_invisible = false;//インビジブルフラグ
 private:
 	Wing* wing = nullptr; //翼
 
-	static constexpr float constDeathCool = 10;
-	float deathCool = 0;
+	static constexpr float constDeathCool = 10;//蘇生までの死んでいる時間
+	float deathCool = 0;//今現在の蘇生するまでの時間
 
-	CQuaternion m_rot;
-	float radian = 0.0f; //回転量
+	CQuaternion m_rot;//回転
 
-	static constexpr float flyPower = 60000.0f; //飛行力
+	static constexpr float flyPower = 70000.0f; //飛行力
 	static constexpr float jumpPower = 600.0f; //ジャンプ力
 	static constexpr float moveSpeed = 40.0f; //移動速度
 	static constexpr float dashMul = 2.0f; //ダッシュ倍率

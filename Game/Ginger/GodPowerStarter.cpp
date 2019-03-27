@@ -133,7 +133,7 @@ void GodPowerStarter::Update(){
 			CPlayer* P_sacrifice[3] = {};
 			for (int i = 0; i < m_pGame->GetCitizenGene().GetCitizenNum(); i++) {
 				Citizen* C = m_pGame->GetCitizenGene().GetCitizen(i);
-				if (m_pPlayer->team == C->GetOwnerTeam() && !C->GetIsDead() && (C->getPos() - m_pPlayer->getPosition()).LengthSq() < sacrificeRange*sacrificeRange) {
+				if (m_pPlayer->getTeam() == C->GetOwnerTeam() && !C->GetIsDead() && (C->getPos() - m_pPlayer->getPosition()).LengthSq() < sacrificeRange*sacrificeRange) {
 					C_sacrifice[cnt] = C;
 					cnt++;
 					if (cnt == 3) { break; }
@@ -141,7 +141,7 @@ void GodPowerStarter::Update(){
 			}
 			if (cnt < 3) {
 				for (auto& P : m_pGame->getPlayers()) {
-					if (m_pPlayer != P.second && m_pPlayer->team == P.second->team && !P.second->GetIsDead() && (P.second->getPosition() - m_pPlayer->getPosition()).LengthSq() < sacrificeRange*sacrificeRange) {
+					if (m_pPlayer != P.second && m_pPlayer->getTeam() == P.second->getTeam() && !P.second->GetIsDead() && (P.second->getPosition() - m_pPlayer->getPosition()).LengthSq() < sacrificeRange*sacrificeRange) {
 						P_sacrifice[cnt] = P.second;
 						cnt++;
 						if (cnt == 3) { break; }

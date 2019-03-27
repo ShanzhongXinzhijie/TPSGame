@@ -122,7 +122,7 @@ void MainPlayer::Update() {
 
 void MainPlayer::PostRender() {
 	//HP表示
-	hpbar.Draw(CPlayer::m_hp, mover.getFlyTimer(), mover.isRest());
+	hpbar.Draw(CPlayer::m_hp, mover.getFlyTimer(), mover.isFlyRest());
 
 	//弾数表示
 	weapon[activeWeapon]->drawBulletCount(font);
@@ -130,7 +130,7 @@ void MainPlayer::PostRender() {
 	if (!GameWaiter::GetIsWait()) {
 		//自チームの眷族数の表示
 		wchar_t countDisp[12];
-		swprintf_s(countDisp, L"Zombie:%d", team->getZombieCount());
+		swprintf_s(countDisp, L"Zombie:%d", getTeam()->getZombieCount());
 		font.Draw(countDisp, { 0.014f, 0.086f }, { 0,0,0,1 }, {1.2f, 1.2f});
 		font.Draw(countDisp, { 0.011f, 0.083f },{ 1,1,1,1 }, { 1.2f, 1.2f });
 	}

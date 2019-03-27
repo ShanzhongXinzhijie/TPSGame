@@ -26,6 +26,12 @@ public:
 
 	void reload();
 
+	/// <summary>
+	/// アクティブ化する。
+	/// </summary>
+	/// <remarks>
+	/// アクティブにするとモデルが描画される。
+	/// </remarks>
 	void Activate() {
 		isActive = true;
 		weaponModel.SetIsDraw(true);

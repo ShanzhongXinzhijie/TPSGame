@@ -404,10 +404,10 @@ void NetPlayerReceiver::UpdatePlayer(int playerNr) {
 			//
 			if (m_status[playerNr].m_isUpd8Rest) {
 				if (m_status[playerNr].m_isRest) {
-					if (!m_pCPlayer[playerNr]->isRest()) { m_pCPlayer[playerNr]->rest(); }
+					if (!m_pCPlayer[playerNr]->isFlyRest()) { m_pCPlayer[playerNr]->rest(); }
 				}
 				else {
-					if (m_pCPlayer[playerNr]->isRest()) { m_pCPlayer[playerNr]->restStop(); }
+					if (m_pCPlayer[playerNr]->isFlyRest()) { m_pCPlayer[playerNr]->restStop(); }
 				}
 				m_status[playerNr].m_isUpd8Rest = false;
 			}

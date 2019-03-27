@@ -169,7 +169,7 @@ void NetPlayerCaster::PostUpdate() {
 				if (m_isReload) { bottuns = bottuns | 0b1000; } m_isReload = false;
 				if (m_pCPlayer->isFlying()) { bottuns = bottuns | 0b10000; }
 				if (m_pCPlayer->GetIsSendJumpSE()) { bottuns = bottuns | 0b100000; } m_pCPlayer->OffIsSendJumpSE();
-				if (m_pCPlayer->isRest()) { bottuns = bottuns | 0b1000000; }
+				if (m_pCPlayer->isFlyRest()) { bottuns = bottuns | 0b1000000; }
 				_event.put((nByte)(enActionSender + 5), (nByte)bottuns);			
 				
 				//ƒƒbƒNƒIƒ“

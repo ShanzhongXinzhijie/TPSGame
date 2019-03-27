@@ -36,7 +36,11 @@ Bullet::Bullet(CPlayer* player, CVector3 position, CVector3 direction,
 	m_collision.SetCallback([&](CCollisionObj::SCallbackParam& callback) {
 		IDamagable* hitted = callback.GetClass<IDamagable>();
 		if (hitted && (IDamagable*)shotPlayer != hitted && lastHit != hitted) {
-			if (hitted->damage(m_dir, m_damage, shotPlayer->team, shotPlayer)) {
+			CVector3 damageDir = m_dir;
+			damageDir.Normalize();
+			damageDir.y += 0.5f;
+			damageDir *= 100;
+			if (hitted->damage(damageDir, m_damage, shotPlayer->getTeam(), shotPlayer)) {
 				if (isThrough) {
 					lastHit = hitted;
 				} else {

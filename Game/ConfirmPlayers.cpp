@@ -297,6 +297,15 @@ void ConfirmPlayers::PostRender() {
 		wchar_t str[128];
 		swprintf_s(str, L"Time:%.1f\nCitizen:%d", m_timeLimit, m_citizenCnt);
 		m_font.Draw(str, { 0.86f,0.0f }, CVector4::White(), CVector2::One(), { 0.0f,0.0f });
+		m_font.Draw(L"< backボタンでタイトルにもどる",
+					{ 0.01f,0.0f }, CVector4::White(), {0.7f,0.7f}, { 0.0f,0.0f });
+		if (!m_isReady) {
+			m_font.Draw(L"startボタンでじゅんびかんりょう",
+						{ 0.5f,0.95f }, CVector4::White(), { 0.7f,0.7f }, { 0.5f,0.0f });
+		} else {
+			m_font.Draw(L"ぜんいんそろったらかいし",
+						{ 0.5f,0.95f }, CVector4::White(), { 0.7f,0.7f }, { 0.5f,0.0f });
+		}
 	}
 }
 
