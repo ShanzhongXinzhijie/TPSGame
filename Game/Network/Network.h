@@ -5,7 +5,7 @@
 #include "NetGameEventReceiver.h"
 #include "NetworkConst.h"
 
-static const wchar_t NETWORK_VER[] = L"Alpha22";
+static const wchar_t NETWORK_VER[] = L"Alpha23";
 
 class NetWorkManager : public IGameObject{
 public:

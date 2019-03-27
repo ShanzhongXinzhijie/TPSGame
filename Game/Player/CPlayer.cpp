@@ -159,13 +159,19 @@ void CPlayer::Death() {
 	m_hp = 0;
 	deathCool = constDeathCool;//蘇生時間の設定
 	m_model.SetIsDraw(false);
-	weapon[activeWeapon]->Inactivate();//武器も非アクティブ化しないとモデルだけが残る
+	weapon[activeWeapon]->Inactivate();
+	//あたり判定を消す
+	m_collision.SetEnable(false);
+	mover.RemoveRigidBoby();
 }
 //蘇生処理
 void CPlayer::Revive() {
 	m_hp = maxHp;
 	m_model.SetIsDraw(true);
 	weapon[activeWeapon]->Activate();
+	//あたり判定の再生
+	m_collision.SetEnable(true);
+	mover.AddRigidBoby();
 }
 
 void CPlayer::Move() {
@@ -275,7 +281,8 @@ void CPlayer::Reload() {
 }
 
 void CPlayer::changeWeapon(bool left, bool right) {
-	if (left == right) { return; }//片方だけが押されている場合のみ武器変更
+	if (left == right) { return; }
+
 	int nextWeapon = (int)activeWeapon;
 	if (left) { nextWeapon -= 1;}
 	if (right) { nextWeapon += 1;}
@@ -287,6 +294,8 @@ void CPlayer::changeWeapon(bool left, bool right) {
 	activeWeapon = (unsigned int)nextWeapon;//手に持っている武器を変更
 }
 void CPlayer::changeWeapon(unsigned char useWeapon) {
+	if (GetIsDead()) { return; }
+
 	short nextWeapon = useWeapon;
 	if (nextWeapon < 0) { nextWeapon = WEAPON_NUM - 1; }
 	if (nextWeapon >= WEAPON_NUM) { nextWeapon = 0; }
