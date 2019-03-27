@@ -110,12 +110,12 @@ void Ginger::Konryu(){
 					se->Play(true);
 				}
 				if(m_hp <= 0 && !m_isWillDestroy){//破壊
-					m_isWillDestroy = true;
 #ifdef SpritScreen
 					//神のパワー獲得
 					bullet->getShooter()->SetGodPower((GodPowerType)m_powerType);
 					//破壊
 					Destory();
+					m_isWillDestroy = true;
 #else
 					//マスターが上げるやつ決める
 					if (bullet->getShooter()->playerNum == GetPhoton()->GetLocalPlayerNumber()) {
@@ -125,6 +125,7 @@ void Ginger::Konryu(){
 						else {
 							bullet->getShooter()->GetNetCaster()->SendDestroyGinger(m_index);
 						}
+						m_isWillDestroy = true;
 					}
 #endif
 				}
