@@ -16,7 +16,7 @@ void HandGun::createBullet(CPlayer * player, CVector3 pos, CVector3 dir) {
 	const float angle = 20.0f;
 	const int count = 3;
 	CQuaternion rot;
-	rot.SetRotationDeg(CVector3::AxisY(), -(angle*count/2));
+	rot.SetRotationDeg(CVector3::AxisY(), -(angle*(count-1)/2));
 	rot.Multiply(dir);
 	rot.SetRotationDeg(CVector3::AxisY(), angle);
 	for (int i = 0; i < count; i++) {
