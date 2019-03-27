@@ -34,6 +34,7 @@ void Walker::walljump(float jumpPower, CVector2 move) {
 }
 
 void Walker::Update() {
+	springRotation();
 	//èdóÕ
 	if (!IsOnGround()) {
 		velocity.y -= gravity * GetDeltaTimeSec();
@@ -90,34 +91,16 @@ void Walker::Update() {
 
 void Walker::turn(float x, float z) {
 	if (z != 0 || x != 0) {
-		float rotRad = atan2f(x, z) - radian;
-		if (rotRad != 0) {
-			char sign = 1;
-			if (rotRad < 0) {
-				sign = -1;
-			}
-			if (CMath::PI < rotRad*sign) {
-				rotRad -= CMath::PI2*sign;
-				sign = -sign;
-			}
-			float delta = GetDeltaTimeSec();
-			if (rotRad*sign < CMath::PI * delta * 7) {
-				radian += rotRad;
-			} else {
-				radian += sign * CMath::PI * delta * 7;
-			}
-			if (radian < -CMath::PI) {
-				radian += CMath::PI2;
-			} else if (CMath::PI < radian) {
-				radian -= CMath::PI2;
-			}
-			m_rot.SetRotation(CVector3::AxisY(), radian);
-		}
+		m_rot.SetRotation(CVector3::AxisY(), atan2f(x, z));
 	}
 }
 
 void Walker::addVelocity(const CVector3& v) {
 	velocity += v;
+}
+
+void Walker::springRotation() {
+	springRot.Slerp(0.1f, springRot, m_rot);
 }
 
 

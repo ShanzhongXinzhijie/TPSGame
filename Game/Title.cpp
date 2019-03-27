@@ -45,7 +45,7 @@ bool Title::Start() {
 }
 
 void Title::Update() {
-	if (Pad(0).GetDown(enButtonA) && fade->isIdel()) {
+	if (Pad(0).GetDown(enButtonA) && fade->isIdle()) {
 		NewGO<SuicideObj::CSE>(L"Resource/sound/SE_select.wav")->Play();
 		fade->fadeIn([&]() {
 			new ConfirmPlayers(fade, bgm);
@@ -53,7 +53,7 @@ void Title::Update() {
 		});
 	}
 
-	if (Pad(0).GetDown(enButtonLB1) && fade->isIdel()) {
+	if (Pad(0).GetDown(enButtonLB1) && fade->isIdle()) {
 		m_configData.lowGraphics = !m_configData.lowGraphics;
 	}
 }

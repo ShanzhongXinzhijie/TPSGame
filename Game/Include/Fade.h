@@ -1,4 +1,7 @@
 #pragma once
+/// <summary>
+/// フェードイン・フェードアウトを行うクラス
+/// </summary>
 class Fade : public IGameObject{
 public:
 	Fade();
@@ -7,14 +10,24 @@ public:
 	void PostRender() override;
 
 	void fadeOut();
+
+	/// <summary>
+	/// フェードイン
+	/// </summary>
+	/// <remarks>暗転しきった後に実行したい処理を関数オブジェクトとして渡すことができます</remarks>
+	/// <param name="function">暗転した後実行する処理</param>
 	void fadeIn(const std::function<void()>& function);
 
-	bool isIdel() {
+	/// <summary>
+	/// フェードイン・フェードアウト中でなければtrue
+	/// </summary>
+	/// <returns></returns>
+	bool isIdle() {
 		return state == Idle;
 	};
 
 private:
-	float alpha = 1.0f;
+	float alpha = 1.0f;//透明度
 	enum State {
 		In,
 		Out,

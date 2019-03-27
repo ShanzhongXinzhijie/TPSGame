@@ -100,7 +100,7 @@ void ConfirmPlayers::Update() {
 		//ルームに入るのを待つ
 		if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED) { isJoin = false; }
 #endif
-		if (isJoin && fade->isIdel()) {
+		if (isJoin && fade->isIdle()) {
 #ifdef SpritScreen
 			int seed = CMath::RandomInt();
 			//ゲーム開始
@@ -299,13 +299,14 @@ void ConfirmPlayers::PostRender() {
 		m_font.Draw(str, { 0.86f,0.0f }, CVector4::White(), CVector2::One(), { 0.0f,0.0f });
 		m_font.Draw(L"< backボタンでタイトルにもどる",
 					{ 0.01f,0.0f }, CVector4::White(), {0.7f,0.7f}, { 0.0f,0.0f });
+
+		const wchar_t* under;
 		if (!m_isReady) {
-			m_font.Draw(L"startボタンでじゅんびかんりょう",
-						{ 0.5f,0.95f }, CVector4::White(), { 0.7f,0.7f }, { 0.5f,0.0f });
+			under = L"startボタンでじゅんびかんりょう";
 		} else {
-			m_font.Draw(L"ぜんいんそろったらかいし",
-						{ 0.5f,0.95f }, CVector4::White(), { 0.7f,0.7f }, { 0.5f,0.0f });
+			under = L"ぜんいんそろったらかいし";
 		}
+		m_font.Draw(under, { 0.5f,0.93f }, CVector4::White(), { 0.7f,0.7f }, { 0.5f,0.0f });
 	}
 }
 

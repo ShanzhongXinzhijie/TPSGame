@@ -13,6 +13,7 @@
 Game* Game::static_game = nullptr;
 
 Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_ms) : citizenGene(this), timer(timeLimit){
+	//市民とプレイヤーの発生位置の設定
 	level.Init(L"Resource/Level/level.tkl", [&](LevelObjectData& objData)->bool {
 		if (objData.EqualObjectName(L"player700")) {
 			playerGene.addSpawner(objData.position, 780.0f);
@@ -23,6 +24,7 @@ Game::Game(Fade* fade, float timeLimit, int citizenCnt, int seed, int startTime_
 		}
 		return true;
 	});
+	//舞台の生成
 	ground = new Ground(CVector3::Zero());
 
 	bgm = NewGO<SuicideObj::CBGM>(L"Resource/sound/BGM_battle.wav");
@@ -90,6 +92,7 @@ Game::~Game() {
 }
 
 void Game::Update() {
+	//開始前待機時間
 	if (m_waitGameStartTimer_sec > 0.0f) {
 		m_waitGameStartTimer_sec -= GetDeltaTimeSec();
 		if (m_waitGameStartTimer_sec <= 0.0f) {
@@ -102,13 +105,18 @@ void Game::Update() {
 		}
 	}
 
+	//制限時間の減少
 	if (timer > fadeInDelay) {
 		timer -= GetDeltaTimeSec();
 	}
+
+	//タイムアップ
 	if (timer < 0 && !GameWaiter::GetIsWait()) {
 		GameWaiter::SetIsWait(true);
 		NewGO<SuicideObj::CSE>(L"Resource/sound/SE_timeUp.wav")->Play(false);
 	}
+
+	//ゲームの終了処理
 	if (timer <= fadeInDelay && !gameIsEnd) {
 		timer = fadeInDelay;
 		gameIsEnd = true;
@@ -167,7 +175,7 @@ void Game::Update() {
 }
 
 void Game::PostRender() {
-
+	//開始前待機時間の描画
 	if (m_waitGameStartTimer_sec > 0.0f) {
 		wchar_t countDisp[24];
 		swprintf_s(countDisp, L"Ready... %.1f sec", m_waitGameStartTimer_sec);
@@ -180,12 +188,12 @@ void Game::PostRender() {
 	float l_timer = timer;
 	if (l_timer < 0) {
 		l_timer = 0;
-	}
+	}//制限時間の描画
 	swprintf_s(countDisp, L"Time: %.1f sec", l_timer);
 	font.Draw(countDisp, { 0.013f, 0.013f }, { 0,0,0,1 }, {1.2f,1.2f});
 	font.Draw(countDisp, { 0.01f, 0.01f }, { 1,1,1,1 }, { 1.2f,1.2f });
 
-	if (timer < 0) {
+	if (timer < 0) {//ゲーム終了後、TimeUpと表示する
 		float scale = timer / -0.5f;
 		if (scale > 1.0f) {
 			scale = 1.0f;

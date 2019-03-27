@@ -31,7 +31,9 @@ public:
 	/// </summary>
 	void restStop();
 
-	CQuaternion getRotation() const;
+	CQuaternion getRotation() const {
+		return Walker::springRot;
+	}
 
 	/// <summary>
 	/// 飛行可能残り時間を取得
@@ -101,6 +103,9 @@ public:
 
 	static constexpr float c_flyTimer = 5.0f;//最大飛行可能時間
 private:
+	//バネ回転
+	void springRotation() override;
+
 	bool m_isLocalUser = true;
 
 	float flyTimer = c_flyTimer; //飛行可能な残り時間
@@ -118,8 +123,6 @@ private:
 	float upDown = 0.0f;//上下方向の移動
 
 	bool hitWall = false;//壁に衝突したらtrueになる
-
-	CQuaternion springRot;//滑らかなバネ回転のための四元数
 
 	float flyPower = 0.0f;
 	bool flying = false;

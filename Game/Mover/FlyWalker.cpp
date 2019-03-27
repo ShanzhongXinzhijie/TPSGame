@@ -77,25 +77,9 @@ void FlyWalker::restStop() {
 	m_isRest = false;
 }
 
-CQuaternion FlyWalker::getRotation() const {
-	return springRot;
-}
-
 void FlyWalker::Update() {
 	hitWall = false;
 	if (flying) {
-		{//バネ回転
-			CQuaternion rot;
-			rot.SetRotation(CVector3::AxisY(), atan2f(velocity.x, velocity.z));
-
-			float xz = velocity.x*velocity.x + velocity.z*velocity.z;
-			xz = sqrt(xz);
-
-			rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-velocity.y, xz) + (CMath::PI * 0.5f)));
-
-			springRot.Slerp(0.1f, springRot, rot);
-		}
-
 		//飛行可能時間減少
 		flyTimer -= GetDeltaTimeSec();
 		if (flyTimer <= 0.0f) {
@@ -134,9 +118,6 @@ void FlyWalker::Update() {
 		}
 
 	} else {
-		//回転をspringRotに追従させる
-		springRot.Slerp(0.1f, springRot, Walker::getRotation());
-
 		CVector3 pos = GetPosition();
 		pos.y += 50.0f;
 
@@ -177,6 +158,7 @@ void FlyWalker::Update() {
 			if (flyTimer >= c_flyTimer) {
 				restStop();
 			} else if (isFlyRest() && !recoverEffect &&(c_flyTimer-flyTimer) < c_recoverEfkTime) {
+				//エフェクト終了時にちょうど飛行時間回復するように再生する
 				recoverEffect = new GameObj::Suicider::CEffekseer(L"Resource/effect/flyRecover.efk", 1.0f, pos);
 				recoverEffect->SetIsSuicide(false);
 				playSE(L"Resource/sound/SE_flyRecover.wav", GetPosition());
@@ -184,4 +166,20 @@ void FlyWalker::Update() {
 		}
 	}
 	Walker::Update();
+}
+
+void FlyWalker::springRotation() {
+	if (flying) {
+		CQuaternion rot;
+		rot.SetRotation(CVector3::AxisY(), atan2f(velocity.x, velocity.z));
+
+		float xz = velocity.x*velocity.x + velocity.z*velocity.z;
+		xz = sqrt(xz);
+
+		rot.Multiply(CQuaternion::GetRotation(CVector3::AxisX(), atan2f(-velocity.y, xz) + (CMath::PI * 0.5f)));
+
+		springRot.Slerp(0.1f, springRot, rot);
+	} else {
+		Walker::springRotation();
+	}
 }
