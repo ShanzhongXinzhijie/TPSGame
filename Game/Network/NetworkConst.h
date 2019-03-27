@@ -1,6 +1,6 @@
 #pragma once
 
-static constexpr int NET_MAX_PLAYER = 10;
+static constexpr int NET_MAX_PLAYER = 6;// 10;
 static constexpr int NET_SEND_RATE[10] = {4,4,4,4,5,8,12,16,20,25};
 
 enum NetworkEventCode {
