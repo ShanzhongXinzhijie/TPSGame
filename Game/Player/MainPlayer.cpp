@@ -97,13 +97,11 @@ void MainPlayer::Update() {
 
 	CPlayer::Update();
 
-	if (Pad(playerNum).GetDown(enButtonUp)) {
-		if (!m_camera.getLeft()) {
+	if (Pad(playerNum).GetDown(enButtonLeft)) {
 			m_camera.setLeft();
-		}
-		else {
+	}else
+	if (Pad(playerNum).GetDown(enButtonRight)) {
 			m_camera.setRight();
-		}
 	}
 	if (Pad(playerNum).GetButton(enButtonDown)) {
 		m_camera.BackTurn();
