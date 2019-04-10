@@ -60,7 +60,7 @@ void Title::Update() {
 
 void Title::PostRender() {
 	m_sprite.Draw({ 0.5f, 0.5f }, CVector2::One(), {0.5f, 0.5f});
-	m_font.Draw(L"V a n p i r e", { 0.47f,0.3f }, CVector4::White(), { 3.0f,3.0f }, { 0.5f, 0.5f });
+	m_font.Draw(L"V a m p i r e", { 0.47f,0.3f }, CVector4::White(), { 3.0f,3.0f }, { 0.5f, 0.5f });
 	m_font.Draw(L"push A to Start", { 0.47f, 0.8f }, CVector4::White(), { 1.5f,1.5f }, { 0.5f, 0.5f });
 
 	if (m_configData.lowGraphics) {
