@@ -4,14 +4,16 @@
 
 #include"MotionBlurHeader.h"
 
-#if defined(ALL)
+#if defined(ALL_VS)
 #define MOTIONBLUR 1
 #define NORMAL_MAP 1
 #endif
 
 /////////////////////////////////////////////////////////////
 // Shader Resource View
+// [SkinModelShaderConst.h:EnSkinModelSRVReg]
 /////////////////////////////////////////////////////////////
+#if ALBEDO_MAP || defined(TEXTURE) || defined(SKY_CUBE)
 #if !defined(SKY_CUBE)
 //アルベドテクスチャ。
 Texture2D<float4> albedoTexture : register(t0);	
@@ -19,16 +21,22 @@ Texture2D<float4> albedoTexture : register(t0);
 //スカイボックス用キューブマップ
 TextureCube<float4> skyCubeMap : register(t0);
 #endif
+#endif
 #if NORMAL_MAP
 //ノーマルマップ
 Texture2D<float3> NormalTexture : register(t1);
 #endif
+#if LIGHTING_MAP
+//ライティングパラメータマップ
+Texture2D<float4> LightingTexture : register(t2);
+#endif
+
 //ボーン行列
-StructuredBuffer<float4x4> boneMatrix : register(t2);
-StructuredBuffer<float4x4> boneMatrixOld : register(t3);
+StructuredBuffer<float4x4> boneMatrix : register(t3);
+StructuredBuffer<float4x4> boneMatrixOld : register(t4);
 //インスタンシング用ワールド行列
-StructuredBuffer<float4x4> InstancingWorldMatrix : register(t4);
-StructuredBuffer<float4x4> InstancingWorldMatrixOld : register(t5);
+StructuredBuffer<float4x4> InstancingWorldMatrix : register(t5);
+StructuredBuffer<float4x4> InstancingWorldMatrixOld : register(t6);
 
 /////////////////////////////////////////////////////////////
 // SamplerState
@@ -37,6 +45,7 @@ sampler Sampler : register(s0);
 
 /////////////////////////////////////////////////////////////
 // 定数バッファ。
+// [SkinModelShaderConst.h:EnSkinModelCBReg]
 /////////////////////////////////////////////////////////////
 /*!
  * @brief	頂点シェーダーとピクセルシェーダー用の定数バッファ。
@@ -60,12 +69,15 @@ cbuffer VSPSCb : register(b0){
 	float3 camWorldPos;
 };
 
+//定数バッファ　[MaterialSetting.h:MaterialParam]
 //マテリアルパラメーター
 cbuffer MaterialCb : register(b1) {
 	float4 albedoScale;	//アルベドにかけるスケール
 	float  emissive;	//自己発光
 	float  isLighting;	//ライティングするか
-	float2 uvOffset;
+	float  metallic;	//メタリック
+	float  shininess;	//シャイネス(ラフネスの逆)
+	float2 uvOffset;	//UV座標オフセット
 }
 
 /////////////////////////////////////////////////////////////
@@ -394,6 +406,7 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 	PSOutput_RenderGBuffer Out = (PSOutput_RenderGBuffer)0;
 
 	//アルベド
+#if ALBEDO_MAP || defined(SKY_CUBE)
 #if !defined(SKY_CUBE)
 	//通常
 	Out.albedo = albedoTexture.Sample(Sampler, In.TexCoord + uvOffset);	
@@ -401,15 +414,19 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 	//スカイボックス
 	Out.albedo = skyCubeMap.SampleLevel(Sampler, In.cubemapPos, 0);
 #endif
-	Out.albedo.xyz = pow(Out.albedo.xyz, 2.2f);
-	Out.albedo *= albedoScale;
+	Out.albedo.xyz = pow(Out.albedo.xyz, 2.2f);//リニア空間に変換
+	Out.albedo *= albedoScale;//スケールをかける
+#else
+	//アルベドテクスチャがない場合はスケールをそのまま使う
+	Out.albedo = albedoScale;
+#endif
 
 	//αテスト
 	if (Out.albedo.a > 0.5f) { 
 		Out.albedo.a = 1.0f;//半透明無効
 	}
 	else {
-		discard;
+		discard;//描画しない
 	}
 
 	//法線
@@ -424,16 +441,26 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 	Out.viewpos = float4(In.Viewpos.x, In.Viewpos.y, In.Viewpos.z + depthBias.y, In.curPos.z / In.curPos.w + depthBias.x);
 
 	//ライティング用パラメーター
-	Out.lightingParam.x = emissive;//エミッシブ
-	Out.lightingParam.y = isLighting;//ライティングするか?
-	Out.lightingParam.z = 0.0f;//メタリック
-	Out.lightingParam.w = 0.38f;//シャイニネス
+#if LIGHTING_MAP
+	//x:エミッシブ y:メタリック z:シャイニネス w:ライティングするか?
+	float4 lightMap = LightingTexture.Sample(Sampler, In.TexCoord + uvOffset);
+	Out.lightingParam.x = lightMap.x * emissive;	//エミッシブ
+	Out.lightingParam.y = lightMap.w * isLighting;	//ライティングするか?
+	Out.lightingParam.z = lightMap.y * metallic;	//メタリック
+	Out.lightingParam.w = lightMap.z * shininess;	//シャイニネス
+#else
+	Out.lightingParam.x = emissive;		//エミッシブ
+	Out.lightingParam.y = isLighting;	//ライティングするか?
+	Out.lightingParam.z = metallic;		//メタリック
+	Out.lightingParam.w = shininess;	//シャイニネス
+#endif
 
 	//速度
 #if MOTIONBLUR
 		float2	current = In.curPos.xy / In.curPos.w;
 		float2	last = In.lastPos.xy / In.lastPos.w;		
 
+		//無効
 		if (In.lastPos.z < 0.0f) {
 		//if (last.z < 0.0f || last.z > 1.0f) {
 			Out.velocity.z = min(In.curPos.z, In.lastPos.z) + depthBias.y;
@@ -450,11 +477,12 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 		Out.velocity.z = min(In.curPos.z, In.lastPos.z) + depthBias.y;
 		Out.velocity.w = max(In.curPos.z, In.lastPos.z) + depthBias.y;
 
+		//オブジェクトが動いている or カメラに近い
 		if (In.isWorldMove || In.curPos.z + depthBias.y < depthBias.z) {
 			Out.velocity.xy = current.xy - last.xy;
 
 			Out.velocityPS.z = max(In.curPos.z, In.lastPos.z) + depthBias.y;
-			Out.velocityPS.w = -1.0f;
+			Out.velocityPS.w = -1.0f;//PSブラーしない
 
 			//Out.albedo.r = 1.0f; Out.albedo.b = 0.0f; Out.albedo.g = 0.0f;
 		}
@@ -464,9 +492,10 @@ PSOutput_RenderGBuffer PSMain_RenderGBuffer(PSInput In)
 			Out.velocityPS.z = min(In.curPos.z, In.lastPos.z) + depthBias.y;
 			Out.velocityPS.w = max(In.curPos.z, In.lastPos.z) + depthBias.y;
 
+			//動きが小さい
 			if (abs(Out.velocityPS.x) < BUNBO*0.5f && abs(Out.velocityPS.y) < BUNBO*0.5f) {
 				Out.velocityPS.z = Out.velocityPS.w;
-				Out.velocityPS.w = -1.0f;
+				Out.velocityPS.w = -1.0f;//PSブラーしない
 			}
 
 			//Out.albedo.r *= 0.1f; Out.albedo.b = 1.0f; Out.albedo.g *= 0.1f;
