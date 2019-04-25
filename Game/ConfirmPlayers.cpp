@@ -189,6 +189,11 @@ void ConfirmPlayers::Update() {
 	}
 #endif
 
+	//ゲーム開始してたら以後実行しない
+	if (m_isGameStart) {
+		return;
+	}
+
 	bool isCanChangeSetting = true;
 #ifndef SpritScreen
 	if (GetPhoton()->GetState() != PhotonNetworkLogic::JOINED || !GetPhoton()->GetIsMasterClient()) {
@@ -218,6 +223,24 @@ void ConfirmPlayers::Update() {
 			m_citizenCnt += 25;
 			m_netEventCaster.SendRoomSetting_CitizenCount(m_citizenCnt);
 		}
+
+#ifndef SpritScreen
+		//満員ならルーム見つからないようにする
+		if (GetPhoton()->GetPlayers().getSize() >= NET_MAX_PLAYER) {
+			//満員ならルームを閉じる
+			if (GetPhoton()->GetMutableRoom().getIsVisible() == true) {
+				GetPhoton()->GetMutableRoom().setIsVisible(false);
+				//GetPhoton()->GetMutableRoom().setIsOpen(false);
+			}
+		}
+		else {
+			//満員でないならルーム開ける
+			if (GetPhoton()->GetMutableRoom().getIsVisible() == false) {
+				GetPhoton()->GetMutableRoom().setIsVisible(true);
+				//GetPhoton()->GetMutableRoom().setIsOpen(true);
+			}
+		}		
+#endif
 	}
 }
 
