@@ -216,14 +216,27 @@ void CPlayer::Move() {
 
 	//IK‚ğg‚Á‚½“·‘Ì‰ñ“]
 	if (action.isShot() && !mover.isFlying()) {
+		
+		if (m_bodyIKSetting->isEnable == false) {
+			//‰Šú‰»
+			m_bodyIKtarget = m_bodyIKSetting->tipBone->GetPosition() - m_bodyIKSetting->rootBone->GetPosition();
+			m_bodyIKtarget.Normalize();
+		}
+
+		//ã•ûŒü‹‚ß‚é
 		CVector3 target = { action.getLookVec().x, 0.0f, action.getLookVec().z };
+		target.Normalize();
 		target.Cross(CVector3::AxisY());
 		target.Cross(action.getLookVec());
-		target = getPosition() + target * 10000.0f;
+
+		//™X‚ÉˆÚ€
+		m_bodyIKtarget = lerp(m_bodyIKtarget, target, 0.1f);
+
+		//ON
 		m_bodyIKSetting->isEnable = true;
-		m_bodyIKSetting->targetPos = target;
+		m_bodyIKSetting->targetPos = getPosition() + m_bodyIKtarget * 10000.0f;
 	}
-	else {
+	else {		
 		//OFF
 		m_bodyIKSetting->isEnable = false;
 	}
