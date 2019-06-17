@@ -293,7 +293,7 @@ float3 CookTorrance(float3 lightDir, float3 viewDir, float3 normal, float3 baseC
 float3 IBL_Specular(float3 lightDir, float3 viewDir, float3 normal, float3 baseColor, float shininess, float3 ibl) {
 	float3 halfVec = normalize(lightDir + viewDir);
 
-	return  lerp(baseColor, float3(1.0f, 1.0f, 1.0f), shininess*shininess)
+	return  shininess * shininess //lerp(baseColor, float3(1.0f, 1.0f, 1.0f), shininess*shininess)
 			* Fresnel(baseColor, halfVec, lightDir)
 			* ibl
 			// * min(1, min(2 * dot(normal, halfVec)*dot(normal, viewDir) / dot(viewDir, halfVec), 2 * dot(normal, halfVec)*dot(normal, lightDir) / dot(viewDir, halfVec)))
@@ -432,8 +432,5 @@ float4 PSMain(PSDefferdInput In) : SV_Target0
 	//エミッシブを加算
 	Out += emissive;
 
-	//0.0~1.0で出力
-	//Out = saturate(Out);
-	return float4(Out, albedo.w);
-	
+	return float4(Out, albedo.w);	
 }
