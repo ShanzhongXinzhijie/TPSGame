@@ -245,6 +245,7 @@ private:
 		anim_num,
 	};
 	AnimationClip m_animationClips[anim_num];
+	SkeletonIK::IKSetting* m_bodyIKSetting = nullptr;//ì∑ëÃIKê›íË
 
 	Team* team;
 

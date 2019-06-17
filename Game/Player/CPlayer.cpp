@@ -42,6 +42,12 @@ bool CPlayer::Start() {
 		mat->SetAlbedoScale(team->getColor());
 	});
 
+	//“·‘ÌIK
+	m_bodyIKSetting = m_model.GetSkinModel().GetSkeleton().CreateIK();
+	m_bodyIKSetting->tipBone = m_model.FindBone(L"Bone013");		  
+	m_bodyIKSetting->rootBone = m_model.FindBone(L"Bone012");
+	m_bodyIKSetting->iteration = 1;
+
 	//CharacterController‚Ì‰Šú‰»
 	mover.Init(30.0f, 40.0f, getPosition());
 
@@ -206,6 +212,20 @@ void CPlayer::Move() {
 				mover.fly(true, action.getLookVec(), {0, 0}, flyPower);
 			}
 		}
+	}
+
+	//IK‚ğg‚Á‚½“·‘Ì‰ñ“]
+	if (action.isShot() && !mover.isFlying()) {
+		CVector3 target = { action.getLookVec().x, 0.0f, action.getLookVec().z };
+		target.Cross(CVector3::AxisY());
+		target.Cross(action.getLookVec());
+		target = getPosition() + target * 10000.0f;
+		m_bodyIKSetting->isEnable = true;
+		m_bodyIKSetting->targetPos = target;
+	}
+	else {
+		//OFF
+		m_bodyIKSetting->isEnable = false;
 	}
 
 	//”òs
