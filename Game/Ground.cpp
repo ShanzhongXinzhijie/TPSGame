@@ -10,7 +10,7 @@ bool Ground::Start() {
 	m_skyModel.SetIsMostDepth(true);
 	m_skyModel.SetIsShadowCaster(false);
 	m_skyModel.SetDrawPriority(DRAW_PRIORITY_MAX);
-
+	
 	m_model.Init(L"Resource/modelData/Ground.cmo");
 	m_model.SetPos(m_pos);
 	m_model.SetIsShadowCaster(true);
@@ -28,6 +28,9 @@ bool Ground::Start() {
 	CascadeShadowmap.SetDirection(m_dirlight.GetDirection());
 	CascadeShadowmap.SetNear(50.0f);
 	CascadeShadowmap.SetFar(50000.0f);
+
+	//ŠÂ‹«Œõ
+	SetAmbientCubeMap(L"Resource/cubemap/IBL.dds", 0.5f);
 
 	return true;
 }

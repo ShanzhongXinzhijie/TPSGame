@@ -25,7 +25,7 @@ bool Indra::Start() {
 	m_model.SetIsMostDepth(true);
 	m_model.SetIsShadowCaster(false);
 	m_model.SetDrawPriority(DRAW_PRIORITY_MAX-1);
-	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
+	m_model.GetSkinModel().FindMaterialSetting([](MaterialSetting* mat) {
 		mat->SetLightingEnable(false);
 	});
 
@@ -34,6 +34,9 @@ bool Indra::Start() {
 	//SE
 	SuicideObj::CSE* se = NewGO<SuicideObj::CSE>(L"Resource/sound/SE_indra.wav");
 	se->Play();
+
+	//ŠÂ‹«Œõ•ÏX
+	SetAmbientCubeMap(L"Resource/cubemap/IBLThunder.dds", 0.5f);
 
 	return true;
 }
