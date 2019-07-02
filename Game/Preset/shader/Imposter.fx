@@ -6,8 +6,9 @@
 //モデルサイズ(カメラ方向への)
 StructuredBuffer<float> ImposterSizeToCamera : register(t7);
 #if defined(INSTANCING)
-//インスタンシング用インポスター拡大率
-StructuredBuffer<float> InstancingImposterScale : register(t8);
+//インスタンシング用インポスターパラメータ
+//[CInposter.h] InstancingImposterParamManager::ImposterParam
+StructuredBuffer<float2> InstancingImposterParam : register(t8);
 #endif
 
 static const float PI = 3.14159265359f;
@@ -60,16 +61,27 @@ void CalcImposter(out int2 out_index, out float4x4 out_rotMat, out float3 out_of
 	float3 pos = float3(mWorld._m03, mWorld._m13, mWorld._m23);
 #endif
 
+	//アーティファクト軽減
+	float antiArtifact = (int)(pos.x + pos.y + pos.z)%100*0.005f;
+
 	//インポスター用インデックス計算
 	float3 polyDir = normalize(camWorldPos - pos);
 
 	//X軸回転
 	float3 axisDir = polyDir; axisDir.x = length(float2(polyDir.x, polyDir.z));
 	float XRot = atan2(axisDir.y, axisDir.x);
+
+	//アーティファクト軽減
+	XRot += PI / 17.0f * antiArtifact;
+
 	out_index.y = (int)round(XRot / PI * imposterPartNum.y) - (int)(imposterPartNum.y / 2.0f - 0.5f);
 
 	//Y軸回転		
-	float YRot = atan2(polyDir.x, polyDir.z);
+	float YRot = atan2(polyDir.x, polyDir.z);	
+
+	//アーティファクト軽減
+	YRot += PI2 / 34.0f * antiArtifact;
+
 	out_index.x = (int)round(-YRot / PI2 * imposterPartNum.x) + (int)(imposterPartNum.x / 2.0f - 0.5f);
 
 	//回転		
@@ -98,10 +110,19 @@ void CalcImposter(out int2 out_index, out float4x4 out_rotMat, out float3 out_of
 	//カメラ方向にモデルサイズ分座標ずらす
 	//※埋まり防止
 #if defined(INSTANCING)	
-	out_offsetPos = polyDir * (InstancingImposterScale[instanceID] * ImposterSizeToCamera[(imposterPartNum.y - 1 + out_index.y)*imposterPartNum.x + out_index.x]);
+	out_offsetPos = polyDir * (InstancingImposterParam[instanceID].x * ImposterSizeToCamera[(imposterPartNum.y - 1 + out_index.y)*imposterPartNum.x + out_index.x]);
 #else
-	out_offsetPos = polyDir * (imposterScale * ImposterSizeToCamera[(imposterPartNum.y - 1 + out_index.y)*imposterPartNum.x + out_index.x]);
+	out_offsetPos = polyDir * (imposterParameter.x * ImposterSizeToCamera[(imposterPartNum.y - 1 + out_index.y)*imposterPartNum.x + out_index.x]);
 #endif
+
+	//オフセット
+#if defined(INSTANCING)
+	YRot -= InstancingImposterParam[instanceID].y;
+#else
+	YRot -= imposterParameter.y;
+#endif
+	out_index.x = (int)round(-YRot / PI2 * imposterPartNum.x) + (int)(imposterPartNum.x / 2.0f - 0.5f);
+
 }
 
 //頂点シェーダ(通常)
