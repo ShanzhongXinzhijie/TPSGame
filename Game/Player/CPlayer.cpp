@@ -27,6 +27,7 @@ CPlayer::~CPlayer() {
 }
 
 bool CPlayer::Start() {
+	//アニメーションクリップ
 	m_animationClips[anim_run].Load(L"Resource/animData/PlayerRun.tka", true);
 	m_animationClips[anim_walk].Load(L"Resource/animData/PlayerWalk.tka", true);
 	m_animationClips[anim_fly].Load(L"Resource/animData/PlayerFly.tka", true);
@@ -36,8 +37,10 @@ bool CPlayer::Start() {
 	m_animationClips[anim_jump].Load(L"Resource/animData/PlayerJump.tka", true);
 	m_animationClips[anim_fall].Load(L"Resource/animData/PlayerFall.tka", true);
 
+	//プレイヤーモデル
 	m_model.Init(L"Resource/modelData/PlayerVanp.cmo", m_animationClips, anim_num);
 
+	//プレイヤーモデルにチームカラー設定
 	m_model.GetSkinModel().FindMaterialSetting([&](MaterialSetting* mat) {
 		mat->SetAlbedoScale(team->getColor());
 	});
