@@ -1,7 +1,6 @@
 #pragma once
 #include "DemolisherWeapon/physics/character/CCharacterController.h"
 #include "CPlayer.h"
-#include "InstancingCitizenColorManager.h"
 #include "../Network/NetPlayerCaster.h"
 #include "MiniHPbar.h"
 #include "IDamagable.h"
@@ -15,8 +14,7 @@ public:
 	~Citizen();
 
 	void Update() override;
-	void PostLoopUpdate() override;
-
+	
 	void setPos(const CVector3& pos) {
 		charaCon.SetPosition(pos);
 	}
@@ -63,7 +61,7 @@ private:
 		anim_idle,
 		anim_num,
 	};
-	InstancingCitizenColorManager* m_ptrCitizenColorManager[(int)anim_num * 2] = { nullptr };//市民の色を変えるクラス(市民とゾンビ、2つ分用意)
+	CVector4 m_color;//チームカラー
 	//攻撃アニメ用モデル
 	GameObj::CSkinModelRender m_modelAttack;
 	AnimationClip m_attackAnimationClip;

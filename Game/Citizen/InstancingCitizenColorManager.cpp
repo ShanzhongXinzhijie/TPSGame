@@ -2,14 +2,13 @@
 #include "InstancingCitizenColorManager.h"
 #include "DemolisherWeapon\Graphic\Model\SkinModelShaderConst.h"
 
-void InstancingCitizenColorManager::Init(GameObj::InstancingModel* insModel) {
-	m_insModel = insModel;
+void InstancingCitizenColorManager::Reset(int insMaxNum) {
+	//最大インスタンス数設定
+	m_instanceMax = insMaxNum;
 	
-	//リソース確保
-	m_instanceMax = m_insModel->GetInstanceMax();
-
 	//色配列の確保
-	m_color.reset(new CVector4[m_instanceMax]);
+	m_color = std::make_unique<CVector4[]>(m_instanceMax);
+	m_colorCache = std::make_unique<CVector4[]>(m_instanceMax);
 
 	//StructuredBufferの確保
 	D3D11_BUFFER_DESC desc;
@@ -19,8 +18,8 @@ void InstancingCitizenColorManager::Init(GameObj::InstancingModel* insModel) {
 	desc.ByteWidth = static_cast<UINT>(stride * m_instanceMax);
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	desc.StructureByteStride = stride;
-	GetEngine().GetGraphicsEngine().GetD3DDevice()->CreateBuffer(&desc, NULL, &m_colorSB);
-	
+	GetGraphicsEngine().GetD3DDevice()->CreateBuffer(&desc, NULL, m_colorSB.ReleaseAndGetAddressOf());
+
 	//ShaderResourceViewの確保
 	D3D11_SHADER_RESOURCE_VIEW_DESC descSRV;
 	ZeroMemory(&descSRV, sizeof(descSRV));
@@ -28,7 +27,12 @@ void InstancingCitizenColorManager::Init(GameObj::InstancingModel* insModel) {
 	descSRV.BufferEx.FirstElement = 0;
 	descSRV.Format = DXGI_FORMAT_UNKNOWN;
 	descSRV.BufferEx.NumElements = desc.ByteWidth / desc.StructureByteStride;
-	GetEngine().GetGraphicsEngine().GetD3DDevice()->CreateShaderResourceView(m_colorSB, &descSRV, &m_colorSRV);
+	GetGraphicsEngine().GetD3DDevice()->CreateShaderResourceView(m_colorSB.Get(), &descSRV, m_colorSRV.ReleaseAndGetAddressOf());
+}
+
+InstancingCitizenColorManager::InstancingCitizenColorManager(GameObj::InstancingModel* insModel) : m_insModel(insModel){	
+	//リソース確保
+	Reset(m_insModel->GetInstanceMax());
 
 	//シェーダをロード
 	D3D_SHADER_MACRO macros[] = { "INSTANCING", "1", "MOTIONBLUR", "1", "ALBEDO_MAP", "1", NULL, NULL };
@@ -39,48 +43,39 @@ void InstancingCitizenColorManager::Init(GameObj::InstancingModel* insModel) {
 			mat->SetPS(&m_psShader);
 		}
 	);
-	
-	//インスタンシングモデルに関数セット
-	m_insModel->SetPreDrawFunction(
-		[&]() {
-			//シェーダーリソースに色配列をセット
-			GetEngine().GetGraphicsEngine().GetD3DDeviceContext()->PSSetShaderResources(enSkinModelSRVReg_Free, 1, &m_colorSRV);
-		}
-	);
 }
 
-void InstancingCitizenColorManager::Release() {
-	//リソース解放
-	m_color.reset();
-	if (m_colorSB) { m_colorSB->Release(); m_colorSB = nullptr; }
-	if (m_colorSRV) { m_colorSRV->Release(); m_colorSRV = nullptr; }
-
+InstancingCitizenColorManager::~InstancingCitizenColorManager() {
 	//シェーダリセット
 	m_insModel->GetModelRender().GetSkinModel().FindMaterialSetting(
 		[](MaterialSetting* mat) {
 			mat->SetDefaultPS();
 		}
 	);
-
-	//関数リセット
-	m_insModel->SetPreDrawFunction(nullptr);
-	m_insModel = nullptr;
-
-	m_instanceNum = 0; m_instanceMax = 0;
 }
 
-void InstancingCitizenColorManager::AddColor(const CVector4& color) {
-	if (m_instanceMax <= m_instanceNum) { return; }
-	m_color[m_instanceNum] = color;
-	m_instanceNum++;
-}
-void InstancingCitizenColorManager::PostLoopPostUpdate() {
-	if (m_instanceNum <= 0) { return; }
-
+void InstancingCitizenColorManager::PreDraw(int instanceNum, int drawInstanceNum, const std::unique_ptr<bool[]>& drawInstanceMask) {
+	//カリングされてないもののみコピー
+	int drawNum = 0;
+	for (int i = 0; i < instanceNum; i++) {
+		if (drawInstanceMask[i]) {
+			m_color[drawNum] = m_colorCache[i];
+			drawNum++;
+		}
+	}
 	//StructuredBufferを更新。
-	GetEngine().GetGraphicsEngine().GetD3DDeviceContext()->UpdateSubresource(
-		m_colorSB, 0, NULL, m_color.get(), 0, 0
+	GetGraphicsEngine().GetD3DDeviceContext()->UpdateSubresource(
+		m_colorSB.Get(), 0, NULL, m_color.get(), 0, 0
 	);
-
-	m_instanceNum = 0;
+	//シェーダーリソースに色配列をセット
+	GetGraphicsEngine().GetD3DDeviceContext()->PSSetShaderResources(enSkinModelSRVReg_Free, 1, m_colorSRV.GetAddressOf());
+}
+void InstancingCitizenColorManager::AddDrawInstance(int instanceIndex, const CMatrix& SRTMatrix, const CVector3& scale, void *param) {
+	//カラーを設定
+	m_colorCache[instanceIndex] = *(CVector4*)param;
+}
+void InstancingCitizenColorManager::SetInstanceMax(int instanceMax) {
+	if (instanceMax > m_instanceMax) {
+		Reset(instanceMax);
+	}
 }

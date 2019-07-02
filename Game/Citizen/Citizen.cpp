@@ -6,6 +6,7 @@
 #include "GameWaiter.h"
 #include "DemolisherWeapon/Graphic/Effekseer/CEffekseer.h"
 #include "CollisionMaskConst.h"
+#include "InstancingCitizenColorManager.h"
 
 Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* moveType, unsigned int id)
 	:playersMap(pm), m_uniqueID(id),miniHpbar(maxHp){
@@ -19,18 +20,13 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 	m_model.SetPos({ 300,100,300 });
 	//インスタンシングモデルの色変えるクラス
 	for (int i = 0; i < anim_num; i++) {
-		wchar_t name[32];
-		if (i == anim_walk0) { wcscpy_s(name, L"CitizenWalk0"); }
-		if (i == anim_walk1) { wcscpy_s(name, L"CitizenWalk1"); }
-		if (i == anim_walk2) { wcscpy_s(name, L"CitizenWalk2"); }
-		if (i == anim_idle) { wcscpy_s(name, L"CitizenIdle"); }
-
-		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
-		if (!m_ptrCitizenColorManager[i]) {
-			//なければ作る
-			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i));
-			m_ptrCitizenColorManager[i]->SetName(name);
+		//IInstanceDataを設定
+		if (!m_model.GetInstancingModel(i)->GetIInstanceData()) {
+			//新規作成
+			m_model.GetInstancingModel(i)->SetIInstanceData(std::make_unique<InstancingCitizenColorManager>(m_model.GetInstancingModel(i)));
 		}
+		//カラーのポインタを設定
+		m_model.SetParamPtr(&m_color);
 	}
 
 	charaCon.Init(30.0f, 40.0f, { 300,100,300 });
@@ -59,9 +55,16 @@ Citizen::~Citizen() {
 }
 
 void Citizen::Update() {
-
 	//ゲームがウェイト状態なら終わる
 	if (GameWaiter::GetIsWait()) { return; }
+
+	//カラーのセット
+	if (ownerTeam) {
+		m_color = ownerTeam->getColor();
+	}
+	else {
+		m_color = CVector4::One();
+	}
 
 	m_netCnt++;//通信用カウンタ進める
 
@@ -193,18 +196,13 @@ void Citizen::Kansenzyoutai()
 	m_model.SetPos(charaCon.GetPosition());
 	//インスタンシングモデルの色変えるクラス
 	for (int i = anim_num; i < (int)anim_num * 2; i++) {
-		wchar_t name[32];
-		if (i == (int)anim_num + anim_walk0) { wcscpy_s(name, L"VanpWalk0"); }
-		if (i == (int)anim_num + anim_walk1) { wcscpy_s(name, L"VanpWalk1"); }
-		if (i == (int)anim_num + anim_walk2) { wcscpy_s(name, L"VanpWalk2"); }
-		if (i == (int)anim_num + anim_idle) { wcscpy_s(name, L"VanpIdle"); }
-
-		m_ptrCitizenColorManager[i] = FindGO<InstancingCitizenColorManager>(name);
-		if (!m_ptrCitizenColorManager[i]) {
-			//なければ作る
-			m_ptrCitizenColorManager[i] = NewGO<InstancingCitizenColorManager>(m_model.GetInstancingModel(i - (int)anim_num));
-			m_ptrCitizenColorManager[i]->SetName(name);
+		//IInstanceDataを設定
+		if (!m_model.GetInstancingModel(i - (int)anim_num)->GetIInstanceData()) {
+			//新規作成
+			m_model.GetInstancingModel(i - (int)anim_num)->SetIInstanceData(std::make_unique<InstancingCitizenColorManager>(m_model.GetInstancingModel(i - (int)anim_num)));
 		}
+		//カラーのポインタを設定
+		m_model.SetParamPtr(&m_color);
 	}
 
 	//攻撃モデル
@@ -274,19 +272,6 @@ void Citizen::Attack() {
 			atkCol->Delete();
 		}
 	});
-}
-
-void Citizen::PostLoopUpdate() {
-	if (m_model.GetIsDraw()) {//インスタンシング描画するなら
-		//インスタンシングモデルにカラーのセット
-		int index = (isKenzoku ? (int)anim_num : 0) + m_model.GetPlayAnimNum();
-		if (ownerTeam) {
-			m_ptrCitizenColorManager[index]->AddColor(ownerTeam->getColor());
-		}
-		else {
-			m_ptrCitizenColorManager[index]->AddColor(CVector4::One());
-		}
-	}
 }
 
 void  Citizen::Death(){
