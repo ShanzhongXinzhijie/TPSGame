@@ -21,9 +21,9 @@ Citizen::Citizen(const std::unordered_map<int, CPlayer*>& pm, ICitizenBrain* mov
 	//インスタンシングモデルの色変えるクラス
 	for (int i = 0; i < anim_num; i++) {
 		//IInstanceDataを設定
-		if (!m_model.GetInstancingModel(i)->GetIInstanceData()) {
+		if (!m_model.GetInstancingModel(i)->GetIInstanceData(L"InstancingCitizenColorManager")) {
 			//新規作成
-			m_model.GetInstancingModel(i)->SetIInstanceData(std::make_unique<InstancingCitizenColorManager>(m_model.GetInstancingModel(i)));
+			m_model.GetInstancingModel(i)->AddIInstanceData(L"InstancingCitizenColorManager",std::make_unique<InstancingCitizenColorManager>(m_model.GetInstancingModel(i)));
 		}
 		//カラーのポインタを設定
 		m_model.SetParamPtr(&m_color);
@@ -197,9 +197,9 @@ void Citizen::Kansenzyoutai()
 	//インスタンシングモデルの色変えるクラス
 	for (int i = anim_num; i < (int)anim_num * 2; i++) {
 		//IInstanceDataを設定
-		if (!m_model.GetInstancingModel(i - (int)anim_num)->GetIInstanceData()) {
+		if (!m_model.GetInstancingModel(i - (int)anim_num)->GetIInstanceData(L"InstancingCitizenColorManager")) {
 			//新規作成
-			m_model.GetInstancingModel(i - (int)anim_num)->SetIInstanceData(std::make_unique<InstancingCitizenColorManager>(m_model.GetInstancingModel(i - (int)anim_num)));
+			m_model.GetInstancingModel(i - (int)anim_num)->AddIInstanceData(L"InstancingCitizenColorManager", std::make_unique<InstancingCitizenColorManager>(m_model.GetInstancingModel(i - (int)anim_num)));
 		}
 		//カラーのポインタを設定
 		m_model.SetParamPtr(&m_color);
