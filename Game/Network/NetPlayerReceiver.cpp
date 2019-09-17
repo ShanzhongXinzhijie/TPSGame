@@ -536,18 +536,21 @@ void NetPlayerReceiver::UpdateCitizen() {
 
 void NetPlayerReceiver::UpdateGodPower() {
 	//_‚Ì—Í‚ ‚°‚é
-	for (auto& T : m_godPowerLotteryTimer) {
-		if (T.second > 0) {
-			T.second--;
-			if (T.second <= 0) {
+	for (auto T = m_godPowerLotteryTimer.begin();T != m_godPowerLotteryTimer.end();){
+		if (T->second > 0) {
+			T->second--;
+			if (T->second <= 0) {
 				//Šl“¾
-				GetGodPower(T.first, m_godPowerLotteryList[T.first].second);
+				GetGodPower(T->first, m_godPowerLotteryList[T->first].second);
 
 				if (m_pCaster[GetPhoton()->GetLocalPlayerNumber()]) {
 					//‚Ý‚ñ‚È‚É“`‚¦‚é
-					m_pCaster[GetPhoton()->GetLocalPlayerNumber()]->SendGetGodPower(T.first, m_godPowerLotteryList[T.first].second);
+					m_pCaster[GetPhoton()->GetLocalPlayerNumber()]->SendGetGodPower(T->first, m_godPowerLotteryList[T->first].second);
 				}
-				m_godPowerLotteryTimer.erase(T.first);
+				T = m_godPowerLotteryTimer.erase(T);
+			}
+			else {
+				++T;
 			}
 		}
 	}
