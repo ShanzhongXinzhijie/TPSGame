@@ -39,13 +39,13 @@ TpsCamera::TpsCamera(int pad, const CVector3& tar) : padNum(pad), m_target(tar) 
 }
 
 TpsCamera::~TpsCamera() {
-	auto& list = GetCameraList();
-	for (auto itr = list.begin(), end = list.end(); itr != end; itr++) {
-		if ((*itr) == &m_camera) {
-			list.erase(itr);
-			break;
-		}
-	}
+//	auto& list = GetCameraList();
+//	for (auto itr = list.begin(), end = list.end(); itr != end; itr++) {
+//		if ((*itr) == &m_camera) {
+//			list.erase(itr);
+//			break;
+//		}
+//	}
 }
 
 void TpsCamera::RotationCamera(const CVector2& rot) {

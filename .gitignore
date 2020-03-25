@@ -1,5 +1,7 @@
 .vs/
 x64/
+*.dwcso
+*.dwsmeta
 *.cmo
 *.dds
 *.lib
